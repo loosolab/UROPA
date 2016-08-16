@@ -1,0 +1,17 @@
+site_name: UROPA
+site_description: 'Universal RObust Peak Annotator for annotating peaks generated from any peak caller.'
+site_author: 'Maria Kondili, Annika Fust, Jens Preussner, Carsten Kuenne, Mario Looso'
+repo_url: https://github.molgen.mpg.de/loosolab/uropa
+repo_name: 'GitHub'
+pages:
+- Home: 'index.rst'
+- 'About UROPA': 'introduction.rst'
+- 'Command-line usage':
+    - Installation: 'install.rst'
+    - 'Available parameters': 'parameters.rst'
+    - 'Configuration file': 'config.rst'
+    - 'Query examples': 'uropa-example.rst'
+    - 'Custom Annotation': 'custom.rst'
+- Output: 'output.rst'
+- 'MIT License': 'license.rst'
+- Help: 'help.rst'
