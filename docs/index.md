@@ -1,8 +1,3 @@
-.. UROPA documentation master file, created by
-   sphinx-quickstart on Thu Aug 11 11:20:51 2016.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 ***********************************
 Welcome to the UROPA documentation
 ***********************************
@@ -19,8 +14,8 @@ UROPA was developed as an open source analysis pipeline for peaks generated from
 peak caller, e.g. MUSIC, originating from any of the existing methods of accessible
 chromatin-based sequencing, as ChIP-seq or ATAC-seq.
 
-Advantages of UROPA
-===================
+Features of UROPA
+=================
 * Easy usage with the help of a configuration file
 * Simple customization by this config file
 * Usage of all available gtf files as annotation database
