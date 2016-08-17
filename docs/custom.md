@@ -5,11 +5,11 @@ The Gencode v19 annotation gtf looks for example like shown in Table 1.
 |    |      |          |     |     | | | |                                                                                                                                                                                                            | 
 |----|------|----------|-----|-----|-|-|-|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
 |chr1|HAVANA|gene      |11869|14412|.|+|.|gene_id "ENSG00000223972"; transcript_id "ENSG00000223972.4"; gene_type "pseudogene"; gene_status "KNOWN"; gene_name "DDX11L1"; transcript_type "pseudogene";                                               | 
-|										 |transcript_status "KNOWN";transcript_name "DDX11L1"; level 2; havana_gene "OTTHUMG00000000961.2";                                                                                                           | 
+|	 |      |          |     |     | | | |transcript_status "KNOWN";transcript_name "DDX11L1"; level 2; havana_gene "OTTHUMG00000000961.2";                                                                                                           | 
 |chr1|HAVANA|transcript|11869|14409|.|+|.|gene_id "ENSG00000223972"; transcript_id "ENST00000456328.2"; gene_type "pseudogene"; gene_status "KNOWN"; gene_name "DDX11L1"; transcript_type "processed_transcript";                                     | 
-|										 |transcript_status "KNOWN"; transcript_name "DDX11L1-002"; level 2; tag "basic"; havana_gene "OTTHUMG00000000961.2"; havana_transcript "OTTHUMT00000362751.1";                                               | 
+|    |      |          |     |     | | | |transcript_status "KNOWN"; transcript_name "DDX11L1-002"; level 2; tag "basic"; havana_gene "OTTHUMG00000000961.2"; havana_transcript "OTTHUMT00000362751.1";                                               | 
 |chr1|HAVANA| exon     |11869|12227|.|+|.|gene_id "ENSG00000223972"; transcript_id "ENST00000456328.2"; gene_type "pseudogene"; gene_status "KNOWN"; gene_name "DDX11L1"; transcript_type "processed_transcript";                                     | 
-|									     | transcript_status "KNOWN"; transcript_name "DDX11L1-002"; exon_number 1;  exon_id "ENSE00002234944.1";  level 2; tag "basic"; havana_gene "OTTHUMG00000000961.2"; havana_transcript "OTTHUMT00000362751.1";| 
+|    |      |          |     |     | | | |transcript_status "KNOWN"; transcript_name "DDX11L1-002"; exon_number 1;  exon_id "ENSE00002234944.1";  level 2; tag "basic"; havana_gene "OTTHUMG00000000961.2"; havana_transcript "OTTHUMT00000362751.1";| 
 |...                                                                                                                                                                                                                                                  | 
 
 Table 1: head of gencode v19 gtf file, the columns are: chr, source, feature, start, end, score, strand, frame, and attributes. (Left out description header) 
@@ -55,6 +55,7 @@ In Table 2 the CTCF transcription factor table from UCSC is shown. This should b
 Table 2: Downloaded table from [UCSC Table Browser](https://genome.ucsc.edu/cgi-bin/hgTables) (wgEncodeAwgTfbsBroadHuvecCtcfUniPk) for CTCF transcription factor from Uniform TFBS track.
 
 After transformation with feature=tfbs but without given source, the gtf format annotation file will look as displayed in Table 3.  
+
 |      |           |      |         |         |      |   |   |                                                              | 
 |------|-----------|------|---------|---------|------|---|---|--------------------------------------------------------------| 
 | chr1 | undefined | tfbs | 1310465 | 1310835 | 244  | . | . | signalValue  382.141 ; pValue -1 ; qValue 4.82217 ; peak 185 | 
@@ -67,6 +68,7 @@ The UCSC table browser also supports gtf file format. But whithin this gtf file,
 only the exon in which the peak is located is displayed. Additionally for this example, in the attribute column,           
 there are empty information about 'gene_id' and information about peak, pValue und signalValue are lost. 
 An example of the gtf output from UCSC table browser is shown in Table 4.
+
 |      |                                         |      |         |         |            |   |   |                                      |
 |------|-----------------------------------------|------|---------|---------|------------|---|---|--------------------------------------| 
 | chr1 | hg19_wgEncodeAwgTfbsBroadHuvecCtcfUniPk | exon | 1310466 | 1310835 | 244.000000 | . | . | gene_id "."; transcript_id ".";      | 
