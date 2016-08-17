@@ -1,12 +1,9 @@
-***********************************
-Welcome to the UROPA documentation
-***********************************
+**Welcome to the UROPA documentation!**
 
 UROPA is a peak annotation tool which can easily be fitted to your requirements.
 Download UROPA: tba
 
 **Overview**
-
 
 There are already different peak annotation tools, like HOMER or ChIPpeakAnno,
 but with none of them it is so easy to suit the annotation to your currant analysis. 
