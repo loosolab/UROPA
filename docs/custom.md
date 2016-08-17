@@ -2,6 +2,7 @@ The gtf file is a very common format used for annotation. UROPA accepts all gtf 
 such as UCSC, ensembl, GENCODE. The file fromat is well-explained by [Ensembl](http://www.ensembl.org/info/website/upload/gff.html )       
 The Gencode v19 annotation gtf looks for example like shown in Table 1.                 
  
+|    |      |          |     |     | | | |                                                                                                                                                                                                            | 
 |----|------|----------|-----|-----|-|-|-|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
 |chr1|HAVANA|gene      |11869|14412|.|+|.|gene_id "ENSG00000223972"; transcript_id "ENSG00000223972.4"; gene_type "pseudogene"; gene_status "KNOWN"; gene_name "DDX11L1"; transcript_type "pseudogene";                                               | 
 |										 |transcript_status "KNOWN";transcript_name "DDX11L1"; level 2; havana_gene "OTTHUMG00000000961.2";                                                                                                           | 
@@ -49,12 +50,12 @@ In Table 2 the CTCF transcription factor table from UCSC is shown. This should b
 |------|-------|------------|----------|------|-------|--------|-------------|--------|---------|------| 
 | 74   | chr1  | 1310465    | 1310835  | .    | 244   | .      | 382.141     | -1     | 482.217 | 185  | 
 | 76   | chr1  | 3407792    | 3408060  | .    | 1000  | .      | 178.305     | -1     | 482.217 | 129  | 
-|...   |       |            |          |      |       |        |             |        |         |      |
+|...   |       |            |          |      |       |        |             |        |         |      | 
 
 Table 2: Downloaded table from [UCSC Table Browser](https://genome.ucsc.edu/cgi-bin/hgTables) (wgEncodeAwgTfbsBroadHuvecCtcfUniPk) for CTCF transcription factor from Uniform TFBS track.
 
 After transformation with feature=tfbs but without given source, the gtf format annotation file will look as displayed in Table 3.  
-
+|      |           |      |         |         |      |   |   |                                                              | 
 |------|-----------|------|---------|---------|------|---|---|--------------------------------------------------------------| 
 | chr1 | undefined | tfbs | 1310465 | 1310835 | 244  | . | . | signalValue  382.141 ; pValue -1 ; qValue 4.82217 ; peak 185 | 
 | chr1 | undefined | tfbs | 3407792 | 3408060 | 1000 | . | . | signalValue 178.305 ; pValue -1 ; qValue 4.82217 ; peak 129  | 
@@ -66,7 +67,7 @@ The UCSC table browser also supports gtf file format. But whithin this gtf file,
 only the exon in which the peak is located is displayed. Additionally for this example, in the attribute column,           
 there are empty information about 'gene_id' and information about peak, pValue und signalValue are lost. 
 An example of the gtf output from UCSC table browser is shown in Table 4.
-
+|      |                                         |      |         |         |            |   |   |                                      |
 |------|-----------------------------------------|------|---------|---------|------------|---|---|--------------------------------------| 
 | chr1 | hg19_wgEncodeAwgTfbsBroadHuvecCtcfUniPk | exon | 1310466 | 1310835 | 244.000000 | . | . | gene_id "."; transcript_id ".";      | 
 | chr1 | hg19_wgEncodeAwgTfbsBroadHuvecCtcfUniPk | exon | 1334906 | 1334997 | 630.000000 | . | . | gene_id "."; transcript_id "._dup1"; | 
