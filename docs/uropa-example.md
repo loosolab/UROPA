@@ -2,7 +2,7 @@ In this section several examples for the usage of the config file are presented.
 
 Example with two queries and difference in priority 
 --------------------------------------------------- 
-This example is based on POLR2A peaks annotated with the Ensembl genome ([further details])[#used-peak-and-annotation-files]).
+This example is based on POLR2A peaks annotated with the Ensembl genome ([further details])[http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files]).
 More than one query can be given, keeping the same gtf and bed files, allowing for a combination of annotation in one run.    
 If there are more queries, it is important to decide if they should be priorized. This can be done with the priority key in the config file.   
 The following examples illustrate how this can be beneficial for the annotation.    
@@ -95,7 +95,7 @@ UROPA allows flexibility of annotation for features. With the 'feature.position'
 The typical application is to calculate the distance from the TSS, respresented as 'start' of the feature,        
 but with UROPA it is also possible to use the 'center' and 'end' of the analyzed feature. If no value is given, the distance from all three feature positions (['start', 'center', 'end'])     
 are calculated, and if one of them is smaller than the indicated distance, the peak will be annotated for this feature.   
-This example is based on H3K4me1 peaks annotated with the Gencode genome ([further details])[#used-peak-and-annotation-files]).
+This example is based on H3K4me1 peaks annotated with the Gencode genome ([further details])[http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files]).
 There are two queries with different feature.positions and if peaks are internal is not taken into account:   
 "queries":  [{"feature":"gene", "attribute":"gene_name", "distance":[5000],"feature.position": "start"},       
 		    {"feature": "gene", "feature.position": "center"}],
@@ -112,13 +112,15 @@ to return a valid annotation.
 | peak71  | chr22 | 18161387 | 18161442 | 18161496 | gene    | 18111621 | 18213388 | +        | 1063     | BCL2L13   | 1     | 
 | ...     |       |          |          |          |         |          |          |          |          |           |       | 
 
+Table 5: All hits table feature position example
+
 ![peak71](img/chr22-18161287-18161496_peak71_h3k4me1_feature_pos.png)
 
-Figure 1: H3K4me1 peak 71 annotated with Ensembl genome, the genomic location is chr22:18161287-18161496.    
+Figure 1: H3K4me1 peak 71 annotated with the Ensembl genome, the genomic location is chr22:18161287-18161496.    
 
 Example for the direction 
 ------------------------- 
-This example is based on H3K4me1 peaks annotated with the Gencode genome ([further details])[#used-peak-and-annotation-files]).
+This example is based on H3K4me1 peaks annotated with the Gencode genome ([further details])[http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files]).
 In the following example the utility of the key 'direction' will be illustrated. It is optional but can be a very important 'player' for a more specialized annotation.             
 The example is based on the peak displayed in Figure 2.     
 *It can also be thought of as the location of the peak depending on the feature’s direction.* 
@@ -129,50 +131,53 @@ the distance from the start position is smaller than the indicated distance. The
 *of the upstream or downstream location of the peak from the feature, so there shouldn’t be an important overlap of the peak length*.
 
 Let’s see now an example of an annotation with and without direction chosen, for the peak shown in Image 3.
-![direction.key](img/chr1-1,403,500-1,408,500-01_h3k4me1_peaks.png)    
-If the query looks as followed:         
+![direction.key](img/chr1-1,403,500-1,408,500-01_h3k4me1_peaks.png) 
+
+Figure 2: H3K4me1 peak annotated with the Gencode genome, the genomic location is chr1:1403500-1408500.
+   
+The query looked as followed:         
 "queries": [{"feature": "gene", "attribute":"gene_name", "distance":1000}]        
-The peak displayed in the Figure would be annotated for both genes: 
-ATAD3C with a distance of 712.5 bp and ATAD3B with a distance of 892.5 bp. Due to that no feature.position was defined, the distance calculated for ATAD3C        
-is the distance from the gene end and the distance for ATAD3B the distance to the gene start. The best annotation in this case would than be the gene ATAD3C.    
+The peak displayed in Figure 2 would be annotated for both genes: 
+*ATAD3C* with a distance of 712.5 bp and *ATAD3B* with a distance of 892.5 bp. Due to that no feature.position was defined, the distance calculated for *ATAD3C*        
+is the distance from the gene end and the distance for *ATAD3B* the distance to the gene start. The best annotation in this case would than be the gene *ATAD3C*.    
 More specific annotation can be usefull for some peaks. For example, if the peaks are known to be enriched in transcriptionally active promotors.   
 It is possible to add the direction key with 'upstream' to the querie:          
 "queries": [{"feature": "gene", "attribute":"gene_name", "distance":1000, "direction":"upstream"}]           
-In this case the peak will only be annotated for ATAD3B. Depending on the biologically relevance, it is very usefull to utilize the accessible keys. 
-
-
-
+In this case the peak will only be annotated for *ATAD3B*. Depending on the biologically relevance, it can be very usefull to utilize the accessible keys. 
 
 
 Example for the internal.feature key
 ------------------------------------
-This example is based on POLR2A peaks annotated with the Ensembl genome.         
-When peaks are very large sometimes, the genomic features found inside the peak region are found to be far from the peak center and are thus discarded      
-from the annotation. But, with the option of 'internal.features' UROPA allows to annotate the large peaks as well, with small features that can be of         
-particular interest. Especially, when ATACseq peaks are used for annotating them with very small transcription factors, this option can become very handy.          
+This example is based on POLR2A peaks annotated with the Ensembl genome ([further details])[http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files]).
+By default this feature is false. With this attidue only such peaks are annotated whose distance is smaller than the definded one.          
+But there are cases where the genomic feature is larger as the set distance, this can lead to unannotated peaks, even if the peak is inside the genomic feature.     
+Same the other way around, very large peaks and small features. For those cases, the internal key was implemented.            
+To say usually peaks with a max distance should be annotated, but also those who are internal, or include the feature.      
+Especially, when ATACseq peaks are used for annotating them with very small transcription factors, this option becomes very handy.          
 The following configuration allows for searching peaks internal features and featurs internal of peaks:
 "queries":[{"feature":"gene", "distance":1000, "attribute":"gene_name"}],
 "internal.features": "True"
 The output would be:   
  
-| p_chr   | p_start  | p_center | p_end | feature  | f_start  | f_end | f_strand | distance | gene_name| Query   | 
-|:--------|:---------|:---------|:---------|:------|:---------|:---------|:------|:---------|:----------|:-------| 
-| ...     |          |          |          |       |          |          |       |          |           |        | 
-| chr6    | 27857165 | 27860401 | 27863637 | gene  | 27861203 | 27861669 | +     | 0        | HIST1H2BO | 0      | 
-| chr6    | 27857165 | 27860401 | 27863637 | gene  | 27858093 | 27860884 | -     | 0        | HIST1H3J  | 0      | 
-| chr6    | 27857165 | 27860401 | 27863637 | gene  | 27860477 | 27860963 | -     | 0        | HIST1H2AM | 0      | 
-| ...     |          |          |          |       |          |          |       |          |           |        | 
+| p_chr   | p_start  | p_center | p_end    | feature| f_start  | f_end   | f_strand| distance | gene_name| Query   | 
+|:--------|:---------|:---------|:---------|:-------|:---------|:--------|:--------|:---------|:----------|:-------| 
+| ...     |          |          |          |        |          |         |         |          |           |        | 
+| chr6    | 27857165 | 27860401 | 27863637 | gene   | 27861203 | 27861669| +       | 0        | HIST1H2BO | 0      | 
+| chr6    | 27857165 | 27860401 | 27863637 | gene   | 27858093 | 27860884| -       | 0        | HIST1H3J  | 0      | 
+| chr6    | 27857165 | 27860401 | 27863637 | gene   | 27860477 | 27860963| -       | 0        | HIST1H2AM | 0      | 
+| ...     |          |          |          |        |          |         |         |          |           |        | 
+
+Table 6: All hits table internal feature example
 
 ![internal.feature](img/chr6-27,857,165-27,863,637_internal_feature-01.png)
 
 Figure 3: H3K4me1 peaks annotated with Ensembl, genomic location: chr6-27,857,165-27,863,637
 
-We observe that UROPA annotated three genes in the region of the peak, as seen also in the Image 4.     
-Their Distance is reported ‘Zero(0)’, because UROPA detects the internal features by their position even when their distances from the peak.center           
-are further than the allowed 'distance' in the config, so the distance is not a parameter that can allow the annotation, this is why Zero value(0)           
-is selected for ease of annotation in this special case.   
+As displayed in Table 5 there are three genes annotated for the peak which is shown in Figure 3.    
+Their distance is reportet as 0, because UROPA detects the internal features by their position even when their distances from the peak.center       
+to all feature positions (no specific chosen in the configuration) would be larger than set.        
 In the contrary case, where the option 'internal.feature' is not activated and no feature.position is chosen,          
-the peak would only be annotated for HIST1H3J with a distance of 483 bp. 
+the peak would only be annotated for *HIST1H3J* with a distance of 483 bp. 
 
 Used peak and annotation files 
 ------------------------------ 
