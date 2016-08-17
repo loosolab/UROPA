@@ -3,7 +3,7 @@ such as UCSC, ensembl, GENCODE. The file fromat is well-explained by [Ensembl](h
 The Gencode v19 annotation gtf looks for example like shown in Table 1.                 
  
 |----|------|----------|-----|-----|-|-|-|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
-|chr1|HAVANA|gene      |11869|14412|.|+|.|gene_id "ENSG00000223972"; transcript_id "ENSG00000223972.4"; gene_type "pseudogene"; gene_status "KNOWN"; gene_name "DDX11L1"; transcript_type "pseudogene"; transcript_status "KNOWN";transcript_name "DDX11L1"; level 2; havana_gene "OTTHUMG00000000961.2";                                                                                                                    |
+|chr1|HAVANA|gene      |11869|14412|.|+|.|gene_id "ENSG00000223972"; transcript_id "ENSG00000223972.4"; gene_type "pseudogene"; gene_status "KNOWN"; gene_name "DDX11L1"; transcript_type "pseudogene"; transcript_status "KNOWN";transcript_name "DDX11L1"; level 2; havana_gene "OTTHUMG00000000961.2";                                                                                                                    | 
 |chr1|HAVANA|transcript|11869|14409|.|+|.|gene_id "ENSG00000223972"; transcript_id "ENST00000456328.2"; gene_type "pseudogene"; gene_status "KNOWN"; gene_name "DDX11L1"; transcript_type "processed_transcript"; transcript_status "KNOWN"; transcript_name "DDX11L1-002"; level 2; tag "basic"; havana_gene "OTTHUMG00000000961.2"; havana_transcript "OTTHUMT00000362751.1";                                              | 
 |chr1|HAVANA| exon     |11869|12227|.|+|.|gene_id "ENSG00000223972"; transcript_id "ENST00000456328.2"; gene_type "pseudogene"; gene_status "KNOWN"; gene_name "DDX11L1"; transcript_type "processed_transcript"; transcript_status "KNOWN"; transcript_name "DDX11L1-002"; exon_number 1;  exon_id "ENSE00002234944.1";  level 2; tag "basic"; havana_gene "OTTHUMG00000000961.2"; havana_transcript "OTTHUMT00000362751.1";| 
 |...                                                                                                                                                                                                                                                                                                                                                                                                                         | 
@@ -52,7 +52,6 @@ Table 2: Downloaded table from [UCSC Table Browser](https://genome.ucsc.edu/cgi-
 
 After transformation with feature=tfbs but without given source, the gtf format annotation file will look as displayed in Table 3.  
 
-|      |           |      |         |         |      |   |   |                                                              | 
 |------|-----------|------|---------|---------|------|---|---|--------------------------------------------------------------| 
 | chr1 | undefined | tfbs | 1310465 | 1310835 | 244  | . | . | signalValue  382.141 ; pValue -1 ; qValue 4.82217 ; peak 185 | 
 | chr1 | undefined | tfbs | 3407792 | 3408060 | 1000 | . | . | signalValue 178.305 ; pValue -1 ; qValue 4.82217 ; peak 129  | 
@@ -65,7 +64,6 @@ only the exon in which the peak is located is displayed. Additionally for this e
 there are empty information about 'gene_id' and information about peak, pValue und signalValue are lost. 
 An example of the gtf output from UCSC table browser is shown in Table 4.
 
-|      |                                         |      |         |         |            |   |   |                                      | 
 |------|-----------------------------------------|------|---------|---------|------------|---|---|--------------------------------------| 
 | chr1 | hg19_wgEncodeAwgTfbsBroadHuvecCtcfUniPk | exon | 1310466 | 1310835 | 244.000000 | . | . | gene_id "."; transcript_id ".";      | 
 | chr1 | hg19_wgEncodeAwgTfbsBroadHuvecCtcfUniPk | exon | 1334906 | 1334997 | 630.000000 | . | . | gene_id "."; transcript_id "._dup1"; | 
@@ -105,6 +103,7 @@ The config file could look like followed:
 As you can see in Figure 1 there are many transcription factor binding sites (tfbs) co-localized close to the annotated peak -2.963782_36_0_36 (chr17:26,662,487-26,662,883). 
 ![custom.gtf](img/chr17_26,662,154-26,663,454.png)
 
+Figure 1: 
 With the given configuration, most of them are annotated with UROPA. Part of the All hits table for peak -2.963782_36_0_36 is represented in Table 5.
 
 | h_start  | h_end    | distance | table                                        | 
