@@ -1,3 +1,5 @@
+Using UROPA the fist time? Here the Idea of UROPA is presented.
+#What is UROPA about
 UROPA ('Universal RObust Peak Annotator' ) is a tool designed for annotating peaks generated from any peak caller
 (e.g. MACS2, MUSIC, FindPeaks, CisGenome, PeakSeq), originating from any of the existing methods of 
 accessible chromatin-based sequencing (e.g. ATACseq, ChIPseq, FAIREseq). 
@@ -37,8 +39,7 @@ There is freedom in the use of parameters, as UROPA can also run with default op
 You can see these instructions in more details in the --help menu of UROPA in command line: 
 uropa.sh –h & uropa.sh –u
 
-Advantages of UROPA
--------------------
+#Advantages of UROPA
 * Annotation with default values: 
 * Detect the most appropriate annotation with flexible keys that allow robustness, such as
 	* feature type
@@ -48,16 +49,7 @@ Advantages of UROPA
 	* internal features to large peaks
 * Gives all annotations that fit to config file: Represented in the All_hits output
 * Gives also the best annotation if more than one is identified: Represented in the Best_hits output
-When a peak overlaps with more than one feature the annotation becomes more demanding.
-In order to best identify the genomic feature related to the enriched region and to the biological activity implied,        
-we have developed UROPA so as to distinguish among features and their distances and choose the best feature for the final annotation.
-For accomplishing the best annotation, UROPA uses the parameters defined in the configuration file.                   
-The best feature to be selected for annotation should comply with the defined 'feature', 'strand', 'distance' and 'direction' of the query.           
-'Feature' and 'strand' are validated firstly and then the distance of 'feature.position' to the peak-center is measured.                   
-This distance should be less or equal to the 'distance' given. If it is, this distance is kept as closest.                  
-If the next feature is even closer, this one will be kept as the best, and so on. So, in the end the closest feature is assigned to the peak,            
-for each query given. If the 'direction' is also defined, it will be examined before the distance for validation, as the direction is a priority parameter for the annotation.        
-If it is valid according to the query, then the distance will be measured and validated. Otherwise, the peak is considered non-annotated.
+
 * Run with multiple sets of parameters at once by several queries
 * Graduated annotation with the priority key
 * Usage of custom annotation files
