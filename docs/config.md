@@ -9,25 +9,19 @@ By default, 'internal.feature' and 'priority' are false. But all keys are furthe
 In a basic annotation, only the gtf and bed keys are specified, UROPA can annotate the peaks provided in the bed file by all possible feature types represented in the gtf file within a distance of max 100,000 bp. 
 #Queries 
 The queries key is a field with nested keys, as you will see in the config template, for defining in more details the genomic feature of interest for the annotation. It can contain more than one query, written inside '{}' and separated with commas. It accepts the following keys for each query:
-+ features: 'gene', 'exon', 'intron', 'miRNA', or whatever is defined in the 3rd column of the 'gtf'.        
-By default all features that are present in the 'gtf'. This key is part of the filter.         	
-+ distance: 2000, default 100,000. It is used as the maximum allowd distance from the genomic feature to the peak center.        
-The position of the feature for the measured distance is the chosen key:'feature.positon'.         
-This key in combination with the 'feature.position' is part of the filter.              
-+ attribute: ['gene_id', 'gene_biotype'], or whatever is defined in the 9th column of the 'gtf'. Default is 'None'.           
-The chosen attribute(s) of all queries will be shown collectively as column names in the output tables.           
-The value of each attribute is the one that provides the identification of the annotation of each peak.            
-The attributes can be defined only in one query and will be considered the same for all. If the given attribute key doesn't exist in the 'gtf',         
-the annotated peaks will have the value 'not.found' in the attribute's column. So make sure, that a present attribute will be chosen to have a valid annotation.           
-This key selects for what the peaks will be annotated, so this is kind of a chosen diplay.                
-+ feature.position': 'start'. The position from which the distance to the peak center will be measured for annotating the peak with the best feature (the closest).             
-Default:  ['start', 'center', 'end']. If default values used, the distance of all positions will be measured from the peak center           
-and if the minimum of the three compared distances is less than the 'distance' given, the feature will be accepted for annotation:                
-closest.distance = min (|feat.start - p.center|, |feat.center - p.center|, |feat.end - p.center|)   < 'distance'             
-This key in combination with the distance is part of the filter.            
+
++ features: 'gene', 'exon', 'intron', 'miRNA', or whatever is defined in the 3rd column of the 'gtf'. By default all features that are present in the 'gtf'. This key is part of the filter. 
+
++ distance: 2000, default 100,000. It is used as the maximum allowd distance from the genomic feature to the peak center. The position of the feature for the measured distance is the chosen key:'feature.positon'. This key in combination with the 'feature.position' is part of the filter.              
+
++ attribute: ['gene_id', 'gene_biotype'], or whatever is defined in the 9th column of the 'gtf'. Default is 'None'. The chosen attribute(s) of all queries will be shown collectively as column names in the output tables. The value of each attribute is the one that provides the identification of the annotation of each peak. The attributes can be defined only in one query and will be considered the same for all. If the given attribute key doesn't exist in the 'gtf', the annotated peaks will have the value 'not.found' in the attribute's column. So make sure, that a present attribute will be chosen to have a valid annotation. This key selects for what the peaks will be annotated, so this is kind of a chosen diplay.
+
++ feature.position': 'start'. The position from which the distance to the peak center will be measured for annotating the peak with the best feature (the closest). Default:  ['start', 'center', 'end']. If default values used, the distance of all positions will be measured from the peak center and if the minimum of the three compared distances is less than the 'distance' given, the feature will be accepted for annotation: closest.distance = min (|feat.start - p.center|, |feat.center - p.center|, |feat.end - p.center|)   < 'distance' This key in combination with the distance is part of the filter.            
+
 + strand: '+' .The strand on which the annotated feature should be. Default: ['+', '-' ]. If peaks are stranded (strand given in 6th column of 'bed' file),       
 the strand of the peak will be considered and not the 'strand' given here. If peak.strand = '.', the strand given in this key (in config) will be considered.           
 This key is part of the filter.                  
+
 + direction: [ 'upstream', 'downstream' ] , for defining the peak location relative to the genomic feature where it overlaps or is closer to. Default: 'any_direction'.                
 A peak is 'upstream' when it is closer to the TSS of the feature, while downstream is when it is closer to the end position(TTS).                 
 An overlap is allowed only to small starting or ending part of the peak (half median length of peaks). If the direction of the feature doesn't agree with the demanded 'direction',          
