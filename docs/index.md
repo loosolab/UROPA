@@ -21,13 +21,14 @@ chromatin-based sequencing, as ChIP-seq or ATAC-seq.
 	* feature direction relative to peak location
 	* peak strand
 	* internal features to large peaks
+* Usage of custom annotation files
 * One run with multiple sets of parameters by multiple queries
 * Gives all annotations that fit to config file: Represented in the All_hits output
 * Gives also the best annotation if more than one is identified: Represented in the Best_hits output
-
 * Run with multiple sets of parameters at once by several queries
 * Graduated annotation with the priority key
-* Usage of custom annotation files
+
+
 **How to cite**
 
 Please cite the paper describing UROPA when using it in your research:
