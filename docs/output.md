@@ -55,6 +55,7 @@ Table 1: All hits table basic example
 Table 2: Best hits table basic example
 
 3. Merged_best_hits_basic_example
+
 | peak_id | p_chr | p_start   | p_center    | p_end     | feature | f_start   | f_end     | f_strand | distance | gene_id   | query | 
 |---------|-------|-----------|-------------|-----------|---------|-----------|-----------|----------|----------|-----------|-------| 
 | ...     |       |           |             |           |         |           |           |          |          |           |       | 
@@ -66,13 +67,13 @@ Table 2: Best hits table basic example
 Table 3: Merged best hits basic example
 4. Reformatted_Allhits_perPeak_basic_anno.txt
 
-| peak_id | p_chr | p_start   | p_center  | p_end     | feature  | f_start      | f_end        | f_strand | distance | gene_id             | query | 
-|---------|-------|-----------|-----------|-----------|----------|--------------|--------------|----------|----------|---------------------|-------| 
-| ...     |       |           |           |           |          |              |              |          |          |                     |       | 
-| peak_3  | chr6  | 396914    | 405319    | 413724    | exon,CDS | 405018       | 405130       | +        | 189      | NR_046000,NM_002460 | 0,1   | 
-| peak_4  | chr17 | 56404303  | 56411344  | 56418385  | NA       | NA           | NA           | NA       | NA       | NA                  | 0,1   | 
-| peak_5  | chr14 | 106317273 | 106324112 | 106330951 | exon,NA  | 106324293,NA | 106324344,NA | -,NA     | 181,NA   | NR_039730,NA        | 0,1   | 
-| ...     |       |           |           |           |          |              |              |          |          |                     |       | 
+| peak_id | p_chr | p_start   | p_center  | p_end     | feature   | f_start       | f_end         | f_strand | distance | gene_id              | query | 
+|---------|-------|-----------|-----------|-----------|-----------|---------------|---------------|----------|----------|----------------------|-------| 
+| ...     |       |           |           |           |           |               |               |          |          |                      |       | 
+| peak_3  | chr6  | 396914    | 405319    | 413724    | exon, CDS | 405018        | 405130        | +        | 189      | NR_046000, NM_002460 | 0,1   | 
+| peak_4  | chr17 | 56404303  | 56411344  | 56418385  | NA        | NA            | NA            | NA       | NA       | NA                   | 0,1   | 
+| peak_5  | chr14 | 106317273 | 106324112 | 106330951 | exon, NA  | 106324293, NA | 106324344, NA | -,NA     | 181,NA   | NR_039730, NA        | 0,1   | 
+| ...     |       |           |           |           |           |               |               |          |          |                      |       | 
 
 
 Table 4: Reformatted Allhits perPeak basic anno. Notice that the last colum is just adjusted to more rows for display them.  
