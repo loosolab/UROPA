@@ -5,11 +5,9 @@ Download UROPA: tba
 
 **Overview**
 
-There are already different peak annotation tools, like HOMER or ChIPpeakAnno,
-but with none of them it is so easy to suit the annotation to your currant analysis. 
-UROPA was developed as an open source analysis pipeline for peaks generated from any 
-peak caller, e.g. MUSIC, originating from any of the existing methods of accessible
-chromatin-based sequencing, as ChIP-seq or ATAC-seq.
+UROPA is a tool for facititating a wide range of biological experiments that are followed by parallel DNA sequencing, for example ChIP-seq or ATAC-seq. 
+There are already different peak annotation tools, like HOMER or ChIPpeakAnno, but the advantage of UROPA is, that it is very easy to suit the annotation to your current analysis.
+UROPA was developed as an open source analysis pipeline for peaks generated from any peak caller, e.g. MUSIC.
 
 **Advantages of UROPA**
 
@@ -26,7 +24,8 @@ chromatin-based sequencing, as ChIP-seq or ATAC-seq.
 * Gives all annotations that fit to config file: Represented in the All_hits output
 * Gives also the best annotation if more than one is identified: Represented in the Best_hits output
 * Run with multiple sets of parameters at once by several queries
-* Graduated annotation with the priority key
+* Graduated annotation with the priority key              
+
 
 
 **How to cite**
