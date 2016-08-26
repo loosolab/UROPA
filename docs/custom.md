@@ -2,25 +2,19 @@ The GTF file is a very common format used for annotation. UROPA accepts all GTF 
 such as UCSC, ensembl, GENCODE. The file fromat is well-explained by [Ensembl](http://www.ensembl.org/info/website/upload/gff.html )       
 The Gencode v19 annotation GTF looks for example like shown in Table 1.                 
  
-|    |      |          |     |     | | | |                                                                                                                                                                                                            | 
-|----|------|----------|-----|-----|-|-|-|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
-|chr1|HAVANA|gene      |11869|14412|.|+|.|gene_id "ENSG00000223972"; transcript_id "ENSG00000223972.4"; gene_type "pseudogene"; gene_status "KNOWN"; gene_name "DDX11L1"; transcript_type "pseudogene";                                               | 
-|	 |      |          |     |     | | | |transcript_status "KNOWN";transcript_name "DDX11L1"; level 2; havana_gene "OTTHUMG00000000961.2";                                                                                                           | 
-|chr1|HAVANA|transcript|11869|14409|.|+|.|gene_id "ENSG00000223972"; transcript_id "ENST00000456328.2"; gene_type "pseudogene"; gene_status "KNOWN"; gene_name "DDX11L1"; transcript_type "processed_transcript";                                     | 
-|    |      |          |     |     | | | |transcript_status "KNOWN"; transcript_name "DDX11L1-002"; level 2; tag "basic"; havana_gene "OTTHUMG00000000961.2"; havana_transcript "OTTHUMT00000362751.1";                                               | 
-|chr1|HAVANA| exon     |11869|12227|.|+|.|gene_id "ENSG00000223972"; transcript_id "ENST00000456328.2"; gene_type "pseudogene"; gene_status "KNOWN"; gene_name "DDX11L1"; transcript_type "processed_transcript";                                     | 
-|    |      |          |     |     | | | |transcript_status "KNOWN"; transcript_name "DDX11L1-002"; exon_number 1;  exon_id "ENSE00002234944.1";  level 2; tag "basic"; havana_gene "OTTHUMG00000000961.2"; havana_transcript "OTTHUMT00000362751.1";| 
-|...                                                                                                                                                                                                                                                  | 
+|    |      |          |     |     | | | |                                                                                                                                                                                                                                                              | 
+|----|------|----------|-----|-----|-|-|-|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
+|chr1|HAVANA|gene      |11869|14412|.|+|.|gene_id "ENSG00000223972"; transcript_id "ENSG00000223972.4"; gene_type "pseudogene"; gene_status "KNOWN"; gene_name "DDX11L1"; transcript_type "pseudogene";transcript_status "KNOWN";transcript_name "DDX11L1"; level 2; havana_gene "OTTHUMG00000000961.2";| 
+|...                                                                                                                                                                                                                                                                                                    | 
 
-Table 1: head of gencode v19 GTF file, the columns are: chr, source, feature, start, end, score, strand, frame, and attributes. (Left out description header) 
+Table 1: first row of gencode v19 GTF file, the columns are: chr, source, feature, start, end, score, strand, frame, and attributes. (Left out description header) 
 
-For further extending the utility of UROPA, the tool allows annotation files that are not in this format. UROPA can convert them to this format. 
-Files for annotation can for example be provided by the [UCSC Table Browser](https://genome.ucsc.edu/cgi-bin/hgTables).    
+For further extending the utility of UROPA, there is the UROPA.to.GTF tool allows which transforms annotation files that are not in this format.
+Files for annotation can be provided by the [UCSC Table Browser](https://genome.ucsc.edu/cgi-bin/hgTables), or many more data bases.   
 For the internal convertion, the input annotation file needs to have a header, and there need to be columns with information about the location,      
-e.g. 'chr', 'start' and 'end' . Additionally, the file should be tab separated.  Another requirement for the transformation is,      
-that the file name should be explicit for the file content. For example, if transcription factor binding sites (tfbs) were downloaded from UCSC table browser,         
+e.g. 'chr', 'start' and 'end' . Additionally, the file should be tab separated. Another requirement for the transformation is that the file name should be explicit for the file content. For example, if transcription factor binding sites (tfbs) were downloaded from UCSC table browser,         
 the name of the file could be the name of the table 'wgEncodeAwgTfbsBroadHuvecCtcfUniPk.txt'. The file name will be one information in the attribute column. 
-There are two variations of the GTF file generator
+There are two variations of the GTF file generator:
 
 1.	One file should be converted and used for annotation. Then the file should be given in the key 'GTF' of the config file. 
 2.	Several files should be used for annotation. In this case the input should be a folder with all files included (but no others).  
