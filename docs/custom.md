@@ -9,11 +9,9 @@ The Gencode v19 annotation GTF looks for example like shown in Table 1.
 
 Table 1: first row of gencode v19 GTF file, the columns are: chr, source, feature, start, end, score, strand, frame, and attributes. (Left out description header) 
 
-For further extending the utility of UROPA, there is the UROPA.to.GTF tool allows which transforms annotation files that are not in this format.
+For further extending the utility of UROPA, there is the UROPA.to.GTF tool which transforms annotation files that are not in this format.
 Files for annotation can be provided by the [UCSC Table Browser](https://genome.ucsc.edu/cgi-bin/hgTables), or many more data bases.   
-For the internal convertion, the input annotation file needs to have a header, and there need to be columns with information about the location,      
-e.g. 'chr', 'start' and 'end' . Additionally, the file should be tab separated. Another requirement for the transformation is that the file name should be explicit for the file content. For example, if transcription factor binding sites (tfbs) were downloaded from UCSC table browser,         
-the name of the file could be the name of the table 'wgEncodeAwgTfbsBroadHuvecCtcfUniPk.txt'. The file name will be one information in the attribute column. 
+For the internal convertion, the input annotation file needs to have a header, and there need to be columns with information about the location,e.g. 'chr', 'start' and 'end' . Additionally, the file should be tab separated. Another requirement for the transformation is that the file name should be explicit for the file content. For example, if transcription factor binding sites (tfbs) were downloaded from UCSC table browser, the name of the file could be the name of the table 'wgEncodeAwgTfbsBroadHuvecCtcfUniPk.txt'. The file name will be one information in the attribute column. 
 There are two variations of the GTF file generator:
 
 1.	One file should be converted and used for annotation. Then the file should be given in the key 'GTF' of the config file. 
@@ -75,10 +73,10 @@ The major problem with the UCSC GTF file is that in this the exon location and n
 That means, the peaks that should be annotated cannot be annotated for them tfbs itself. That is why the tables should be downloaded with the output format      
 'all fields from selected table' or with 'select fields from primary and related tabs'. 
 
-Custom GTF annotation of ATAC-seq peaks
----------------------------------------
-This example is based on ATAC-seq peaks ([ataq.bed](https://github.molgen.mpg.de/loosolab/UROPA/blob/master/atac-seq_example.bed) annotated with the internal generated GTF file from the following tables from [UCSC Table Browser](https://genome.ucsc.edu/cgi-bin/hgTables),    
-called [merged_custom_GTF](https://github.molgen.mpg.de/loosolab/UROPA/blob/master/merged_custom_GTF.gtf)   
+Application Example
+-------------------
+This example is based on ATAC-seq peaks ([ataq.bed](https://github.molgen.mpg.de/loosolab/UROPA/blob/master/atac-seq_example.bed) annotated with the UROPA.to.GTF file of the following tables from [UCSC Table Browser](https://genome.ucsc.edu/cgi-bin/hgTables),    
+called ['merged_custom_GTF.gtf'](https://github.molgen.mpg.de/loosolab/UROPA/blob/master/merged_custom_GTF.gtf)   
 * wgEncodeAwgTfbsBroadHuvecCtcfUniPk
 * wgEncodeAwgTfbsBroadHuvecEzh239875UniPk
 * wgEncodeAwgTfbsBroadHuvecPol2bUniPk
