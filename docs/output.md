@@ -65,6 +65,7 @@ Table 2: Best hits table basic example
 | ...     |       |           |             |           |         |           |           |          |          |           |       | 
 
 Table 3: Merged best hits basic example
+
 4. Reformatted_Allhits_perPeak_basic_anno.txt
 
 | peak_id | p_chr | p_start   | p_center  | p_end     | feature   | f_start       | f_end         | f_strand | distance | gene_id              | query | 

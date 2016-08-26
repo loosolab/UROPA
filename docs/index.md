@@ -1,11 +1,10 @@
 **Welcome to the UROPA documentation!**
 
 UROPA is a peak annotation tool which can easily be fitted to your requirements.
-Download UROPA: tba
 
 **Overview**
 
-UROPA is a tool for facititating a wide range of biological experiments that are followed by parallel DNA sequencing, for example ChIP-seq or ATAC-seq. 
+UROPA is a tool for facilitatingthe analysis of next-generation sequencing methods for chromatin biology, like ChIP-seq or ATAC-seq. 
 There are already different peak annotation tools, like HOMER or ChIPpeakAnno, but the advantage of UROPA is, that it is very easy to suit the annotation to your current analysis.
 UROPA was developed as an open source analysis pipeline for peaks generated from any peak caller, e.g. MUSIC.
 
@@ -35,7 +34,8 @@ tba
 
 **Contribute**
 
-Source Code: https://github.molgen.mpg.de/loosolab/UROPA
+Source Code: https://github.molgen.mpg.de/loosolab/UROPA     
+Further details see [here](docs/install.md)
 
 **Support**
 
