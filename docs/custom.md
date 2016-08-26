@@ -63,10 +63,10 @@ only the exon in which the peak is located is displayed. Additionally for this e
 there are empty information about 'gene_id' and information about peak, pValue und signalValue are lost. 
 An example of the GTF output from UCSC table browser is shown in Table 4.
 
-|      |                                         |      |         |         |            |   |   |                                      |
-|------|-----------------------------------------|------|---------|---------|------------|---|---|--------------------------------------| 
-| chr1 | hg19_wgEncodeAwgTfbsBroadHuvecCtcfUniPk | exon | 1310466 | 1310835 | 244.000000 | . | . | gene_id "."; transcript_id ".";      | 
-| chr1 | hg19_wgEncodeAwgTfbsBroadHuvecCtcfUniPk | exon | 1334906 | 1334997 | 630.000000 | . | . | gene_id "."; transcript_id "._dup1"; | 
+|      |                                         |      |         |         |           | | |                                      |
+|------|-----------------------------------------|------|---------|---------|-----------|-|-|--------------------------------------| 
+| chr1 | hg19_wgEncodeAwgTfbsBroadHuvecCtcfUniPk | exon | 1310466 | 1310835 | 244.000000|.|.| gene_id "."; transcript_id ".";      | 
+| chr1 | hg19_wgEncodeAwgTfbsBroadHuvecCtcfUniPk | exon | 1334906 | 1334997 | 630.000000|.|.| gene_id "."; transcript_id "._dup1"; | 
 
 
 Table 4: GTF file download from UCSC table browser for wgEncodeAwgTfbsBroadHuvecCtcfUniPk
@@ -77,8 +77,8 @@ That means, the peaks that should be annotated cannot be annotated for them tfbs
 
 Custom GTF annotation of ATAC-seq peaks
 ---------------------------------------
-This example is based on ATAC-seq peaks ([ataq.bed](https://github.molgen.mpg.de/loosolab/UROPA/blob/master/atac-seq_example.bed)) annotated with the internal generated GTF file from the following tables from [UCSC Table Browser](https://genome.ucsc.edu/cgi-bin/hgTables),    
-called [merged_custom_GTF](https://github.molgen.mpg.de/loosolab/UROPA/blob/master/merged_custom_GTF.GTF).  
+This example is based on ATAC-seq peaks ([ataq.bed](https://github.molgen.mpg.de/loosolab/UROPA/blob/master/atac-seq_example.bed) annotated with the internal generated GTF file from the following tables from [UCSC Table Browser](https://genome.ucsc.edu/cgi-bin/hgTables),    
+called [merged_custom_GTF](https://github.molgen.mpg.de/loosolab/UROPA/blob/master/merged_custom_GTF.gtf)   
 * wgEncodeAwgTfbsBroadHuvecCtcfUniPk
 * wgEncodeAwgTfbsBroadHuvecEzh239875UniPk
 * wgEncodeAwgTfbsBroadHuvecPol2bUniPk
@@ -97,7 +97,7 @@ called [merged_custom_GTF](https://github.molgen.mpg.de/loosolab/UROPA/blob/mast
 The config file could look like followed:
 {"queries": [{"feature": "tfbs", "attribute":"table", 
 "distance": "500", "feature.position": "center"}],
-"GTF": "merged_custom_GTF.GTF", 
+"gtf": "merged_custom_GTF.gtf", 
 "bed": "atac-seq_example.bed"}
 
 As you can see in Figure 1 there are many transcription factor binding sites (tfbs) co-localized close to the annotated peak -2.963782_36_0_36 (chr17:26,662,487-26,662,883). 
