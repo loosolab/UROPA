@@ -25,7 +25,7 @@ The only difference between 1. and 2. is the priority key:
 	and three feature annotation for query 1. But in Table 2 there is only one entry for each query. The entry for query 0 is the same in both Tables,      
 	because only one annotation was identified. For query 1, there is only the hit with the closest distance of Table 1 present in Table 2. This hit belongs also to the gene *AC006483.1*.
  
-	| peak_id | p_chr | p_start  | p_center | p_end    | feature    | f_start | f_end    | f_strand | distance | gene_name  | Query | 
+	| peak_id | p_chr | p_start  | p_center | p_end    | feature    | feat_start | feat_end    | feat_strand | distance | gene_name  | Query | 
 	|:--------|:------|:---------|:---------|:---------|:-----------|:--------|:---------|:---------|:---------|:-----------|:------| 
 	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         | 0     | 
 	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         | 1     | 
@@ -42,7 +42,7 @@ The only difference between 1. and 2. is the priority key:
 
 	Table 1: All hits table two queries with priority false    
 
-	| peak_id | p_chr | p_start  | p_center | p_end    | feature    | f_start | f_end    | f_strand | distance | gene_name  | Query | 
+	| peak_id | p_chr | p_start  | p_center | p_end    | feature    | feat_start | feat_end    | feat_strand | distance | gene_name  | Query | 
 	|:--------|:------|:---------|:---------|:---------|:-----------|:--------|:---------|:---------|:---------|:-----------|:------| 
 	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         | 0,1   | 
 	| ...     |       |          |          |          |            |         |          |          |          |            |       | 
@@ -64,7 +64,7 @@ The only difference between 1. and 2. is the priority key:
 	For peak_10 there was no annotation identified for the query 0, but two for query 1, as displayed in Table 3. In this example, this is the only peak    
 	with a difference betweeen the two Tables, in Table 4 only the annotation with the closest distance is displayed, which is gene *RCC1*.	
 	
-	| peak_id | p_chr | p_start  | p_center | p_end    | feature    | f_start  | f_end    | f_strand | distance | gene_name  | Query | 
+	| peak_id | p_chr | p_start  | p_center | p_end    | feature    | feat_start  | feat_end    | feat_strand | distance | gene_name  | Query | 
 	|:--------|:------|:---------|:---------|:---------|:-----------|:---------|:---------|:---------|:---------|:-----------|:------| 
 	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA       | NA       | NA       | NA       | NA         | 0,1   |	
 	| ...     |       |          |          |          |            |          |          |          |          |            |       | 
@@ -76,7 +76,7 @@ The only difference between 1. and 2. is the priority key:
 
 	Table 3: All hits table two queries with priority true
 	
-	| peak_id | p_chr | p_start  | p_center | p_end    | feature    | f_start  | f_end    | f_strand | distance | gene_name  | Query | 
+	| peak_id | p_chr | p_start  | p_center | p_end    | feature    | feat_start  | feat_end    | feat_strand | distance | gene_name  | Query | 
 	|:--------|:------|:---------|:---------|:---------|:-----------|:---------|:---------|:---------|:---------|:-----------|:------| 
 	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA       | NA       | NA       | NA       | NA         | 0,1   | 
 	| ...     |       |          |          |          |            |          |          |          |          |            |       | 
@@ -105,7 +105,7 @@ As displayed in the All_hits Table 5, the peak could only be annotated for query
 that is why even if the peak is internal of the gene, the start position of the feature gene is to far away (feature.start – peak.center = \|18111621-18161442\| = 49 821)    
 to return a valid annotation. 
 
-| peak_id | p_chr | p_start  | p_center | p_end    | feature | f_start  | f_end    | f_strand | distance | gene_name | Query | 
+| peak_id | p_chr | p_start  | p_center | p_end    | feature | feat_start  | feat_end    | feat_strand | distance | gene_name | Query | 
 |:--------|:------|:---------|:---------|:---------|:--------|:---------|:---------|:---------|:---------|:----------|:------|
 | ...     |       |          |          |          |         |          |          |          |          |           |       | 
 | peak71  | chr22 | 18161387 | 18161442 | 18161496 | NA      | NA       | NA       | NA       | NA       | NA        | 0     | 
@@ -159,7 +159,7 @@ The following configuration allows for searching peaks internal features and fea
 "internal.features": "True"
 The output would be:   
  
-| p_chr   | p_start  | p_center | p_end    | feature| f_start  | f_end   | f_strand| distance | gene_name| Query   | 
+| p_chr   | p_start  | p_center | p_end    | feature| feat_start  | feat_end   | feat_strand| distance | gene_name| Query   | 
 |:--------|:---------|:---------|:---------|:-------|:---------|:--------|:--------|:---------|:----------|:-------| 
 | ...     |          |          |          |        |          |         |         |          |           |        | 
 | chr6    | 27857165 | 27860401 | 27863637 | gene   | 27861203 | 27861669| +       | 0        | HIST1H2BO | 0      | 

@@ -2,7 +2,7 @@ UROPA provides many output files. The different outputs are showns with an examp
 
 H3K4me1 peaks from UCSC (processed data accession ENCFF001SUE were annotated for genes from gencode v19 ([further details](#"Used peak and annotation files")) using almost default values:   
 {"queries":[{"feature":"gene", "attribute":"gene_name"}],  
-"gtf": "gencode.v19.annotation.gtf",  
+"GTF": "gencode.v19.annotation.GTF",  
 "bed": "ENCFF001SUE.bed"}  
 To make it easier, the feature was set on gene. Otherwise it is possible that thare are thousands of valid annotations for one peak.        
 But whatever should be analysed, it is possible to leave out this key as well. 
@@ -16,7 +16,7 @@ There will be three output tables in the folder basic_example:
 
 1. Allhits_table_basic_example.txt
 
-| peak_id | p_chr | p_start   | p_center    | p_end     | feature | f_start   | f_end     | f_strand | distance | gene_id      | query | 
+| peak_id | p_chr | p_start   | p_center    | p_end     | feature | feat_start   | feat_end     | feat_strand | distance | gene_id      | query | 
 |---------|-------|-----------|-------------|-----------|---------|-----------|-----------|----------|----------|--------------|-------| 
 | ...     |       |           |             |           |         |           |           |          |          |              |       | 
 | peak_3  | chr6  | 396914    | 405319.0    | 413724    | exon    | 405018    | 405130    | +        | 189.0    | NR_046000    | 0     | 
@@ -40,7 +40,7 @@ There will be three output tables in the folder basic_example:
 Table 1: All hits table basic example
 2. Besthit_table_basic_example.txt
 
-| peak_id | p_chr | p_start   | p_center    | p_end     | feature | f_start   | f_end     | f_strand | distance | gene_id   | query | 
+| peak_id | p_chr | p_start   | p_center    | p_end     | feature | feat_start   | feat_end     | feat_strand | distance | gene_id   | query | 
 |---------|-------|-----------|-------------|-----------|---------|-----------|-----------|----------|----------|-----------|-------| 
 | ...     |       |           |             |           |         |           |           |          |          |           |       | 
 | peak_3  | chr6  | 396914    | 405319.0    | 413724    | exon    | 405018    | 405130    | +        | 189.0    | NR_046000 | 0     | 
@@ -56,7 +56,7 @@ Table 2: Best hits table basic example
 
 3. Merged_best_hits_basic_example
 
-| peak_id | p_chr | p_start   | p_center    | p_end     | feature | f_start   | f_end     | f_strand | distance | gene_id   | query | 
+| peak_id | p_chr | p_start   | p_center    | p_end     | feature | feat_start   | feat_end     | feat_strand | distance | gene_id   | query | 
 |---------|-------|-----------|-------------|-----------|---------|-----------|-----------|----------|----------|-----------|-------| 
 | ...     |       |           |             |           |         |           |           |          |          |           |       | 
 | peak_3  | chr6  | 396914    | 405319.0    | 413724    | exon    | 405018    | 405130    | +        | 189.0    | NR_046000 | 0,1   | 
@@ -68,7 +68,7 @@ Table 3: Merged best hits basic example
 
 4. Reformatted_Allhits_perPeak_basic_anno.txt
 
-| peak_id | p_chr | p_start   | p_center  | p_end     | feature   | f_start       | f_end         | f_strand | distance | gene_id              | query | 
+| peak_id | p_chr | p_start   | p_center  | p_end     | feature   | feat_start       | feat_end         | feat_strand | distance | gene_id              | query | 
 |---------|-------|-----------|-----------|-----------|-----------|---------------|---------------|----------|----------|----------------------|-------| 
 | ...     |       |           |           |           |           |               |               |          |          |                      |       | 
 | peak_3  | chr6  | 396914    | 405319    | 413724    | exon, CDS | 405018        | 405130        | +        | 189      | NR_046000, NM_002460 | 0,1   | 
