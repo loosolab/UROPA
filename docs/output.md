@@ -1,11 +1,13 @@
-UROPA provides many output files. The different outputs are showns with an example:
+UROPA provides many output files. The different outputs are shown with an example:
 
-H3K4me1 peaks from UCSC (processed data accession ENCFF001SUE were annotated for genes from gencode v19 ([further details](#"Used peak and annotation files")) using almost default values:   
-{"queries":[{"feature":"gene", "attribute":"gene_name"}],  
+H3K4me1 peaks from UCSC (processed data accession ENCFF001SUE were annotated for genes from gencode v19 ([further details](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files)) using almost default values:   
+{"queries":[{"feature":"gene", "attribute":"gene_id"}],  
 "GTF": "gencode.v19.annotation.GTF",  
 "bed": "ENCFF001SUE.bed"}  
-To make it easier, the feature was set on gene. Otherwise it is possible that thare are thousands of valid annotations for one peak.        
-But whatever should be analysed, it is possible to leave out this key as well. 
+
+**Important Note** Make sure to give any attributes, otherwise the annotated peaks will be displayed without any assignment.
+To make it easier, the feature was set on gene. Otherwise it is possible that there are hundreds of valid annotations for one peak.        
+But whatever should be analyzed, it is possible to leave out this key as well. 
 Of course, the attribute key cannot be left out, this is what the peaks will be annotated for.     
 Running UROPA with:     
 ```
@@ -77,14 +79,14 @@ Table 3: Merged best hits basic example
 | ...     |       |           |           |           |           |               |               |          |          |                      |       | 
 
 
-Table 4: Reformatted Allhits perPeak basic anno. Notice that the last colum is just adjusted to more rows for display them.  
+Table 4: Reformatted Allhits per Peak basic anno. Notice that the last column is just adjusted to more rows for display them.  
 
 5. Summary of UROPA run
 For every run there is also a summary output. Within this there are various plot to communicate an overview about the run. There are different plots:
-* if there is more than one query, a pairwise comparison of all queries is evaluated within a venn diagramm based on the best hits output
+* if there is more than one query, a pairwise comparison of all queries is evaluated within a venn diagram based on the best hits output
 * the distance per feature per query are displayed in a histogram based on the best hits output
 * the genomic location per feature in a pie chart based on the best hits output 
-* if there is more than one feature, the occurence of the different features are displayed in a barplot based on the best hits output
+* if there is more than one feature, the occurrence of the different features are displayed in a barplot based on the best hits output
 * the distance per feature per query are displayed in a density plot based on the merged best hits output 
 * the genomic location per feature in a pie chart based on the merged best hits output
-* if there is more than one feature, the occurence of the different features are displayed in a barplot based on the merged best hits output
+* if there is more than one feature, the occurrence of the different features are displayed in a barplot based on the merged best hits output

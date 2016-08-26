@@ -4,8 +4,8 @@ For running UROPA, a template of the config file will be provided. The structure
 
 Figure 1: Configuration file example: A config file will be downloaded when UROPA is installed. The fields are empty to be filled in. Please accord further instructions for a proper annotation.   
 
-There are three basic keys: 'queries', 'GTF', and 'bed', additionally there are three optional keys: 'internal', 'priority', and 'bigwig'
-By default, 'internal' and 'priority' are false. But all keys are further described below.     
+There are three basic keys: 'queries', 'GTF', and 'BED', additionally there are three optional keys: 'internal', 'priority', and 'bigwig'
+By default, 'internal' and 'priority' are false.  
 In a basic annotation, only the GTF and bed keys are specified, UROPA can annotate the peaks provided in the bed file by all possible feature types represented in the GTF file within a distance of max 100,000 bp. 
 #queries 
 The queries key is a field with nested keys, as you will see in the config template, for defining in more details the genomic feature of interest for the annotation. It can contain more than one query, written inside '{}' and separated with commas. It accepts the following keys for each query:
@@ -37,11 +37,11 @@ With priority='True', this key is part of the filter. If it is defined as 'False
 of these queries will annotate the peaks. The query that allowed each feature to be selected for annotation will be shown in the last column of the output tables.                
 If only one query is provided, the value of 'priority' can be 'True' or 'False', without any difference in the output annotation. Default value is 'False'.                 
 #GTF 
-The 'GTF' file should be of the standard GTF format (9 columns), as described by [Ensembl GTF format](http://www.ensembl.org/info/website/upload/gff.html>). The GTF file acts as annotation database.             
+The GTF file should be of the standard GTF format (9 columns), as described by [Ensembl GTF format](http://www.ensembl.org/info/website/upload/gff.html>). The GTF file acts as annotation database.             
 If it is not in the right format, a conversion can be done by UROPA. For more information see [Custom annotation](custom.md)
-#bed 
-The 'bed' file can be any tab-delimited file containing the detected enriched regions from a peak-calling tool (e.g. MACS2, MUSIC, FindPeaks, CisGenome, PeakSeq)             
-or any other table with genomic regions of a minimum of 3 columns and complying with the known bed format, as described by [Ensembl Bed format](http://www.ensembl.org/info/website/upload/bed.html).             
+#BED
+The BED file can be any tab-delimited file containing the detected enriched regions from a peak-calling tool (e.g. MACS2, MUSIC, FindPeaks, CisGenome, PeakSeq)             
+or any other table with genomic regions of a minimum of 3 columns and complying with the known BED format, as described by [Ensembl Bed format](http://www.ensembl.org/info/website/upload/bed.html).             
 #bigWig 
 A 'bigwig' file is optional and if specified, it gives the advantage of the peak summit, which can give a more precise annotation than the peak center. As shown in the image below,             
 sometimes the center (geometric mean) is not the real center of the enriched region. (function 'find_summit', which checks compatibility of bigwig-bed for the 'chr-' prefix             
