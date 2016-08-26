@@ -4,7 +4,7 @@ UROPA ('Universal RObust Peak Annotator' ) is a tool designed for annotating pea
 The annotation source is a gtf file, which provides the information of the genomic features to be used for annotation of the overlapping enriched regions (peaks). 
 The annotation file as well as the peaks file should be defined in a configuration file, together with certain parameters that specify which features should be selected. 
 The output is given in an easily-readable tab-delimited table with the corresponding annotation, as it is validated by the configuration file for each peak. 
-Detailed information about the configuration file is in the section [Configuration file](docs/config.md) and about the annotation output tables in the section [Output](docs/output.md). 
+Detailed information about the configuration file is in the section [Configuration file](http://uropa.readthedocs.io/en/latest/config/) and about the annotation output tables in the section [Output](docs/output.md). 
 
 Running UROPA is very simple. It can be executed in UNIX environment in one command line. 
 By editing the configuration file all necessary parameters will be defined to obtain the peak annotation immediately. Within this configuration file, the peak bed file and the annotation gtf file need to be specified.
