@@ -48,10 +48,10 @@ Table 2: Downloaded table from [UCSC Table Browser](https://genome.ucsc.edu/cgi-
 
 After transformation with feature=tfbs but without given source, the GTF format annotation file will look as displayed in Table 3.  
 
-|      |           |      |         |         |      |   |   |                                                              | 
-|------|-----------|------|---------|---------|------|---|---|--------------------------------------------------------------| 
-| chr1 | undefined | tfbs | 1310465 | 1310835 | 244  | . | . | signalValue  382.141 ; pValue -1 ; qValue 4.82217 ; peak 185 | 
-| chr1 | undefined | tfbs | 3407792 | 3408060 | 1000 | . | . | signalValue 178.305 ; pValue -1 ; qValue 4.82217 ; peak 129  | 
+|      |           |      |         |         |      |   |   |                                                                                                        | 
+|------|-----------|------|---------|---------|------|---|---|--------------------------------------------------------------------------------------------------------| 
+| chr1 | undefined | tfbs | 1310465 | 1310835 | 244  | . | . | signalValue  382.141 ; pValue -1 ; qValue 4.82217 ; peak 185; table wgEncodeAwgTfbsBroadHuvecCtcfUniPk | 
+| chr1 | undefined | tfbs | 3407792 | 3408060 | 1000 | . | . | signalValue 178.305 ; pValue -1 ; qValue 4.82217 ; peak 129; table wgEncodeAwgTfbsBroadHuvecCtcfUniPk  | 
 
 Table 3: Internal transformation to GTF file format of CTCF table from UCSC.
 
