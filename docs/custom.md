@@ -76,7 +76,8 @@ That means, the peaks that should be annotated cannot be annotated for them tfbs
 Application Example
 -------------------
 This example is based on ATAC-seq peaks ([ataq.bed](https://github.molgen.mpg.de/loosolab/UROPA/blob/master/atac-seq_example.bed) annotated with the UROPA.to.GTF file of the following tables from [UCSC Table Browser](https://genome.ucsc.edu/cgi-bin/hgTables),    
-called ['merged_custom_GTF.gtf'](https://github.molgen.mpg.de/loosolab/UROPA/blob/master/merged_custom_GTF.gtf)   
+called ['merged_custom_GTF.gtf'](https://github.molgen.mpg.de/loosolab/UROPA/blob/master/merged_custom_GTF.gtf)  
+ 
 * wgEncodeAwgTfbsBroadHuvecCtcfUniPk
 * wgEncodeAwgTfbsBroadHuvecEzh239875UniPk
 * wgEncodeAwgTfbsBroadHuvecPol2bUniPk
