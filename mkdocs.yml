@@ -16,5 +16,5 @@ pages:
 - UROPA to GTF: custom.md
 - MIT License: license.md
 - Help: help.md
-- FAQ: faq.md
+  - FAQ: faq.md
 - Abbreviations: abbreviations.md
