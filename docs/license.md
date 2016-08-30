@@ -1,6 +1,3 @@
-License
-=======
-
 MIT License
 
 Copyright (c) 2016 Maria Kondili and Mario Looso
