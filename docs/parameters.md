@@ -3,7 +3,7 @@ List of current parameters for command-line usage and their explanation:
 ```                        
 	Usage: uropa.sh [options]          
 	Available options:           
-	- i | INPUT: configuration file, add the file name of the file              
+	- i | INPUT: configuration file, add the file name             
 	- o | OUTPUT: output directory, add the path            
 	- h | HELP: this help message            
 	- u | UROPA-CONFIG: instructions for configuration file           
