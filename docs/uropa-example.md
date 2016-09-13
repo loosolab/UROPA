@@ -7,8 +7,10 @@ More than one query can be given, keeping the same gtf and bed files, allowing f
 If there are more queries, it is important to decide if they should be priorized. This can be done with the priority key in the config file.   
 The following examples illustrate how this can be beneficial for the annotation.    
 The queries in the config file looks like followed:  
+
 "queries": [{"feature":"gene", "distance":1000, "attribute":"gene_name"},     
-{"feature":"transcript", "distance":1000}],          
+{"feature":"transcript", "distance":1000}], 
+         
 The only difference between 1. and 2. is the priority key:                  
 
 1. No priority is given ('priority'='F')     
@@ -104,7 +106,7 @@ The only difference between 1. and 2. is the priority key:
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28832863 | 28836145 | +        | 245      | SNHG3      | 1     | 
 	| ...     |       |          |          |          |            |          |          |          |          |            |       | 
 
-	Table 3: All hits table two queries with priority true
+	Table 4: All hits table two queries with priority true
 	
 	| peak_id | p_chr | p_start  | p_center | p_end    | feature    | feat_start  | feat_end    | feat_strand | distance | gene_name  | Query | 
 	|:--------|:------|:---------|:---------|:---------|:-----------|:---------|:---------|:---------|:---------|:-----------|:------| 
@@ -115,7 +117,7 @@ The only difference between 1. and 2. is the priority key:
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589 | 28862538 | +        | 199      | RCC1       | 1     | 
 	| ...     |       |          |          |          |            |          |          |          |          |            |       | 
 
-	Table 4: Best hits table two queries with priority true
+	Table 5: Best hits table two queries with priority true
 	
 	*So, in the case of 'priority' =True, the features are mutually exclusive, and the rest of the queries should be parsed for valid hits in an escalating-priority, too.*        
 	
@@ -125,6 +127,7 @@ UROPA allows flexibility of annotation for features. With the 'feature.position'
 The typical application is to calculate the distance from the TSS, respresented as 'start' of the feature,        
 but with UROPA it is also possible to use the 'center' and 'end' of the analyzed feature. If no value is given, the distance from all three feature positions (['start', 'center', 'end'])     
 are calculated, and if one of them is smaller than the indicated distance, the peak will be annotated for this feature.   
+
 This example is based on H3K4me1 peaks annotated with the Gencode genome ([further details])[http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files]).
 There are two queries with different feature.positions and if peaks are internal is not taken into account:   
 "queries":  [{"feature":"gene", "attribute":"gene_name", "distance":[5000],"feature.position": "start"},       
@@ -142,7 +145,7 @@ to return a valid annotation.
 | peak71  | chr22 | 18161387 | 18161442 | 18161496 | gene    | 18111621 | 18213388 | +        | 1063     | BCL2L13   | 1     | 
 | ...     |       |          |          |          |         |          |          |          |          |           |       | 
 
-Table 5: All hits table feature position example
+Table 6: All hits table feature position example
 
 ![peak71](img/chr22-18161287-18161496_peak71_h3k4me1_feature_pos.png)
 
