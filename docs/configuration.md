@@ -2,8 +2,8 @@ The configuration file is a .json format file that allows keys and values to be 
 For running UROPA, a template of the config file will be provided. The structure of the file is shown in the following image. 
 ![config-file](img/config.png "Configuration file example: A config file will be downloaded when UROPA is installed. The fields are empty to be filled in. Please accord further instructions for a proper annotation.")
 
-There are three basic keys: 'queries', 'gtf', and 'bed', additionally there are two optional keys: 'priority', and 'bigwig'
-By default,'priority' is false. But all keys are further described below:
+There are three basic keys: 'queries', 'gtf', and 'bed'.Additionally, there are two optional keys: 'priority', and 'bigwig'
+All keys are further described below:
 
 * Queries: The queries key is a field with nested keys, as you will see in the config template, for defining in more details the genomic feature of interest for the annotation. It can contain more than one query, written inside '{}' and separated with commas. It accepts the following keys for each query:
 	* 'features': ['gene', 'exon', 'intron', 'miRNA'] or other types as defined in the 3rd column of the 'gtf'.By default all the features present in the 'gtf' will be used for the peak annotation.

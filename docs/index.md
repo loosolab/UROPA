@@ -17,8 +17,9 @@ UROPA was developed as an open source analysis pipeline for peaks generated from
 * One run with multiple sets of parameters by multiple queries
 * Gives all annotations that fit to the custom configuration: Represented in the All_hits output
 * Offers also the best annotation for each query, if more than one was identified: Represented in the Best_hits output
-* For multiple queries a best annotation of all possible annotations across all queries is also provided: Merged_best_hits output
-* Graduated annotation with the priority key     
+* For multiple queries the best annotation of all possible annotations across all queries is also provided: Merged_best_hits output
+* Graduated annotation with the priority key
+* Easily-readable output tables with rich information about exact distance and location of annotated features.
 * Visual summary for annotation evaluation
 
 **How to cite**

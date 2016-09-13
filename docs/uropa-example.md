@@ -12,18 +12,17 @@ The queries in the config file looks like followed:
 The only difference between 1. and 2. is the priority key:                  
 
 1. No priority is given ('priority'='F')     
-	The set of queries will allow UROPA to annotate peaks for genes and transcripts. As priority is false, there is no feature priorized.            
-	There can be three cases for the peak annotation: Either a peak cannot be annotated for any query, it can be annotated with one of both queries,     
-	or it could be annotated with both queries.  
-	The Tables 1, and 2 represent the All_hits and Best_hits output from UROPA. 
-	Peak_1 represents the first case, both queries have no hit at all. 
-	In the All_hits Table 1 this peak is represented by two NA rows, one for each query. Those are merged in the Best_hits Table 2, with Query information 0,1.       
-	The second case is represented by peak_10, which has an annotation for the transcript feature but not the gene feature.       
-	In Table 1 there are three entries for peak_10, two with the annotation based on query 1 and one NA row, because no annotation with query 0 was identified.     
-	In the Best_hits Table 2 only the annotation with the closest possible annotation is displayed which is for the gene *RCC1*.        
-	Peak_6 is an example for the last case, with annotations for both queries. In Table 1 four entries represent peak_6, one annotation for query 0 (gene_name *AC006483.1*),      
-	and three feature annotation for query 1. But in Table 2 there is only one entry for each query. The entry for query 0 is the same in both Tables,      
-	because only one annotation was identified. For query 1, there is only the hit with the closest distance of Table 1 present in Table 2. This hit belongs also to the gene *AC006483.1*.
+	The above set of queries will allow UROPA to annotate peaks for genes and transcripts. As priority is False (default if no different value given),there is no feature priorized.            
+	There can be three cases for the peak annotation: 
+	Case 1: No query gives any feature for annotating the peaks. 
+	Case 2: One query gives a feature but the other not. 
+	Case 3: Both queries validate features overlapping with the peaks.  
+
+	The Tables [1], and [2], shown below, represent the All_hits and Best_hits outputs of UROPA,respectively for the 3 cases. 
+	
+	In the 'All_hits' all the features found within the given distance will be annotated for the peak,while 
+	in the 'Best_hits' only the annotation with the closest feature  per peak per query is displayed. 
+
  
 	| peak_id | p_chr | p_start  | p_center | p_end    | feature    | feat_start | feat_end    | feat_strand | distance | gene_name  | Query | 
 	|:--------|:------|:---------|:---------|:---------|:-----------|:--------|:---------|:---------|:---------|:-----------|:------| 
@@ -40,11 +39,23 @@ The only difference between 1. and 2. is the priority key:
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | NA         | NA      | NA       | NA       | NA       | NA         | 0     | 
 	| ...     |       |          |          |          |            |         |          |          |          |            |       | 
 
-	Table 1: All hits table two queries with priority false    
+	Table 1: All hits table for two queries with priority false. 
 
-	| peak_id | p_chr | p_start  | p_center | p_end    | feature    | feat_start | feat_end    | feat_strand | distance | gene_name  | Query | 
+
+	'Peak_1' represents the first case where both queries validate no feature at all. In this case the peak is represented by 'NA' rows, for each query. 
+	Those are merged in the Best_hits Table 2, with Query information 0,1.       
+	
+	The second case is represented by 'peak_10', which has an annotation for the transcript feature but not the gene feature.       
+	There are three entries,two with the annotation based on query 1 and one NA row, because no annotation with query 0 was identified.     
+	
+	'Peak_6' is an example for the last case, with annotations for both queries. Transcripts(*ACTB*) are found by query 1 and a gene(*AC006483.1*) by query 0.
+
+
+
+	| peak_id | p_chr | p_start  | p_center | p_end    | feature    |feat_start|feat_end |feat_strand|distance | gene_name  | Query | 
 	|:--------|:------|:---------|:---------|:---------|:-----------|:--------|:---------|:---------|:---------|:-----------|:------| 
-	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         | 0,1   | 
+	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         | 0     | 
+	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         | 1     |
 	| ...     |       |          |          |          |            |         |          |          |          |            |       | 
 	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | transcript | 5567734 | 5567817  | -        | 3        | AC006483.1 | 1     | 
 	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | gene       | 5567734 | 5567817  | -        | 3        | AC006483.1 | 0     | 
@@ -52,12 +63,31 @@ The only difference between 1. and 2. is the priority key:
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589| 28862538 | +        | 199      | RCC1       | 1     | 
 	| ...     |       |          |          |          |            |         |          |          |          |            |       | 
 
-	Table 2: Best hits table two queries with priority false
+	Table 2: Best hits table for two queries with priority false.
+
+
+	| peak_id | p_chr | p_start  | p_center | p_end    | feature    |feat_start|feat_end |feat_strand|distance | gene_name  | Query | 
+	|:--------|:------|:---------|:---------|:---------|:-----------|:--------|:---------|:---------|:---------|:-----------|:------| 
+	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         | 0,1   |
+	| ...     |       |          |          |          |            |         |          |          |          |            |       |
+	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | transcript | 5567734 | 5567817  | -        | 3        | AC006483.1 | 0,1   |
+	| ...     |       |          |          |          |            |         |          |          |          |            |       |
+	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589| 28862538 | +        | 199      | RCC1       | 1     |
+
+	Table 3: Merged best hits table for two queries with priority false.
+
+	In Case 1,reported in 'peak_1', the 'Best_hits' table will be the same as the 'All_hits' because all queries give same annotation. This is why 'Merged_Best_Hits' table was designed [Table 3]. Queries with same annotation are merged in one line giving a more compact illustration of the annotation.
+	For the other 2 cases (peak_6, peak_10) the best feature is chosen according to  'distance' measured from the peak center.For 'peak_6' the closest transcript and gene have both same distance = 3, so they are both reported in Best_hits, but merged in one line at the 'Merged_Best_hits'.
+	For 'peak_10' the closest feature is the transcript with gene_name *RCC1*, so no merging was needed.
+
 
 2. Priority is considered ('priority'='T')     
-	The set of queries will allow UROPA to annotate peaks for genes. Only if there is no annotation identified for the feature gene,     
-	UROPA analyzes peaks the feature transcript for annotations. The feature gene is priorized.   
-	That is why there is no peak in the output tables, that is annotated for both features. The example is based on the same three cases.    
+
+	The set of queries will allow UROPA to annotate peaks for genes. Only if there is no gene detected with the given parameters,     
+	UROPA will assign to the peaks the feature transcript for annotation. The feature gene is priorized.The example above is based on the same three cases.
+	That is why there is no peak in the output tables annotated for both features. Each peak is allowed to have either one feature or the other.
+
+
 	The first difference to the example above is that already in the All_hits Table 3 those peaks with no annotation for both queries are merged.    
 	That is why the entries for peaks without any annotation will look the same in All_hits and Best_hits, compare Best_hits Table 4.     
 	Because for peak_6 there is already an annotation for the priorized query 0, the other query is not further analyzed, compare Tables 3, and 4.     
