@@ -8,20 +8,22 @@ If there are more queries, it is important to decide if they should be priorized
 The following examples illustrate how this can be beneficial for the annotation.    
 
 The queries in the config file looks like followed:  
+
+```
 				{"queries": [{"feature":"gene", "distance":1000, "attribute":"gene_name"},     
 							{"feature":"transcript", "distance":1000 }], 
          		"priority" : "False",
          		"gtf":"Homo_sapiens.GRCh37.75_chr.gtf" ,
          		"bed":"ENCFF001VFA_GM12878_POLR2A_narrowPeaks.bed"
          		}
-
+```
 
 1. No priority is given ('priority'='F')     
 	The above set of queries will allow UROPA to annotate peaks for genes and transcripts. As priority is False (default if no different value given),there is no feature priorized.            
 	There can be three cases for the peak annotation: 
-	Case 1: No query gives any feature for annotating the peaks. 
-	Case 2: One query gives a feature but the other not. 
-	Case 3: Both queries validate features overlapping with the peaks.  
+	*Case 1: No query gives any feature for annotating the peaks. 
+	*Case 2: One query gives a feature but the other not. 
+	*Case 3: Both queries validate features overlapping with the peaks.  
 
 	The Tables [1] and [2] shown below, represent the All_hits and Best_hits outputs of UROPA,respectively for the 3 cases. 
 	
@@ -51,7 +53,7 @@ The queries in the config file looks like followed:
 	
 	The 2nd case is represented by 'peak_10', which has two annotations for the transcript feature but not the gene feature.       
 	
-	'Peak_6' is an example for the last case, with annotations for both queries. Transcripts(*ACTB*) are found by query 1 and a gene(*AC006483.1*) by query 0.
+	'Peak_6' is an example for the last case, with annotations for both queries. Transcripts (*ACTB*) are found by query 1 and a gene (*AC006483.1*) by query 0.
 
 
 
@@ -86,9 +88,9 @@ The queries in the config file looks like followed:
 
 2. Priority is considered ('priority'='T')     
 
-	The set of queries will allow UROPA to annotate peaks for genes. Only if there is no gene detected with the given parameters,     
-	UROPA will assign to the peaks the feature transcript for annotation. The feature gene is priorized.The example above is based on the same three cases.
-	That is why there is no peak in the output tables annotated for both features. Each peak is allowed to have either one feature or the other.
+	If 'priority' is True, UROPA will annotate peaks with the **first feature given** in the set of queries. Unless genes are not found for a peak, 'transcripts' will then be searched and validated by the query’s parameters in order to be assigned on a peak. The example is based on the same three cases,explained above.
+	That is why there will be no peak in the output tables annotated for both features at the same time. 
+	Each peak is allowed to have either the priority feature or the other one.
 
 
 	The first difference to the example above is that already in the All_hits Table 3 those peaks with no annotation for both queries are merged.    
@@ -118,26 +120,34 @@ The queries in the config file looks like followed:
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589 | 28862538 | +        | 199      | RCC1       | 1     | 
 	| ...     |       |          |          |          |            |          |          |          |          |            |       | 
 
-	Table 5: Best hits table two queries with priority true
+	Table 5: Best hits table with two queries when priority is set 'True'.
 	
-	*So, in the case of 'priority' =True, the features are mutually exclusive, and the rest of the queries should be parsed for valid hits in an escalating-priority, too.*        
+
+	*So, in the case of 'priority' = True, the features are mutually exclusive, and the rest of the queries should be parsed for valid hits in an escalating-priority, too.*        
 	
+
 Example for the feature position 
 -------------------------------- 
 UROPA allows flexibility of annotation for features. With the 'feature.position' key it is possible to decide from where the distance to the peak should be calculated.    
 The typical application is to calculate the distance from the TSS, respresented as 'start' of the feature,        
-but with UROPA it is also possible to use the 'center' and 'end' of the analyzed feature. If no value is given, the distance from all three feature positions (['start', 'center', 'end'])     
-are calculated, and if one of them is smaller than the indicated distance, the peak will be annotated for this feature.   
+but with UROPA it is also possible to use the 'center' and 'end' of the feature in question. If no value is given, the distances from all three feature positions (['start', 'center', 'end']) to the peak center are calculated. If one of them is smaller than the indicated distance and minimum among them, the peak will be annotated for this feature. 
 
 This example is based on H3K4me1 peaks annotated with the Gencode genome ([further details])[http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files]).
-There are two queries with different feature.positions and if peaks are internal is not taken into account:   
-"queries":  [{"feature":"gene", "attribute":"gene_name", "distance":[5000],"feature.position": "start"},       
-		    {"feature": "gene", "feature.position": "center"}],
-"internal"="False"
 
-As displayed in the All_hits Table 5, the peak could only be annotated for query 1 with the 'feature.position' center. Visible in Figure 1, the gene *BCL2L13* is very large,   
-that is why even if the peak is internal of the gene, the start position of the feature gene is to far away (feature.start – peak.center = \|18111621-18161442\| = 49 821)    
-to return a valid annotation. 
+There are two queries with different feature.positions. 
+```
+
+"queries":  [{"feature":"gene", "attribute":"gene_name", "distance":[5000],"feature.position": "start"},       
+		    {"feature": "gene", "feature.position": "center"}]
+
+```
+
+As displayed in the All_hits table(Table 5), the peak could only be annotated for query 1 with the 'feature.position' center. Visible in Figure 1, the gene *BCL2L13* is very large,   
+that is why even if the peak is internal to the gene region, the start position of the feature 'gene' is far away to return a valid annotation.
+```
+(feature.start – peak.center = \|18111621-18161442\| = 49 821)    
+
+```
 
 | peak_id | p_chr | p_start  | p_center | p_end    | feature | feat_start  | feat_end    | feat_strand | distance | gene_name | Query | 
 |:--------|:------|:---------|:---------|:---------|:--------|:---------|:---------|:---------|:---------|:----------|:------|
@@ -148,9 +158,11 @@ to return a valid annotation.
 
 Table 6: All hits table feature position example
 
+
 ![peak71](img/chr22-18161287-18161496_peak71_h3k4me1_feature_pos.png)
 
 Figure 1: H3K4me1 peak 71 annotated with the Ensembl genome, the genomic location is chr22:18161287-18161496.    
+
 
 Example for the direction 
 ------------------------- 
