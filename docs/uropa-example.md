@@ -5,7 +5,7 @@ Example with two queries and difference in 'priority'
 This example is based on POLR2A peaks annotated with the Ensembl genome ([further details])[http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files]).
 More than one query can be given, keeping the same gtf and bed files, allowing for a combination of annotation in one run.    
 If there are more queries, it is important to decide if they should be priorized. This can be done with the priority key in the config file.   
-The following examples illustrate how this can be beneficial for the annotation.    
+The following examples illustrate how this can be beneficial for the annotation.
 
 The queries in the config file looks like followed:  
 
@@ -18,7 +18,7 @@ The queries in the config file looks like followed:
          		}
 ```
 
-1. No priority is given ('priority'='F')     
+1. If No priority is given ('priority'='F')     
 	The above set of queries will allow UROPA to annotate peaks for genes and transcripts. As priority is False (default if no different value given),there is no feature priorized. 
 
 	There can be three cases for the peak annotation: 
@@ -49,7 +49,8 @@ The queries in the config file looks like followed:
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28832863| 28836145 | +        | 245      | SNHG3      | 1     | 
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | NA         | NA      | NA       | NA       | NA       | NA         | 0     | 
 	| ...     |       |          |          |          |            |         |          |          |          |            |       | 
-[Table 1: All hits table for two queries with priority false. ]
+
+	[Table 1: All hits table for two queries with priority false. ]
 
 
 	'Peak_1' represents the first case where both queries validate no feature at all. In this case the peak is represented by 'NA' rows, for each query. 
@@ -70,7 +71,8 @@ The queries in the config file looks like followed:
 	| ...     |       |          |          |          |            |         |          |          |          |            |       | 
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589| 28862538 | +        | 199      | RCC1       | 1     | 
 	| ...     |       |          |          |          |            |         |          |          |          |            |       | 
-[Table 2: Best hits table for two queries with priority false.]
+
+	[Table 2: Best hits table for two queries with priority false.]
 
 
 	| peak_id | p_chr | p_start  | p_center | p_end    | feature    |feat_start|feat_end |feat_strand|distance | gene_name  | Query | 
@@ -80,14 +82,15 @@ The queries in the config file looks like followed:
 	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | transcript | 5567734 | 5567817  | -        | 3        | AC006483.1 | 0,1   |
 	| ...     |       |          |          |          |            |         |          |          |          |            |       |
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589| 28862538 | +        | 199      | RCC1       | 1     |
-[Table 3: Merged best hits table for two queries with priority false.]
+
+	[Table 3: Merged best hits table for two queries with priority false.]
 
 	In Case 1,reported in 'peak_1', the 'Best_hits' table will be the same as the 'All_hits' because all queries give same annotation. This is why 'Merged_Best_Hits' table was designed [Table 3]. Queries with same annotation are merged in one line giving a more compact illustration of the annotation.
 	For the other 2 cases (peak_6, peak_10) the best feature is chosen according to  'distance' measured from the peak center.For 'peak_6' the closest transcript and gene have both same distance = 3, so they are both reported in Best_hits, but merged in one line at the 'Merged_Best_hits'.
 	For 'peak_10' the closest feature is the transcript with gene_name *RCC1*, so no merging was needed.
 
 
-2. Priority is considered ('priority'='T')     
+2. If Priority is considered ('priority'='True')     
 
 	If 'priority' is True, UROPA will annotate peaks with the **first feature given** in the set of queries. Unless genes are not found for a peak, 'transcripts' will then be searched and validated by the query’s parameters in order to be assigned to a peak. The example is based on the same three cases, explained above.
 	That is why there will be no peak in the output tables annotated for both features at the same time. 
@@ -110,7 +113,8 @@ The queries in the config file looks like followed:
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589 | 28862538 | +        | 199      | RCC1       | 1     | 
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28832863 | 28836145 | +        | 245      | SNHG3      | 1     | 
 	| ...     |       |          |          |          |            |          |          |          |          |            |       | 
-[Table 4: All hits table with two queries when priority='True']
+
+	[Table 4: All hits table with two queries when priority='True']
 	
 
 	| peak_id | p_chr | p_start  | p_center | p_end    | feature    | feat_start| feat_end| feat_strand | distance | gene_name | Query | 
@@ -121,7 +125,8 @@ The queries in the config file looks like followed:
 	| ...     |       |          |          |          |            |          |          |          |          |            |       | 
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589 | 28862538 | +        | 199      | RCC1       | 1     | 
 	| ...     |       |          |          |          |            |          |          |          |          |            |       | 
-[Table 5: Best hits table with two queries when priority is set 'True'.]
+
+	[Table 5: Best hits table with two queries when priority is set 'True'.]
 	
 
 	*So, in the case of 'priority' = True, the features are mutually exclusive, and the queries are parsed for valid hits in an escalating-priority, too.*        
@@ -129,9 +134,11 @@ The queries in the config file looks like followed:
 
 Example for the 'feature.position' 
 -------------------------------- 
-UROPA allows flexibility of annotation for features. With the 'feature.position' key it is possible to decide from where the distance to the peak should be calculated.    
+UROPA allows flexibility of annotation for features. With the key 'feature.position' it is possible to decide from where the distance-to-the-peak should be calculated.    
 The typical application is to calculate the distance from the TSS, respresented as 'start' of the feature,        
-but with UROPA it is also possible to use the 'center' and 'end' of the feature in question. If no value is given, the distances from all three feature positions (['start', 'center', 'end']) to the peak center are calculated. If one of them is smaller than the indicated distance and minimum among them, the peak will be annotated for this feature. 
+but with UROPA it is also possible to use the 'center' and 'end' of the feature in question. 
+
+If no value is given, the distances from all three feature positions ('start', 'center', 'end') to the peak center are calculated. The minimum of all measured distances (|feature.position - peak.center|) is kept and if it is smaller than the indicated distance, the peak will be annotated for this feature. 
 
 This example is based on H3K4me1 peaks annotated with the Gencode genome ([further details])[http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files]).
 
@@ -146,7 +153,7 @@ There are two queries with different feature.positions.
 As displayed in the All_hits table(Table 5), the peak could only be annotated for query 1 with the 'feature.position' center. Visible in Figure 1, the gene *BCL2L13* is very large,   
 that is why even if the peak is internal to the gene region, the start position of the feature 'gene' is far away to return a valid annotation.
 ```
-(feature.start – peak.center = \|18111621-18161442\| = 49 821)    
+(feature.start – peak.center = |18111621-18161442| = 49 821)    
 
 ```
 
@@ -156,6 +163,7 @@ that is why even if the peak is internal to the gene region, the start position 
 | peak71  | chr22 | 18161387 | 18161442 | 18161496 | NA      | NA       | NA       | NA       | NA       | NA        | 0     | 
 | peak71  | chr22 | 18161387 | 18161442 | 18161496 | gene    | 18111621 | 18213388 | +        | 1063     | BCL2L13   | 1     | 
 | ...     |       |          |          |          |         |          |          |          |          |           |       | 
+
 [Table 6: All hits table feature position example]
 
 
@@ -236,6 +244,7 @@ The output will be:
 | chr6    | 27857165 | 27860401 | 27863637 | gene   | 27858093 | 27860884| -       | 0        | HIST1H3J  | 0      | 
 | chr6    | 27857165 | 27860401 | 27863637 | gene   | 27860477 | 27860963| -       | 0        | HIST1H2AM | 0      | 
 | ...     |          |          |          |        |          |         |         |          |           |        | 
+
 [ Table 7: All hits table internal feature example].
 
 ![internal.feature](img/chr6-27,857,165-27,863,637_internal_feature-01.png)
