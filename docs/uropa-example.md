@@ -1,6 +1,6 @@
 In this section several examples for the usage of the config file are presented. 
 
-Example with two queries and difference in priority 
+Example with two queries and difference in 'priority' 
 --------------------------------------------------- 
 This example is based on POLR2A peaks annotated with the Ensembl genome ([further details])[http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files]).
 More than one query can be given, keeping the same gtf and bed files, allowing for a combination of annotation in one run.    
@@ -49,7 +49,7 @@ The queries in the config file looks like followed:
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28832863| 28836145 | +        | 245      | SNHG3      | 1     | 
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | NA         | NA      | NA       | NA       | NA       | NA         | 0     | 
 	| ...     |       |          |          |          |            |         |          |          |          |            |       | 
-	[Table 1: All hits table for two queries with priority false. ]
+[Table 1: All hits table for two queries with priority false. ]
 
 
 	'Peak_1' represents the first case where both queries validate no feature at all. In this case the peak is represented by 'NA' rows, for each query. 
@@ -70,7 +70,7 @@ The queries in the config file looks like followed:
 	| ...     |       |          |          |          |            |         |          |          |          |            |       | 
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589| 28862538 | +        | 199      | RCC1       | 1     | 
 	| ...     |       |          |          |          |            |         |          |          |          |            |       | 
-	[Table 2: Best hits table for two queries with priority false.]
+[Table 2: Best hits table for two queries with priority false.]
 
 
 	| peak_id | p_chr | p_start  | p_center | p_end    | feature    |feat_start|feat_end |feat_strand|distance | gene_name  | Query | 
@@ -80,7 +80,7 @@ The queries in the config file looks like followed:
 	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | transcript | 5567734 | 5567817  | -        | 3        | AC006483.1 | 0,1   |
 	| ...     |       |          |          |          |            |         |          |          |          |            |       |
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589| 28862538 | +        | 199      | RCC1       | 1     |
-	[Table 3: Merged best hits table for two queries with priority false.]
+[Table 3: Merged best hits table for two queries with priority false.]
 
 	In Case 1,reported in 'peak_1', the 'Best_hits' table will be the same as the 'All_hits' because all queries give same annotation. This is why 'Merged_Best_Hits' table was designed [Table 3]. Queries with same annotation are merged in one line giving a more compact illustration of the annotation.
 	For the other 2 cases (peak_6, peak_10) the best feature is chosen according to  'distance' measured from the peak center.For 'peak_6' the closest transcript and gene have both same distance = 3, so they are both reported in Best_hits, but merged in one line at the 'Merged_Best_hits'.
@@ -110,7 +110,7 @@ The queries in the config file looks like followed:
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589 | 28862538 | +        | 199      | RCC1       | 1     | 
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28832863 | 28836145 | +        | 245      | SNHG3      | 1     | 
 	| ...     |       |          |          |          |            |          |          |          |          |            |       | 
-	[Table 4: All hits table with two queries when priority='True']
+[Table 4: All hits table with two queries when priority='True']
 	
 
 	| peak_id | p_chr | p_start  | p_center | p_end    | feature    | feat_start| feat_end| feat_strand | distance | gene_name | Query | 
@@ -121,13 +121,13 @@ The queries in the config file looks like followed:
 	| ...     |       |          |          |          |            |          |          |          |          |            |       | 
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589 | 28862538 | +        | 199      | RCC1       | 1     | 
 	| ...     |       |          |          |          |            |          |          |          |          |            |       | 
-	[Table 5: Best hits table with two queries when priority is set 'True'.]
+[Table 5: Best hits table with two queries when priority is set 'True'.]
 	
 
 	*So, in the case of 'priority' = True, the features are mutually exclusive, and the queries are parsed for valid hits in an escalating-priority, too.*        
 	
 
-Example for the feature position 
+Example for the 'feature.position' 
 -------------------------------- 
 UROPA allows flexibility of annotation for features. With the 'feature.position' key it is possible to decide from where the distance to the peak should be calculated.    
 The typical application is to calculate the distance from the TSS, respresented as 'start' of the feature,        
@@ -164,7 +164,7 @@ that is why even if the peak is internal to the gene region, the start position 
 Figure 1: H3K4me1 peak 71 annotated with the Ensembl genome, the genomic location is chr22:18161287-18161496.    
 
 
-Example for the direction 
+Example for the 'direction' 
 ------------------------- 
 This example is based on H3K4me1 peaks annotated with the Gencode genome ([further details])[http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files]).
 In the following example the utility of the key 'direction' will be illustrated. It is optional but can be a very important 'player' for a more specialized annotation.             
@@ -199,8 +199,10 @@ So for *ATAD3C* the distance is measured from the 'end' and the distance for *AT
 
 The best annotation in this case would be the gene *ATAD3C*.  
 
-But, more specific annotation can be useful for some peaks. For example, if some genomic regions are known to be enriched in transcriptionally active promotors.   
-It is then possible in UROPA config file to add the parameter 'direction': 'upstream' to the query.
+But, more specific annotation can be useful for some peaks like this one, in order to obtain a unique and precise annotation. 
+For example, if some genomic regions are known to be enriched in transcriptionally active promoters, we would be interested to know on which features these regions are found upstream.   
+Also,‘downstream’ direction could be useful for the targeted identification of miRNAs or 3’UTR-binding proteins.
+It is then possible in UROPA via the config file to add the parameter 'direction': 'upstream' to the query.
 ```
 
 "queries": [{"feature": "gene", "attribute":"gene_name", "distance":1000, "direction":"upstream"}]           
@@ -210,7 +212,7 @@ In this case the peak will only be annotated for *ATAD3B*. Depending on the biol
 
 
 
-Example for the internal.feature key
+Example for the 'internals' key
 ------------------------------------
 This example is based on POLR2A peaks annotated with the Ensembl genome ([further details])[http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files]).
 By default this feature is false. With this attidue only such peaks are annotated whose distance is smaller than the definded one.          
@@ -219,9 +221,13 @@ Same the other way around, very large peaks and small features. For those cases,
 To say usually peaks with a max distance should be annotated, but also those who are internal, or include the feature.      
 Especially, when ATACseq peaks are used for annotating them with very small transcription factors, this option becomes very handy.          
 The following configuration allows for searching peaks internal features and featurs internal of peaks:
-"queries":[{"feature":"gene", "distance":1000, "attribute":"gene_name"}],
-"internal.features": "True"
-The output would be:   
+```
+
+"queries":[{"feature":"gene", "distance":1000, "attribute":"gene_name", "internals" : "True"}]
+
+```
+
+The output will be:   
  
 | p_chr   | p_start  | p_center | p_end    | feature| feat_start  | feat_end   | feat_strand| distance | gene_name| Query   | 
 |:--------|:---------|:---------|:---------|:-------|:---------|:--------|:--------|:---------|:----------|:-------| 
@@ -230,18 +236,24 @@ The output would be:
 | chr6    | 27857165 | 27860401 | 27863637 | gene   | 27858093 | 27860884| -       | 0        | HIST1H3J  | 0      | 
 | chr6    | 27857165 | 27860401 | 27863637 | gene   | 27860477 | 27860963| -       | 0        | HIST1H2AM | 0      | 
 | ...     |          |          |          |        |          |         |         |          |           |        | 
-
-Table 6: All hits table internal feature example
+[ Table 7: All hits table internal feature example].
 
 ![internal.feature](img/chr6-27,857,165-27,863,637_internal_feature-01.png)
 
 Figure 3: H3K4me1 peaks annotated with Ensembl, genomic location: chr6-27,857,165-27,863,637
 
 As displayed in Table 5 there are three genes annotated for the peak which is shown in Figure 3.    
-Their distance is reportet as 0, because UROPA detects the internal features by their position even when their distances from the peak.center       
-to all feature positions (no specific chosen in the configuration) would be larger than set.        
-In the contrary case, where the option 'internal.feature' is not activated and no feature.position is chosen,          
-the peak would only be annotated for *HIST1H3J* with a distance of 483 bp. 
+
+UROPA detects the internal-to-a-peak features or the internal-to-a-feature peaks and reports their 'genomic.location' in the output files. Even if the distances from feature.position to the peak center  are larger than the 'distance' set, the features will be annotated to the corresponding peaks.
+       
+In the contrary case, where the key 'internals' is not activated (by default "False") and no feature.position is chosen,          
+the peak would only be annotated for *HIST1H3J*  with a distance of 483 bp. 
+
+
+| p_chr   | p_start  | p_center | p_end    | feature| feat_start  | feat_end   | feat_strand| distance | gene_name| Query   | 
+|:--------|:---------|:---------|:---------|:-------|:---------|:--------|:--------|:---------|:----------|:-------| 
+| chr6    | 27857165 | 27860401 | 27863637 | gene   | 27858093 | 27860884| -       | 483        | HIST1H3J  | 0      |
+
 
 Used peak and annotation files 
 ------------------------------ 
@@ -252,6 +264,6 @@ Human Gencode genome, version hg19: [Gencode genome](ftp://ftp.sanger.ac.uk/pub/
 Narrow peak and signal files based on ChIP-seq of GM12878 immortalized cell line:  
 [H3K4ME1](https://www.encodeproject.org/experiments/ENCSR000AKF/)   
 [POLR2A](https://www.encodeproject.org/experiments/ENCSR000EAD/)     
-**Note**: peak ids are manually added to make it easier to compare different tables or to combind tables with images. 
+**Note**: peak ids are manually added to make it easier to compare different tables or to combine tables with images. 
 
 Still not sure how to use the config file? Please contact Maria Kondili(maria.kondili@mpi-bn.mpg.de)
