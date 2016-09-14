@@ -169,10 +169,10 @@ Example for the direction
 This example is based on H3K4me1 peaks annotated with the Gencode genome ([further details])[http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files]).
 In the following example the utility of the key 'direction' will be illustrated. It is optional but can be a very important 'player' for a more specialized annotation.             
 The example is based on the peak displayed in Figure 2.     
-*It can also be thought of as the location of the peak depending on the feature’s direction.* 
 
-When the direction key is set to 'upstream', peaks will be annotated to a feature if the peak center is upstream of the feature start postition and             
-the distance from the start position is smaller than the indicated distance. The other way around for 'downstream'. This is why the direction is relative to the peak location.      
+When the direction key is set to 'upstream', peaks will be annotated to a feature if the peak center is upstream of the feature start-position and the distance from the start position is smaller than the indicated distance. The other way around for 'downstream'. This is why the direction is relative to the peak location. 
+*It can also be thought of as the location of the peak depending on the feature’s direction.*       
+
 *An overlap is partially allowed to the edges of the peak, but the overlap should allow a clear evidence*         
 *of the upstream or downstream location of the peak from the feature, so there shouldn’t be an important overlap of the peak length*.
 
@@ -181,15 +181,33 @@ Let’s see now an example of an annotation with and without direction chosen, f
 
 Figure 2: H3K4me1 peak annotated with the Gencode genome, the genomic location is chr1:1403500-1408500.
    
-The query looked as followed:         
-"queries": [{"feature": "gene", "attribute":"gene_name", "distance":1000}]        
+The query looks as the following:       
+```
+
+"queries": [{ "feature": "gene", "attribute":"gene_name", "distance":1000 }] 
+
+```
+
 The peak displayed in Figure 2 would be annotated for both genes: 
-*ATAD3C* with a distance of 712.5 bp and *ATAD3B* with a distance of 892.5 bp. Due to that no feature.position was defined, the distance calculated for *ATAD3C*        
-is the distance from the gene end and the distance for *ATAD3B* the distance to the gene start. The best annotation in this case would than be the gene *ATAD3C*.    
-More specific annotation can be usefull for some peaks. For example, if the peaks are known to be enriched in transcriptionally active promotors.   
-It is possible to add the direction key with 'upstream' to the querie:          
+
+ * *ATAD3C* with a distance of 712.5 bp and
+ * *ATAD3B* with a distance of 892.5 bp. 
+
+Due to the fact that no 'feature.position' was defined, the distance calculated was chosen after a comparison of distances to find the minimum to the peak.center.
+
+So for *ATAD3C* the distance is measured from the 'end' and the distance for *ATAD3B* is measured from the 'start',as shown in the output table in column 'feature.position'. 
+
+The best annotation in this case would be the gene *ATAD3C*.  
+
+But, more specific annotation can be useful for some peaks. For example, if some genomic regions are known to be enriched in transcriptionally active promotors.   
+It is then possible in UROPA config file to add the parameter 'direction': 'upstream' to the query.
+```
+
 "queries": [{"feature": "gene", "attribute":"gene_name", "distance":1000, "direction":"upstream"}]           
-In this case the peak will only be annotated for *ATAD3B*. Depending on the biologically relevance, it can be very usefull to utilize the accessible keys. 
+
+```
+In this case the peak will only be annotated for *ATAD3B*. Depending on the biological relevance, it can be very useful to utilize more flexible keys. 
+
 
 
 Example for the internal.feature key
