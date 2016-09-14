@@ -49,8 +49,7 @@ The queries in the config file looks like followed:
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28832863| 28836145 | +        | 245      | SNHG3      | 1     | 
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | NA         | NA      | NA       | NA       | NA       | NA         | 0     | 
 	| ...     |       |          |          |          |            |         |          |          |          |            |       | 
-
-	Table 1: All hits table for two queries with priority false. 
+	[Table 1: All hits table for two queries with priority false. ]
 
 
 	'Peak_1' represents the first case where both queries validate no feature at all. In this case the peak is represented by 'NA' rows, for each query. 
@@ -71,8 +70,7 @@ The queries in the config file looks like followed:
 	| ...     |       |          |          |          |            |         |          |          |          |            |       | 
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589| 28862538 | +        | 199      | RCC1       | 1     | 
 	| ...     |       |          |          |          |            |         |          |          |          |            |       | 
-
-	Table 2: Best hits table for two queries with priority false.
+	[Table 2: Best hits table for two queries with priority false.]
 
 
 	| peak_id | p_chr | p_start  | p_center | p_end    | feature    |feat_start|feat_end |feat_strand|distance | gene_name  | Query | 
@@ -82,8 +80,7 @@ The queries in the config file looks like followed:
 	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | transcript | 5567734 | 5567817  | -        | 3        | AC006483.1 | 0,1   |
 	| ...     |       |          |          |          |            |         |          |          |          |            |       |
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589| 28862538 | +        | 199      | RCC1       | 1     |
-
-	Table 3: Merged best hits table for two queries with priority false.
+	[Table 3: Merged best hits table for two queries with priority false.]
 
 	In Case 1,reported in 'peak_1', the 'Best_hits' table will be the same as the 'All_hits' because all queries give same annotation. This is why 'Merged_Best_Hits' table was designed [Table 3]. Queries with same annotation are merged in one line giving a more compact illustration of the annotation.
 	For the other 2 cases (peak_6, peak_10) the best feature is chosen according to  'distance' measured from the peak center.For 'peak_6' the closest transcript and gene have both same distance = 3, so they are both reported in Best_hits, but merged in one line at the 'Merged_Best_hits'.
@@ -92,16 +89,17 @@ The queries in the config file looks like followed:
 
 2. Priority is considered ('priority'='T')     
 
-	If 'priority' is True, UROPA will annotate peaks with the **first feature given** in the set of queries. Unless genes are not found for a peak, 'transcripts' will then be searched and validated by the query’s parameters in order to be assigned on a peak. The example is based on the same three cases,explained above.
+	If 'priority' is True, UROPA will annotate peaks with the **first feature given** in the set of queries. Unless genes are not found for a peak, 'transcripts' will then be searched and validated by the query’s parameters in order to be assigned to a peak. The example is based on the same three cases, explained above.
 	That is why there will be no peak in the output tables annotated for both features at the same time. 
-	Each peak is allowed to have either the priority feature or the other one.
+	Each peak is allowed to have the 1st feature or the 2nd, or the 3rd, etc.
 
 
-	The first difference to the example above is that already in the All_hits Table 3 those peaks with no annotation for both queries are merged.    
-	That is why the entries for peaks without any annotation will look the same in All_hits and Best_hits, compare Best_hits Table 4.     
-	Because for peak_6 there is already an annotation for the priorized query 0, the other query is not further analyzed, compare Tables 3, and 4.     
-	For peak_10 there was no annotation identified for the query 0, but two for query 1, as displayed in Table 3. In this example, this is the only peak    
-	with a difference betweeen the two Tables, in Table 4 only the annotation with the closest distance is displayed, which is gene *RCC1*.	
+	The first difference to the example without priority is that in the All_hits [Table 4] the peaks with no annotation for both queries are merged in one line and both queries are reported.    
+	This is why the entries for peaks without any annotation will look the same in All_hits and Best_hits.
+
+	In the case of 'peak_6' there is an annotation for the priorized query 0, so the other query is not further analyzed. 
+	Compare Tables 3 and 4.     
+	For 'peak_10' there was no annotation identified for the query 0, but two for query 1, as displayed in Table 3. In this example, this is the only peak with a difference betweeen the two Tables: Here the two transripts are annotated because the query 0-gene was not found. As shown in Table 5 the annotation with the closest distance between these two is displayed at the Best hits, which is gene *RCC1*.	
 	
 	| peak_id | p_chr | p_start  | p_center | p_end    | feature    | feat_start  | feat_end    | feat_strand | distance | gene_name  | Query | 
 	|:--------|:------|:---------|:---------|:---------|:-----------|:---------|:---------|:---------|:---------|:-----------|:------| 
@@ -112,10 +110,10 @@ The queries in the config file looks like followed:
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589 | 28862538 | +        | 199      | RCC1       | 1     | 
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28832863 | 28836145 | +        | 245      | SNHG3      | 1     | 
 	| ...     |       |          |          |          |            |          |          |          |          |            |       | 
-
-	Table 4: All hits table two queries with priority true
+	[Table 4: All hits table with two queries when priority='True']
 	
-	| peak_id | p_chr | p_start  | p_center | p_end    | feature    | feat_start  | feat_end    | feat_strand | distance | gene_name  | Query | 
+
+	| peak_id | p_chr | p_start  | p_center | p_end    | feature    | feat_start| feat_end| feat_strand | distance | gene_name | Query | 
 	|:--------|:------|:---------|:---------|:---------|:-----------|:---------|:---------|:---------|:---------|:-----------|:------| 
 	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA       | NA       | NA       | NA       | NA         | 0,1   | 
 	| ...     |       |          |          |          |            |          |          |          |          |            |       | 
@@ -123,11 +121,10 @@ The queries in the config file looks like followed:
 	| ...     |       |          |          |          |            |          |          |          |          |            |       | 
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589 | 28862538 | +        | 199      | RCC1       | 1     | 
 	| ...     |       |          |          |          |            |          |          |          |          |            |       | 
-
-	Table 5: Best hits table with two queries when priority is set 'True'.
+	[Table 5: Best hits table with two queries when priority is set 'True'.]
 	
 
-	*So, in the case of 'priority' = True, the features are mutually exclusive, and the rest of the queries should be parsed for valid hits in an escalating-priority, too.*        
+	*So, in the case of 'priority' = True, the features are mutually exclusive, and the queries are parsed for valid hits in an escalating-priority, too.*        
 	
 
 Example for the feature position 
@@ -159,8 +156,7 @@ that is why even if the peak is internal to the gene region, the start position 
 | peak71  | chr22 | 18161387 | 18161442 | 18161496 | NA      | NA       | NA       | NA       | NA       | NA        | 0     | 
 | peak71  | chr22 | 18161387 | 18161442 | 18161496 | gene    | 18111621 | 18213388 | +        | 1063     | BCL2L13   | 1     | 
 | ...     |       |          |          |          |         |          |          |          |          |           |       | 
-
-Table 6: All hits table feature position example
+[Table 6: All hits table feature position example]
 
 
 ![peak71](img/chr22-18161287-18161496_peak71_h3k4me1_feature_pos.png)
