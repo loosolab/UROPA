@@ -50,7 +50,8 @@ The queries in the config file looks like followed:
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | NA         | NA      | NA       | NA       | NA       | NA         | 0     | 
 	| ...     |       |          |          |          |            |         |          |          |          |            |       | 
 
-	[Table 1: All hits table for two queries with priority false. ]
+
+	Table 1: All hits table for two queries with priority false. 
 
 
 	'Peak_1' represents the first case where both queries validate no feature at all. In this case the peak is represented by 'NA' rows, for each query. 
@@ -70,9 +71,10 @@ The queries in the config file looks like followed:
 	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | gene       | 5567734 | 5567817  | -        | 3        | AC006483.1 | 0     | 
 	| ...     |       |          |          |          |            |         |          |          |          |            |       | 
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589| 28862538 | +        | 199      | RCC1       | 1     | 
-	| ...     |       |          |          |          |            |         |          |          |          |            |       | 
+	| ...     |       |          |          |          |      
 
-	[Table 2: Best hits table for two queries with priority false.]
+
+	Table 2: Best hits table for two queries with priority false.
 
 
 	| peak_id | p_chr | p_start  | p_center | p_end    | feature    |feat_start|feat_end |feat_strand|distance | gene_name  | Query | 
@@ -83,7 +85,8 @@ The queries in the config file looks like followed:
 	| ...     |       |          |          |          |            |         |          |          |          |            |       |
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589| 28862538 | +        | 199      | RCC1       | 1     |
 
-	[Table 3: Merged best hits table for two queries with priority false.]
+
+	Table 3: Merged best hits table for two queries with priority false.
 
 	In Case 1,reported in 'peak_1', the 'Best_hits' table will be the same as the 'All_hits' because all queries give same annotation. This is why 'Merged_Best_Hits' table was designed [Table 3]. Queries with same annotation are merged in one line giving a more compact illustration of the annotation.
 	For the other 2 cases (peak_6, peak_10) the best feature is chosen according to  'distance' measured from the peak center.For 'peak_6' the closest transcript and gene have both same distance = 3, so they are both reported in Best_hits, but merged in one line at the 'Merged_Best_hits'.
@@ -114,7 +117,8 @@ The queries in the config file looks like followed:
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28832863 | 28836145 | +        | 245      | SNHG3      | 1     | 
 	| ...     |       |          |          |          |            |          |          |          |          |            |       | 
 
-	[Table 4: All hits table with two queries when priority='True']
+
+	Table 4: All hits table with two queries when priority='True'
 	
 
 	| peak_id | p_chr | p_start  | p_center | p_end    | feature    | feat_start| feat_end| feat_strand | distance | gene_name | Query | 
@@ -126,10 +130,11 @@ The queries in the config file looks like followed:
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589 | 28862538 | +        | 199      | RCC1       | 1     | 
 	| ...     |       |          |          |          |            |          |          |          |          |            |       | 
 
-	[Table 5: Best hits table with two queries when priority is set 'True'.]
+
+	Table 5: Best hits table with two queries when priority is set 'True'.
 	
 
-	*So, in the case of 'priority' = True, the features are mutually exclusive, and the queries are parsed for valid hits in an escalating-priority, too.*        
+	**So, in the case of 'priority' = True, the features are mutually exclusive, and the queries are parsed for valid hits in an escalating priority.**        
 	
 
 Example for the 'feature.position' 
