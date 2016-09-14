@@ -19,11 +19,15 @@ The queries in the config file looks like followed:
 ```
 
 1. No priority is given ('priority'='F')     
-	The above set of queries will allow UROPA to annotate peaks for genes and transcripts. As priority is False (default if no different value given),there is no feature priorized.            
+	The above set of queries will allow UROPA to annotate peaks for genes and transcripts. As priority is False (default if no different value given),there is no feature priorized. 
+
 	There can be three cases for the peak annotation: 
-	*Case 1: No query gives any feature for annotating the peaks. 
-	*Case 2: One query gives a feature but the other not. 
-	*Case 3: Both queries validate features overlapping with the peaks.  
+
+	* Case 1: No query gives any feature for annotating the peaks. 
+	
+	* Case 2: One query gives a feature but the other not. 
+	
+	* Case 3: Both queries validate features overlapping with the peaks.  
 
 	The Tables [1] and [2] shown below, represent the All_hits and Best_hits outputs of UROPA,respectively for the 3 cases. 
 	
