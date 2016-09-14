@@ -6,12 +6,15 @@ This example is based on POLR2A peaks annotated with the Ensembl genome ([furthe
 More than one query can be given, keeping the same gtf and bed files, allowing for a combination of annotation in one run.    
 If there are more queries, it is important to decide if they should be priorized. This can be done with the priority key in the config file.   
 The following examples illustrate how this can be beneficial for the annotation.    
-The queries in the config file looks like followed:  
 
-"queries": [{"feature":"gene", "distance":1000, "attribute":"gene_name"},     
-{"feature":"transcript", "distance":1000}], 
-         
-The only difference between 1. and 2. is the priority key:                  
+The queries in the config file looks like followed:  
+				{"queries": [{"feature":"gene", "distance":1000, "attribute":"gene_name"},     
+							{"feature":"transcript", "distance":1000 }], 
+         		"priority" : "False",
+         		"gtf":"Homo_sapiens.GRCh37.75_chr.gtf" ,
+         		"bed":"ENCFF001VFA_GM12878_POLR2A_narrowPeaks.bed"
+         		}
+
 
 1. No priority is given ('priority'='F')     
 	The above set of queries will allow UROPA to annotate peaks for genes and transcripts. As priority is False (default if no different value given),there is no feature priorized.            
@@ -20,9 +23,9 @@ The only difference between 1. and 2. is the priority key:
 	Case 2: One query gives a feature but the other not. 
 	Case 3: Both queries validate features overlapping with the peaks.  
 
-	The Tables [1], and [2], shown below, represent the All_hits and Best_hits outputs of UROPA,respectively for the 3 cases. 
+	The Tables [1] and [2] shown below, represent the All_hits and Best_hits outputs of UROPA,respectively for the 3 cases. 
 	
-	In the 'All_hits' all the features found within the given distance will be annotated for the peak,while 
+	In the 'All_hits' all the features found within the given distance will be annotated for the peak, while 
 	in the 'Best_hits' only the annotation with the closest feature  per peak per query is displayed. 
 
  
@@ -45,10 +48,8 @@ The only difference between 1. and 2. is the priority key:
 
 
 	'Peak_1' represents the first case where both queries validate no feature at all. In this case the peak is represented by 'NA' rows, for each query. 
-	Those are merged in the Best_hits Table 2, with Query information 0,1.       
 	
-	The second case is represented by 'peak_10', which has an annotation for the transcript feature but not the gene feature.       
-	There are three entries,two with the annotation based on query 1 and one NA row, because no annotation with query 0 was identified.     
+	The 2nd case is represented by 'peak_10', which has two annotations for the transcript feature but not the gene feature.       
 	
 	'Peak_6' is an example for the last case, with annotations for both queries. Transcripts(*ACTB*) are found by query 1 and a gene(*AC006483.1*) by query 0.
 
