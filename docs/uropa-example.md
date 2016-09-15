@@ -242,13 +242,13 @@ The following configuration allows for searching peaks internal features and fea
 
 The output will be:   
  
-| p_chr   | p_start  | p_center | p_end    | feature| feat_start  | feat_end   | feat_strand| distance | gene_name| Query   | 
-|:--------|:---------|:---------|:---------|:-------|:---------|:--------|:--------|:---------|:----------|:-------| 
-| ...     |          |          |          |        |          |         |         |          |           |        | 
-| chr6    | 27857165 | 27860401 | 27863637 | gene   | 27861203 | 27861669| +       | 0        | HIST1H2BO | 0      | 
-| chr6    | 27857165 | 27860401 | 27863637 | gene   | 27858093 | 27860884| -       | 0        | HIST1H3J  | 0      | 
-| chr6    | 27857165 | 27860401 | 27863637 | gene   | 27860477 | 27860963| -       | 0        | HIST1H2AM | 0      | 
-| ...     |          |          |          |        |          |         |         |          |           |        | 
+| p_chr   | p_start  | p_center | p_end    |feature |feat_start|feat_end |feat_strand|distance| feat_pos  | genomic_location  |feat_ovl_peak | peak_ovl_feat |gene_name | Query  | 
+|:--------|:---------|:---------|:---------|:-------|:---------|:--------|:--------|:---------|:----------|:----------------- | :------------|:------------- |:---------|:-------|
+| ...     |          |          |          |        |          |         |         |          |           |             	  |              | 	             |          |        |
+| chr6    | 27857165 | 27860401 | 27863637 | gene   | 27861203 | 27861669| +       | 802      | start     |FeatureInsidePeak  | 0.07         | 1.0 	         |HIST1H2BO |   0    |
+| chr6    | 27857165 | 27860401 | 27863637 | gene   | 27858093 | 27860884| -       | 483      | start     |FeatureInsidePeak  | 0.43         | 1.0 	         |HIST1H3J  |   0    |
+| chr6    | 27857165 | 27860401 | 27863637 | gene   | 27860477 | 27860963| -       | 76       | end       |FeatureInsidePeak  | 0.08         | 1.0 	         |HIST1H2AM |   0    |
+| ...     |          |          |          |        |          |         |         |          |           |                   |              |               |          |        |
 
 [ Table 7: All hits table internal feature example].
 
