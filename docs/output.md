@@ -1,19 +1,26 @@
-UROPA provides many output files. The different outputs are shown with an example:
+UROPA provides many output files,each providing a valuable information in a more extended either more condense way, to cover all needs.
 
-H3K4me1 peaks from UCSC (processed data accession ENCFF001SUE were annotated for genes from gencode v19 ([further details](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files)) using almost default values:   
-{"queries":[{"feature":"gene", "attribute":"gene_id"}],  
+The different outputs are shown with the following example:
+
+H3K4me1 peaks from UCSC (processed data accession 'ENCFF001SUE') were annotated for genes from gencode.v19 gtf file. ([further details](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files)) using almost default values: 
+`  
+{"queries": [{"feature":"gene", "show.attributes":"gene_id"}],  
 "GTF": "gencode.v19.annotation.GTF",  
-"bed": "ENCFF001SUE.bed"}  
+"bed": "ENCFF001SUE.bed"} `
 
-**Important Note** Make sure to give any attributes, otherwise the annotated peaks will be displayed without any assignment.
-To make it easier, the feature was set on gene. Otherwise it is possible that there are hundreds of valid annotations for one peak.        
-But whatever should be analyzed, it is possible to leave out this key as well. 
-Of course, the attribute key cannot be left out, this is what the peaks will be annotated for.     
+**Important Note** 
+Make sure to give any attributes for display in the output-if existant in the 9th column of the gtf - otherwise the annotated peaks will be reported 
+without any information of the assigned features.
+
+To make it easier, the feature was set on 'gene' in this example. 
+
 Running UROPA with:     
 ```
 uropa.sh -i config.json -o basic_example -r
 ```    
-There will be three output tables in the folder basic_example: 
+
+There will be three output tables in the folder 'basic_example/'. 
+The flag '-r' will create the reformatted table of the Best_hits where each peak contains all annotation of all queries in one line. 
 (peak names are given manually)
 
 1. Allhits_table_basic_example.txt
@@ -37,9 +44,8 @@ There will be three output tables in the folder basic_example:
 | peak_5  | chr14 | 106317273 | 106324112.0 | 106330951 | NA      | NA        | NA        | NA       | NA       | NA           | 1     | 
 | ...     |       |           |             |           |         |           |           |          |          |              |       | 
 
+*[Table 1: All hits table basic example]*
 
-
-Table 1: All hits table basic example
 2. Besthit_table_basic_example.txt
 
 | peak_id | p_chr | p_start   | p_center    | p_end     | feature | feat_start   | feat_end     | feat_strand | distance | gene_id   | query | 
@@ -53,8 +59,7 @@ Table 1: All hits table basic example
 | peak_5  | chr14 | 106317273 | 106324112.0 | 106330951 | NA      | NA        | NA        | NA       | NA       | NA        | 1     | 
 | ...     |       |           |             |           |         |           |           |          |          |           |       | 
 
-
-Table 2: Best hits table basic example
+[Table 2: Best hits table basic example]
 
 3. Merged_best_hits_basic_example
 
@@ -78,10 +83,22 @@ Table 3: Merged best hits basic example
 | peak_5  | chr14 | 106317273 | 106324112 | 106330951 | exon, NA  | 106324293, NA | 106324344, NA | -,NA     | 181,NA   | NR_039730, NA        | 0,1   | 
 | ...     |       |           |           |           |           |               |               |          |          |                      |       | 
 
+[Table 4: Reformatted Allhits per Peak basic anno. Notice that the last column is just adjusted to more rows for display them.]
 
-Table 4: Reformatted Allhits per Peak basic anno. Notice that the last column is just adjusted to more rows for display them.  
+#Output columns explanation
+**feature, feature_start, feature_end, feature_strand** : 
+**distance** :
+**feat_pos**:
+**genomic_location**:
+**feat_ovl_peak**:
+**peak_ovl_feat**:
+**gene_name, gene_id, gene_type** : 
+**query**:
 
-5. Summary of UROPA run
+
+
+
+6. Summary of UROPA run
 For every run there is also a summary output. Within this there are various plot to communicate an overview about the run. There are different plots:
 * if there is more than one query, a pairwise comparison of all queries is evaluated within a venn diagram based on the best hits output
 * the distance per feature per query are displayed in a histogram based on the best hits output
