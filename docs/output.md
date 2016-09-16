@@ -86,24 +86,32 @@ Table 3: Merged best hits basic example
 [Table 4: Reformatted Allhits per Peak basic anno. Notice that the last column is just adjusted to more rows for display them.]
 
 #Output columns explanation
-**feature, feature_start, feature_end, feature_strand** : 
-**distance** :
-**feat_pos**:
-**genomic_location**:
-**feat_ovl_peak**:
-**peak_ovl_feat**:
-**gene_name, gene_id, gene_type** : 
-**query**:
+**feature, feature_start, feature_end, feature_strand** : The information of the genomic feature that annotates the peak, as extracted by the gtf file.
+
+**distance** : The distance measured as following: abs(peak.center-feature.position).If no feature.position given,then the minimum of 3 distances from each feature.position{start,center,end} to peak.center is chosen.
+
+**feat_pos**: The position of the genomic feature chosen for annotation that had the minimum distance to the peak.center.If feature.position given in config this will be shown also here.
+
+**genomic_location**: The position of the peak relative to the annotated feature direction.(i.e upstream = peak located upstream of the gene).
+
+**feat_ovl_peak**: When peak and feature overlap(i.e genomic_location = overlapStart), Ratio(overlapping region / peak.length) shows percentage of peak covered by the feature.(i.e 1.0 = 100% of peak covered, peak is internal.
+
+**peak_ovl_feat**: When peak and feature overlap(i.e genomic_location = overlapStart), Ratio(overlapping region / feature.length) shows percentage of feature covered by the peak.(i.e 1.0 = 100% of feature covered, feature is internal.)
+
+**gene_name, gene_id, gene_type** : Attributes that have been given in the key 'show.atttributes' will be shown here and their values extracted by the gtf will be displayed for each feature.If 'filter.attribute' contains same attribute keys, this column helps confirming the filtering.
+
+**query**: The query that validates with its given parameters the feature to be assigned to the peak.If only one query given, column will always display '0',the first query.
 
 
+6. Summary of UROPA output
+For every run there is also a summary output, vizualising the results for a global overview of the final annotation. Within this document one can find : 
+-> Graphs based on the 'Best Hits' output:
+* A pairwise comparison among all queries is evaluated within a venn diagram, when more than one query is given in the config file. 
+* A distribution of the distances per feature per query are displayed in a histogram.
+* A pie chart illustrating the genomic location of the peaks per annotated feature.
+* A barplot displaying the occurrence of the different features, if there is more than one feature assigned for peak annotation.
 
-
-6. Summary of UROPA run
-For every run there is also a summary output. Within this there are various plot to communicate an overview about the run. There are different plots:
-* if there is more than one query, a pairwise comparison of all queries is evaluated within a venn diagram based on the best hits output
-* the distance per feature per query are displayed in a histogram based on the best hits output
-* the genomic location per feature in a pie chart based on the best hits output 
-* if there is more than one feature, the occurrence of the different features are displayed in a barplot based on the best hits output
-* the distance per feature per query are displayed in a density plot based on the merged best hits output 
-* the genomic location per feature in a pie chart based on the merged best hits output
-* if there is more than one feature, the occurrence of the different features are displayed in a barplot based on the merged best hits output
+-> Graphs based on the 'Merged Best Hits' output:
+* A density plot displaying the distance per feature per query. 
+* A pie chart illustrating the genomic locations of the peaks per annotated feature.
+* A barplot displaying the occurrence of the different features, if there is more than one feature assigned for peak annotation.
