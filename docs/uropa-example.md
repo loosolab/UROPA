@@ -7,16 +7,15 @@ More than one query can be given, keeping the same gtf and bed files, allowing f
 If there are more queries, it is important to decide if they should be priorized. This can be done with the priority key in the config file.   
 The following examples illustrate how this can be beneficial for the annotation.
 
-The queries in the config file looks like followed:  
+The queries in the config file looks like followed:
 
-```
-				{"queries": [{"feature":"gene", "distance":1000, "attribute":"gene_name"},     
-							{"feature":"transcript", "distance":1000 }], 
-         		"priority" : "False",
-         		"gtf":"Homo_sapiens.GRCh37.75_chr.gtf" ,
-         		"bed":"ENCFF001VFA_GM12878_POLR2A_narrowPeaks.bed"
-         		}
-```
+`
+{"queries": [{"feature":"gene", "distance":1000, "attribute":"gene_name"},     
+			{"feature":"transcript", "distance":1000 }], 
+ "priority" : "False",
+ "gtf":"Homo_sapiens.GRCh37.75_chr.gtf" ,
+ "bed":"ENCFF001VFA_GM12878_POLR2A_narrowPeaks.bed"
+} `
 
 1. If No priority is given ('priority'='F')     
 	The above set of queries will allow UROPA to annotate peaks for genes and transcripts. As priority is False (default if no different value given),there is no feature priorized. 
@@ -35,23 +34,21 @@ The queries in the config file looks like followed:
 	in the 'Best_hits' only the annotation with the closest feature  per peak per query is displayed. 
 
  
-	| peak_id | p_chr | p_start  | p_center | p_end    | feature    | feat_start | feat_end    | feat_strand | distance | gene_name  | Query | 
-	|:--------|:------|:---------|:---------|:---------|:-----------|:--------|:---------|:---------|:---------|:-----------|:------| 
-	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         | 0     | 
-	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         | 1     | 
-	| ...     |       |          |          |          |            |         |          |          |          |            |       | 
-	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | transcript | 5567372 | 5569294  | -        | 448      | ACTB       | 1     | 
-	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | transcript | 5567781 | 5570235  | -        | 39       | ACTB       | 1     | 
-	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | transcript | 5567734 | 5567817  | -        | 3        | AC006483.1 | 1     | 
-	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | gene       | 5567734 | 5567817  | -        | 3        | AC006483.1 | 0     | 
-	| ...     |       |          |          |          |            |         |          |          |          |            |       | 
-	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589| 28862538 | +        | 199      | RCC1       | 1     | 
-	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28832863| 28836145 | +        | 245      | SNHG3      | 1     | 
-	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | NA         | NA      | NA       | NA       | NA       | NA         | 0     | 
-	| ...     |       |          |          |          |            |         |          |          |          |            |       | 
+	| peak_id | p_chr | p_start  | p_center | p_end    | feature  | feat_start| feat_end |feat_strand|distance | feat_pos   |genomic_location |feat_ovl_peak | peak_ovl_feat | gene_name| query | 
+	|:--------|:------|:---------|:---------|:---------|:-----------|:--------|:---------|:---------|:---------|:-----------|:----------------|:-------------|:--------------|:---------|:------| 
+	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         |NA       		  | NA      | NA          | NA   | 0     | 
+	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         |NA               | NA      | NA          | NA   | 1     | 
+	| ...     |       |          |          |          |            |         |          |          |          |            |                 | 	    | 			  |      |       |
+	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | gene       | 5567734 | 5567817  | -        | 3        |  start	    |FeatureInsidePeak|	0.01     | 1.0        |AC006483.1| 0     | 
+	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | transcript | 5566782 |	5567729  | -	    | 91	   |  start	    |FeatureInsidePeak|	0.09     | 1.0	      |ACTB	     | 1     |
+	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | transcript | 5566787 |	5570232  | -		|689	   |  center	|FeatureInsidePeak|	0.33	 | 1.0        |ACTB	     | 1     |
+	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | transcript | 5567734 |	5567817  | -	    |3         |  start	    |FeatureInsidePeak|	0.01	 | 1.0	      |AC006483.1| 1     |
+	| ...     |       |          |          |          |            |         |          |          |          |            |                 |          |            |          |       |
+	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | NA	        |	NA    |	  NA	 |   NA     | NA       |	NA      | NA    	      |   NA     |	NA        |	 NA      |	0    |
+	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589| 28862538 |   +      | 245	   |   end	    |FeatureInsidePeak|  0.37	 |  1.0	      | SNHG3	 |  1    | 
+	| ...     |       |          |          |          |            |         |          |          |          |            |                 |          |            |          |       |
 
-
-	Table 1: All hits table for two queries with priority false. 
+	[Table 1: All hits table for two queries with priority false.] 
 
 
 	'Peak_1' represents the first case where both queries validate no feature at all. In this case the peak is represented by 'NA' rows, for each query. 
@@ -61,32 +58,29 @@ The queries in the config file looks like followed:
 	'Peak_6' is an example for the last case, with annotations for both queries. Transcripts (*ACTB*) are found by query 1 and a gene (*AC006483.1*) by query 0.
 
 
+	| peak_id | p_chr | p_start  | p_center | p_end    | feature    |feat_start|feat_end |feat_strand|distance | feat_pos   |genomic_location |feat_ovl_peak | peak_ovl_feat |gene_name| query | 
+	|:--------|:------|:---------|:---------|:---------|:-----------|:--------|:---------|:---------|:---------|:-----------|:----------------|:------------ |:--------------|:--------|:------| 
+	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         |NA       		  | NA       | NA         | NA       | 0     | 
+	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         |NA               | NA       | NA         | NA       | 1     |
+	| ...     |       |          |          |          |            |         |          |          |          |            |                 |          |            |          |       |         
+	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | gene       | 5567734 | 5567817  | -        | 3        |  start	    |FeatureInsidePeak|	0.01     | 1.0        |AC006483.1| 0     |
+	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | transcript | 5567734 |	5567817  | -	    | 3        |  start	    |FeatureInsidePeak|	0.01	 | 1.0	      |AC006483.1| 1     |
+	| ...     |       |          |          |          |            |         |          |          |          |            |                 |          |            |          |       |
+	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589| 28862538 |   +      | 245	   |   end	    |FeatureInsidePeak|  0.37	 |  1.0	      | SNHG3	 |  1    |  
+	| ...     |       |          |          |          |            |         |          |          |          |            |                 |          |            |          |       |
 
-	| peak_id | p_chr | p_start  | p_center | p_end    | feature    |feat_start|feat_end |feat_strand|distance | gene_name  | Query | 
-	|:--------|:------|:---------|:---------|:---------|:-----------|:--------|:---------|:---------|:---------|:-----------|:------| 
-	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         | 0     | 
-	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         | 1     |
-	| ...     |       |          |          |          |            |         |          |          |          |            |       | 
-	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | transcript | 5567734 | 5567817  | -        | 3        | AC006483.1 | 1     | 
-	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | gene       | 5567734 | 5567817  | -        | 3        | AC006483.1 | 0     | 
-	| ...     |       |          |          |          |            |         |          |          |          |            |       | 
-	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589| 28862538 | +        | 199      | RCC1       | 1     | 
-	| ...     |       |          |          |          |      
-
-
-	Table 2: Best hits table for two queries with priority false.
+	[Table 2: Best hits table for two queries with priority false.]
 
 
-	| peak_id | p_chr | p_start  | p_center | p_end    | feature    |feat_start|feat_end |feat_strand|distance | gene_name  | Query | 
-	|:--------|:------|:---------|:---------|:---------|:-----------|:--------|:---------|:---------|:---------|:-----------|:------| 
-	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         | 0,1   |
-	| ...     |       |          |          |          |            |         |          |          |          |            |       |
-	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | transcript | 5567734 | 5567817  | -        | 3        | AC006483.1 | 0,1   |
-	| ...     |       |          |          |          |            |         |          |          |          |            |       |
-	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589| 28862538 | +        | 199      | RCC1       | 1     |
+	| peak_id | p_chr | p_start  | p_center | p_end    | feature    |feat_start|feat_end |feat_strand|distance | feat_pos   |genomic_location |feat_ovl_peak | peak_ovl_feat | gene_name |query | 
+	|:--------|:------|:---------|:---------|:---------|:-----------|:--------|:---------|:---------|:---------|:-----------|:----------------|:-------------|:--------------|:----------|:-----| 
+	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         | NA         	  |   NA         | NA            | NA        | 0,1  |
+	| ...     |       |          |          |          |            |         |          |          |          |            |                 |              |               |           |      |
+	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | gene       | 5567734 | 5567817  | -        | 3        |  start	    |FeatureInsidePeak|	    0.01     |  1.0          |AC006483.1 | 0    |
+	| ...     |       |          |          |          |            |         |          |          |          |            |                 |              |               |           |      |    
+	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript	|28832863 |	28836145 |	+       |	245	   |  end	    |FeatureInsidePeak|	   0.37      | 	1.0	         |SNHG3      |	1   |
 
-
-	Table 3: Merged best hits table for two queries with priority false.
+	[Table 3: Merged best hits table for two queries with priority false.]
 
 	In Case 1,reported in 'peak_1', the 'Best_hits' table will be the same as the 'All_hits' because all queries give same annotation. This is why 'Merged_Best_Hits' table was designed [Table 3]. Queries with same annotation are merged in one line giving a more compact illustration of the annotation.
 	For the other 2 cases (peak_6, peak_10) the best feature is chosen according to  'distance' measured from the peak center.For 'peak_6' the closest transcript and gene have both same distance = 3, so they are both reported in Best_hits, but merged in one line at the 'Merged_Best_hits'.
@@ -107,31 +101,28 @@ The queries in the config file looks like followed:
 	Compare Tables 3 and 4.     
 	For 'peak_10' there was no annotation identified for the query 0, but two for query 1, as displayed in Table 3. In this example, this is the only peak with a difference betweeen the two Tables: Here the two transripts are annotated because the query 0-gene was not found. As shown in Table 5 the annotation with the closest distance between these two is displayed at the Best hits, which is gene *RCC1*.	
 	
-	| peak_id | p_chr | p_start  | p_center | p_end    | feature    | feat_start  | feat_end    | feat_strand | distance | gene_name  | Query | 
-	|:--------|:------|:---------|:---------|:---------|:-----------|:---------|:---------|:---------|:---------|:-----------|:------| 
-	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA       | NA       | NA       | NA       | NA         | 0,1   |	
-	| ...     |       |          |          |          |            |          |          |          |          |            |       | 
-	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | gene       | 5567734  | 5567817  | -        | 3        | AC006483.1 | 0     | 
-	| ...     |       |          |          |          |            |          |          |          |          |            |       | 
-	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589 | 28862538 | +        | 199      | RCC1       | 1     | 
-	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28832863 | 28836145 | +        | 245      | SNHG3      | 1     | 
-	| ...     |       |          |          |          |            |          |          |          |          |            |       | 
+	| peak_id | p_chr | p_start  | p_center | p_end    | feature    |feat_start| feat_end |feat_strand|distance | feat_pos   |genomic_location |feat_ovl_peak | peak_ovl_feat | gene_name |query |
+	|:--------|:------|:---------|:---------|:---------|:-----------|:---------|:---------|:---------|:---------|:-----------|:----------------|:-------------| :-------------|:----------|:-----|
+	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA       | NA       | NA       | NA       | NA         | NA         	   |   NA         | NA            | NA        |0,1   |	
+	| ...     |       |          |          |          |            |          |          |          |          |            |                 |              |               |           |      | 
+	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | gene       | 5567734  | 5567817  | -        | 3        | start	     |FeatureInsidePeak|	0.01	  |1.0            |AC006483.1 | 0    |  
+	| ...     |       |          |          |          |            |          |          |          |          |            |                 |              |               |           |      | 
+	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28832863 | 28836145 | +        | 245      |end	     |FeatureInsidePeak|	0.37	  |1.0	          |SNHG3	  |  1   | 
+	| ...     |       |          |          |          |            |          |          |          |          |            |                 |              |               |           |      | 
 
-
-	Table 4: All hits table with two queries when priority='True'
+	[Table 4: All hits table with two queries when priority='True']
 	
 
-	| peak_id | p_chr | p_start  | p_center | p_end    | feature    | feat_start| feat_end| feat_strand | distance | gene_name | Query | 
-	|:--------|:------|:---------|:---------|:---------|:-----------|:---------|:---------|:---------|:---------|:-----------|:------| 
-	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA       | NA       | NA       | NA       | NA         | 0,1   | 
-	| ...     |       |          |          |          |            |          |          |          |          |            |       | 
-	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | gene       | 5567734  | 5567817  | -        | 3        | AC006483.1 | 0     | 
-	| ...     |       |          |          |          |            |          |          |          |          |            |       | 
-	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589 | 28862538 | +        | 199      | RCC1       | 1     | 
-	| ...     |       |          |          |          |            |          |          |          |          |            |       | 
+	| peak_id | p_chr | p_start  | p_center | p_end    | feature    |feat_start| feat_end |feat_strand|distance |feat_pos    |genomic_location |feat_ovl_peak | peak_ovl_feat |gene_name | query | 
+	|:--------|:------|:---------|:---------|:---------|:-----------|:---------|:---------|:---------|:---------|:-----------|:---------------|:--------------|:--------------|:---------|:------|
+	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA       | NA       | NA       | NA       | NA         | NA             |   NA     | NA       | NA       | 0,1   | 
+	| ...     |       |          |          |          |            |          |          |          |          |            |                |          |          |          |       |   
+	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | gene       | 5567734  | 5567817  | -        | 3        | start	     |FeatureInsidePeak|0.01	 |1.0	    |AC006483.1|  0    | 
+	| ...     |       |          |          |          |            |          |          |          |          |            |                 |         |          |          |       | 
+	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28832863 | 28836145 | +        | 245      |end	     |FeatureInsidePeak|0.37	 |1.0	    |SNHG3	   |  1    |
+	| ...     |       |          |          |          |            |          |          |          |          |            |                 |         |          |          |       |
 
-
-	Table 5: Best hits table with two queries when priority is set 'True'.
+	[Table 5: Best hits table with two queries when priority is set 'True'.]
 	
 
 	**So, in the case of 'priority' = True, the features are mutually exclusive, and the queries are parsed for valid hits in an escalating priority.**        
@@ -149,10 +140,10 @@ This example is based on H3K4me1 peaks annotated with the Gencode genome ([furth
 
 There are two queries with different feature.positions. 
 
-` "queries":  [{"feature":"gene", "attribute":"gene_name", "distance":[5000],"feature.position": "start"},       
-		    {"feature": "gene", "feature.position": "center"}] `
+` "queries": [ {"feature":"gene", "attribute":"gene_name", "distance":[5000],"feature.position": "start"},       
+		       {"feature": "gene", "feature.position": "center"} ] `
 
-As displayed in the All_hits table(Table 5), the peak could only be annotated for query 1 with the 'feature.position' center. Visible in Figure 1, the gene *BCL2L13* is very large,   
+As displayed in the All_hits table(Table 6), the peak could only be annotated for query 1 where 'feature.position' is set to 'center'. Illustrated in Figure 1, the gene *BCL2L13*  is very large,   
 that is why even if the peak is internal to the gene region, the start position of the feature 'gene' is far away to return a valid annotation.
 
 `(feature.start – peak.center = |18111621-18161442| = 49 821) `
@@ -181,10 +172,12 @@ The example is based on the peak displayed in Figure 2.
 When the direction key is set to 'upstream', peaks will be annotated to a feature if the peak center is upstream of the feature start-position and the distance from the start position is smaller than the indicated distance. The other way around for 'downstream'. This is why the direction is relative to the peak location. 
 *It can also be thought of as the location of the peak depending on the feature’s direction.*       
 
-*An overlap is partially allowed to the edges of the peak, but the overlap should allow a clear evidence*         
-*of the upstream or downstream location of the peak from the feature, so there shouldn’t be an important overlap of the peak length*.
+*An overlap is partially allowed to the start or end of the peak, but the overlap should allow a clear evidence*         
+*of the upstream or downstream location of the peak from the feature.*
 
 Let’s see now an example of an annotation with and without direction chosen, for the peak shown in Image 3.
+
+
 ![direction.key](img/chr1-1,403,500-1,408,500-01_h3k4me1_peaks.png) 
 
 Figure 2: H3K4me1 peak annotated with the Gencode genome, the genomic location is chr1:1403500-1408500.
@@ -195,8 +188,8 @@ The query looks as the following:
 
 The peak displayed in Figure 2 would be annotated for both genes: 
 
- * *ATAD3C* with a distance of 712.5 bp and
- * *ATAD3B* with a distance of 892.5 bp. 
+ * **ATAD3C**  with a distance of 712.5 bp and
+ * **ATAD3B**  with a distance of 892.5 bp. 
 
 Due to the fact that no 'feature.position' was defined, the distance calculated was chosen after a comparison of distances to find the minimum to the peak.center.
 
@@ -206,10 +199,10 @@ The best annotation in this case would be the gene *ATAD3C*.
 
 But, more specific annotation can be useful for some peaks like this one, in order to obtain a unique and precise annotation. 
 For example, if some genomic regions are known to be enriched in transcriptionally active promoters, we would be interested to know on which features these regions are found upstream.   
-Also,‘downstream’ direction could be useful for the targeted identification of miRNAs or 3’UTR-binding proteins.
+Moreover, ‘downstream’ direction could be useful for the targeted identification of miRNAs or 3’UTR-binding proteins.
 It is then possible in UROPA via the config file to add the parameter 'direction': 'upstream' to the query.
 
-`"queries": [{"feature": "gene", "attribute":"gene_name", "distance":1000, "direction":"upstream"}]           `
+`"queries": [{"feature": "gene", "attribute":"gene_name", "distance":1000, "direction":"upstream"}] `
 
 In this case the peak will only be annotated for *ATAD3B*. Depending on the biological relevance, it can be very useful to utilize more flexible keys. 
 

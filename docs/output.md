@@ -8,20 +8,17 @@ H3K4me1 peaks from UCSC (processed data accession 'ENCFF001SUE') were annotated 
 "GTF": "gencode.v19.annotation.GTF",  
 "bed": "ENCFF001SUE.bed"} `
 
-**Important Note** 
-Make sure to give any attributes for display in the output-if existant in the 9th column of the gtf - otherwise the annotated peaks will be reported 
+**Important Note** : Make sure to give any attributes for display in the output-if existant in the 9th column of the gtf - otherwise the annotated peaks will be reported 
 without any information of the assigned features.
 
 To make it easier, the feature was set on 'gene' in this example. 
 
-Running UROPA with:     
-```
-uropa.sh -i config.json -o basic_example -r
-```    
+Running UROPA with: ` uropa.sh -i config.json -o basic_example -r  ` 
+
 
 There will be three output tables in the folder 'basic_example/'. 
 The flag '-r' will create the reformatted table of the Best_hits where each peak contains all annotation of all queries in one line. 
-(peak names are given manually)
+(*Peak names are given manually for the example's illustration*)
 
 1. Allhits_table_basic_example.txt
 
