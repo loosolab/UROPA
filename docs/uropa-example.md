@@ -224,7 +224,7 @@ The following configuration allows to search peaks internal to feature region an
 
 The output will be:   
  
-| p_chr   | p_start  | p_center | p_end    |feature |feat_start|feat_end |feat_strand|distance| feat_pos  | genomic_location  |feat_ovl_peak | peak_ovl_feat |gene_name |Query| 
+| p_chr   | p_start  | p_center | p_end    |feature |feat_start|feat_end |feat_strand|distance| feat_pos  | genomic_location  |feat_ovl_peak | peak_ovl_feat |gene_name |query| 
 |:--------|:---------|:---------|:---------|:-------|:---------|:--------|:--------|:---------|:----------|:----------------- | :------------|:------------- |:---------|:----|
 | chr6    | 27857165 | 27860401 | 27863637 | gene   | 27861203 | 27861669| +       | 802      | start     |FeatureInsidePeak  | 0.07         | 1.0 	         |HIST1H2BO | 0   |
 | chr6    | 27857165 | 27860401 | 27863637 | gene   | 27858093 | 27860884| -       | 483      | start     |FeatureInsidePeak  | 0.43         | 1.0 	         |HIST1H3J  | 0   |
@@ -244,7 +244,7 @@ In the contrary case, where the key 'internals' is not activated (by default "Fa
 the peak would only be annotated for *HIST1H3J*  with a distance of 483 bp. 
 
 
-| p_chr   | p_start  | p_center | p_end    |feature |feat_start|feat_end |feat_strand|distance| feat_pos  | genomic_location  |feat_ovl_peak | peak_ovl_feat |gene_name |Query| 
+| p_chr   | p_start  | p_center | p_end    |feature |feat_start|feat_end |feat_strand|distance| feat_pos  | genomic_location  |feat_ovl_peak | peak_ovl_feat |gene_name |query| 
 |:--------|:---------|:---------|:---------|:-------|:---------|:--------|:--------|:---------|:----------|:----------------- | :------------|:------------- |:---------|:----|
 | chr6    | 27857165 | 27860401 | 27863637 | gene   | 27858093 | 27860884| -       | 483      | start     |FeatureInsidePeak  | 0.43         | 1.0 	         |HIST1H3J  | 0   |
 
