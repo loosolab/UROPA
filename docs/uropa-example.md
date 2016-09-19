@@ -10,14 +10,15 @@ The following examples illustrate how this can be beneficial for the annotation.
 The queries in the config file looks like followed:
 
 `
-{"queries": [{"feature":"gene", "distance":1000, "attribute":"gene_name"},     
+{"queries": [{"feature":"gene", "distance":1000, "show.attributes":"gene_name"},     
 			{"feature":"transcript", "distance":1000 }], 
  "priority" : "False",
  "gtf":"Homo_sapiens.GRCh37.75_chr.gtf" ,
  "bed":"ENCFF001VFA_GM12878_POLR2A_narrowPeaks.bed"
 } `
 
-1. If No priority is given ('priority'='F')     
+#### 1. If No priority is given ('priority'='False')     
+
 	The above set of queries will allow UROPA to annotate peaks for genes and transcripts. As priority is False (default if no different value given),there is no feature priorized. 
 
 	There can be three cases for the peak annotation: 
@@ -87,7 +88,9 @@ The queries in the config file looks like followed:
 	For 'peak_10' the closest feature is the transcript with gene_name *RCC1*, so no merging was needed.
 
 
-2. If Priority is considered ('priority'='True')     
+
+
+#### 2. If Priority is considered ('priority'='True')     
 
 	If 'priority' is True, UROPA will annotate peaks with the **first feature given** in the set of queries. Unless genes are not found for a peak, 'transcripts' will then be searched and validated by the query’s parameters in order to be assigned to a peak. The example is based on the same three cases, explained above.
 	That is why there will be no peak in the output tables annotated for both features at the same time. 
@@ -113,7 +116,7 @@ The queries in the config file looks like followed:
 	[Table 4: All hits table with two queries when priority='True']
 	
 
-	| peak_id | p_chr | p_start  | p_center | p_end    | feature    |feat_start| feat_end |feat_strand|distance |feat_pos    |genomic_location |feat_ovl_peak | peak_ovl_feat |gene_name | query | 
+	| peak_id | p_chr | p_start  | p_center | p_end    | feature    |feat_start| feat_end |feat_strand |distance | feat_pos  | genomic_location | feat_ovl_peak | peak_ovl_feat | gene_name | query | 
 	|:--------|:------|:---------|:---------|:---------|:-----------|:---------|:---------|:---------|:---------|:-----------|:---------------|:--------------|:--------------|:---------|:------|
 	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA       | NA       | NA       | NA       | NA         | NA             |   NA     | NA       | NA       | 0,1   | 
 	| ...     |       |          |          |          |            |          |          |          |          |            |                |          |          |          |       |   
@@ -145,37 +148,35 @@ There are two queries with different feature.positions.
 
 As displayed in the All_hits table(Table 6), the peak could only be annotated for query 1 where 'feature.position' is set to 'center'. Illustrated in Figure 1, the gene *BCL2L13*  is very large,   
 that is why even if the peak is internal to the gene region, the start position of the feature 'gene' is far away to return a valid annotation.
+` feature.start – peak.center = |18111621-18161442| = 49 821 `
 
-`(feature.start – peak.center = |18111621-18161442| = 49 821) `
-
-| peak_id | p_chr | p_start  | p_center | p_end    | feature | feat_start  | feat_end    | feat_strand | distance | gene_name | Query | 
-|:--------|:------|:---------|:---------|:---------|:--------|:---------|:---------|:---------|:---------|:----------|:------|
-| ...     |       |          |          |          |         |          |          |          |          |           |       | 
-| peak71  | chr22 | 18161387 | 18161442 | 18161496 | NA      | NA       | NA       | NA       | NA       | NA        | 0     | 
-| peak71  | chr22 | 18161387 | 18161442 | 18161496 | gene    | 18111621 | 18213388 | +        | 1063     | BCL2L13   | 1     | 
-| ...     |       |          |          |          |         |          |          |          |          |           |       | 
-
+| peak_id | p_chr | p_start  | p_center | p_end  | feature | feat_start | feat_end | feat_strand | distance | feat_pos | genomic_location | feat_ovl_peak | peak_ovl_feat | gene_name | query | 
+|:--------|:------|:---------|:---------|:---------|:--------|:---------|:---------|:---------|:---------|:----------|:-------------------|:--------------|:---------|:---------|:---------|
+| ...     |       |          |          |          |         |          |          |          |          |           |                    |               |          |          |          |       
+| peak71  | chr22 | 18161387 | 18161441.5 | 18161496 | NA    | NA       | NA       | NA       | NA       | NA        | NA                 |     NA        |    NA    |    NA    |   0      |
+| peak71  | chr22 | 18161387 | 18161441.5 | 18161496 | gene  | 18111621 | 18213388 | +        | 1063     | center    | PeakInsideFeature  |     1.0       |    0.0   | BCL2L13  |   1      |
+| ...     |       |          |          |          |         |          |          |          |          |           |                    |               |          |          |          | 
+	
 [Table 6: All hits table feature position example]
 
 
 ![peak71](img/chr22-18161287-18161496_peak71_h3k4me1_feature_pos.png)
 
-Figure 1: H3K4me1 peak 71 annotated with the Ensembl genome, the genomic location is chr22:18161287-18161496.    
+Figure 1: From the histone mark H3K4me1, peak71 shown here annotated with the Ensembl genome, the genomic location is chr22:18161387-18161496.    
 
 
 Example for the 'direction' 
 ------------------------- 
-This example is based on H3K4me1 peaks annotated with the Gencode genome ([further details])[http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files]).
-In the following example the utility of the key 'direction' will be illustrated. It is optional but can be a very important 'player' for a more specialized annotation.             
-The example is based on the peak displayed in Figure 2.     
+This example is based on H3K4me1 peaks annotated with the Gencode genome  ( [further details][http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files] ).
+In the following example the utility of the key 'direction' will be illustrated. It is optional but can be a very important 'player' for a more specialized annotation.                  
 
-When the direction key is set to 'upstream', peaks will be annotated to a feature if the peak center is upstream of the feature start-position and the distance from the start position is smaller than the indicated distance. The other way around for 'downstream'. This is why the direction is relative to the peak location. 
+When the direction key is set to 'upstream', peaks will be annotated to a feature if the peak center is upstream of the start-position of the feature and the distance from the start position is smaller than the distance required in the config file. The same would be for 'downstream'. This is why the direction is relative to the peak location. 
 *It can also be thought of as the location of the peak depending on the feature’s direction.*       
 
-*An overlap is partially allowed to the start or end of the peak, but the overlap should allow a clear evidence*         
+*An overlap of the feature to the start or end of the peak is partially allowed, but the overlap should allow a clear evidence*         
 *of the upstream or downstream location of the peak from the feature.*
 
-Let’s see now an example of an annotation with and without direction chosen, for the peak shown in Image 3.
+Let’s see now an example of an annotation with and without direction chosen, for the peak shown in Figure 2.
 
 
 ![direction.key](img/chr1-1,403,500-1,408,500-01_h3k4me1_peaks.png) 
@@ -204,20 +205,21 @@ It is then possible in UROPA via the config file to add the parameter 'direction
 
 `"queries": [{"feature": "gene", "attribute":"gene_name", "distance":1000, "direction":"upstream"}] `
 
-In this case the peak will only be annotated for *ATAD3B*. Depending on the biological relevance, it can be very useful to utilize more flexible keys. 
+In this case the peak will only be annotated for *ATAD3B*. 
 
 
 Example for the 'internals' key
-------------------------------------
-This example is based on POLR2A peaks annotated with the Ensembl genome ([further details])[http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files]).
-By default this feature is false. With this attidue only such peaks are annotated whose distance is smaller than the definded one.          
-But there are cases where the genomic feature is larger as the set distance, this can lead to unannotated peaks, even if the peak is inside the genomic feature.     
-Same the other way around, very large peaks and small features. For those cases, the internal key was implemented.            
-To say usually peaks with a max distance should be annotated, but also those who are internal, or include the feature.      
-Especially, when ATACseq peaks are used for annotating them with very small transcription factors, this option becomes very handy.          
-The following configuration allows for searching peaks internal features and featurs internal of peaks:
+------------------------------------ 
+This example is based on POLR2A peaks annotated with the Ensembl genome ( [further details][http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files] ).
+By default this parameter is set to 'False'. With this setting peaks are only annotated with features whose distance is smaller than the defined one in the config.          
+
+But there are cases where the genomic feature is larger than the set 'distance' and this case can lead to unannotated peaks, even if the peak is located inside the genomic feature interval.     
+Same the other way around, there exist very large peaks containing small features inside their interval. The 'internals' key was implemented exactly for these cases.            
+So, peaks with a max distance from the feature are normally annotated with it, but **also** those who contain the feature internally, or are included in the features region. These internal features are the only ones allowed to be in a larger distance than the set 'distance'.
+Especially, when ATACseq peaks are used for annotation with very small transcription factors, this option becomes very handy.          
+The following configuration allows to search peaks internal to feature region and features internal to peak region :
 `
-"queries":[{"feature":"gene", "distance":1000, "attribute":"gene_name", "internals" : "True"}]
+"queries":[{"feature":"gene", "distance":1000, "show.attributes":"gene_name", "internals" : "True"}]
 `
 
 The output will be:   
@@ -242,9 +244,13 @@ In the contrary case, where the key 'internals' is not activated (by default "Fa
 the peak would only be annotated for *HIST1H3J*  with a distance of 483 bp. 
 
 
-| p_chr   | p_start  | p_center | p_end    | feature| feat_start  | feat_end   | feat_strand| distance | gene_name| Query   | 
-|:--------|:---------|:---------|:---------|:-------|:---------|:--------|:--------|:---------|:----------|:-------| 
-| chr6    | 27857165 | 27860401 | 27863637 | gene   | 27858093 | 27860884| -       | 483        | HIST1H3J  | 0      |
+| p_chr   | p_start  | p_center | p_end    |feature |feat_start|feat_end |feat_strand|distance| feat_pos  | genomic_location  |feat_ovl_peak | peak_ovl_feat |gene_name |Query| 
+|:--------|:---------|:---------|:---------|:-------|:---------|:--------|:--------|:---------|:----------|:----------------- | :------------|:------------- |:---------|:----|
+| chr6    | 27857165 | 27860401 | 27863637 | gene   | 27858093 | 27860884| -       | 483      | start     |FeatureInsidePeak  | 0.43         | 1.0 	         |HIST1H3J  | 0   |
+
+
+
+These examples make overally evident, that depending on the biological relevance, it can be very useful to utilize more flexible keys. 
 
 
 Used peak and annotation files 
