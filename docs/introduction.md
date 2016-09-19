@@ -6,16 +6,19 @@ The output is given in an easily-readable tab-delimited table with the correspon
 Detailed information about the configuration file is in the section [Configuration file](http://uropa.readthedocs.io/en/latest/config/) and about the annotation output tables in the section [Output](http://uropa.readthedocs.io/en/latest/output/). 
 
 Running UROPA is very simple. It can be executed in UNIX environment in one command line. 
-By editing the configuration file all necessary parameters will be defined to obtain the peak annotation immediately. Within this configuration file, the peak bed file and the annotation GTF file need to be specified.
-Without defining further parameters, the peaks will be annotated with a default annotation. To adjust the annotations to very fexible requirements, the different parameters of the config file should be used. 
+By editing the configuration file all necessary parameters will be defined to obtain the peak annotation immediately. Within this configuration file, the peak-bed file and the annotation-GTF file need to be specified,as well.
+Without defining further parameters, the peaks will be annotated with a default annotation. To adjust the annotations to more flexible requirements, the different parameters of the config file should be used. 
 Examples of application are presented in the [Usage Examples](http://uropa.readthedocs.io/en/latest/uropa-example/). Further exploration is suggested.
 
-To start the UROPA peak annotation, the basic command has to look like this:
+To start the UROPA peak annotation, the basic command shoulb be :
 
-	uropa.sh –i <config.json> –o <output_dir_name>
 
-A template of the file config.json is provided by downloading UROPA. A quick overview about UROPA is displayed with uropa.sh -h, and instructions about the parameters with uropa.sh -u.
+	`uropa.sh –i <config.json> –o <output_dir_name>` 
 
-If one would like to have verbosity when running UROPA and obtain a file where all the steps of the annotation are explained in details for each peak, a –-verbose option is available, too:      
 
-	uropa.sh –i config.json –o <Output_dir_name> –v <verbose_file.log>
+A template of the file config.json is provided by downloading UROPA ["a_config_example.json"]. A quick overview about UROPA is displayed with  `uropa.sh -h` , 
+and instructions about the parameters with  `uropa.sh -u`
+
+If one would like to have verbosity when running UROPA and obtain a file where all the steps of the annotation are explained in details for each peak, a --verbose option is available, too:      
+
+	uropa.sh  –i  config.json  –o  <Output_dir_name>  –v  <verbose_file.log>
