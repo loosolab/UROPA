@@ -10,7 +10,7 @@ By editing the configuration file all necessary parameters will be defined to ob
 Without defining further parameters, the peaks will be annotated with a default annotation. To adjust the annotations to more flexible requirements, the different parameters of the config file should be used. 
 Examples of application are presented in the [Usage Examples](http://uropa.readthedocs.io/en/latest/uropa-example/). Further exploration is suggested.
 
-To start the UROPA peak annotation, the basic command shoulb be : `uropa.sh –i <config.json> –o <output_dir_name> ` 
+To start the UROPA peak annotation, the basic command should be :  ` uropa.sh –i <config.json> –o <output_dir_name> `
 
 
 A template of the file config.json is loaded in the working directory when downloading UROPA, named "a_config_example.json". A quick overview about UROPA is displayed with  `uropa.sh -h` , 
