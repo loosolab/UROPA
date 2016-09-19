@@ -17,7 +17,7 @@ The queries in the config file looks like followed:
  "bed":"ENCFF001VFA_GM12878_POLR2A_narrowPeaks.bed"
 } `
 
-#### 1. If No priority is given ('priority'='False')     
+1. If No priority is given ('priority'='False')     
 
 	The above set of queries will allow UROPA to annotate peaks for genes and transcripts. As priority is False (default if no different value given),there is no feature priorized. 
 
@@ -90,7 +90,7 @@ The queries in the config file looks like followed:
 
 
 
-#### 2. If Priority is considered ('priority'='True')     
+2. If Priority is considered ('priority'='True')     
 
 	If 'priority' is True, UROPA will annotate peaks with the **first feature given** in the set of queries. Unless genes are not found for a peak, 'transcripts' will then be searched and validated by the query’s parameters in order to be assigned to a peak. The example is based on the same three cases, explained above.
 	That is why there will be no peak in the output tables annotated for both features at the same time. 
