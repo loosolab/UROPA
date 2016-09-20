@@ -187,7 +187,8 @@ Figure 2 : Location of a peak shown upstream of the TSS of a gene X. Respectivel
 
 
 Let’s see now an example of an annotation with and without direction chosen, for the peak shown in Figure 3.
-It is based on H3K4me1 peaks annotated with the Gencode genome( [further details][http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files]).
+It is based on H3K4me1 peaks annotated with the Gencode genome, 
+found here : [further details][http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files].
 
 
 ![direction.key](img/chr1-1,403,500-1,408,500-01_h3k4me1_peaks.png) 
@@ -207,14 +208,16 @@ The peak displayed in Figure 3 would be annotated for both genes as shown in the
 |peak_21044 | chr1 | 1406116 |	1406250.5 | 1406385 | gene | 1407143 | 1433228 | + | 892 | start | upstream	|  0.0  | 0.0 |	ATAD3B | 0 |
 |peak_21044 | chr1 | 1406116 |	1406250.5 | 1406385 | gene | 1385069 | 1405538 | + | 712 | end	 | downstream |	0.0 | 0.0 |	ATAD3C | 0 |
 
+[Table 7 : All_hits_table for an H3K4me1-peak annotated with two genes according to the above config file ]
+
 
 Due to the fact that no 'feature.position' was defined, the distance shown in the table is measured from the ` min(|[start,center,end] - peak.center|) `, 
 as explained in "Example for the 'feature.position'" and the position having the minimum distance is given in the table : 'start' for  *ATAD3B*, 'end' for *ATAD3C* .
 
 
-From All_hits_table we can infer the best annotation,too, which in this case, would be the gene *ATAD3C* , with distance 712 bp.  
+From All_hits_table we can infer the best annotation,too, which is this case, the gene *ATAD3C* , with distance 712 bp.  
 
-But,let's see the differences according to the 'direction' key. If only 'upstream' annotation is required :
+But, let's see the differences when the 'direction' key is set. If only 'upstream' annotation is required :
 
 `"queries": [{"feature": "gene", "attribute":"gene_name", "distance":1000, "direction":"upstream"}] `
 
@@ -224,10 +227,10 @@ even though the distance is closer.
 
 **The direction is considered a priority parameter for the annotation, so only if direction is valid, the distance will then be validated, too.**
 
-The direction/location of peak relative to feature can also be found at the column 'genomic_location' even when 'direction' key is not given. This allows for an extra control of results.
+The location of a peak relative to the annotated feature can also be found at the column 'genomic_location' even when 'direction' key is not given. This allows for an extra control of results, with or without filtering parameters.
 
-**Note** : In some cases the 'upstream' direction will be matched with annotation of genomic_location 'overlapStart' , 
-and respectively the 'downstream' direction will contain annotation with the genomic_location 'overlapEnd', because a partial overlap with the feature is allowed when filtering for upstream/downstream peaks to features. 
+**Note** : In some cases the 'upstream' direction will be matched with annotation of genomic_location = 'overlapStart' , 
+and respectively the 'downstream' direction will contain annotation with the genomic_location = 'overlapEnd', because a partial overlap with the feature is allowed when filtering for upstream/downstream peaks to features. 
 
 
 
