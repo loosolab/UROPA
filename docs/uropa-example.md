@@ -229,16 +229,15 @@ even though the distance is closer.
 
 **The direction is considered a priority parameter for the annotation, so only if direction is valid, the distance will then be validated, too.**
 
-The location of a peak relative to the annotated feature can also be found at the column 'genomic_location' even when 'direction' key is not given. This allows for an extra control of results, with or without filtering parameters.
+The location of a peak relative to the annotated feature can also be found at the column **'genomic_location'** even when 'direction' key is not given. This allows for an extra control of results, with or without filtering parameters.
 
-**Note** : In some cases the 'upstream' direction will be matched with annotation of genomic_location = 'overlapStart' , 
-and respectively the 'downstream' direction will contain annotation with the genomic_location = 'overlapEnd', because a partial overlap with the feature is allowed when filtering for upstream/downstream peaks to features. 
+**Note** : In some cases the 'upstream' direction will be matched with annotation of genomic_location = **'overlapStart'** , 
+and respectively the 'downstream' direction will contain annotation with the genomic_location = **'overlapEnd'**, because a partial overlap with the feature is allowed when filtering for upstream/downstream peaks to features. 
 
 
 
-So, more specific annotation can be useful for peaks like this one, in order to obtain a unique feature matching the requirements. 
-For example, if some genomic regions are known to be enriched in transcriptionally active promoters, we would be interested to know to which features these regions are found upstream.   
-Moreover, ‘downstream’ direction could be useful for the targeted identification of miRNAs or 3’UTR-binding proteins.
+So,globally, this example shows that more specific annotation can be useful for peaks like this one, in order to obtain a unique feature matching more specific requirements. 
+There is interest in cases where for example, some genomic regions are known to be enriched in transcriptionally active promoters, and we would be interested to know to which features these regions are found upstream. Moreover, a ‘downstream’ direction could be useful for the targeted identification of miRNAs or 3’UTR-binding proteins.
 
 
 
@@ -270,7 +269,7 @@ The output will be for "peak_13":
 | chr6    | 27857165 | 27860401 | 27863637 | gene   | 27858093 | 27860884|   -     | 483      | start     |FeatureInsidePeak  |   0.43       |   1.0 	     | HIST1H3J  | 0  |
 | chr6    | 27857165 | 27860401 | 27863637 | gene   | 27860477 | 27860963|   -     | 76       | end       |FeatureInsidePeak  |   0.08       |   1.0 	     | HIST1H2AM | 0  |
 
-[ Table 7: All hits table internal feature example].
+[ Table 8: All hits table internal feature example].
 
 ![internal.feature](img/chr6-27,857,165-27,863,637_internal_feature-01.png)
 
@@ -290,7 +289,7 @@ the peak would only be annotated with the two genes *HIST1H3J*  and *HIST1H2AM* 
 | chr6    | 27857165 | 27860401 | 27863637 | gene   | 27858093 | 27860884 |   -    |   483    | start     | FeatureInsidePeak |    0.43      |     1.0       | HIST1H3J  | 0   |
 | chr6	  | 27857165 | 27860401 | 27863637 | gene   | 27860477 | 27860963 |   -	   |   76     | end       | FeatureInsidePeak |    0.08      |     1.0	     | HIST1H2AM | 0   |
 
-[ Table 8 : All hits table with 'internals': 'False' for the peak_13 of polR2A ]
+[ Table 9 : All hits table with 'internals': 'False' for the peak_13 of polR2A ]
 
 
 These examples make overally evident, that depending on the biological relevance, it can be very useful to utilize more flexible keys and allow better control of results. 
