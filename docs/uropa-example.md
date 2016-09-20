@@ -85,9 +85,7 @@ The queries in the config file looks like followed:
 
 	In Case 1,reported in 'peak_1', the 'Best_hits' table will be the same as the 'All_hits' because all queries give same annotation. This is why 'Merged_Best_Hits' table was designed [Table 3]. Queries with same annotation are merged in one line giving a more compact illustration of the annotation.
 	For the other 2 cases (peak_6, peak_10) the best feature is chosen according to  'distance' measured from the peak center.For 'peak_6' the closest transcript and gene have both same distance = 3, so they are both reported in Best_hits, but merged in one line at the 'Merged_Best_hits'.
-	For 'peak_10' the closest feature is the transcript with gene_name *RCC1*, so no merging was needed.
-
-
+	For 'peak_10' the closest feature is the transcript with gene_name *RCC1*, so no merging was needed.                                                                                                 
 
 2. If Priority is considered ('priority'='True')     
 
@@ -133,13 +131,10 @@ The queries in the config file looks like followed:
 Example for the 'feature.position' 
 -------------------------------- 
 UROPA allows flexibility of annotation for features. With the key 'feature.position' it is possible to decide from where the distance-to-the-peak should be calculated.    
-The typical application is to calculate the distance from the TSS, respresented as 'start' of the feature,        
-but with UROPA it is also possible to use the 'center' and 'end' of the feature in question. 
+The typical application is to calculate the distance from the TSS, respresented as 'start' of the feature,but with UROPA it is also possible to use the 'center' and 'end' of the feature in question. 
 
 If no value is given, the distances from all three positions :  `'feature.position' =['start', 'center', 'end']`  to the peak center are calculated and,
-if :  ` min(|feature.position - peak.center|) <= 'distance' ` , the feature is kept for annotation.
-
-The position closer to the peak.center will be indicated in the output file in the column **'feat_pos'**.
+if :  ` min(|feature.position - peak.center|) <= 'distance' ` , the feature is kept for annotation.                                                                                                     The position closer to the peak.center will be indicated in the output file in the column **'feat_pos'**.
 
 This example is based on H3K4me1 peaks annotated with the Gencode genome ( [further details][http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files] ).
 
@@ -171,13 +166,13 @@ Figure 1: From the histone mark H3K4me1, peak71(chr22:18161387-18161496) annotat
 
 
 **Note** : Similar cases of peaks being internally to the genomic region of a feature (and also features being internally to a peak region) 
-can be well-annotated using a supplementary key in UROPA, the 'internals', whic is explained in the section "Example for the 'internals' key".
+can be well-annotated using a supplementary key in UROPA, the 'internals', which is explained in the section "Example for the 'internals' key".
 
 
 
 Example for the 'direction' 
 ------------------------- 
-This example is based on H3K4me1 peaks annotated with the Gencode genome  ( [further details][http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files] ).
+
 In the following example the utility of the key 'direction' will be illustrated. It is optional but can be a very important 'player' for a more specialized annotation.                  
 
 When the direction key is set to 'upstream', peaks will be annotated to a feature if the peak center is upstream of the feature and the distance from the 'feature.position' is smaller than the distance required in the config file. The same would be for 'downstream' where the location of the peak should be downstream of the gene (Figure 2).
@@ -192,6 +187,7 @@ Figure 2 : Location of a peak shown upstream of the TSS of a gene X. Respectivel
 
 
 Let’s see now an example of an annotation with and without direction chosen, for the peak shown in Figure 3.
+It is based on H3K4me1 peaks annotated with the Gencode genome( [further details][http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files]).
 
 
 ![direction.key](img/chr1-1,403,500-1,408,500-01_h3k4me1_peaks.png) 
@@ -212,11 +208,11 @@ The peak displayed in Figure 3 would be annotated for both genes as shown in the
 |peak_21044 | chr1 | 1406116 |	1406250.5 | 1406385 | gene | 1385069 | 1405538 | + | 712 | end	 | downstream |	0.0 | 0.0 |	ATAD3C | 0 |
 
 
-Due to the fact that no 'feature.position' was defined, the distance shown in the table is measured from the min(|peak.center-[start,center,end]|), 
+Due to the fact that no 'feature.position' was defined, the distance shown in the table is measured from the ` min(|[start,center,end] - peak.center|) `, 
 as explained in "Example for the 'feature.position'" and the position having the minimum distance is given in the table : 'start' for  *ATAD3B*, 'end' for *ATAD3C* .
 
 
-From All_hits_table we can infer the best annotation,too, which in this case would be the gene *ATAD3C* , with distance 712 bp.  
+From All_hits_table we can infer the best annotation,too, which in this case, would be the gene *ATAD3C* , with distance 712 bp.  
 
 But,let's see the differences according to the 'direction' key. If only 'upstream' annotation is required :
 
@@ -230,8 +226,10 @@ even though the distance is closer.
 
 The direction/location of peak relative to feature can also be found at the column 'genomic_location' even when 'direction' key is not given. This allows for an extra control of results.
 
-**Note** : In some cases the 'direction': 'upstream' will be matched with annotation of genomic_location 'overlapStart' , 
-and respectively the 'direction':'downstream' will contain annotation with the genomic_location 'overlapEnd', because a partial overlap with the feature is allowed when filtering for upstream/downstream peaks to features. 
+**Note** : In some cases the 'upstream' direction will be matched with annotation of genomic_location 'overlapStart' , 
+and respectively the 'downstream' direction will contain annotation with the genomic_location 'overlapEnd', because a partial overlap with the feature is allowed when filtering for upstream/downstream peaks to features. 
+
+
 
 So, more specific annotation can be useful for peaks like this one, in order to obtain a unique feature matching the requirements. 
 For example, if some genomic regions are known to be enriched in transcriptionally active promoters, we would be interested to know to which features these regions are found upstream.   
