@@ -17,7 +17,9 @@ The queries in the config file looks like followed:
  "bed":"ENCFF001VFA_GM12878_POLR2A_narrowPeaks.bed"
 } `
 
-1. If No priority is given ('priority'='False')     
+
+-   1. If No priority is given ('priority'='False') 
+    
 
 	The above set of queries will allow UROPA to annotate peaks for genes and transcripts. As priority is False (default if no different value given),there is no feature priorized. 
 
@@ -85,11 +87,11 @@ The queries in the config file looks like followed:
 
 	In Case 1,reported in 'peak_1', the 'Best_hits' table will be the same as the 'All_hits' because all queries give same annotation. This is why 'Merged_Best_Hits' table was designed [Table 3]. Queries with same annotation are merged in one line giving a more compact illustration of the annotation.
 	For the other 2 cases (peak_6, peak_10) the best feature is chosen according to  'distance' measured from the peak center.For 'peak_6' the closest transcript and gene have both same distance = 3, so they are both reported in Best_hits, but merged in one line at the 'Merged_Best_hits'.
-	For 'peak_10' the closest feature is the transcript with gene_name *RCC1*, so no merging was needed.                                                                                                 
+	For 'peak_10' the closest feature is the transcript with gene_name *RCC1*, so no merging was needed.
 
 
+-   2. If Priority is considered ('priority'='True')
 
-2. If Priority is considered ('priority'='True')     
 
 	If 'priority' is True, UROPA will annotate peaks with the **first feature given** in the set of queries. Unless genes are not found for a peak, 'transcripts' will then be searched and validated by the query’s parameters in order to be assigned to a peak. The example is based on the same three cases, explained above.
 	That is why there will be no peak in the output tables annotated for both features at the same time. 
@@ -236,8 +238,8 @@ and respectively the 'downstream' direction will contain annotation with the gen
 
 
 
-So,globally, this example shows that more specific annotation can be useful for peaks like this one, in order to obtain a unique feature matching more specific requirements. 
-There is interest in cases where for example, some genomic regions are known to be enriched in transcriptionally active promoters, and we would be interested to know to which features these regions are found upstream. Moreover, a ‘downstream’ direction could be useful for the targeted identification of miRNAs or 3’UTR-binding proteins.
+So, globally, this example shows that more specific annotation can be useful for peaks like this one, in order to obtain a unique feature matching more specific requirements. 
+There is interest in cases where for example, some genomic regions are known to be enriched in transcriptionally active promoters, and we would like to know to which features these regions are found upstream. Moreover, a ‘downstream’ direction could be useful for the targeted identification of miRNAs or 3’UTR-binding proteins.
 
 
 
