@@ -87,6 +87,8 @@ The queries in the config file looks like followed:
 	For the other 2 cases (peak_6, peak_10) the best feature is chosen according to  'distance' measured from the peak center.For 'peak_6' the closest transcript and gene have both same distance = 3, so they are both reported in Best_hits, but merged in one line at the 'Merged_Best_hits'.
 	For 'peak_10' the closest feature is the transcript with gene_name *RCC1*, so no merging was needed.                                                                                                 
 
+
+
 2. If Priority is considered ('priority'='True')     
 
 	If 'priority' is True, UROPA will annotate peaks with the **first feature given** in the set of queries. Unless genes are not found for a peak, 'transcripts' will then be searched and validated by the query’s parameters in order to be assigned to a peak. The example is based on the same three cases, explained above.
@@ -175,7 +177,7 @@ Example for the 'direction'
 
 In the following example the utility of the key 'direction' will be illustrated. It is optional but can be a very important 'player' for a more specialized annotation.                  
 
-When the direction key is set to 'upstream', peaks will be annotated to a feature if the peak center is upstream of the feature and the distance from the 'feature.position' is smaller than the distance required in the config file. The same would be for 'downstream' where the location of the peak should be downstream of the gene (Figure 2).
+When the direction key is set to **'upstream'**, peaks will be annotated to a feature if the peak center is upstream of the feature and the distance from the 'feature.position' is smaller than the distance required in the config file. The same would be for **'downstream'**  where the location of the peak should be downstream of the gene (Figure 2).
 
 So,the location of the peak is relative to the feature’s direction, and furthermore, the closest 'feature.position' is actually the 'start' when peak is upstream, while on the contrary, it is the 'end', if the peak is downstream.  This is why in the example the 'feature.position' will be used with default values.
 
