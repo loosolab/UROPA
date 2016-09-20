@@ -136,8 +136,10 @@ UROPA allows flexibility of annotation for features. With the key 'feature.posit
 The typical application is to calculate the distance from the TSS, respresented as 'start' of the feature,        
 but with UROPA it is also possible to use the 'center' and 'end' of the feature in question. 
 
-If no value is given, the distances from all three feature positions =['start', 'center', 'end'] to the peak center are calculated: ` min(|feature.position - peak.center|)` ,
-and the minimum of these measured distances is kept if it is smaller than the indicated 'distance'.Then the peak will be annotated for this feature and the position closer to the peak.center will be indicated in the output file in the column **'feat_pos'**.
+If no value is given, the distances from all three positions :  `'feature.position' =['start', 'center', 'end']`  to the peak center are calculated and,
+if :  ` min(|feature.position - peak.center|) <= 'distance' ` , the feature is kept for annotation.
+
+The position closer to the peak.center will be indicated in the output file in the column **'feat_pos'**.
 
 This example is based on H3K4me1 peaks annotated with the Gencode genome ( [further details][http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files] ).
 
@@ -269,7 +271,7 @@ The output will be for "peak_13":
 
 ![internal.feature](img/chr6-27,857,165-27,863,637_internal_feature-01.png)
 
-Figure 4: polR2A peaks annotated with Ensembl, genomic location: chr6 : 27,858,000 - 27,863,000
+Figure 4: A polR2A-peak annotated with Ensembl, genomic location: chr6 : 27,858,000 - 27,863,000
 
 
 As displayed in Table 7 there are three genes annotated for the peak which is shown in Figure 4.    
