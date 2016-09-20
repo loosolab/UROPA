@@ -53,7 +53,7 @@ The queries in the config file looks like followed:
 	| peak_10 | chr1  |	28832002 | 28836390 |28840778  | transcript	|28836589 |	28862538 |	 +	    |  199	   |   start	| overlapStart    |  0.48	 |  0.16	  |  RCC1	 | 1 |
 	| ...     |       |          |          |          |            |         |          |          |          |            |                 |          |            |          |   |
 	.	
-	[Table 1: AllHits table for two queries with priority false.] 
+	[Table 1: AllHits_table for two queries with priority false.] 
 
 
 	'Peak_1' represents the first case where both queries validate no feature at all. In this case the peak is represented by 'NA' rows, for each query. 
@@ -168,7 +168,7 @@ The location of the gene and the peak of interest (highlighted in black colour) 
 | peak71  | chr22 | 18161387 | 18161441.5 | 18161496 |   gene  | 18111621 | 18213388 | +        | 1063     | center    | PeakInsideFeature  |     1.0       |    0.0   | BCL2L13  |   1      |
 | ...     |       |          |            |          |         |          |          |          |          |           |                    |               |          |          |          | 
 	
-[Table 6: All_hits_table with annotation of a peak from two queries with different 'feature.position' and 'priority' = 'False'  ]
+[Table 6: AllHits_table with annotation of a peak from two queries with different 'feature.position' and 'priority' = 'False'  ]
 
 
 ![peak71](img/chr22-18161287-18161496_peak71_h3k4me1_feature_pos.png)
@@ -224,7 +224,7 @@ The peak displayed in Figure 3 would be annotated for both genes as shown in the
 |peak_21044 | chr1 | 1406116 |	1406250.5 | 1406385 | gene | 1407143 | 1433228 | + | 892 | start | upstream	|  0.0  | 0.0 |	ATAD3B | 0 |
 |peak_21044 | chr1 | 1406116 |	1406250.5 | 1406385 | gene | 1385069 | 1405538 | + | 712 | end	 | downstream |	0.0 | 0.0 |	ATAD3C | 0 |
 
-[Table 7 : All_hits_table for an H3K4me1-peak annotated with two genes according to the above config file ]
+[Table 7 : AllHits_table for an H3K4me1-peak annotated with two genes according to the above config file ]
 
 
 Due to the fact that no 'feature.position' was defined, the distance shown in the table is measured from the ` min(|[start,center,end] - peak.center|) `, 
