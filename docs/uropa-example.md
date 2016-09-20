@@ -239,47 +239,74 @@ Moreover, ‘downstream’ direction could be useful for the targeted identifica
 
 Example for the 'internals' key
 ------------------------------------ 
-This example is based on POLR2A peaks annotated with the Ensembl genome ( [further details][http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files] ).
-By default this parameter is set to 'False'. With this setting peaks are only annotated with features whose distance is smaller than the defined one in the config.          
+This example is based on POLR2A peaks annotated with the Ensembl genome
+([further details][http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files]).
 
-But there are cases where the genomic feature is larger than the set 'distance' and this case can lead to unannotated peaks, even if the peak is located inside the genomic feature interval.     
-Same the other way around, there exist very large peaks containing small features inside their interval. The 'internals' key was implemented exactly for these cases.            
-So, peaks with a max distance from the feature are normally annotated with it, but **also** those who contain the feature internally, or are included in the features region. These internal features are the only ones allowed to be in a larger distance than the set 'distance'.
+By default this parameter is set to 'False'. With this setting, peaks are only annotated with features whose 'distance' is smaller than the defined one in the config.          
+
+But there are cases where the genomic feature is larger than the set 'distance' and this case can lead to unannotated peaks, even if the peak is located inside the genomic feature interval (seen in the Example for the 'feature.position').     
+Same the other way around, there exist very large peaks containing small features inside their interval. 
+The 'internals' key was implemented exactly for these cases.   
+
+So, peaks with a max distance from the feature are normally annotated with it, but **also** those who contain the feature internally, or are included in the features region. 
+These internal features are the only ones allowed to be in a larger distance than the set 'distance'.
+
 Especially, when ATACseq peaks are used for annotation with very small transcription factors, this option becomes very handy.          
 The following configuration allows to search peaks internal to feature region and features internal to peak region :
 `
-"queries":[{"feature":"gene", "distance":1000, "show.attributes":"gene_name", "internals" : "True"}]
+"queries":[{"feature":"gene", "distance":500, "show.attributes":"gene_name", "internals" : "True"}]
 `
 
-The output will be:   
+The output will be for "peak_13":   
  
 | p_chr   | p_start  | p_center | p_end    |feature |feat_start|feat_end |feat_strand|distance| feat_pos  | genomic_location  |feat_ovl_peak | peak_ovl_feat |gene_name |query| 
 |:--------|:---------|:---------|:---------|:-------|:---------|:--------|:--------|:---------|:----------|:----------------- | :------------|:------------- |:---------|:----|
-| chr6    | 27857165 | 27860401 | 27863637 | gene   | 27861203 | 27861669| +       | 802      | start     |FeatureInsidePeak  | 0.07         | 1.0 	         |HIST1H2BO | 0   |
-| chr6    | 27857165 | 27860401 | 27863637 | gene   | 27858093 | 27860884| -       | 483      | start     |FeatureInsidePeak  | 0.43         | 1.0 	         |HIST1H3J  | 0   |
-| chr6    | 27857165 | 27860401 | 27863637 | gene   | 27860477 | 27860963| -       | 76       | end       |FeatureInsidePeak  | 0.08         | 1.0 	         |HIST1H2AM | 0   |
+| chr6    | 27857165 | 27860401 | 27863637 | gene   | 27861203 | 27861669|   +     | 802      | start     |FeatureInsidePeak  |   0.07       |   1.0 	     | HIST1H2BO | 0  |
+| chr6    | 27857165 | 27860401 | 27863637 | gene   | 27858093 | 27860884|   -     | 483      | start     |FeatureInsidePeak  |   0.43       |   1.0 	     | HIST1H3J  | 0  |
+| chr6    | 27857165 | 27860401 | 27863637 | gene   | 27860477 | 27860963|   -     | 76       | end       |FeatureInsidePeak  |   0.08       |   1.0 	     | HIST1H2AM | 0  |
 
 [ Table 7: All hits table internal feature example].
 
 ![internal.feature](img/chr6-27,857,165-27,863,637_internal_feature-01.png)
 
-Figure 3: H3K4me1 peaks annotated with Ensembl, genomic location: chr6-27,857,165-27,863,637
+Figure 4: polR2A peaks annotated with Ensembl, genomic location: chr6 : 27,858,000 - 27,863,000
 
-As displayed in Table 5 there are three genes annotated for the peak which is shown in Figure 3.    
+
+As displayed in Table 7 there are three genes annotated for the peak which is shown in Figure 4.    
 
 UROPA detects the internal-to-a-peak features or the internal-to-a-feature peaks and reports their 'genomic.location' in the output files. Even if the distances from feature.position to the peak center are larger than the 'distance' set, the features will be annotated to the corresponding peaks.
        
-In the contrary case, where the key 'internals' is not activated (by default "False") and no feature.position is chosen,          
-the peak would only be annotated for *HIST1H3J*  with a distance of 483 bp. 
+In the contrary case, where the key 'internals' is not activated ("False") and no feature.position is chosen,          
+the peak would only be annotated with the two genes *HIST1H3J*  and *HIST1H2AM*  ,found in distance less than 500 bp(Table 8). 
 
 
-| p_chr   | p_start  | p_center | p_end    |feature |feat_start|feat_end |feat_strand|distance| feat_pos  | genomic_location  |feat_ovl_peak | peak_ovl_feat |gene_name |query| 
-|:--------|:---------|:---------|:---------|:-------|:---------|:--------|:--------|:---------|:----------|:----------------- | :------------|:------------- |:---------|:----|
-| chr6    | 27857165 | 27860401 | 27863637 | gene   | 27858093 | 27860884| -       | 483      | start     |FeatureInsidePeak  | 0.43         | 1.0 	         |HIST1H3J  | 0   |
+| p_chr   | p_start  | p_center | p_end    |feature |feat_start|feat_end |feat_strand|distance| feat_pos  | genomic_location  |feat_ovl_peak | peak_ovl_feat |gene_name  |query| 
+|:--------|:---------|:---------|:---------|:-------|:---------|:--------|:--------|:---------|:----------|:----------------- | :------------|:------------- |:----------|:----|
+| chr6    | 27857165 | 27860401 | 27863637 | gene   | 27858093 | 27860884 |   -    |   483    | start     | FeatureInsidePeak |    0.43      |     1.0       | HIST1H3J  | 0   |
+| chr6	  | 27857165 | 27860401 | 27863637 | gene   | 27860477 | 27860963 |   -	   |   76     | end       | FeatureInsidePeak |    0.08      |     1.0	     | HIST1H2AM | 0   |
+
+[ Table 8 : All hits table with 'internals': 'False' for the peak_13 of polR2A ]
 
 
+These examples make overally evident, that depending on the biological relevance, it can be very useful to utilize more flexible keys and allow better control of results. 
 
-These examples make overally evident, that depending on the biological relevance, it can be very useful to utilize more flexible keys. 
+
+Combination of config keys
+------------------------------
+
+* feature.position + direction : If position is 'end' and the 'direction' given 'upstream', the features with upstream peaks will be annotated if the 'end' position is closer than the given 'distance'.
+
+* direction + internals : If 'direction' is given for filtering and 'internals':'True', the features with 'upstream'/'downstream' peaks will be annotated, plus the internal-to-peak features or the internal-to-feature peaks will also be found in the results, with 'distance' further than the required.
+
+* feature.position + internals : The feature.position will be used for measuring the closest distance to the peak.center and only the features in this cut-off will be annotated, except for  the internal-to-peak features and the internal-to-feature peaks that will be kept as supplementary annotations,irrespective of their distance.
+
+* filter.attribute + attribute.value : The features for annotation will be filtered for the given 'attribute' key and only if they agree with the 'attribute.value' given, will they be associated to the peak. Both these values should be given to the config for the filtering to be done.
+
+* filter.attribute + show.attributes : If the 'filter.attribute' is given, it is advised to also use the same key among others, at the 'show.attributes' so that filtered results are verified.
+To be noted that 'show.attributes' can accept more than one attributes for displaying at the output tables.
+
+
+**Note** : The combination is affecting results accordingly, when given in the same query. If used in different queries, they work independently,they are not considered as combined.
 
 
 Used peak and annotation files 
