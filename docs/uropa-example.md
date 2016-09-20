@@ -179,6 +179,7 @@ This example is based on H3K4me1 peaks annotated with the Gencode genome  ( [fur
 In the following example the utility of the key 'direction' will be illustrated. It is optional but can be a very important 'player' for a more specialized annotation.                  
 
 When the direction key is set to 'upstream', peaks will be annotated to a feature if the peak center is upstream of the feature and the distance from the 'feature.position' is smaller than the distance required in the config file. The same would be for 'downstream' where the location of the peak should be downstream of the gene (Figure 2).
+
 So,the location of the peak is relative to the feature’s direction, and furthermore, the closest 'feature.position' is actually the 'start' when peak is upstream, while on the contrary, it is the 'end', if the peak is downstream.  This is why in the example the 'feature.position' will be used with default values.
 
 *An overlap of the feature to the start or end of the peak is partially allowed, but the overlap should allow a clear evidence of the upstream or downstream location of the peak.*
@@ -209,27 +210,28 @@ The peak displayed in Figure 3 would be annotated for both genes as shown in the
 |peak_21044 | chr1 | 1406116 |	1406250.5 | 1406385 | gene | 1385069 | 1405538 | + | 712 | end	 | downstream |	0.0 | 0.0 |	ATAD3C | 0 |
 
 
-Due to the fact that no 'feature.position' was defined, the distance calculated was chosen after a comparison of distances to find the minimum to the peak.center and the minimum chosen distance is shown on the table : 'end' for *ATAD3C* , 'start' for  *ATAD3B* .
+Due to the fact that no 'feature.position' was defined, the distance shown in the table is measured from the min(|peak.center-[start,center,end]|), 
+as explained in "Example for the 'feature.position'" and the position having the minimum distance is given in the table : 'start' for  *ATAD3B*, 'end' for *ATAD3C* .
 
 
-From All_hits_table we can infer the best annotation, which in this case would be the gene *ATAD3C* , with distance 712 bp.  
+From All_hits_table we can infer the best annotation,too, which in this case would be the gene *ATAD3C* , with distance 712 bp.  
 
-But,let's see the differences according to the 'direction'. If only 'upstream' annotation is required :
+But,let's see the differences according to the 'direction' key. If only 'upstream' annotation is required :
 
 `"queries": [{"feature": "gene", "attribute":"gene_name", "distance":1000, "direction":"upstream"}] `
 
 
-In this case the peak will only be annotated for *ATAD3B* because it is located upstream to it, while it is downstream to the gene *ATAD3C* , so it is not a valid feature, 
+In this case the peak will only be annotated for *ATAD3B* because it is located 'upstream' to it, while it is 'downstream' to the gene *ATAD3C* , so *ATAD3C*  it is not a valid feature, 
 even though the distance is closer. 
 
-**The direction is considered a priority parameter for the annotation, so only if direction is the required the distance will be also then validated.**
+**The direction is considered a priority parameter for the annotation, so only if direction is valid, the distance will then be validated, too.**
 
 The direction/location of peak relative to feature can also be found at the column 'genomic_location' even when 'direction' key is not given. This allows for an extra control of results.
 
 **Note** : In some cases the 'direction': 'upstream' will be matched with annotation of genomic_location 'overlapStart' , 
-and respectively the 'direction':'downstream' will contain annotation with the genomic_location 'overlapEnd', because a partial overlap with the feature is allowed for upstream/downstream peaks. 
+and respectively the 'direction':'downstream' will contain annotation with the genomic_location 'overlapEnd', because a partial overlap with the feature is allowed when filtering for upstream/downstream peaks to features. 
 
-So, more specific annotation can be useful for peaks like this one, in order to obtain a unique and precise annotation. 
+So, more specific annotation can be useful for peaks like this one, in order to obtain a unique feature matching the requirements. 
 For example, if some genomic regions are known to be enriched in transcriptionally active promoters, we would be interested to know to which features these regions are found upstream.   
 Moreover, ‘downstream’ direction could be useful for the targeted identification of miRNAs or 3’UTR-binding proteins.
 
