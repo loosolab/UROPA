@@ -52,7 +52,7 @@ The queries in the config file looks like followed:
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript |28832863 | 28836145 |   +      |  245	   |   end	    |FeatureInsidePeak|  0.37	 |  1.0	      | SNHG3	 | 1 | 
 	| peak_10 | chr1  |	28832002 | 28836390 |28840778  | transcript	|28836589 |	28862538 |	 +	    |  199	   |   start	| overlapStart    |  0.48	 |  0.16	  |  RCC1	 | 1 |
 	| ...     |       |          |          |          |            |         |          |          |          |            |                 |          |            |          |   |
-	.	
+	
 	[Table 1: AllHits_table for two queries with priority false.] 
 
 
