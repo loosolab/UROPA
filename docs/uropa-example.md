@@ -186,7 +186,11 @@ The location of the gene and the peak of interest (highlighted in black colour) 
 
 Figure 1: From the histone mark H3K4me1, peak71(chr22:18161387-18161496) annotated with the gene *BCL2L13* from gencode, at a distance 1063bp from feature.center to peak.center
 
+Concerning the other output tables, 
+
+
 * BestHits_table will be same as All_hits_table for this peak because there is only one feature per query annotated.
+
 * Merged_BestHits_table will only include the annotated peak given by query '1'.
 
 
@@ -209,7 +213,8 @@ So,the location of the peak is relative to the feature’s direction, and furthe
 
 ![peak_upstream](img/peak_Upstream_Downstream_of_gene.png)
 
-(found from : (https://www.geneprof.org/GeneProf/imgs/gp_fig_geneassoc.png)  )
+(found from : (https://www.geneprof.org/GeneProf/imgs/gp_fig_geneassoc.png))
+
 Figure 2 : Location of a peak shown upstream of the TSS of a gene X. Respectively, if peak found on the right side it would be considered 'downstream' of the gene X
 
 
@@ -226,7 +231,7 @@ Figure 3: H3K4me1 peak annotated with the Gencode genome, the genomic location i
     
 The query is the following:       
 
-`"queries": [{ "feature": "gene", "attribute":"gene_name", "distance":1000 }] `
+`"queries": [{ "feature": "gene", "attribute":"gene_name", "distance":1000, "direction":"any_direction" }] `
 
 The peak displayed in Figure 3 would be annotated for both genes as shown in the table below:
 
@@ -236,7 +241,7 @@ The peak displayed in Figure 3 would be annotated for both genes as shown in the
 |peak_21044 | chr1  | 1406116  | 1406250.5 | 1406385  | gene    |   1407143  |  1433228 |     +    |    892      | start     |     upstream	    |      0.0      |    0.0   |	ATAD3B |    0     |
 |peak_21044 | chr1  | 1406116  | 1406250.5 | 1406385  | gene    |   1385069  |  1405538 |     +    |    712      | end	     |    downstream    |	   0.0      |    0.0   |	ATAD3C |    0     |
 
-[Table 7 : AllHits_table for an H3K4me1-peak annotated with two genes according to the above config file ]
+[Table 7 : AllHits_table for an H3K4me1-peak annotated with two genes of different directions relative to the peak, according to the above config file ]
 
 
 Due to the fact that no 'feature.position' was defined, the distance shown in the table is measured from the ` min(|[start,center,end] - peak.center|) `, 
@@ -250,8 +255,15 @@ But, let's see the differences when the 'direction' key is set. If only 'upstrea
 `"queries": [{"feature": "gene", "attribute":"gene_name", "distance":1000, "direction":"upstream"}] `
 
 
-In this case the peak will only be annotated for *ATAD3B* because it is located 'upstream' to it, while it is 'downstream' to the gene *ATAD3C* , so *ATAD3C*  it is not a valid feature, 
-even though the distance is closer. 
+In this case the peak will only be annotated for *ATAD3B* ,as shown in Table 8, because it is located 'upstream' to it, so *ATAD3C*  it is not a valid feature, even though the distance is closer. 
+
+
+| peak_id   | p_chr | p_start  | p_center  | p_end    | feature | feat_start | feat_end | feat_strand | distance | feat_pos  | genomic_location | feat_ovl_peak | peak_ovl_feat | gene_name | query | 
+|:----------|:------|:---------|:----------|:---------|:--------|:-----------|:---------|:---------|:----------- |:----------|:-----------------|:--------------|:---------|:----------|:---------|
+|peak_21044 | chr1  | 1406116  | 1406250.5 | 1406385  | gene    |   1407143  |  1433228 |     +    |    892      | start     |     upstream	    |      0.0      |    0.0   |	ATAD3B |    0     |
+
+[Table 8: AllHits_table for an H3K4me1-peak annotated with an upstream gene are required by the query ]
+
 
 **The direction is considered a priority parameter for the annotation, so only if direction is valid, the distance will then be validated, too.**
 
@@ -295,7 +307,7 @@ The output will be for "peak_13":
 | chr6    | 27857165 | 27860401 | 27863637 | gene   | 27858093 | 27860884|   -     | 483      | start     |FeatureInsidePeak  |   0.43       |   1.0 	     | HIST1H3J  | 0  |
 | chr6    | 27857165 | 27860401 | 27863637 | gene   | 27860477 | 27860963|   -     | 76       | end       |FeatureInsidePeak  |   0.08       |   1.0 	     | HIST1H2AM | 0  |
 
-[ Table 8: AllHits_table internal feature example].
+[ Table 9: AllHits_table internal feature example].
 
 ![internal.feature](img/chr6-27,857,165-27,863,637_internal_feature-01.png)
 
@@ -343,12 +355,10 @@ Used peak and annotation files
 ------------------------------ 
 
 Annotation:  
-
 Ensembl database of the human genome, version hg19 (GRC37): [Ensembl genome](ftp://ftp.ensembl.org/pub/release-75/gtf/homo_sapiens/)                      
 Human Gencode genome, version hg19: [Gencode genome](ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_19/) 
 
 Narrow peak and signal files based on ChIP-seq of GM12878 immortalized cell line:  
-
 [H3K4ME1](https://www.encodeproject.org/experiments/ENCSR000AKF/)   
 [POLR2A](https://www.encodeproject.org/experiments/ENCSR000EAD/)     
 
