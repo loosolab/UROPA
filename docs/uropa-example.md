@@ -182,9 +182,7 @@ The location of the gene and the peak of interest (highlighted in black colour) 
 [Table 6: AllHits_table with annotation of a peak from two queries with different 'feature.position' and 'priority' = 'False'  ]
 
 
-![peak71](img/chr22-18161287-18161496_peak71_h3k4me1_feature_pos.png)
-
-Figure 1: From the histone mark H3K4me1, peak71(chr22:18161387-18161496) annotated with the gene *BCL2L13* from gencode, at a distance 1063bp from feature.center to peak.center.
+![peak71](img/chr22-18161287-18161496_peak71_h3k4me1_feature_pos.png, "Figure 1: From the histone mark H3K4me1, peak71(chr22:18161387-18161496) annotated with the gene *BCL2L13* from gencode, at a distance 1063bp from feature.center to peak.center")
 
 
 * BestHits_table will be same as All_hits_table for this peak because there is only one feature per query annotated.
@@ -208,32 +206,31 @@ So,the location of the peak is relative to the feature’s direction, and furthe
 
 *An overlap of the feature to the start or end of the peak is partially allowed, but the overlap should allow a clear evidence of the upstream or downstream location of the peak.*
 
-![peak_upstream](img/peak_Upstream_Downstream_of_gene.png)
+![peak_upstream](img/peak_Upstream_Downstream_of_gene.png, "Figure 2 : Location of a peak shown upstream of the TSS of a gene X. Respectively, if peak found on the right side it would be considered 'downstream' of the gene X")
 
-Figure 2 : Location of a peak shown upstream of the TSS of a gene X. Respectively, if peak found on the right side it would be considered 'downstream' of the gene X.
 (found from : (https://www.geneprof.org/GeneProf/imgs/gp_fig_geneassoc.png)  )
+
 
 Let’s see now an example of an annotation with and without direction chosen, for the peak shown in Figure 3.
 It is based on H3K4me1 peaks annotated with the Gencode genome, 
 found here : [further details](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files)
 
 
-![direction.key](img/chr1-1,403,500-1,408,500-01_h3k4me1_peaks.png) 
+![direction.key](img/chr1-1,403,500-1,408,500-01_h3k4me1_peaks.png , "Figure 3: H3K4me1 peak annotated with the Gencode genome, the genomic location is chr1:1,403,500-1,408,500") 
 
-Figure 3: H3K4me1 peak annotated with the Gencode genome, the genomic location is chr1:1,403,500-1,408,500
+
     
-
-The query looks as the following:       
+The query is the following:       
 
 `"queries": [{ "feature": "gene", "attribute":"gene_name", "distance":1000 }] `
 
 The peak displayed in Figure 3 would be annotated for both genes as shown in the table below:
 
 
-| peak_id | p_chr | p_start  | p_center | p_end  | feature | feat_start | feat_end | feat_strand | distance | feat_pos | genomic_location | feat_ovl_peak | peak_ovl_feat | gene_name | query | 
-|:--------|:------|:---------|:---------|:---------|:--------|:---------|:---------|:---------|:---------|:----------|:-------------------|:--------------|:---------|:---------|:---------|
-|peak_21044 | chr1 | 1406116 |	1406250.5 | 1406385 | gene | 1407143 | 1433228 | + | 892 | start | upstream	|  0.0  | 0.0 |	ATAD3B | 0 |
-|peak_21044 | chr1 | 1406116 |	1406250.5 | 1406385 | gene | 1385069 | 1405538 | + | 712 | end	 | downstream |	0.0 | 0.0 |	ATAD3C | 0 |
+| peak_id   | p_chr | p_start  | p_center  | p_end    | feature | feat_start | feat_end | feat_strand | distance | feat_pos  | genomic_location | feat_ovl_peak | peak_ovl_feat | gene_name | query | 
+|:----------|:------|:---------|:----------|:---------|:--------|:-----------|:---------|:---------|:----------- |:----------|:-----------------|:--------------|:---------|:----------|:---------|
+|peak_21044 | chr1  | 1406116  | 1406250.5 | 1406385  | gene    |   1407143  |  1433228 |     +    |    892      | start     |     upstream	    |      0.0      |    0.0   |	ATAD3B |    0     |
+|peak_21044 | chr1  | 1406116  | 1406250.5 | 1406385  | gene    |   1385069  |  1405538 |     +    |    712      | end	     |    downstream    |	   0.0      |    0.0   |	ATAD3C |    0     |
 
 [Table 7 : AllHits_table for an H3K4me1-peak annotated with two genes according to the above config file ]
 
@@ -296,9 +293,7 @@ The output will be for "peak_13":
 
 [ Table 8: AllHits_table internal feature example].
 
-![internal.feature](img/chr6-27,857,165-27,863,637_internal_feature-01.png)
-
-Figure 4: A polR2A-peak annotated with Ensembl, genomic location: chr6 : 27,858,000 - 27,863,000
+![internal.feature](img/chr6-27,857,165-27,863,637_internal_feature-01.png , "Figure 4: A polR2A-peak annotated with Ensembl, genomic location: chr6 : 27,858,000 - 27,863,000")
 
 
 As displayed in Table 7 there are three genes annotated for the peak which is shown in Figure 4.    
