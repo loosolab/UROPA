@@ -10,7 +10,7 @@ The following examples illustrate how this can be beneficial for the annotation.
 The queries in the config file looks like the following.
 
 This example is based on POLR2A peaks annotated with the Ensembl genome. 
-Source files can be found here :[further details](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files)
+Source files can be found here :[gtf and bed source files](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files)
 
 
 `
@@ -158,7 +158,7 @@ If no value is given, the distances from all three positions :  `'feature.positi
 if :  ` min(|feature.position - peak.center|) <= 'distance' ` , the feature is kept for annotation.                                                                                                     The position closer to the peak.center will be indicated in the output file in the column **'feat_pos'**.
 
 This example is based on H3K4me1 peaks annotated with the Gencode genome. 
-The source files can be found here: [further details](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files)
+The source files can be found here: [gtf and bed source files](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files)
 
 There are two queries with different 'feature.positions' for this example. 
 
@@ -182,8 +182,9 @@ The location of the gene and the peak of interest (highlighted in black colour) 
 [Table 6: AllHits_table with annotation of a peak from two queries with different 'feature.position' and 'priority' = 'False'  ]
 
 
-![peak71](img/chr22-18161287-18161496_peak71_h3k4me1_feature_pos.png, "Figure 1: From the histone mark H3K4me1, peak71(chr22:18161387-18161496) annotated with the gene *BCL2L13* from gencode, at a distance 1063bp from feature.center to peak.center")
+![peak71](img/chr22-18161287-18161496_peak71_h3k4me1_feature_pos.png)
 
+Figure 1: From the histone mark H3K4me1, peak71(chr22:18161387-18161496) annotated with the gene *BCL2L13* from gencode, at a distance 1063bp from feature.center to peak.center
 
 * BestHits_table will be same as All_hits_table for this peak because there is only one feature per query annotated.
 * Merged_BestHits_table will only include the annotated peak given by query '1'.
@@ -206,18 +207,21 @@ So,the location of the peak is relative to the feature’s direction, and furthe
 
 *An overlap of the feature to the start or end of the peak is partially allowed, but the overlap should allow a clear evidence of the upstream or downstream location of the peak.*
 
-![peak_upstream](img/peak_Upstream_Downstream_of_gene.png, "Figure 2 : Location of a peak shown upstream of the TSS of a gene X. Respectively, if peak found on the right side it would be considered 'downstream' of the gene X")
+![peak_upstream](img/peak_Upstream_Downstream_of_gene.png)
 
 (found from : (https://www.geneprof.org/GeneProf/imgs/gp_fig_geneassoc.png)  )
+Figure 2 : Location of a peak shown upstream of the TSS of a gene X. Respectively, if peak found on the right side it would be considered 'downstream' of the gene X
+
 
 
 Let’s see now an example of an annotation with and without direction chosen, for the peak shown in Figure 3.
 It is based on H3K4me1 peaks annotated with the Gencode genome, 
-found here : [further details](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files)
+found here : [gtf and bed source files](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files)
 
 
-![direction.key](img/chr1-1,403,500-1,408,500-01_h3k4me1_peaks.png , "Figure 3: H3K4me1 peak annotated with the Gencode genome, the genomic location is chr1:1,403,500-1,408,500") 
+![direction.key](img/chr1-1,403,500-1,408,500-01_h3k4me1_peaks.png)  
 
+Figure 3: H3K4me1 peak annotated with the Gencode genome, the genomic location is chr1:1,403,500-1,408,500
 
     
 The query is the following:       
@@ -266,7 +270,7 @@ There is interest in cases where for example, some genomic regions are known to 
 Example for the 'internals' key
 ------------------------------------ 
 This example is based on POLR2A peaks annotated with the Ensembl genome .Link for the source files can be found here:
-[further details](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files)
+[gtf and bed source files](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files)
 
 By default this parameter is set to 'False'. With this setting, peaks are only annotated with features whose 'distance' is smaller than the defined one in the config.          
 
@@ -293,7 +297,9 @@ The output will be for "peak_13":
 
 [ Table 8: AllHits_table internal feature example].
 
-![internal.feature](img/chr6-27,857,165-27,863,637_internal_feature-01.png , "Figure 4: A polR2A-peak annotated with Ensembl, genomic location: chr6 : 27,858,000 - 27,863,000")
+![internal.feature](img/chr6-27,857,165-27,863,637_internal_feature-01.png)
+
+Figure 4: A polR2A-peak annotated with Ensembl, genomic location: chr6 : 27,858,000 - 27,863,000
 
 
 As displayed in Table 7 there are three genes annotated for the peak which is shown in Figure 4.    
@@ -318,15 +324,15 @@ These examples make overally evident, that depending on the biological relevance
 Combination of config keys
 ------------------------------
 
-* feature.position + direction : If position is 'end' and the 'direction' given 'upstream', the features with upstream peaks will be annotated if the 'end' position is closer than the given 'distance'.
+* **feature.position + direction** : If position is 'end' and the 'direction' given 'upstream', the features with upstream peaks will be annotated if the 'end' position is closer than the given 'distance'.
 
-* direction + internals : If 'direction' is given for filtering and 'internals':'True', the features with 'upstream'/'downstream' peaks will be annotated, plus the internal-to-peak features or the internal-to-feature peaks will also be found in the results, with 'distance' further than the required.
+* **direction + internals** : If 'direction' is given for filtering and 'internals':'True', the features with 'upstream'/'downstream' peaks will be annotated, plus the internal-to-peak features or the internal-to-feature peaks will also be found in the results, with 'distance' further than the required.
 
-* feature.position + internals : The feature.position will be used for measuring the closest distance to the peak.center and only the features in this cut-off will be annotated, except for  the internal-to-peak features and the internal-to-feature peaks that will be kept as supplementary annotations,irrespective of their distance.
+* **feature.position + internals** : The feature.position will be used for measuring the closest distance to the peak.center and only the features in this cut-off will be annotated, except for  the internal-to-peak features and the internal-to-feature peaks that will be kept as supplementary annotations,irrespective of their distance.
 
-* filter.attribute + attribute.value : The features for annotation will be filtered for the given 'attribute' key and only if they agree with the 'attribute.value' given, will they be associated to the peak. Both these values should be given to the config for the filtering to be done.
+* **filter.attribute + attribute.value** : The features for annotation will be filtered for the given 'attribute' key and only if they agree with the 'attribute.value' given, will they be associated to the peak. Both these values should be given to the config for the filtering to be done.
 
-* filter.attribute + show.attributes : If the 'filter.attribute' is given, it is advised to also use the same key among others, at the 'show.attributes' so that filtered results are verified.
+* **filter.attribute + show.attributes** : If the 'filter.attribute' is given, it is advised to also use the same key among others, at the 'show.attributes' so that filtered results are verified.
 To be noted that 'show.attributes' can accept more than one attributes for displaying at the output tables.
 
 
@@ -335,13 +341,18 @@ To be noted that 'show.attributes' can accept more than one attributes for displ
 
 Used peak and annotation files 
 ------------------------------ 
+
 Annotation:  
+
 Ensembl database of the human genome, version hg19 (GRC37): [Ensembl genome](ftp://ftp.ensembl.org/pub/release-75/gtf/homo_sapiens/)                      
 Human Gencode genome, version hg19: [Gencode genome](ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_19/) 
 
 Narrow peak and signal files based on ChIP-seq of GM12878 immortalized cell line:  
+
 [H3K4ME1](https://www.encodeproject.org/experiments/ENCSR000AKF/)   
 [POLR2A](https://www.encodeproject.org/experiments/ENCSR000EAD/)     
+
 **Note**: peak ids are manually added to make it easier to compare different tables or to combine tables with images. 
 
-Still not sure how to use the config file? Please contact Maria Kondili(maria.kondili@mpi-bn.mpg.de)
+
+>> Still not sure how to use the config file? Please contact Maria Kondili(maria.kondili@mpi-bn.mpg.de)
