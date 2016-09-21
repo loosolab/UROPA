@@ -3,12 +3,15 @@ In this section several examples for the usage of the config file are presented.
 Example with two queries and difference in 'priority' 
 ----------------------------------------------------- 
 
-This example is based on POLR2A peaks annotated with the Ensembl genome ([further details][http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files]).
 More than one query can be given, keeping the same gtf and bed files, allowing for a combination of annotation in one run.    
 If there are more queries, it is important to decide if they should be priorized. This can be done with the priority key in the config file.   
 The following examples illustrate how this can be beneficial for the annotation.
 
-The queries in the config file looks like followed:
+The queries in the config file looks like the following.
+
+This example is based on POLR2A peaks annotated with the Ensembl genome. 
+Source files can be found here :[further details](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files)
+
 
 `
 {"queries": [{"feature":"gene", "distance":1000, "show.attributes":"gene_name"},     
@@ -33,12 +36,18 @@ The queries in the config file looks like followed:
 	
 	* Case 3: Both queries validate features overlapping with the peaks.  
 
+
+
 	The Tables [1] and [2] shown below, represent the AllHits and BestHits outputs of UROPA,respectively for the 3 cases. 
 	
+	For further details on the output tables format please visit [Output_tables](http://uropa.readthedocs.io/en/latest/output/)
+
+
 	In the 'AllHits' all the features found within the given distance will be annotated for the peak, while 
 	in the 'BestHits' only the annotation with the closest feature  per peak per query is displayed. 
 
  
+
 	| peak_id | p_chr | p_start  | p_center | p_end    | feature  | feat_start| feat_end |feat_strand|distance | feat_pos   |genomic_location |feat_ovl_peak | peak_ovl_feat | gene_name| query | 
 	|:--------|:------|:---------|:---------|:---------|:-----------|:--------|:---------|:---------|:---------|:-----------|:----------------|:-------------|:--------------|:---------|:------| 
 	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         |NA       		  | NA      | NA          | NA   | 0     | 
@@ -57,11 +66,11 @@ The queries in the config file looks like followed:
 	[Table 1: AllHits_table for two queries with priority false.] 
 
 
-	'Peak_1' represents the first case where both queries validate no feature at all. In this case the peak is represented by 'NA' rows, for each query. 
+	'Peak_1' represents the **1st case**  where both queries validate no feature at all. In this case the peak is represented by 'NA' rows, for each query. 
 	
-	The 2nd case is represented by 'peak_10', which has two annotations for the transcript feature but not the gene feature.       
+	The **2nd case** is represented by 'peak_10', which has two annotations for the transcript feature but not the gene feature.       
 	
-	'Peak_6' is an example for the last case, with annotations for both queries. Transcripts (*ACTB*) are found by query 1 and a gene (*AC006483.1*) by query 0.
+	'Peak_6' is an example for the **3rd case** , with annotations for both queries. Transcripts (*ACTB*) are found by query 1 and a gene (*AC006483.1*) by query 0.
 
 
 	| peak_id | p_chr | p_start  | p_center | p_end    | feature    |feat_start|feat_end |feat_strand|distance | feat_pos   |genomic_location |feat_ovl_peak | peak_ovl_feat |gene_name| query | 
@@ -149,7 +158,7 @@ If no value is given, the distances from all three positions :  `'feature.positi
 if :  ` min(|feature.position - peak.center|) <= 'distance' ` , the feature is kept for annotation.                                                                                                     The position closer to the peak.center will be indicated in the output file in the column **'feat_pos'**.
 
 This example is based on H3K4me1 peaks annotated with the Gencode genome. 
-The source files can be found here: [further details][http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files]
+The source files can be found here: [further details](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files)
 
 There are two queries with different 'feature.positions' for this example. 
 
@@ -202,11 +211,11 @@ So,the location of the peak is relative to the feature’s direction, and furthe
 ![peak_upstream](img/peak_Upstream_Downstream_of_gene.png)
 
 Figure 2 : Location of a peak shown upstream of the TSS of a gene X. Respectively, if peak found on the right side it would be considered 'downstream' of the gene X.
-
+(found from : (https://www.geneprof.org/GeneProf/imgs/gp_fig_geneassoc.png)  )
 
 Let’s see now an example of an annotation with and without direction chosen, for the peak shown in Figure 3.
 It is based on H3K4me1 peaks annotated with the Gencode genome, 
-found here : [further details][http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files].
+found here : [further details](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files)
 
 
 ![direction.key](img/chr1-1,403,500-1,408,500-01_h3k4me1_peaks.png) 
@@ -259,8 +268,8 @@ There is interest in cases where for example, some genomic regions are known to 
 
 Example for the 'internals' key
 ------------------------------------ 
-This example is based on POLR2A peaks annotated with the Ensembl genome
-([further details][http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files]).
+This example is based on POLR2A peaks annotated with the Ensembl genome .Link for the source files can be found here:
+[further details](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files)
 
 By default this parameter is set to 'False'. With this setting, peaks are only annotated with features whose 'distance' is smaller than the defined one in the config.          
 
