@@ -281,10 +281,10 @@ There is interest in cases where for example, some genomic regions are known to 
 
 Example for the 'internals' key
 ------------------------------------ 
-This example is based on POLR2A peaks annotated with the Ensembl genome .Link for the source files can be found here:
+This example is based on POLR2A peaks annotated with the Ensembl genome. The source files can be found here:
 [gtf and bed source files](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files)
 
-By default this parameter is set to 'False'. With this setting, peaks are only annotated with features whose 'distance' is smaller than the defined one in the config.          
+By default the parameter 'internals' is set to 'False'. With this setting, peaks are only annotated with features whose 'distance' is smaller than the defined one in the config.          
 
 But there are cases where the genomic feature is larger than the set 'distance' and this case can lead to unannotated peaks, even if the peak is located inside the genomic feature interval (seen in the Example for the 'feature.position').     
 Same the other way around, there exist very large peaks containing small features inside their interval. 
@@ -331,6 +331,38 @@ the peak would only be annotated with the two genes *HIST1H3J*  and *HIST1H2AM* 
 
 
 These examples make overally evident, that depending on the biological relevance, it can be very useful to utilize more flexible keys and allow better control of results. 
+
+
+Example for 'filter.attibute' & 'attribute.value' key
+------------------------------------------------------
+
+For this example the same source files will be used as previously. The query that can be used for a basic filtering by attibute is the following :
+`
+"queries":[{"feature":"gene", "distance":5000, "show.attributes":["gene_name","gene_biotype"],
+            "filter.attribute": "gene_biotype", "attribute.value": "protein_coding" }
+          ] `
+
+This key allows a special filtering of the features for annotation. Only features with the requested 'attribute.value'= 'protein_coding' will be chosen for each peak, if existant in the gtf.
+
+The attribute shown in this example is provided in Ensembl gtf file, therefore it is possible to extract it for each genomic feature. 
+Other gtf source files contain different attribute keys and values, but if known, one can use any of them for filtering the results.
+
+Even when a custom gtf is given, it is formatted in a first step to fit the standard 'gtf' format, so all supplementary columns will be transformed in attributes as key-value pairs. 
+They can then be used in the config file of UROPA as filtering keys. 
+
+
+|peak_id | p_chr  |p_start   | p_center  | p_end  | feature |feat_start |feat_end | feat_strand |distance | feat_pos | genomic_location |feat_ovl_peak| peak_ovl_feat |gene_biotype |gene_name|query| 
+|:-------|:-------|:---------|:------------|:----------|:-------|:----------|:---------|:--------- |:---------|:---------|:------------------|:------------|:------------- |:----------|:----|
+| peak_2  | chr5  |149776755 | 149785224.5 | 149793694 | gene   |149781200  |149792492 | - |  1621 | center  | FeatureInsidePeak | 0.67  |  1.0  | protein_coding | CD74  |   0  | 
+| peak_3  |chr6   |	396914	 | 405319.0    | 413724    | gene	| 391739    | 411447   | + | 3726  | center	 | overlapEnd	     | 0.86	 | 0.74	 | protein_coding |	IRF4  |   0  |
+|  ...    |       |          |             |           |        |           |          |   |       |         |                   |       |       |                |       |      |
+
+[Table 10 :'AllHits_table' for two peaks, as given by the query with 'attribute.value' = 'protein_coding'  ]
+
+As we can see in the sample of the Table 10, the 'filter.attribute'= 'gene_biotype' is displayed as column name, because it is given in 'show.attributes' also. This helps verifying the filtering. 
+The 'attribute.value' is the value used basically for the filtering of the feature and displayed in the corresponding column of the key for each feature chosen. 
+
+So this query, with the keys presented here, allows only 'protein_coding' genes to be annotated to the peaks.
 
 
 Combination of config keys
