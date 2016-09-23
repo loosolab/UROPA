@@ -14,7 +14,7 @@ It accepts the following keys for each query:
 
 + **features** :['gene','exon','intron','miRNA'], or other types as defined in the 3rd column  of the 'GTF'.By default all features present in the 'GTF' will be used. 
 
-+ **distance**: [2000]. Default 100,000. It is used as the maximum allowed distance from the genomic feature to the peak center. The position of the feature to be considered for measuring the distance is the value given at 'feature.position'.             
++ **distance**: [2000]. Default 100,000. It is used as the maximum allowed distance from the genomic feature to the peak center. The position of the feature to be considered for measuring the distance is the value given at 'feature.anchor'.             
 
 + **show.attributes**: ['gene_id', 'gene_biotype'], or other keys defined in the 9th column of the 'GTF'. Default is 'None'. The chosen attribute(s) of all queries will be shown collectively as column names in the output tables. The value of each attribute is the one that provides the identification of the annotation of each peak(e.g gene_id, gene_name). The attributes can be defined only in one query and will be considered the same for all queries. If the given attribute key doesn't exist or is not given for some features in the 'GTF', the annotated peaks will have the value 'not.found' in the attribute's column.
 
@@ -22,7 +22,7 @@ It accepts the following keys for each query:
 
 + **attribute.value** : ['protein_coding']. The value of the key corresponding to the 'filter.attribute'.It will be used for annotating the peaks only with features that contain this value. Default:'None'
 
-+ **feature.position** : ['start']. The position from which the distance to the peak center will be measured for annotating the peak with the best feature (the closest). Default:  ['start', 'center', 'end']. If default values used, the distance of all positions will be measured from the peak center and if the minimum of the three compared distances is less than or equal to the 'distance' given, the feature will be accepted for annotation: closest.distance = min (|feat.start - p.center|, |feat.center - p.center|, |feat.end - p.center|)   < 'distance'. 
++ **feature.anchor** : ['start']. The position from which the distance to the peak center will be measured for annotating the peak with the best feature (the closest). Default:  ['start', 'center', 'end']. If default values used, the distance of all positions will be measured from the peak center and if the minimum of the three compared distances is less than or equal to the 'distance' given, the feature will be accepted for annotation: closest.distance = min (|feat.start - p.center|, |feat.center - p.center|, |feat.end - p.center|)   < 'distance'. 
 
 + **strand**: '+' .The strand on which the annotated feature should be. Default: ['+', '-' ]. If peaks are stranded (strand given in 6th column of 'bed' file),       
 the strand of the peak will be considered and not the 'strand' given here. If peak.strand = ' . ' , the strand given here will be considered instead.                        
@@ -30,7 +30,7 @@ the strand of the peak will be considered and not the 'strand' given here. If pe
 + **direction** : [ 'upstream', 'downstream' ], for defining the peak location relative to the feature's direction. Default: 'any_direction'.                
 A peak is 'upstream' when it is closer to or overlapping with the TSS of the feature.Similar for downstream but to the end position(TTS) of feature. Only when a peak is upstream/downstream of the feature it will be annotated with it. Otherwise it will be reported as 'NA'.              
 
-+ **internals**: ['T',True','F','False','Y','Yes','N','No'].If True, the features found completely inside a peak region OR a peak found inside a feature region will be considered a valid pair for annotation, even if  the distance of 'feature.position' from peak center is further than the desired 'distance'. This key can be helpful to identify peaks all along the features, or for the allocation of ATAC-seq peaks to very small transcription factor binding sites(tfbs). Default='False'.
++ **internals**: ['T',True','F','False','Y','Yes','N','No'].If True, the features found completely inside a peak region OR a peak found inside a feature region will be considered a valid pair for annotation, even if  the distance of 'feature.anchor' from peak center is further than the desired 'distance'. This key can be helpful to identify peaks all along the features, or for the allocation of ATAC-seq peaks to very small transcription factor binding sites(tfbs). Default='False'.
 
 
 #priority    

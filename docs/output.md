@@ -9,7 +9,7 @@ The different outputs will be explained thoroughly below.
 
 * **Merged_Best_hits_table** : The table that summarizes the Best_hits_table by chosing one feature for each peak in case more queries are given and each query validates one feature.The closest feature from all queries should be shown here.
 
-* **Reformatted_Besthits_table** : This table is created by an optional flag in the command line when running UROPA(-r).It creates a compact table with all hits per peak per query in one line, separated by semicolon, so one can have all the annotated features per peak at once.It is therefore created only when multiple queries are given.
+* **Reformatted_Besthits_table** : This table is created by an optional flag in the command line when running UROPA: ` uropa.sh -i [..] -o [..] -r`. It creates a compact table with all hits per peak per query in one line, separated by semicolon, so one can have all the annotated features per peak at once.It is therefore created only when multiple queries are given.
 
 * **Results_Summary_Visualisation.pdf** : In this document one can obtain graphical information of the peak annotation run by UROPA,depending on the configuration file requirements and the output tables created(Best_hits_table or Merged_Best_hits_table are used).
 
@@ -21,9 +21,9 @@ The four output tables mentioned above contain many informative columns about th
 
 **feature, feature_start, feature_end, feature_strand** : The information of the genomic feature that annotates the peak, as extracted by the gtf file.
 
-**distance** : The distance measured as following: abs(peak.center-feature.position).If no feature.position given,then the minimum of 3 distances from each feature.position{start,center,end} to peak.center is chosen.
+**distance** : The distance measured as following: `abs(peak.center-feature.anchor)`. If no feature.anchorgiven,then the minimum of 3 distances from each feature.anchor{start,center,end} to peak.center is chosen.
 
-**feat_pos**: The position of the genomic feature annotated,having the minimum distance to the peak.center.If 'feature.position' given in config only this will be shown.
+**feat_anchor**: The position of the genomic feature annotated,having the minimum distance to the peak.center.If 'feature.anchor' given in config only this will be shown.
 
 **genomic_location**: The position of the peak relative to the annotated feature direction.(i.e upstream = peak located upstream of the gene).
 
@@ -32,9 +32,8 @@ The four output tables mentioned above contain many informative columns about th
 **peak_ovl_feat**: When peak and feature overlap(i.e genomic_location = overlapStart), Ratio(overlapping region / feature.length) shows percentage of feature covered by the peak.(i.e 1.0 = 100% of feature covered, feature is internal.)
 
 **gene_name, gene_id, gene_type** : Attributes that have been given in the key 'show.atttributes' will be shown here and their values extracted by the gtf will be displayed for each feature.If 'filter.attribute' contains same attribute keys, this column helps confirming the filtering.
-
-	**Important Note** : Make sure to give any attributes for display in the output-if existant in the 9th column of the gtf - otherwise the annotated peaks will be reported 
-	without any information of the assigned features.
+**Important Note** : Make sure to give any attributes for display in the output-if existant in the 9th column of the gtf - otherwise the annotated peaks will be reported 
+without any information of the assigned features.
 
 **query**: The query that validates with its given parameters the feature to be assigned to the peak.If only one query given, column will always display '0',the first query.
 

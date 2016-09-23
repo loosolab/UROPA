@@ -1,7 +1,7 @@
 In this section several examples for the usage of the config file are presented. 
 
-Example with two queries and difference in 'priority' 
------------------------------------------------------ 
+Example with 'priority' query
+-----------------------------
 
 More than one query can be given, keeping the same gtf and bed files, allowing for a combination of annotation in one run.    
 If there are more queries, it is important to decide if they should be priorized. This can be done with the priority key in the config file.   
@@ -48,7 +48,7 @@ Source files can be found here :[gtf and bed source files](http://uropa.readthed
 
  
 
-	| peak_id | p_chr | p_start  | p_center | p_end    | feature  | feat_start| feat_end |feat_strand|distance | feat_pos   |genomic_location |feat_ovl_peak | peak_ovl_feat | gene_name| query | 
+	| peak_id | p_chr | p_start  | p_center | p_end    | feature  | feat_start| feat_end |feat_strand|distance | feat_anchor  |genomic_location |feat_ovl_peak | peak_ovl_feat | gene_name| query | 
 	|:--------|:------|:---------|:---------|:---------|:-----------|:--------|:---------|:---------|:---------|:-----------|:----------------|:-------------|:--------------|:---------|:------| 
 	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         |NA       		  | NA      | NA          | NA   | 0     | 
 	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         |NA               | NA      | NA          | NA   | 1     | 
@@ -73,7 +73,7 @@ Source files can be found here :[gtf and bed source files](http://uropa.readthed
 	'Peak_6' is an example for the **3rd case** , with annotations for both queries. Transcripts (*ACTB*) are found by query 1 and a gene (*AC006483.1*) by query 0.
 
 
-	| peak_id | p_chr | p_start  | p_center | p_end    | feature    |feat_start|feat_end |feat_strand|distance | feat_pos   |genomic_location |feat_ovl_peak | peak_ovl_feat |gene_name| query | 
+	| peak_id | p_chr | p_start  | p_center | p_end    | feature    |feat_start|feat_end |feat_strand|distance | feat_anchor |genomic_location |feat_ovl_peak | peak_ovl_feat |gene_name| query | 
 	|:--------|:------|:---------|:---------|:---------|:-----------|:--------|:---------|:---------|:---------|:-----------|:----------------|:------------ |:--------------|:--------|:------| 
 	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         |NA       		  | NA       | NA         | NA       | 0     | 
 	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         |NA               | NA       | NA         | NA       | 1     |
@@ -87,7 +87,7 @@ Source files can be found here :[gtf and bed source files](http://uropa.readthed
 	[Table 2: BestHits_table for two queries with priority false.]
 
 
-	| peak_id | p_chr | p_start  | p_center | p_end    | feature    |feat_start|feat_end |feat_strand|distance | feat_pos   |genomic_location |feat_ovl_peak | peak_ovl_feat | gene_name |query | 
+	| peak_id | p_chr | p_start  | p_center | p_end    | feature    |feat_start|feat_end |feat_strand|distance | feat_anchor  |genomic_location |feat_ovl_peak | peak_ovl_feat | gene_name |query | 
 	|:--------|:------|:---------|:---------|:---------|:-----------|:--------|:---------|:---------|:---------|:-----------|:----------------|:-------------|:--------------|:----------|:-----| 
 	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       |   NA     | NA         | NA         	  |   NA         | NA            | NA        | 0,1  |
 	| ...     |       |          |          |          |            |         |          |          |          |            |                 |              |               |           |      |
@@ -120,7 +120,7 @@ Source files can be found here :[gtf and bed source files](http://uropa.readthed
 	For 'peak_10' there was no annotation identified for the query 0, but two 'transcripts' are found for query-1. The annotation with the closest distance, *SNHG3*  is displayed at the BestHits (Table 5).	
 	
 
-	| peak_id | p_chr | p_start  | p_center | p_end    | feature    |feat_start| feat_end |feat_strand|distance | feat_pos   |genomic_location |feat_ovl_peak | peak_ovl_feat | gene_name |query |
+	| peak_id | p_chr | p_start  | p_center | p_end    | feature    |feat_start| feat_end |feat_strand|distance | feat_anchor |genomic_location |feat_ovl_peak | peak_ovl_feat | gene_name |query |
 	|:--------|:------|:---------|:---------|:---------|:-----------|:---------|:---------|:---------|:---------|:-----------|:----------------|:-------------| :-------------|:----------|:-----|
 	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA       | NA       | NA       | NA       | NA         | NA         	   |   NA         | NA            | NA        |0,1   |	
 	| ...     |       |          |          |          |            |          |          |          |          |            |                 |              |               |           |      | 
@@ -133,7 +133,7 @@ Source files can be found here :[gtf and bed source files](http://uropa.readthed
 	[Table 4: AllHits_table with two queries when priority='True']
 	
 
-	| peak_id | p_chr | p_start  | p_center | p_end    | feature    |feat_start| feat_end |feat_strand |distance | feat_pos  | genomic_location | feat_ovl_peak | peak_ovl_feat | gene_name | query | 
+	| peak_id | p_chr | p_start  | p_center | p_end    | feature    |feat_start| feat_end |feat_strand |distance | feat_anchor | genomic_location | feat_ovl_peak | peak_ovl_feat | gene_name | query | 
 	|:--------|:------|:---------|:---------|:---------|:-----------|:---------|:---------|:---------|:---------|:-----------|:---------------|:--------------|:--------------|:---------|:------|
 	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA       | NA       | NA       | NA       | NA         | NA             |   NA     | NA       | NA       | 0,1   | 
 	| ...     |       |          |          |          |            |          |          |          |          |            |                |          |          |          |       |   
@@ -148,38 +148,38 @@ Source files can be found here :[gtf and bed source files](http://uropa.readthed
 	**So, in the case of 'priority' = True, the features are mutually exclusive, and the queries are parsed for valid hits in an escalating priority.**        
 	
 
-Example for the 'feature.position' 
-----------------------------------
+Example for the 'feature.anchor' 
+--------------------------------
 
-UROPA allows flexibility of annotation for features. With the key 'feature.position' it is possible to decide from where the distance-to-the-peak should be calculated.    
+UROPA allows flexibility of annotation for features. With the key 'feature.anchor' it is possible to decide from where the distance-to-the-peak should be calculated.    
 The typical application is to calculate the distance from the TSS, respresented as 'start' of the feature,but with UROPA it is also possible to use the 'center' and 'end' of the feature in question. 
 
-If no value is given, the distances from all three positions :  `'feature.position' =['start', 'center', 'end']`  to the peak center are calculated and,
-if :  ` min(|feature.position - peak.center|) <= 'distance' ` , the feature is kept for annotation.                                                                                                     The position closer to the peak.center will be indicated in the output file in the column **'feat_pos'**.
+If no value is given, the distances from all three positions :  `'feature.anchor' =['start', 'center', 'end']`  to the peak center are calculated and,
+if :  ` min(|feature.anchor - peak.center|) <= 'distance' ` , the feature is kept for annotation.                                                                                                     The position closer to the peak.center will be indicated in the output file in the column **'feat_anchor'**.
 
 This example is based on H3K4me1 peaks annotated with the Gencode genome. 
 The source files can be found here: [gtf and bed source files](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files)
 
-There are two queries with different 'feature.positions' for this example. 
+There are two queries with different 'feature.anchor' for this example. 
 
-` "queries": [ {"feature":"gene", "distance":5000, "feature.position": "start", "show.attributes":"gene_name", },       
-		       {"feature": "gene","distance":5000, "feature.position": "center"} ]
+` "queries": [ {"feature":"gene", "distance":5000, "feature.anchor": "start", "show.attributes":"gene_name", },       
+		       {"feature": "gene","distance":5000, "feature.anchor": "center"} ]
   "priority" : "False"  `
 		        
 
-As displayed in the output below (Table 6), the peak could only be annotated for query 1 where 'feature.position' is set to 'center' and the measured distance is within the accepted cut-off value. 
+As displayed in the output below (Table 6), the peak could only be annotated for query 1 where 'feature.anchor' is set to 'center' and the measured distance is within the accepted cut-off value. 
 The location of the gene and the peak of interest (highlighted in black colour) are shown in the Figure 1. The gene *BCL2L13*  is very large, that is why the measurement of distance from 'start' position couldn't return a valid annotation. 
 											` feature.start – peak.center = |18111621-18161442| = 49 821 `
 
 
-| peak_id | p_chr | p_start  | p_center   | p_end    | feature | feat_start | feat_end | feat_strand | distance | feat_pos | genomic_location | feat_ovl_peak | peak_ovl_feat | gene_name | query | 
+| peak_id | p_chr | p_start  | p_center   | p_end    | feature | feat_start | feat_end | feat_strand | distance | feat_anchor | genomic_location | feat_ovl_peak | peak_ovl_feat | gene_name | query | 
 |:--------|:------|:---------|:-----------|:---------|:--------|:---------|:---------|:---------|:---------|:----------|:-------------------|:--------------|:---------|:---------|:---------|
 | ...     |       |          |            |          |         |          |          |          |          |           |                    |               |          |          |          |       
 | peak71  | chr22 | 18161387 | 18161441.5 | 18161496 |   NA    | NA       | NA       | NA       | NA       | NA        | NA                 |     NA        |    NA    |    NA    |   0      |
 | peak71  | chr22 | 18161387 | 18161441.5 | 18161496 |   gene  | 18111621 | 18213388 | +        | 1063     | center    | PeakInsideFeature  |     1.0       |    0.0   | BCL2L13  |   1      |
 | ...     |       |          |            |          |         |          |          |          |          |           |                    |               |          |          |          | 
 	
-[Table 6: AllHits_table with annotation of a peak from two queries with different 'feature.position' and 'priority' = 'False'  ]
+[Table 6: AllHits_table with annotation of a peak from two queries with different 'feature.anchor' and 'priority' = 'False'  ]
 
 
 ![peak71](img/chr22-18161287-18161496_peak71_h3k4me1_feature_pos.png)
@@ -205,9 +205,9 @@ Example for the 'direction'
 
 In the following example the utility of the key 'direction' will be illustrated. It is optional but can be a very important 'player' for a more specialized annotation.                  
 
-When the direction key is set to **'upstream'**, peaks will be annotated to a feature if the peak center is upstream of the feature and the distance from the 'feature.position' is smaller than the distance required in the config file. The same would be for **'downstream'**  where the location of the peak should be downstream of the gene (Figure 2).
+When the direction key is set to **'upstream'**, peaks will be annotated to a feature if the peak center is upstream of the feature and the distance from the 'feature.anchor' is smaller than the distance required in the config file. The same would be for **'downstream'**  where the location of the peak should be downstream of the gene (Figure 2).
 
-So,the location of the peak is relative to the feature’s direction, and furthermore, the closest 'feature.position' is actually the 'start' when peak is upstream, while on the contrary, it is the 'end', if the peak is downstream.  This is why in the example the 'feature.position' will be used with default values.
+So,the location of the peak is relative to the feature’s direction, and furthermore, the closest 'feature.anchor' is actually the 'start' when peak is upstream, while on the contrary, it is the 'end', if the peak is downstream.  This is why in the example the 'feature.anchor' will be used with default values.
 
 *An overlap of the feature to the start or end of the peak is partially allowed, but the overlap should allow a clear evidence of the upstream or downstream location of the peak.*
 
@@ -236,7 +236,7 @@ The query is the following:
 The peak displayed in Figure 3 would be annotated for both genes as shown in the table below:
 
 
-| peak_id   | p_chr | p_start  | p_center  | p_end    | feature | feat_start | feat_end | feat_strand | distance | feat_pos  | genomic_location | feat_ovl_peak | peak_ovl_feat | gene_name | query | 
+| peak_id   | p_chr | p_start  | p_center  | p_end    | feature | feat_start | feat_end | feat_strand | distance | feat_anchor | genomic_location | feat_ovl_peak | peak_ovl_feat | gene_name | query | 
 |:----------|:------|:---------|:----------|:---------|:--------|:-----------|:---------|:---------|:----------- |:----------|:-----------------|:--------------|:---------|:----------|:---------|
 |peak_21044 | chr1  | 1406116  | 1406250.5 | 1406385  | gene    |   1407143  |  1433228 |     +    |    892      | start     |     upstream	    |      0.0      |    0.0   |	ATAD3B |    0     |
 |peak_21044 | chr1  | 1406116  | 1406250.5 | 1406385  | gene    |   1385069  |  1405538 |     +    |    712      | end	     |    downstream    |	   0.0      |    0.0   |	ATAD3C |    0     |
@@ -244,21 +244,21 @@ The peak displayed in Figure 3 would be annotated for both genes as shown in the
 [Table 7 : AllHits_table for an H3K4me1-peak annotated with two genes of different directions relative to the peak, according to the above config file ]
 
 
-Due to the fact that no 'feature.position' was defined, the distance shown in the table is measured from the ` min(|[start,center,end] - peak.center|) `, 
-as explained in "Example for the 'feature.position'" and the position having the minimum distance is given in the table : 'start' for  *ATAD3B*, 'end' for *ATAD3C* .
+Due to the fact that no 'feature.anchor' was defined, the distance shown in the table is measured from the ` min(|[start,center,end] - peak.center|) `, 
+as explained in "Example for the 'feature.anchor'" and the position having the minimum distance is given in the table : 'start' for  *ATAD3B*, 'end' for *ATAD3C* .
 
 
 From All_hits_table we can infer the best annotation,too, which is this case, the gene *ATAD3C* , with distance 712 bp.  
 
 But, let's see the differences when the 'direction' key is set. If only 'upstream' annotation is required :
 
-`"queries": [{"feature": "gene", "attribute":"gene_name", "distance":1000, "direction":"upstream"}] `
+`"queries": [{"feature": "gene", "show.attributes":"gene_name", "distance":1000, "direction":"upstream"}] `
 
 
 In this case the peak will only be annotated for *ATAD3B* ,as shown in Table 8, because it is located 'upstream' to it, so *ATAD3C*  it is not a valid feature, even though the distance is closer. 
 
 
-| peak_id   | p_chr | p_start  | p_center  | p_end    | feature | feat_start | feat_end | feat_strand | distance | feat_pos  | genomic_location | feat_ovl_peak | peak_ovl_feat | gene_name | query | 
+| peak_id   | p_chr | p_start  | p_center  | p_end    | feature | feat_start | feat_end | feat_strand | distance | feat_anchor|genomic_location | feat_ovl_peak | peak_ovl_feat | gene_name | query | 
 |:----------|:------|:---------|:----------|:---------|:--------|:-----------|:---------|:---------|:----------- |:----------|:-----------------|:--------------|:---------|:----------|:---------|
 |peak_21044 | chr1  | 1406116  | 1406250.5 | 1406385  | gene    |   1407143  |  1433228 |     +    |    892      | start     |     upstream	    |      0.0      |    0.0   |	ATAD3B |    0     |
 
@@ -286,7 +286,7 @@ This example is based on POLR2A peaks annotated with the Ensembl genome. The sou
 
 By default the parameter 'internals' is set to 'False'. With this setting, peaks are only annotated with features whose 'distance' is smaller than the defined one in the config.          
 
-But there are cases where the genomic feature is larger than the set 'distance' and this case can lead to unannotated peaks, even if the peak is located inside the genomic feature interval (seen in the Example for the 'feature.position').     
+But there are cases where the genomic feature is larger than the set 'distance' and this case can lead to unannotated peaks, even if the peak is located inside the genomic feature interval (seen in the Example for the 'feature.anchor').     
 Same the other way around, there exist very large peaks containing small features inside their interval. 
 The 'internals' key was implemented exactly for these cases.   
 
@@ -301,7 +301,7 @@ The following configuration allows to search peaks internal to feature region an
 
 The output will be for "peak_13":   
  
-| p_chr   | p_start  | p_center | p_end    |feature |feat_start|feat_end |feat_strand|distance| feat_pos  | genomic_location  |feat_ovl_peak | peak_ovl_feat |gene_name |query| 
+| p_chr   | p_start  | p_center | p_end    |feature |feat_start|feat_end |feat_strand|distance| feat_anchor  | genomic_location  |feat_ovl_peak | peak_ovl_feat |gene_name |query| 
 |:--------|:---------|:---------|:---------|:-------|:---------|:--------|:--------|:---------|:----------|:----------------- | :------------|:------------- |:---------|:----|
 | chr6    | 27857165 | 27860401 | 27863637 | gene   | 27861203 | 27861669|   +     | 802      | start     |FeatureInsidePeak  |   0.07       |   1.0 	     | HIST1H2BO | 0  |
 | chr6    | 27857165 | 27860401 | 27863637 | gene   | 27858093 | 27860884|   -     | 483      | start     |FeatureInsidePeak  |   0.43       |   1.0 	     | HIST1H3J  | 0  |
@@ -316,13 +316,13 @@ Figure 4: A polR2A-peak annotated with Ensembl, genomic location: chr6 : 27,858,
 
 As displayed in Table 7 there are three genes annotated for the peak which is shown in Figure 4.    
 
-UROPA detects the internal-to-a-peak features or the internal-to-a-feature peaks and reports their 'genomic.location' in the output files. Even if the distances from feature.position to the peak center are larger than the 'distance' set, the features will be annotated to the corresponding peaks.
+UROPA detects the internal-to-a-peak features or the internal-to-a-feature peaks and reports their 'genomic.location' in the output files. Even if the distances from feature.anchor to the peak center are larger than the 'distance' set, the features will be annotated to the corresponding peaks.
        
-In the contrary case, where the key 'internals' is not activated ("False") and no feature.position is chosen,          
+In the contrary case, where the key 'internals' is not activated ("False") and no feature.anchor is chosen,          
 the peak would only be annotated with the two genes *HIST1H3J*  and *HIST1H2AM*  ,found in distance less than 500 bp(Table 8). 
 
 
-| p_chr   | p_start  | p_center | p_end    |feature |feat_start|feat_end |feat_strand|distance| feat_pos  | genomic_location  |feat_ovl_peak | peak_ovl_feat |gene_name  |query| 
+| p_chr   | p_start  | p_center | p_end    |feature |feat_start|feat_end |feat_strand|distance| feat_anchor | genomic_location  |feat_ovl_peak | peak_ovl_feat |gene_name  |query| 
 |:--------|:---------|:---------|:---------|:-------|:---------|:--------|:--------|:---------|:----------|:----------------- | :------------|:------------- |:----------|:----|
 | chr6    | 27857165 | 27860401 | 27863637 | gene   | 27858093 | 27860884 |   -    |   483    | start     | FeatureInsidePeak |    0.43      |     1.0       | HIST1H3J  | 0   |
 | chr6	  | 27857165 | 27860401 | 27863637 | gene   | 27860477 | 27860963 |   -	   |   76     | end       | FeatureInsidePeak |    0.08      |     1.0	     | HIST1H2AM | 0   |
@@ -351,7 +351,7 @@ Even when a custom gtf is given, it is formatted in a first step to fit the stan
 They can then be used in the config file of UROPA as filtering keys. 
 
 
-|peak_id | p_chr  |p_start   | p_center  | p_end  | feature |feat_start |feat_end | feat_strand |distance | feat_pos | genomic_location |feat_ovl_peak| peak_ovl_feat |gene_biotype |gene_name|query| 
+|peak_id | p_chr  |p_start   | p_center  | p_end  | feature |feat_start |feat_end | feat_strand |distance | feat_anchor | genomic_location |feat_ovl_peak| peak_ovl_feat |gene_biotype |gene_name|query| 
 |:-------|:-------|:---------|:------------|:----------|:-------|:----------|:---------|:--------- |:---------|:---------|:------------------|:------------|:------------- |:----------|:----|
 | peak_2  | chr5  |149776755 | 149785224.5 | 149793694 | gene   |149781200  |149792492 | - |  1621 | center  | FeatureInsidePeak | 0.67  |  1.0  | protein_coding | CD74  |   0  | 
 | peak_3  |chr6   |	396914	 | 405319.0    | 413724    | gene	| 391739    | 411447   | + | 3726  | center	 | overlapEnd	     | 0.86	 | 0.74	 | protein_coding |	IRF4  |   0  |
@@ -368,11 +368,11 @@ So this query, with the keys presented here, allows only 'protein_coding' genes 
 Combination of config keys
 ------------------------------
 
-* **feature.position + direction** : If position is 'end' and the 'direction' given 'upstream', the features with upstream peaks will be annotated if the 'end' position is closer than the given 'distance'.
+* **feature.anchor + direction** : If position is 'end' and the 'direction' given 'upstream', the features with upstream peaks will be annotated if the 'end' position is closer than the given 'distance'.
 
 * **direction + internals** : If 'direction' is given for filtering and 'internals':'True', the features with 'upstream'/'downstream' peaks will be annotated, plus the internal-to-peak features or the internal-to-feature peaks will also be found in the results, with 'distance' further than the required.
 
-* **feature.position + internals** : The feature.position will be used for measuring the closest distance to the peak.center and only the features in this cut-off will be annotated, except for  the internal-to-peak features and the internal-to-feature peaks that will be kept as supplementary annotations,irrespective of their distance.
+* **feature.anchor + internals** : The feature.anchor will be used for measuring the closest distance to the peak.center and only the features in this cut-off will be annotated, except for  the internal-to-peak features and the internal-to-feature peaks that will be kept as supplementary annotations,irrespective of their distance.
 
 * **filter.attribute + attribute.value** : The features for annotation will be filtered for the given 'attribute' key and only if they agree with the 'attribute.value' given, will they be associated to the peak. Both these values should be given to the config for the filtering to be done.
 
