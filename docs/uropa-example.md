@@ -236,7 +236,7 @@ The query is the following:
 The peak displayed in Figure 3 would be annotated for both genes as shown in the table below:
 
 
-| peak_id   | p_chr | p_start  | p_center  | p_end    | feature | feat_start | feat_end | feat_strand | distance | feat_anchor | genomic_location | feat_ovl_peak | peak_ovl_feat | gene_name | query | 
+| peak_id  | p_chr | p_start  | p_center  | p_end  | feature | feat_start | feat_end | feat_strand | distance | feat_anchor | genomic_location | feat_ovl_peak | peak_ovl_feat | gene_name | query | 
 |:----------|:------|:---------|:----------|:---------|:--------|:-----------|:---------|:---------|:----------- |:----------|:-----------------|:--------------|:---------|:----------|:---------|
 |peak_21044 | chr1  | 1406116  | 1406250.5 | 1406385  | gene    |   1407143  |  1433228 |     +    |    892      | start     |     upstream	    |      0.0      |    0.0   |	ATAD3B |    0     |
 |peak_21044 | chr1  | 1406116  | 1406250.5 | 1406385  | gene    |   1385069  |  1405538 |     +    |    712      | end	     |    downstream    |	   0.0      |    0.0   |	ATAD3C |    0     |
@@ -344,6 +344,8 @@ For this example the same source files will be used as previously. The query tha
 
 This key allows a special filtering of the features for annotation. Only features with the requested 'attribute.value'= 'protein_coding' will be chosen for each peak, if existant in the gtf.
 
+**Attention** : These two keys are dependent to each other, so they must both be given for a proper use of filtering.
+
 The attribute shown in this example is provided in Ensembl gtf file, therefore it is possible to extract it for each genomic feature. 
 Other gtf source files contain different attribute keys and values, but if known, one can use any of them for filtering the results.
 
@@ -351,18 +353,20 @@ Even when a custom gtf is given, it is formatted in a first step to fit the stan
 They can then be used in the config file of UROPA as filtering keys. 
 
 
-|peak_id | p_chr  |p_start   | p_center  | p_end  | feature |feat_start |feat_end | feat_strand |distance | feat_anchor | genomic_location |feat_ovl_peak| peak_ovl_feat |gene_biotype |gene_name|query| 
-|:-------|:-------|:---------|:------------|:----------|:-------|:----------|:---------|:--------- |:---------|:---------|:------------------|:------------|:------------- |:----------|:----|
-| peak_2  | chr5  |149776755 | 149785224.5 | 149793694 | gene   |149781200  |149792492 | - |  1621 | center  | FeatureInsidePeak | 0.67  |  1.0  | protein_coding | CD74  |   0  | 
-| peak_3  |chr6   |	396914	 | 405319.0    | 413724    | gene	| 391739    | 411447   | + | 3726  | center	 | overlapEnd	     | 0.86	 | 0.74	 | protein_coding |	IRF4  |   0  |
-|  ...    |       |          |             |           |        |           |          |   |       |         |                   |       |       |                |       |      |
+|peak_id | p_chr |p_start | p_center | p_end | feature |feat_start |feat_end | feat_strand |distance|feat_anchor| genomic_location |feat_ovl_peak| peak_ovl_feat |gene_biotype |gene_name|query| 
+|:-------|:-------|:---------|:------------|:----------|:-------|:----------|:---------|:-------|:-------|:---------|:-------------|:----|:------|:---------------|:------|:------|
+| peak_2  | chr5  |149776755 | 149785224.5 | 149793694 | gene   |149781200  |149792492 | - | 1621 | center | FeatureInsidePeak| 0.67| 1.0 | protein_coding | CD74  |   0  | 
+| peak_3  |chr6   |	396914	 | 405319      | 413724    | gene	| 391739    | 411447   | + | 3726 | center | overlapEnd	     | 0.86	| 0.74| protein_coding | IRF4  |   0  |
+|  ...    |       |          |             |           |        |           |          |   |      |        |                 |      |     |                |       |      |
 
 [Table 10 :'AllHits_table' for two peaks, as given by the query with 'attribute.value' = 'protein_coding'  ]
 
-As we can see in the sample of the Table 10, the 'filter.attribute'= 'gene_biotype' is displayed as column name, because it is given in 'show.attributes' also. This helps verifying the filtering. 
-The 'attribute.value' is the value used basically for the filtering of the feature and displayed in the corresponding column of the key for each feature chosen. 
+As shown in the results above(Table 10), the keys presented allow a more flexible annotation and a better specification of results at the same time. 
 
-So this query, with the keys presented here, allows only 'protein_coding' genes to be annotated to the peaks.
+These two keys can be of great help especially if combined with the 'priority':'True', when the prioritization of a 'protein_coding' feature against the secondary 'non_coding' query can cluster the results in two categories based on the biotype.
+
+It is advised to use the same attribute key in the 'show.attributes' key, too, so that it can be displayed in the output table, giving the confirmation of the filtering. 
+
 
 
 Combination of config keys
