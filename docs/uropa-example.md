@@ -372,13 +372,16 @@ It is advised to use the same attribute key in the 'show.attributes' key, too, s
 Combination of config keys
 ------------------------------
 
+The keys provided in the config file are independent (with exception of two presented above), so the combination of non-default values for some of them can enhance and enrich the annotation results.
+
+
 * **feature.anchor + direction** : If position is 'end' and the 'direction' given 'upstream', the features with upstream peaks will be annotated if the 'end' position is closer than the given 'distance'.
 
 * **direction + internals** : If 'direction' is given for filtering and 'internals':'True', the features with 'upstream'/'downstream' peaks will be annotated, plus the internal-to-peak features or the internal-to-feature peaks will also be found in the results, with 'distance' further than the required.
 
 * **feature.anchor + internals** : The feature.anchor will be used for measuring the closest distance to the peak.center and only the features in this cut-off will be annotated, except for  the internal-to-peak features and the internal-to-feature peaks that will be kept as supplementary annotations,irrespective of their distance.
 
-* **filter.attribute + attribute.value** : The features for annotation will be filtered for the given 'attribute' key and only if they agree with the 'attribute.value' given, will they be associated to the peak. Both these values should be given to the config for the filtering to be done.
+* **filter.attribute + attribute.value** : The features for annotation will be filtered for the given 'attribute' key and only if they agree with the 'attribute.value' given, will they be associated to the peak. Both these values should be given to the config for the filtering to be successful.
 
 * **filter.attribute + show.attributes** : If the 'filter.attribute' is given, it is advised to also use the same key among others, at the 'show.attributes' so that filtered results are verified.
 To be noted that 'show.attributes' can accept more than one attributes for displaying at the output tables.
