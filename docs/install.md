@@ -1,21 +1,23 @@
+
+For developping UROPA the following versions were used : 
 Make sure all prerequisites are met:
 
-* [R/Rscript](http://www.r-project.org/)
-* [python](http://continuum.io/downloads)
+* [R/Rscript](http://www.r-project.org/) , v3.3.0
+* [python](http://continuum.io/downloads) , v2.7.8-anaconda-2.1.0
 
 Packages required :
-
-* Python, version used for developping UROPA : 2.7.8-anaconda-2.1.0
+* for python :
 - argparse
 - logging
 - subprocess
 - multiprocessing
 - itertools
 
-*R, version used : 3.3.0
+* for R
 - library(VennDiagram)
 - library(ggplot2)
 - library(jsonlite)
+
 
 **TODO** what else?
 
