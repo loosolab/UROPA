@@ -6,14 +6,17 @@ Make sure all prerequisites are met:
 * [python](http://continuum.io/downloads) , v2.7.8-anaconda-2.1.0
 
 Packages required :
-* for python :
+
+For python :
+
 - argparse
 - logging
 - subprocess
 - multiprocessing
 - itertools
 
-* for R
+For R:
+
 - library(VennDiagram)
 - library(ggplot2)
 - library(jsonlite)
