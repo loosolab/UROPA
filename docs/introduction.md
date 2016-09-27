@@ -19,3 +19,9 @@ while the instructions about the parameters to be used can be extracted by  `uro
 
 If one would like to have verbosity when running UROPA and obtain a file where all the steps of the annotation are explained in details for each peak, a --verbose option is available, too:      
 								`uropa.sh  –i  config.json  –o  <Output_dir_name>  –v  <verbose_file.log>` 
+
+Further options are also available for :
+* Obtaining a reformatted and more compact output of the 'BestHits_Table' wheere all features per peak are in one line.Use the flag **-r**.
+* Creating a visualisation of results as a quick summary of the annotation, with the flag **-s**
+* running UROPA in multiple cores  using **-n** <nb_of_cores>.
+ 
