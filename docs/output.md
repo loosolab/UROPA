@@ -5,13 +5,13 @@ The different outputs will be explained thoroughly below.
 #Output Files
 * **Uropa_AllHits**  : The basic output table giving for each peak at least a hit which is valid according to the query's parameters. If more than one features are valid, all are shown in this table.
 
-* **Uropa_BestperQuery_Hits** : The table which can be the most useful for peak annotation.For each peak only one feature is assigned,the closest one.If more queries are given and each query validates different features, one feature per query is assigned to the peak.
+* **Uropa_BestperQuery_Hits** : .For each peak only one feature is assigned,the closest one.If more queries are given and each query validates different features, one feature per query is assigned to the peak.
 
-* **Uropa_FinalHits** : The table that summarizes the Best_hits_table by chosing one feature for each peak in case more queries are given and each query validates one feature.The closest feature from all queries should be shown here.
+* **Uropa_FinalHits** : The table which can be the most useful for peak annotation.It provides the best-selected feature according to the config criteria for annotating each peak. The closest distance is the basic parameter for the selection. It also summarizes the 'BestperQuery_Hits' by chosing the closest feature for each peak in case more queries are given and each query validates a different feature.
 
 * **Uropa_Reformatted_HitsperPeak** : This table is created by an optional flag in the command line when running UROPA: ` uropa.sh -i [..] -o [..] -r`. It creates a compact table with all hits per peak per query in one line, separated by semicolon, so one can have all the annotated features per peak at once.It is therefore created only when multiple queries are given.
 
-* **Results_Summary.pdf** : In this document one can obtain graphical information of the peak annotation run by UROPA,depending on the configuration file requirements and the output tables created(Best_hits_table or Merged_Best_hits_table are used).
+* **Results_Summary.pdf** : In this document one can obtain graphical information of the peak annotation run by UROPA,depending on the configuration file requirements and the output tables created ('BestperQuery_Hits' or 'FinalHits' are used).
 
 **Note** : The output files will be named additionally by the output directory name where they are located, for convenience in further use and transfer of files.
 Example  : ChIPannot/Uropa_AllHits_*ChIPannot*.txt
@@ -45,13 +45,13 @@ without any information of the assigned features.
 
 For every run there is also a summary output, vizualising the results for a global overview of the final annotation. Within this document one can find : 
 
----> Graphs based on the 'Best Hits' output:
+---> Graphs based on the 'BestperQuery_Hits' output:
 * A pairwise comparison among all queries is evaluated within a venn diagram, when more than one query is given in the config file. 
 * A distribution of the distances per feature per query are displayed in a histogram.
 * A pie chart illustrating the genomic location of the peaks per annotated feature.
 * A barplot displaying the occurrence of the different features, if there is more than one feature assigned for peak annotation.
 
----> Graphs based on the 'Merged Best Hits' output:
+---> Graphs based on the 'FinalHits' output:
 * A density plot displaying the distance per feature per query. 
 * A pie chart illustrating the genomic locations of the peaks per annotated feature.
 * A barplot displaying the occurrence of the different features, if there is more than one feature assigned for peak annotation.
