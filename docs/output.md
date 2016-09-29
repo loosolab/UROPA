@@ -46,12 +46,15 @@ without any information of the assigned features.
 For every run there is also a summary output, vizualising the results for a global overview of the final annotation. Within this document one can find : 
 
 ---> Graphs based on the 'BestperQuery_Hits' output:
+
 * A pairwise comparison among all queries is evaluated within a venn diagram, when more than one query is given in the config file. 
 * A distribution of the distances per feature per query are displayed in a histogram.
 * A pie chart illustrating the genomic location of the peaks per annotated feature.
 * A barplot displaying the occurrence of the different features, if there is more than one feature assigned for peak annotation.
 
+
 ---> Graphs based on the 'FinalHits' output:
+
 * A density plot displaying the distance per feature per query. 
 * A pie chart illustrating the genomic locations of the peaks per annotated feature.
 * A barplot displaying the occurrence of the different features, if there is more than one feature assigned for peak annotation.
