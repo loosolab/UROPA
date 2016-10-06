@@ -1,6 +1,6 @@
 **Welcome to the UROPA documentation!**
 
-UROPA is a peak annotation tool facilitating the analysis of next-generation sequencing methods for chromatin biology, like ChIP-seq or ATAC-seq. 
+UROPA is a peak annotation tool facilitating the analysis of next-generation sequencing methods for chromatin biology, like ChIPseq or ATACseq. 
 There are already different peak annotation tools, like HOMER or ChIPpeakAnno, but the advantage of UROPA is, that it can easily be fitted to your requirements.
 UROPA was developed as an open source analysis pipeline for peaks generated from any peak caller, e.g. MUSIC.
 
