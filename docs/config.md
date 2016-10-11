@@ -46,8 +46,7 @@ The GTF file acts as annotation database. If it is not in the right format, a co
 The BED file can be any tab-delimited file containing the detected enriched regions from a peak-calling tool (e.g. MACS2, MUSIC, FindPeaks, CisGenome, PeakSeq)             
 or any other table with genomic regions of a minimum of 3 columns and complying with the known BED format, as described by [Ensembl Bed format](http://www.ensembl.org/info/website/upload/bed.html).
 
-```diff
+
 **Hint**
 In order for the default values to be active, the key itself shouldn't be present and empty in the config file.                  
 In case there exist a key without value, an error message will advise you to fill in or omit the key.
-```
