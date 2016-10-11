@@ -18,3 +18,6 @@ pages:
 - MIT License: license.md
 - Help: help.md
 - Abbreviations: abbreviations.md
+css:
+    theme:
+        css/github.css: {}
