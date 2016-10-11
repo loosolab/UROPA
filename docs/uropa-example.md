@@ -53,16 +53,13 @@ Source files can be found here :[gtf and bed source files](http://uropa.readthed
 	|:--------|:------|:---------|:---------|:---------|:-----------|:--------|:---------|:---------|:---------|:-----------|:----------------|:-------------|:--------------|:---------|:------| 
 	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         |NA       		  | NA      | NA          | NA   | 0     | 
 	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         |NA               | NA      | NA          | NA   | 1     | 
-	| ...     |       |          |          |          |            |         |          |          |          |            |                 | 	    | 			  |      |       |
 	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | gene       | 5567734 | 5567817  | -        |  3       |  start	    |FeatureInsidePeak|	0.01     | 1.0        |AC006483.1| 0 | 
 	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | transcript | 5566782 |	5567729  | -	    |  91	   |  start	    |FeatureInsidePeak|	0.09     | 1.0	      |ACTB	     | 1 |
 	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | transcript | 5566787 |	5570232  | -		|  689	   |  center	|FeatureInsidePeak|	0.33	 | 1.0        |ACTB	     | 1 |
 	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | transcript | 5567734 |	5567817  | -	    |  3       |  start	    |FeatureInsidePeak|	0.01	 | 1.0	      |AC006483.1| 1 |
-	| ...     |       |          |          |          |            |         |          |          |          |            |                 |          |            |          |   |
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | NA	        |	NA    |	  NA	 |   NA     |  NA      |	NA      | NA    	      |   NA     |	NA        |	 NA      | 0 |
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript |28832863 | 28836145 |   +      |  245	   |   end	    |FeatureInsidePeak|  0.37	 |  1.0	      | SNHG3	 | 1 | 
 	| peak_10 | chr1  |	28832002 | 28836390 |28840778  | transcript	|28836589 |	28862538 |	 +	    |  199	   |   start	| overlapStart    |  0.48	 |  0.16	  |  RCC1	 | 1 |
-	| ...     |       |          |          |          |            |         |          |          |          |            |                 |          |            |          |   |
 
 	</pre>
 	
