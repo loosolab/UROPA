@@ -13,7 +13,7 @@ This example is based on POLR2A peaks annotated with the Ensembl genome.
 Source files can be found here :[gtf and bed source files](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files)
 
 
-```diff
+```json
 {"queries": [{"feature":"gene", "distance":1000, "show.attributes":"gene_name"},     
 			{"feature":"transcript", "distance":1000 }], 
  "priority" : "False",
@@ -48,7 +48,6 @@ Source files can be found here :[gtf and bed source files](http://uropa.readthed
 	in the 'BestHits' only the annotation with the closest feature  per peak per query is displayed. 
 
 	```diff
-	
 	| peak_id | p_chr | p_start  | p_center | p_end    | feature  | feat_start| feat_end |feat_strand|distance | feat_anchor  |genomic_location |feat_ovl_peak | peak_ovl_feat | gene_name| query | 
 	|:--------|:------|:---------|:---------|:---------|:-----------|:--------|:---------|:---------|:---------|:-----------|:----------------|:-------------|:--------------|:---------|:------| 
 	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         |NA       		  | NA      | NA          | NA   | 0     | 
@@ -63,7 +62,6 @@ Source files can be found here :[gtf and bed source files](http://uropa.readthed
 	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript |28832863 | 28836145 |   +      |  245	   |   end	    |FeatureInsidePeak|  0.37	 |  1.0	      | SNHG3	 | 1 | 
 	| peak_10 | chr1  |	28832002 | 28836390 |28840778  | transcript	|28836589 |	28862538 |	 +	    |  199	   |   start	| overlapStart    |  0.48	 |  0.16	  |  RCC1	 | 1 |
 	| ...     |       |          |          |          |            |         |          |          |          |            |                 |          |            |          |   |
-	
 	```
 	
 	[Table 1: AllHits_table for two queries with priority false.] 
