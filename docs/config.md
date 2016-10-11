@@ -1,8 +1,8 @@
 The configuration file is a .json format file that allows keys and values to be input easily and clearly. 
 For running UROPA, a template of the config file will be provided. The structure of the file is shown in the following image.    
-![config-file](img/config.png =250x)
+![config-file](img/config.png )
 
-Figure 1: Configuration file example: A config file will be downloaded when UROPA is installed. The fields are empty to be filled in. Please accord further instructions for a proper annotation.   
+*Figure 1: Configuration file example: A config file will be downloaded when UROPA is installed. The fields are empty to be filled in. Please accord further instructions for a proper annotation.*   
 
 There are three basic keys: 'queries', 'gtf', and 'bed', additionally there are two optional keys: 'priority', and 'bigwig'
 By default, 'internal' and 'priority' are false.  
@@ -38,7 +38,7 @@ A peak is 'upstream' when it is closer to or overlapping with the TSS of the fea
 a peak can be annotated according to the second query, only if a feature matching to the first query is not found. Respectively for further queries.               
 If 'False', all given queries are considered equally and any feature matching with any of these queries will annotate the peaks. The query that allowed each feature to be selected for annotation will be shown in the last column of the output tables. If only one query is provided, the value of 'priority' can be 'True' or 'False', without any difference in the output annotation.
 
-#gtf 
+#GTF 
 The GTF file should be of the standard GTF format (9 columns), as described by [Ensembl GTF format](http://www.ensembl.org/info/website/upload/gff.html>). 
 The GTF file acts as annotation database. If it is not in the right format, a conversion can be done by UROPA. For more information see [Custom annotation](custom.md)
 
@@ -46,13 +46,6 @@ The GTF file acts as annotation database. If it is not in the right format, a co
 The BED file can be any tab-delimited file containing the detected enriched regions from a peak-calling tool (e.g. MACS2, MUSIC, FindPeaks, CisGenome, PeakSeq)             
 or any other table with genomic regions of a minimum of 3 columns and complying with the known BED format, as described by [Ensembl Bed format](http://www.ensembl.org/info/website/upload/bed.html).
 
-#bigWig 
-A 'bigwig' file is optional and if specified, it gives the advantage of the peak summit, which can give a more precise annotation than the peak center. As shown in the image below,             
-sometimes the center (geometric mean) is not the real center of the enriched region. (function 'find_summit', which checks compatibility of bigwig-bed for the 'chr-' prefix             
-and can create new file when one of them is incompatible.)          
-![summit](img/summit.png)
 
-Figure 2: Different distance calculation when bigwig file is given: The summit is the real local maxima of the enriched region, and the distance will be calculated from this location. This leads to a more precise annotation.
-
-**Important Note**: In order for the default values to be active, the key itself shouldn't be present and empty in the config file.                  
-In case there exist a key without value, an error message will advise you to fill in or omit the key.  
+[[In order for the default values to be active, the key itself shouldn't be present and empty in the config file.                  
+In case there exist a key without value, an error message will advise you to fill in or omit the key.  ]] 
