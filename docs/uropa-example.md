@@ -18,7 +18,7 @@ Source files can be found here :[gtf and bed source files](http://uropa.readthed
 			{"feature":"transcript", "distance":1000 }], 
  "priority" : "False",
  "gtf":"Homo_sapiens.GRCh37.75_chr.gtf" ,
- "bed":"ENCFF001VFA_GM12878_POLR2A_narrowPeaks.bed"
+ "bed":"ENCFF001VFA.bed"
 } `
 
 
@@ -46,7 +46,7 @@ Source files can be found here :[gtf and bed source files](http://uropa.readthed
 	In the 'AllHits' all the features found within the given distance will be annotated for the peak, while 
 	in the 'BestHits' only the annotation with the closest feature  per peak per query is displayed. 
 
-	![alt text](img/table1.png)
+	
 	
 	[Table 1: AllHits_table for two queries with priority false.] 
 
