@@ -29,7 +29,7 @@ The location of the gene and the peak of interest (highlighted in black colour) 
 _Table 1: AllHits with annotation of a peak from two queries with different 'feature.anchor' and 'priority' = 'False'_
 
 
-![peak71](img/chr22-18161287-18161496_peak71_h3k4me1_feature_pos.png =150x)
+![peak71](img/chr22-18161287-18161496_peak71_h3k4me1_feature_pos.png)
 
 _Figure 1: From the histone mark H3K4me1, peak71(chr22:18161387-18161496) annotated with the gene *BCL2L13* from gencode, at a distance 1063bp from feature.center to peak.center_
 
@@ -57,7 +57,7 @@ So,the location of the peak is relative to the feature’s direction, and furthe
 
 *An overlap of the feature to the start or end of the peak is partially allowed, but the overlap should allow a clear evidence of the upstream or downstream location of the peak.*
 
-![peak_upstream](img/peak_Upstream_Downstream_of_gene.png)
+![peak_upstream](img/peak_Upstream_Downstream_of_gene.png =150px)
 
 
 Figure 2 : Location of a peak shown upstream of the start of a gene. In some cases the 'upstream' direction will be matched with annotation of genomic_location 'overlapStart', the second peak would be an example for this genomic location.
