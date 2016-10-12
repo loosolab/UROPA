@@ -9,8 +9,7 @@ For running UROPA, a template of the config file will be provided. The structure
 "gtf": ".gtf",
 "bed": ".bed"
 }
- ``` 
-
+```
 
 There are three basic keys: 'queries', 'gtf', and 'bed', additionally there are two optional keys: 'priority', and 'bigwig'
 By default, 'internal' and 'priority' are false.  

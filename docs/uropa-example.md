@@ -19,9 +19,8 @@ Source files can be found here :[gtf and bed source files](http://uropa.readthed
  "priority" : "False",
  "gtf":"Homo_sapiens.GRCh37.75_chr.gtf" ,
  "bed":"ENCFF001VFA_GM12878_POLR2A_narrowPeaks.bed"
-} ```
-
-
+}
+```
 
 + If No priority is given ('priority'='False') 
 
@@ -112,36 +111,31 @@ The source files can be found here: [gtf and bed source files](http://uropa.read
 
 There are two queries with different 'feature.anchor' for this example. 
 
-` "queries": [ {"feature":"gene", "distance":5000, "feature.anchor": "start", "show.attributes":"gene_name", },       
+```json
+"queries": [ {"feature":"gene", "distance":5000, "feature.anchor": "start", "show.attributes":"gene_name", },       
 		       {"feature": "gene","distance":5000, "feature.anchor": "center"} ]
-  "priority" : "False"  `
-		        
+"priority" : "False"
+```
 
 As displayed in the output below (Table 6), the peak could only be annotated for query 1 where 'feature.anchor' is set to 'center' and the measured distance is within the accepted cut-off value. 
 The location of the gene and the peak of interest (highlighted in black colour) are shown in the Figure 1. The gene *BCL2L13*  is very large, that is why the measurement of distance from 'start' position couldn't return a valid annotation. 
 											` feature.start – peak.center = |18111621-18161442| = 49 821 `
 
-
-| peak_id | p_chr | p_start  | p_center   | p_end    | feature | feat_start | feat_end | feat_strand | distance | feat_anchor | genomic_location | feat_ovl_peak | peak_ovl_feat | gene_name | query | 
-|:--------|:------|:---------|:-----------|:---------|:--------|:---------|:---------|:---------|:---------|:----------|:-------------------|:--------------|:---------|:---------|:---------|
-| ...     |       |          |            |          |         |          |          |          |          |           |                    |               |          |          |          |       
-| peak71  | chr22 | 18161387 | 18161441.5 | 18161496 |   NA    | NA       | NA       | NA       | NA       | NA        | NA                 |     NA        |    NA    |    NA    |   0      |
-| peak71  | chr22 | 18161387 | 18161441.5 | 18161496 |   gene  | 18111621 | 18213388 | +        | 1063     | center    | PeakInsideFeature  |     1.0       |    0.0   | BCL2L13  |   1      |
-| ...     |       |          |            |          |         |          |          |          |          |           |                    |               |          |          |          | 
+![table6](img/ex1_table-06.png )
 	
-[Table 6: AllHits_table with annotation of a peak from two queries with different 'feature.anchor' and 'priority' = 'False'  ]
+_Table 6: AllHits_table with annotation of a peak from two queries with different 'feature.anchor' and 'priority' = 'False'_
 
 
 ![peak71](img/chr22-18161287-18161496_peak71_h3k4me1_feature_pos.png)
 
-Figure 1: From the histone mark H3K4me1, peak71(chr22:18161387-18161496) annotated with the gene *BCL2L13* from gencode, at a distance 1063bp from feature.center to peak.center
+_Figure 1: From the histone mark H3K4me1, peak71(chr22:18161387-18161496) annotated with the gene *BCL2L13* from gencode, at a distance 1063bp from feature.center to peak.center_
 
 Concerning the other output tables, 
 
 
-* BestHits_table will be same as All_hits_table for this peak because there is only one feature per query annotated.
+* FinalHits will be same as All_hits for this peak because there is only one feature per query annotated.
 
-* Merged_BestHits_table will only include the annotated peak given by query '1'.
+* BestperQuery_Hits will only include the annotated peak given by query '1'.
 
 
 
