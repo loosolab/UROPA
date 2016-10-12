@@ -48,10 +48,10 @@ Source files can be found here :[gtf and bed source files](http://uropa.readthed
 
 	![table1](img/ex1_table-01.png )	
 	
-	*Table 1: AllHits_table for two queries with priority false.* 
+	Table 1: AllHits_table for two queries with priority false. 
 
 
-	'Peak_1' represents the **1st case**  where both queries validate no feature at all. In this case the peak is represented by 'NA' rows, for each query. 
+	'Peak_1' represents the **case 1**  where both queries validate no feature at all. In this case the peak is represented by 'NA' rows, for each query. 
 	
 	The **2nd case** is represented by 'peak_10', which has two annotations for the transcript feature but not the gene feature.       
 	
@@ -59,11 +59,11 @@ Source files can be found here :[gtf and bed source files](http://uropa.readthed
 
 	![table2](img/ex1_table-02.png )
 	
-	*Table 2: BestHits_table for two queries with priority false.*
+	Table 2: BestHits_table for two queries with priority false.
 
 	![table3](img/ex1_table-03.png )
 	
-	*Table 3: Merged_BestHits_table for two queries with priority false.*
+	Table 3: Merged_BestHits_table for two queries with priority false.
 
 
 	In Case 1,as reported in 'peak_1', the 'BestHits' table will be the same as the 'AllHits' because all queries give same annotation. This is why the 'Merged_BestHits' table was designed [Table 3]. Queries with same annotation are merged in one line, or the query with the 'closest' feature  among all queries is only given, providing a more compact illustration of the annotation.
