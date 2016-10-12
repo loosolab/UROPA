@@ -1,8 +1,16 @@
 The configuration file is a .json format file that allows keys and values to be input easily and clearly. 
-For running UROPA, a template of the config file will be provided. The structure of the file is shown in the following image.    
-![config-file](img/config.png )
+For running UROPA, a template of the config file will be provided. The structure of the file is shown below.   
+```json
+{
+"queries":[ 
+	{"feature":"",    "distance":"",    "show.attributes":"",    "filter.attribute":"",    "attribute.value":"",    "feature.position": "",    "strand":"",    "direction":"",    "internals":"" }
+          ],
+"priority": "",
+"gtf": ".gtf",
+"bed": ".bed"
+}
+ ``` 
 
-*Figure 1: Configuration file example: A config file will be downloaded when UROPA is installed. The fields are empty to be filled in. Please accord further instructions for a proper annotation.*   
 
 There are three basic keys: 'queries', 'gtf', and 'bed', additionally there are two optional keys: 'priority', and 'bigwig'
 By default, 'internal' and 'priority' are false.  
