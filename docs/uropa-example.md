@@ -46,9 +46,9 @@ Source files can be found here :[gtf and bed source files](http://uropa.readthed
 	In the 'AllHits' all the features found within the given distance will be annotated for the peak, while 
 	in the 'BestHits' only the annotation with the closest feature  per peak per query is displayed. 
 
-	![table1](img/ex1_table-01.png )	
+	![table1](img/ex1_table-01.png =250x)	
 	
-	Table 1: AllHits_table for two queries with priority false. 
+	_Table 1: AllHits_table for two queries with priority false._
 
 
 	'Peak_1' represents the **case 1**  where both queries validate no feature at all. In this case the peak is represented by 'NA' rows, for each query. 
