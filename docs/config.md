@@ -3,7 +3,7 @@ For running UROPA, a template of the config file will be provided. The structure
 ```json
 {
 "queries":[ 
-	{"feature":"",    "distance":"",    "show.attributes":"",    "filter.attribute":"",    "attribute.value":"",    "feature.position": "",    "strand":"",    "direction":"",    "internals":"" }
+	{"feature":"",    "feature.anchor": "",    "distance":"",    "strand":"",    "direction":"",    "internals":"",    "filter.attribute":"",    "attribute.value":"",     "show.attributes":"", }
           ],
 "priority": "",
 "gtf": ".gtf",
@@ -19,6 +19,7 @@ In a basic annotation, only the GTF and bed keys are specified, UROPA can annota
 The queries key is a field with nested keys, as you will see in the config template, for defining in more details the genomic feature of interest for the annotation. It can contain more than one query, written inside '{}' and separated with commas.Attention : If more than one queries given,should be included in brackets like all values, i.e [{}, {}].
 It accepts the following keys for each query:
 
+## keys
 + **features** :['gene','exon','intron','miRNA'], or other types as defined in the 3rd column  of the 'GTF'.By default all features present in the 'GTF' will be used. 
 
 + **distance**: [2000]. Default 100,000. It is used as the maximum allowed distance from the genomic feature to the peak center. The position of the feature to be considered for measuring the distance is the value given at 'feature.anchor'.             
@@ -38,6 +39,25 @@ the strand of the peak will be considered and not the 'strand' given here. If pe
 A peak is 'upstream' when it is closer to or overlapping with the TSS of the feature.Similar for downstream but to the end position(TTS) of feature. Only when a peak is upstream/downstream of the feature it will be annotated with it. Otherwise it will be reported as 'NA'.              
 
 + **internals**: ['T',True','F','False','Y','Yes','N','No'].If True, the features found completely inside a peak region OR a peak found inside a feature region will be considered a valid pair for annotation, even if  the distance of 'feature.anchor' from peak center is further than the desired 'distance'. This key can be helpful to identify peaks all along the features, or for the allocation of ATAC-seq peaks to very small transcription factor binding sites(tfbs). Default='False'.
+
+## Combination of config keys
+
+The keys provided in the config file are independent (with exception of filter.attribute + attribute.value), so the combination of non-default values for some of them can enhance and enrich the annotation results.
+
+
+* **feature.anchor + direction** : If position is 'end' and the 'direction' given 'upstream', the features with upstream peaks will be annotated if the 'end' position is closer than the given 'distance'.
+
+* **feature.anchor + internals** : The feature.anchor will be used for measuring the closest distance to the peak.center and only the features in this cut-off will be annotated, except for  the internal-to-peak features and the internal-to-feature peaks that will be kept as supplementary annotations,irrespective of their distance.
+
+* **direction + internals** : If 'direction' is given for filtering and 'internals':'True', the features with 'upstream'/'downstream' peaks will be annotated, plus the internal-to-peak features or the internal-to-feature peaks will also be found in the results, with 'distance' further than the required.
+
+* **filter.attribute + attribute.value** : The features for annotation will be filtered for the given 'attribute' key and only if they agree with the 'attribute.value' given, will they be associated to the peak. Both these values should be given to the config for the filtering to be successful.
+
+* **filter.attribute + show.attributes** : If the 'filter.attribute' is given, it is advised to also use the same key among others, at the 'show.attributes' so that filtered results are verified.
+To be noted that 'show.attributes' can accept more than one attributes for displaying at the output tables.
+
+
+**Note** : The combination is affecting results accordingly, when given in the same query. If used in different queries, they work independently,they are not considered as combined.
 
 
 #priority    
