@@ -57,8 +57,7 @@ So,the location of the peak is relative to the feature’s direction, and furthe
 
 *An overlap of the feature to the start or end of the peak is partially allowed, but the overlap should allow a clear evidence of the upstream or downstream location of the peak.*
 
-
-<img src="https://github.molgen.mpg.de/loosolab/UROPA/blob/master/docs/img/peak_Upstream_Downstream_of_gene.png" width="48">
+![peak_upstream](img/peak_Upstream_Downstream_of_gene.png){width="50px"}
 
 
 Figure 2 : Location of a peak shown upstream of the start of a gene. In some cases the 'upstream' direction will be matched with annotation of genomic_location 'overlapStart', the second peak would be an example for this genomic location.
