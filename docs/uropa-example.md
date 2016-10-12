@@ -18,7 +18,7 @@ Source files can be found here :[gtf and bed source files](http://uropa.readthed
 			{"feature":"transcript", "distance":1000 }], 
  "priority" : "False",
  "gtf":"Homo_sapiens.GRCh37.75_chr.gtf" ,
- "bed":"ENCFF001VFA_GM12878_POLR2A_narrowPeaks.bed"
+ "bed":"ENCFF001VFA.bed"
 }
 ```
 
@@ -179,13 +179,9 @@ The query is the following:
 
 The peak displayed in Figure 3 would be annotated for both genes as shown in the table below:
 
+![table7](img/ex1_table-07.png )
 
-| peak_id  | p_chr | p_start  | p_center  | p_end  | feature | feat_start | feat_end | feat_strand | distance | feat_anchor | genomic_location | feat_ovl_peak | peak_ovl_feat | gene_name | query | 
-|:----------|:------|:---------|:----------|:---------|:--------|:-----------|:---------|:---------|:----------- |:----------|:-----------------|:--------------|:---------|:----------|:---------|
-|peak_21044 | chr1  | 1406116  | 1406250.5 | 1406385  | gene    |   1407143  |  1433228 |     +    |    892      | start     |     upstream	    |      0.0      |    0.0   |	ATAD3B |    0     |
-|peak_21044 | chr1  | 1406116  | 1406250.5 | 1406385  | gene    |   1385069  |  1405538 |     +    |    712      | end	     |    downstream    |	   0.0      |    0.0   |	ATAD3C |    0     |
-
-[Table 7 : AllHits_table for an H3K4me1-peak annotated with two genes of different directions relative to the peak, according to the above config file ]
+[Table 7 : AllHits for an H3K4me1-peak annotated with two genes of different directions relative to the peak, according to the above config file ]
 
 
 Due to the fact that no 'feature.anchor' was defined, the distance shown in the table is measured from the ` min(|[start,center,end] - peak.center|) `, 
@@ -201,10 +197,7 @@ But, let's see the differences when the 'direction' key is set. If only 'upstrea
 
 In this case the peak will only be annotated for *ATAD3B* ,as shown in Table 8, because it is located 'upstream' to it, so *ATAD3C*  it is not a valid feature, even though the distance is closer. 
 
-
-| peak_id   | p_chr | p_start  | p_center  | p_end    | feature | feat_start | feat_end | feat_strand | distance | feat_anchor|genomic_location | feat_ovl_peak | peak_ovl_feat | gene_name | query | 
-|:----------|:------|:---------|:----------|:---------|:--------|:-----------|:---------|:---------|:----------- |:----------|:-----------------|:--------------|:---------|:----------|:---------|
-|peak_21044 | chr1  | 1406116  | 1406250.5 | 1406385  | gene    |   1407143  |  1433228 |     +    |    892      | start     |     upstream	    |      0.0      |    0.0   |	ATAD3B |    0     |
+![table8](img/ex1_table-08.png )
 
 [Table 8: AllHits_table for an H3K4me1-peak annotated with an upstream gene are required by the query ]
 
@@ -245,11 +238,7 @@ The following configuration allows to search peaks internal to feature region an
 
 The output will be for "peak_13":   
  
-| p_chr   | p_start  | p_center | p_end    |feature |feat_start|feat_end |feat_strand|distance| feat_anchor  | genomic_location  |feat_ovl_peak | peak_ovl_feat |gene_name |query| 
-|:--------|:---------|:---------|:---------|:-------|:---------|:--------|:--------|:---------|:----------|:----------------- | :------------|:------------- |:---------|:----|
-| chr6    | 27857165 | 27860401 | 27863637 | gene   | 27861203 | 27861669|   +     | 802      | start     |FeatureInsidePeak  |   0.07       |   1.0 	     | HIST1H2BO | 0  |
-| chr6    | 27857165 | 27860401 | 27863637 | gene   | 27858093 | 27860884|   -     | 483      | start     |FeatureInsidePeak  |   0.43       |   1.0 	     | HIST1H3J  | 0  |
-| chr6    | 27857165 | 27860401 | 27863637 | gene   | 27860477 | 27860963|   -     | 76       | end       |FeatureInsidePeak  |   0.08       |   1.0 	     | HIST1H2AM | 0  |
+![table9](img/ex1_table-09.png )
 
 [ Table 9: AllHits_table internal feature example].
 
@@ -265,13 +254,9 @@ UROPA detects the internal-to-a-peak features or the internal-to-a-feature peaks
 In the contrary case, where the key 'internals' is not activated ("False") and no feature.anchor is chosen,          
 the peak would only be annotated with the two genes *HIST1H3J*  and *HIST1H2AM*  ,found in distance less than 500 bp(Table 8). 
 
+![table10](img/ex1_table-10.png )
 
-| p_chr   | p_start  | p_center | p_end    |feature |feat_start|feat_end |feat_strand|distance| feat_anchor | genomic_location  |feat_ovl_peak | peak_ovl_feat |gene_name  |query| 
-|:--------|:---------|:---------|:---------|:-------|:---------|:--------|:--------|:---------|:----------|:----------------- | :------------|:------------- |:----------|:----|
-| chr6    | 27857165 | 27860401 | 27863637 | gene   | 27858093 | 27860884 |   -    |   483    | start     | FeatureInsidePeak |    0.43      |     1.0       | HIST1H3J  | 0   |
-| chr6	  | 27857165 | 27860401 | 27863637 | gene   | 27860477 | 27860963 |   -	   |   76     | end       | FeatureInsidePeak |    0.08      |     1.0	     | HIST1H2AM | 0   |
-
-[ Table 9 : AllHits_table with 'internals': 'False' for the peak_13 of polR2A ]
+[ Table 10 : AllHits_table with 'internals': 'False' for the peak_13 of polR2A ]
 
 
 These examples make overally evident, that depending on the biological relevance, it can be very useful to utilize more flexible keys and allow better control of results. 
@@ -297,13 +282,9 @@ Even when a custom gtf is given, it is formatted in a first step to fit the stan
 They can then be used in the config file of UROPA as filtering keys. 
 
 
-|peak_id | p_chr |p_start | p_center | p_end | feature |feat_start |feat_end | feat_strand |distance|feat_anchor| genomic_location |feat_ovl_peak| peak_ovl_feat |gene_biotype |gene_name|query| 
-|:-------|:-------|:---------|:------------|:----------|:-------|:----------|:---------|:-------|:-------|:---------|:-------------|:----|:------|:---------------|:------|:------|
-| peak_2  | chr5  |149776755 | 149785224.5 | 149793694 | gene   |149781200  |149792492 | - | 1621 | center | FeatureInsidePeak| 0.67| 1.0 | protein_coding | CD74  |   0  | 
-| peak_3  |chr6   |	396914	 | 405319      | 413724    | gene	| 391739    | 411447   | + | 3726 | center | overlapEnd	     | 0.86	| 0.74| protein_coding | IRF4  |   0  |
-|  ...    |       |          |             |           |        |           |          |   |      |        |                 |      |     |                |       |      |
+![table11](img/ex1_table-11.png )
 
-[Table 10 :'AllHits_table' for two peaks, as given by the query with 'attribute.value' = 'protein_coding'  ]
+[Table 11 :'AllHits_table' for two peaks, as given by the query with 'attribute.value' = 'protein_coding'  ]
 
 As shown in the results above(Table 10), the keys presented allow a more flexible annotation and a better specification of results at the same time. 
 
