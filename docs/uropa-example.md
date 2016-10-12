@@ -57,16 +57,16 @@ So,the location of the peak is relative to the feature’s direction, and furthe
 
 *An overlap of the feature to the start or end of the peak is partially allowed, but the overlap should allow a clear evidence of the upstream or downstream location of the peak.*
 
-![peak_upstream](img/peak_Upstream_Downstream_of_gene.png){width="50px"}
+![peak_upstream](img/peak_Upstream_Downstream_of_gene.png)
 
 
-Figure 2 : Location of a peak shown upstream of the start of a gene. In some cases the 'upstream' direction will be matched with annotation of genomic_location 'overlapStart', the second peak would be an example for this genomic location.
-Respectively, if peak found on the right side it would be considered 'downstream' of the gene and the genomic_location would be 'overlapEnd' or 'downstream'.
+_Figure 2 : Location of a peak shown upstream of the start of a gene. In some cases the 'upstream' direction will be matched with annotation of genomic_location 'overlapStart', the second peak would be an example for this genomic location.
+Respectively, if peak found on the right side it would be considered 'downstream' of the gene and the genomic_location would be 'overlapEnd' or 'downstream'._
 
 
 ![direction.key](img/chr1-1,403,500-1,408,500-01_h3k4me1_peaks.png)  
 
-Figure 3: H3K4me1 peak annotated with the Gencode genome, the genomic location is chr1:1,403,500-1,408,500
+_Figure 3: H3K4me1 peak annotated with the Gencode genome, the genomic location is chr1:1,403,500-1,408,500_
 
 The peak, the following example is based on is displayed in Figure 3. 
 Configuration for the first annotation run:
@@ -81,7 +81,7 @@ The peak displayed in Figure 3 would be annotated for both genes as shown in the
 
 ![table2](img/ex1_table-02.png )
 
-_Table 2 : AllHits for an H3K4me1 peak annotated for two genes with different directions of the peak_
+_Table 2: AllHits for an H3K4me1 peak annotated for two genes with different directions of the peak_
 
 
 Due to the fact that no 'feature.anchor' was defined, the distance shown in the table is measured from the closed feature.anchor: 'start' for  *ATAD3B*, 'end' for *ATAD3C* .
@@ -122,7 +122,7 @@ This example is based on the peak displayed in Figure 4. The peak is very large 
 
 ![internal.feature](img/chr6-27,857,165-27,863,637_internal_feature-01.png)
 
-Figure 4: A polR2A-peak annotated with Ensembl, genomic location: chr6 : 27,858,000 - 27,863,000
+_Figure 4: A polR2A-peak annotated with Ensembl, genomic location: chr6 : 27,858,000 - 27,863,000_
  
 Configuration for the first annotation run:
 ```json
@@ -133,7 +133,7 @@ Configuration for the first annotation run:
 
 ![table03](img/ex1_table-03.png )
 
-_Table 3 : AllHits with "internals":"False" for the peak_13 of ENCFF001VFA._
+_Table 3: AllHits with "internals":"False" for the peak_13 of ENCFF001VFA._
 
 As displayed in Table 10, there are two valid annotation for the given configuration. But the third gene in this genomic regions is missed.
 
@@ -176,7 +176,7 @@ It is advised to use the 'filter.attribute' key also in 'show.attributes' key, t
 
 ![table5](img/ex1_table-05.png )
 
-_Table 5 : AllHits for annotation with linked keys 'filter.attribute' + 'attribute.value'_
+_Table 5: AllHits for annotation with linked keys 'filter.attribute' + 'attribute.value'_
 
 
 Example 5: 'priority' flag
