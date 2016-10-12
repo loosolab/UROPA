@@ -1,4 +1,3 @@
-
 For developping UROPA the following versions were used : 
 Make sure all prerequisites are met:
 
@@ -17,10 +16,12 @@ For python :
 
 For R:
 
-- library(VennDiagram)
-- library(ggplot2)
-- library(jsonlite)
-
+* library(VennDiagram)
+* library(ggplot2)
+* library(jsonlite)
+* library(gridExtra)
+* library(gplots)
+* library(Vennerable)
 
 **TODO** what else?
 

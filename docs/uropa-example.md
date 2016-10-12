@@ -47,22 +47,8 @@ Source files can be found here :[gtf and bed source files](http://uropa.readthed
 	In the 'AllHits' all the features found within the given distance will be annotated for the peak, while 
 	in the 'BestHits' only the annotation with the closest feature  per peak per query is displayed. 
 
-	```
-	|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-	| peak_id | p_chr | p_start  | p_center | p_end    | feature  | feat_start| feat_end |feat_strand|distance | feat_anchor  |genomic_location |feat_ovl_peak | peak_ovl_feat | gene_name| query | 
-	|:--------|:------|:---------|:---------|:---------|:-----------|:--------|:---------|:---------|:---------|:-----------|:----------------|:-------------|:--------------|:---------|:------| 
-	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         |NA       		  | NA      | NA          | NA   | 0     | 
-	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA      | NA       | NA       | NA       | NA         |NA               | NA      | NA          | NA   | 1     | 
-	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | gene       | 5567734 | 5567817  | -        |  3       |  start	    |FeatureInsidePeak|	0.01     | 1.0        |AC006483.1| 0 | 
-	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | transcript | 5566782 |	5567729  | -	    |  91	   |  start	    |FeatureInsidePeak|	0.09     | 1.0	      |ACTB	     | 1 |
-	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | transcript | 5566787 |	5570232  | -		|  689	   |  center	|FeatureInsidePeak|	0.33	 | 1.0        |ACTB	     | 1 |
-	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | transcript | 5567734 |	5567817  | -	    |  3       |  start	    |FeatureInsidePeak|	0.01	 | 1.0	      |AC006483.1| 1 |
-	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | NA	        |	NA    |	  NA	 |   NA     |  NA      |	NA      | NA    	      |   NA     |	NA        |	 NA      | 0 |
-	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript |28832863 | 28836145 |   +      |  245	   |   end	    |FeatureInsidePeak|  0.37	 |  1.0	      | SNHG3	 | 1 | 
-	| peak_10 | chr1  |	28832002 | 28836390 |28840778  | transcript	|28836589 |	28862538 |	 +	    |  199	   |   start	| overlapStart    |  0.48	 |  0.16	  |  RCC1	 | 1 |
-	|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-	```
 	
+	![Table 1](img/table1.png)
 	[Table 1: AllHits_table for two queries with priority false.] 
 
 
