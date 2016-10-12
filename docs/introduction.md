@@ -11,6 +11,7 @@ Without defining further parameters, the peaks will be annotated with a default 
 Examples of application are presented in the [Usage Examples](http://uropa.readthedocs.io/en/latest/uropa-example/). Further exploration is suggested.
 
 To start the UROPA peak annotation, the basic command should be :  
+
 ```bash
 uropa.sh –i <config.json> –o <output_dir_name> 
 ```

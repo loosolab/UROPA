@@ -12,7 +12,6 @@ The queries in the config file looks like the following.
 This example is based on POLR2A peaks annotated with the Ensembl genome. 
 Source files can be found here :[gtf and bed source files](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files)
 
-
 ```json
 {"queries": [{"feature":"gene", "distance":1000, "show.attributes":"gene_name"},     
 			{"feature":"transcript", "distance":1000 }], 
@@ -21,8 +20,6 @@ Source files can be found here :[gtf and bed source files](http://uropa.readthed
  "bed":"ENCFF001VFA.bed"
 } 
 ```
-
-
 
 + If No priority is given ('priority'='False') 
 
