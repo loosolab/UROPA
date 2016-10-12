@@ -30,11 +30,11 @@ Source files can be found here :[gtf and bed source files](http://uropa.readthed
 
 	There can be three cases for the peak annotation: 
 
-	* Case 1: No query gives any feature for annotating the peaks. 
+	* **Case 1**: No query gives any feature for annotating the peaks. 
 	
-	* Case 2: One query gives a feature but the other not. 
+	* **Case 2**: One query gives a feature but the other not. 
 	
-	* Case 3: Both queries validate features overlapping with the peaks.  
+	* **Case 3**: Both queries validate features overlapping with the peaks.  
 
 
 
@@ -46,27 +46,26 @@ Source files can be found here :[gtf and bed source files](http://uropa.readthed
 	In the 'AllHits' all the features found within the given distance will be annotated for the peak, while 
 	in the 'BestHits' only the annotation with the closest feature  per peak per query is displayed. 
 
-	![table1](img/ex1_table-01.png =400x)	
+	![table1](img/ex1_table-01.png)	
 	
-	_Table 1: AllHits_table for two queries with priority false._
+	_Table 1: AllHits for two queries with priority='False'._
 
-
-	'Peak_1' represents **Case 1**  where both queries validate no feature at all. In this case the peak is represented by 'NA' rows, for each query. 
+	'peak_1' represents **Case 1**  where both queries validate no feature at all. In this case the peak is represented by 'NA' rows, for each query. 
 	
-	The **2nd case** is represented by 'peak_10', which has two annotations for the transcript feature but not the gene feature.       
+	**Case 2** is represented by 'peak_10', which has two annotations for the transcript feature but not the gene feature.       
 	
-	'Peak_6' is an example for the **3rd case** , with annotations for both queries. Transcripts (*ACTB*) are found by query 1 and a gene (*AC006483.1*) by query 0.
+	'peak_6' is an example for the **Case 3** , with annotations for both queries. Transcripts (*ACTB*) are found by query 1 and a gene (*AC006483.1*) by query 0.
 
 	![table2](img/ex1_table-02.png )
 	
-	Table 2: BestHits_table for two queries with priority false.
+	_Table 2: FinalHits for two queries with priority='False'._
 
 	![table3](img/ex1_table-03.png )
 	
-	Table 3: Merged_BestHits_table for two queries with priority false.
+	_Table 3: BestperQuery_Hits for two queries with priority='False'._
 
 
-	In Case 1,as reported in 'peak_1', the 'BestHits' table will be the same as the 'AllHits' because all queries give same annotation. This is why the 'Merged_BestHits' table was designed [Table 3]. Queries with same annotation are merged in one line, or the query with the 'closest' feature  among all queries is only given, providing a more compact illustration of the annotation.
+	In Case 1, as reported in 'peak_1', the 'BestHits' table will be the same as the 'AllHits' because all queries give same annotation. This is why the 'Merged_BestHits' table was designed [Table 3]. Queries with same annotation are merged in one line, or the query with the 'closest' feature  among all queries is only given, providing a more compact illustration of the annotation.
 	
 	For the other 2 cases (peak_6, peak_10) the best feature is chosen according to the 'distance' measured from the peak center. For 'peak_6' the closest transcript and gene have both same distance = 3, so they are both reported in 'BestHits', but merged in one line at the 'Merged_BestHits'.
 	
@@ -87,30 +86,13 @@ Source files can be found here :[gtf and bed source files](http://uropa.readthed
 	    
 	For 'peak_10' there was no annotation identified for the query 0, but two 'transcripts' are found for query-1. The annotation with the closest distance, *SNHG3*  is displayed at the BestHits (Table 5).	
 	
-
-	| peak_id | p_chr | p_start  | p_center | p_end    | feature    |feat_start| feat_end |feat_strand|distance | feat_anchor |genomic_location |feat_ovl_peak | peak_ovl_feat | gene_name |query |
-	|:--------|:------|:---------|:---------|:---------|:-----------|:---------|:---------|:---------|:---------|:-----------|:----------------|:-------------| :-------------|:----------|:-----|
-	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA       | NA       | NA       | NA       | NA         | NA         	   |   NA         | NA            | NA        |0,1   |	
-	| ...     |       |          |          |          |            |          |          |          |          |            |                 |              |               |           |      | 
-	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | gene       | 5567734  | 5567817  | -        |   3      |  start	 |FeatureInsidePeak|	0.01	  |     1.0       |AC006483.1 | 0    |  
-	| ...     |       |          |          |          |            |          |          |          |          |            |                 |              |               |           |      | 
-	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28832863 | 28836145 |   +      |  245	    |   end	     |FeatureInsidePeak|    0.37	  |     1.0	      |   SNHG3	  | 1    |
-	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589 | 28862538 |	  +      |	199	    |  start	 |   overlapStart  |	0.48      | 	0.16      |   SNHG3   |	1    | 
-	| ...     |       |          |          |          |            |          |          |          |          |            |                 |              |               |           |      | 
-
-	[Table 4: AllHits_table with two queries when priority='True']
+	![table4](img/ex1_table-04.png )
 	
-
-	| peak_id | p_chr | p_start  | p_center | p_end    | feature    |feat_start| feat_end |feat_strand |distance | feat_anchor | genomic_location | feat_ovl_peak | peak_ovl_feat | gene_name | query | 
-	|:--------|:------|:---------|:---------|:---------|:-----------|:---------|:---------|:---------|:---------|:-----------|:---------------|:--------------|:--------------|:---------|:------|
-	| peak_1  | chr21 | 26932550 | 26945255 | 26957959 | NA         | NA       | NA       | NA       | NA       | NA         | NA             |   NA     | NA       | NA       | 0,1   | 
-	| ...     |       |          |          |          |            |          |          |          |          |            |                |          |          |          |       |   
-	| peak_6  | chr7  | 5562617  | 5567820  | 5573023  | gene       | 5567734  | 5567817  | -        | 3        | start	     |FeatureInsidePeak|0.01	 |1.0	    |AC006483.1|  0    | 
-	| ...     |       |          |          |          |            |          |          |          |          |            |                 |         |          |          |       | 
-	| peak_10 | chr1  | 28832002 | 28836390 | 28840778 | transcript | 28836589 | 28862538 |	  +      |	199	    |  start	 |   overlapStart  | 0.48    | 	0.16    |   SNHG3  |  1    | 
-	| ...     |       |          |          |          |            |          |          |          |          |            |                 |         |          |          |       |
-
-	[Table 5: BestHits_table with two queries when priority is set 'True'.]
+	_Table 4: AllHits with two queries when priority='True'_
+	
+	![table5](img/ex1_table-05.png )
+	
+	_Table 5: FinalHits with two queries when priority='True'._
 	
 
 	**So, in the case of 'priority' = True, the features are mutually exclusive, and the queries are parsed for valid hits in an escalating priority.**        
