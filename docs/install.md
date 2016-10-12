@@ -16,12 +16,12 @@ For python :
 
 For R:
 
-* library(VennDiagram)
-* library(ggplot2)
-* library(jsonlite)
-* library(gridExtra)
-* library(gplots)
-* library(Vennerable)
+- library(VennDiagram)
+- library(ggplot2)
+- library(jsonlite)
+- library(gridExtra)
+- library(gplots)
+- library(Vennerable)
 
 **TODO** what else?
 
