@@ -10,8 +10,9 @@ UROPA was developed as an open source analysis pipeline for peaks generated from
 * Usage of all available GTF files as annotation database
 * Detect the most appropriate annotation with flexible keys that allow robustness and simple customization, such as
 	* feature type
-	* feature position
+	* feature anchor
 	* feature direction relative to peak location
+	* filter for feature attribute values
 	* peak strand
 * Preparation of custom annotation files
 * One run with multiple sets of parameters by multiple queries
@@ -19,8 +20,9 @@ UROPA was developed as an open source analysis pipeline for peaks generated from
 * Offers also the best annotation for each query, if more than one was identified: Represented in the Best_hits output
 * For multiple queries the best annotation of all possible annotations across all queries is also provided: Merged_best_hits output
 * Graduated annotation with the priority key
-* Easily-readable output tables with rich information about exact distance and location of annotated features.
+* Different easily-readable output tables (AllHits, FinalHits, Best_perQuery_Hits).
 * Visual summary for annotation evaluation
+
 
 **How to cite**
 

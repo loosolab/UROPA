@@ -13,7 +13,7 @@ If no value is given, the distances from all three positions to the peak center 
 There are two queries with different 'feature.anchor' for this example. 
 
 ```json
-"queries": [ {"feature":"gene", "distance":5000, "feature.anchor": "start", "show.attributes":"gene_name", },       
+"queries": [ {"feature":"gene", "distance":5000, "feature.anchor": "start", "show.attributes":"gene_name"},       
 		       {"feature": "gene","distance":5000, "feature.anchor": "center"} ]
 "priority" : "False"
 "gtf": "gencode.v19.annotation.gtf",
@@ -21,8 +21,7 @@ There are two queries with different 'feature.anchor' for this example.
 ```
 
 As displayed in the output below (Table 1), the peak could only be annotated for query 1 where 'feature.anchor' is set to 'center' and the measured distance is within the accepted cut-off value. 
-The location of the gene and the peak of interest (highlighted in black colour) are shown in the Figure 1. The gene *BCL2L13*  is very large, that is why the measurement of distance from 'start' position couldn't return a valid annotation. 
-											` feature.start – peak.center = |18111621-18161442| = 49 821 `
+The location of the gene and the peak of interest (highlighted in black colour) are shown in the Figure 1. The gene *BCL2L13*  is very large, that is why the measurement of distance from 'start' position couldn't return a valid annotation. _feature.start – peak.center = |18111621-18161442| = 49,821_
 
 ![table1](img/ex1_table-01.png )
 	
@@ -251,9 +250,7 @@ Configuration for the second annotation:
 	
 	_Table 7: AllHits with two queries with priority='True'._
 	
-
-
-	**So, in the case of 'priority' = True, the features are mutually exclusive, and the queries are parsed for valid hits in an escalating priority.**        
+	So, in the case of 'priority' = True, the features are mutually exclusive, and the queries are parsed for valid hits in an escalating priority.
 	
 Used peak and annotation files 
 ------------------------------ 
@@ -269,4 +266,4 @@ Peak and signal files based on ChIP-seq of GM12878 immortalized cell line:
 **Note**: peak ids are manually added to make it easier to compare different tables or to combine tables with images. 
 
 
->> Still not sure how to use the config file? Please contact Maria Kondili(maria.kondili@mpi-bn.mpg.de)
+Still not sure how to use the config file? Please contact Maria Kondili(maria.kondili@mpi-bn.mpg.de)
