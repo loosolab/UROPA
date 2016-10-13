@@ -3,15 +3,15 @@ UROPA provides many output files, each providing a valuable information in eithe
 The different outputs will be explained thoroughly below.
 
 #Output Files
-* **Uropa_AllHits**  : The basic output table giving for each peak at least a hit which is valid according to the query's parameters. If more than one features are valid, all are shown in this table.
-
-* **Uropa_BestperQuery_Hits** : .For each peak only one feature is assigned,the closest one.If more queries are given and each query validates different features, one feature per query is assigned to the peak.
+* **Uropa_AllHits**  : The basic output table giving for each peak all valid annotations and additionally NA rows for invalid annotations.
 
 * **Uropa_FinalHits** : The table which can be the most useful for peak annotation.It provides the best-selected feature according to the config criteria for annotating each peak. The closest distance is the basic parameter for the selection. It also summarizes the 'BestperQuery_Hits' by chosing the closest feature for each peak in case more queries are given and each query validates a different feature.
 
-* **Uropa_Reformatted_HitsperPeak** : This table is created by an optional flag in the command line when running UROPA: ` uropa.sh -i [..] -o [..] -r`. It creates a compact table with all hits per peak per query in one line, separated by semicolon, so one can have all the annotated features per peak at once.It is therefore created only when multiple queries are given.
+* **Uropa_BestperQuery_Hits** : Only if more than one query is specified: Best valid annotation per query for each peak.
 
-* **Results_Summary.pdf** : In this document one can obtain graphical information of the peak annotation run by UROPA,depending on the configuration file requirements and the output tables created ('BestperQuery_Hits' or 'FinalHits' are used).
+* **Uropa_Reformatted_HitsperPeak** : Only if more than one query is specified and the *-r* parameter is used: Compact table with best per query annotation in one row. 
+
+* **Results_Summary.pdf** : Only if the *-s* parameter is used: Graphical information of the peak annotation run by UROPA.
 
 **Note** : The output files will be named additionally by the output directory name where they are located, for convenience in further use and transfer of files.
 Example  : ChIPannot/Uropa_AllHits_*ChIPannot*.txt
@@ -20,14 +20,15 @@ Example  : ChIPannot/Uropa_AllHits_*ChIPannot*.txt
 #Output columns explanation
 
 The four output tables mentioned above contain many informative columns about the peak annotation performed. The headers and content of tables are explained here :
+**peak_id, peak_start, peak_center, peak_end** : Peak information with id if available, otherwise a peak id in chr:start-end scheme will be created.
 
-**feature, feature_start, feature_end, feature_strand** : The information of the genomic feature that annotates the peak, as extracted by the gtf file.
+**feature, feat_start, feat_end, feat_strand** : The information of the genomic feature that annotates the peak, as extracted by the gtf file.
+
+**feat_anchor**: The position of the genomic feature annotated, having the minimum distance to the peak.center. If 'feature.anchor' given in config only this will be shown.
 
 **distance** : The distance measured as following: `abs(peak.center-feature.anchor)`. If no feature.anchorgiven,then the minimum of 3 distances from each feature.anchor{start,center,end} to peak.center is chosen.
 
-**feat_anchor**: The position of the genomic feature annotated,having the minimum distance to the peak.center.If 'feature.anchor' given in config only this will be shown.
-
-**genomic_location**: The position of the peak relative to the annotated feature direction.(i.e upstream = peak located upstream of the gene).
+**genomic_location**: The position of the peak relative to the annotated feature direction (e.g. upstream = peak located upstream of the gene, see Figure 2 in [Usage Examples](http://uropa.readthedocs.io/en/latest/uropa-example/#example-2-direction-key)).
 
 **feat_ovl_peak**: When peak and feature overlap(i.e genomic_location = overlapStart), Ratio(overlapping region / peak.length) shows percentage of peak covered by the feature.(i.e 1.0 = 100% of peak covered, peak is internal.
 
@@ -39,6 +40,58 @@ without any information of the assigned features.
 
 **query**: The query that validates with its given parameters the feature to be assigned to the peak.If only one query given, column will always display '0',the first query.
 
+
+#Output files (one query)
+UROPA annotation with one query results in two output tables. Those are the Uropa_AllHits and Uropa_FinalHits. 
+With a configuration as followed, a cut out of the AllHits would look as in Table 1, and a cut out of the FinalHits as displayed in Table 2. Peak and annotation files are further discribed [here](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files). 
+
+```json
+{
+"queries":[
+		{"feature":"gene", "distance":10000, "feature.anchor":"start", "internals":"True", "filter.attribute":"gene_type",  "attribute.value":"protein_coding","show.attributes":["gene_name","gene_type"]}], 
+ "priority" : "False",
+ "gtf":"gencode.v19.annotation.gtf" ,
+ "bed":"ENCFF001VFA.bed"
+}
+```
+
+![table1](img/output-formats-01.png)	
+_Table 1: AllHits for one query_
+
+![table2](img/output-formats-02.png)	
+_Table 2: FinalHits for one query_
+
+As displayed in Table 1, peak_22 has two valid annotations, but only the best of those is presented in the FinalHits as displayed in Table2.
+The peaks peak_355 and peak_356 have either no valid annotation or only one valid annotation, thus they stay the same in both files. 
+
+#Output files (multiple queries)
+UROPA annotation with multiple queries result in at least three output tables. Those are the Uropa_AllHits, Uropa_FinalHits, and Uropa_BestperQuery_Hits. If the *-r* parameter is added in the command line call, there will the additional output Uropa_Reformatted_HitsperPeak file.
+With a configuration as followed, a cut out of all generated output files will look as in Table 3 to 6 and Figure 1. Peak and annotation files are further discribed [here](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files). 
+```json
+"queries":[
+		{"feature":"gene", "distance":10000, "feature.anchor":"start", "internals":"True", "filter.attribute":"gene_type",  "attribute.value":"protein_coding","show.attributes":["gene_name","gene_type"]},
+		{"feature":"gene", "distance":10000, "feature.anchor":"start", "internals":"True", "filter.attribute":"gene_type",  "attribute.value":"miRNA"},
+		{"feature":"gene", "distance":10000, "feature.anchor":"start", "internals":"True", "filter.attribute":"gene_type",  "attribute.value":"lincRNA"},
+		{"feature":"gene", "distance":10000, "feature.anchor":"start", "internals":"True", "filter.attribute":"gene_type",  "attribute.value":"misc_RNA"},
+		{"feature":"gene", "distance":10000, "feature.anchor":"start", "internals":"True", "filter.attribute":"gene_type",  "attribute.value":"snRNA"}
+          ],
+"priority" : "False",
+"gtf": "/mnt/agnerds/annika.fust/testMaria/ref_genome/gencode.v19.annotation.gtf",
+"bed": "/mnt/agnerds/annika.fust/testMaria/peaks/ENCFF001VFA.peaks.bed"
+}
+```
+
+![table3](img/output-formats-03.png)	
+_Table 3: AllHits for multiple queries_
+
+![table4](img/output-formats-04.png)	
+_Table 4: FinalHits for mulitple queries_
+
+![table5](img/output-formats-05.png)	
+_Table 5: Uropa_BestperQuery_Hits for multiple queries_
+
+![table6](img/output-formats-06.png)	
+_Table 6: Uropa_Reformatted_HitsperPeak for multiple queries_
 
 
 #Summary Vizualisation
