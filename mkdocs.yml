@@ -8,8 +8,8 @@ pages:
 - About UROPA: 'introduction.md'
 - Installation: 'install.md'
 - Available parameters: 'parameters.md'
-- Output: 'output.md'
 - Configuration file: 'config.md'
+- Output: 'output.md'
 - Usage Examples: 'uropa-example.md'
 - Notes: 'important-notes.md'
 - Side tool - 'UROPA to GTF': custom.md
