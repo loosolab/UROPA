@@ -16,6 +16,5 @@ To start the UROPA peak annotation, the basic command should be :
 uropa.sh –i <config.json> –o <output_dir_name>
 ```
 
-A template of the file config.json is loaded in the working directory when downloading UROPA, named "a_config_example.json". A quick overview about UROPA is displayed with  *uropa.sh -h* , 
-while the instructions about the parameters to be used can be extracted by  *uropa.sh -u*
+A template of the file config.json is loaded in the working directory when downloading UROPA, named "a_config_example.json". A quick overview about UROPA usage is displayed with  *uropa.sh -h*. 
 
