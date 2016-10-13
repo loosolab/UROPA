@@ -70,14 +70,12 @@ With a configuration as followed, a cut out of all generated output files will l
 ```json
 "queries":[
 		{"feature":"gene", "distance":10000, "feature.anchor":"start", "internals":"True", "filter.attribute":"gene_type",  "attribute.value":"protein_coding","show.attributes":["gene_name","gene_type"]},
-		{"feature":"gene", "distance":10000, "feature.anchor":"start", "internals":"True", "filter.attribute":"gene_type",  "attribute.value":"miRNA"},
 		{"feature":"gene", "distance":10000, "feature.anchor":"start", "internals":"True", "filter.attribute":"gene_type",  "attribute.value":"lincRNA"},
 		{"feature":"gene", "distance":10000, "feature.anchor":"start", "internals":"True", "filter.attribute":"gene_type",  "attribute.value":"misc_RNA"},
-		{"feature":"gene", "distance":10000, "feature.anchor":"start", "internals":"True", "filter.attribute":"gene_type",  "attribute.value":"snRNA"}
           ],
 "priority" : "False",
-"gtf": "/mnt/agnerds/annika.fust/testMaria/ref_genome/gencode.v19.annotation.gtf",
-"bed": "/mnt/agnerds/annika.fust/testMaria/peaks/ENCFF001VFA.peaks.bed"
+"gtf": "gencode.v19.annotation.gtf",
+"bed": "ENCFF001VFA.peaks.bed"
 }
 ```
 
