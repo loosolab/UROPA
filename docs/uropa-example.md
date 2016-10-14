@@ -199,25 +199,26 @@ Configuration for the first annotation:
  "bed":"ENCFF001VFA.bed"
 }
 ```
-	The above set of queries will allow UROPA to annotate peaks for genes and transcripts. As priority is False (default if no different value given),there is no feature priorized. 
 
-	There can be three cases for the peak annotation: 
+The above set of queries will allow UROPA to annotate peaks for genes and transcripts. As priority is False (default if no different value given),there is no feature priorized. 
 
-	* **Case 1**: No query gives any feature for annotating the peaks. 
-	
-	* **Case 2**: One query gives a feature but the other not. 
-	
-	* **Case 3**: Both queries validate features overlapping with the peaks.  
+There can be three cases for the peak annotation: 
 
-	![table6](img/ex1_table-06.png)	
+* **Case 1**: No query gives any feature for annotating the peaks. 
 	
-	_Table 6: AllHits for two queries with priority='False'._
+* **Case 2**: One query gives a feature but the other not. 
+	
+* **Case 3**: Both queries validate features overlapping with the peaks.  
 
-	'peak_1' represents **Case 1**  where both queries validate no feature at all. In this case the peak is represented by 'NA' rows, for each query. 
+![table6](img/ex1_table-06.png)	
 	
-	**Case 2** is represented by 'peak_10', which has two annotations for the transcript feature but not the gene feature.       
+_Table 6: AllHits for two queries with priority='False'._
+
+'peak_1' represents **Case 1**  where both queries validate no feature at all. In this case the peak is represented by 'NA' rows, for each query. 
 	
-	'peak_6' is an example for the **Case 3** , with annotations for both queries. Transcripts (*ACTB*) are found by query 1 and a gene (*AC006483.1*) by query 0.
+**Case 2** is represented by 'peak_10', which has two annotations for the transcript feature but not the gene feature.       
+	
+'peak_6' is an example for the **Case 3** , with annotations for both queries. Transcripts (*ACTB*) are found by query 1 and a gene (*AC006483.1*) by query 0.
 	
 Concerning the other output tables, 
 
