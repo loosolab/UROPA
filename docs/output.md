@@ -105,16 +105,18 @@ A summery of the UROPA run: Used peak and annotation files, number of peaks and 
 * A density plot displaying the distance per feature across all queries (Fig. 1B). 
 * A pie chart illustrating the genomic locations of the peaks per annotated feature (Fig. 1C).
 * A barplot displaying the occurrence of the different features, if there is more than one feature assigned for peak annotation (not illustrated due to one feature in this example).
+
 **Figure 1 A-C would be the summary for the first UROPA run with only one query***
 
 ---> Graphs based on the 'BestperQuery_Hits' output:
 
 * A distribution of the distances per feature per query are displayed in a histogram (Figure 1D).
+* A pie chart illustrating the genomic locations of the peaks per annotated feature (not illustrated).
 * A pairwise comparison among all queries is evaluated within a venn diagram, when more than one query is given in the config file (One pairwise comparison displayed in Figure 1E). 
 * Chow Ruskey plot with comparison across all defined queries (for three to five annotation queries)(Figure 1F).
 
 ![summary](img/output-formats-summary.png)	
-_Figure 1: Summary Example for queries as above described._
+_Figure 1: Summary Example for queries as described above: (A) Summery of specified queries, used annotation and peak files, and how many peaks were present and annotated, (B) Distance density for all features based on FinalHits, (C) Pie Chart representing genomic location for each feature across FinalHits, (D) Distance per query per feature across BestperQuery_Hits, (E) Pairwise comparison across all queries displayed in Venn diagramms, (F) Chow Ruskey plot to compare all queries._
 
 
 
