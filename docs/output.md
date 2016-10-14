@@ -89,23 +89,33 @@ _Table 4: FinalHits for mulitple queries_
 _Table 5: Uropa_BestperQuery_Hits for multiple queries_
 
 ![table6](img/output-formats-06.png)	
-_Table 6: Uropa_Reformatted_HitsperPeak for multiple queries_
+_Table 6.1: Uropa_Reformatted_HitsperPeak for multiple queries part one_
 
+![table6](img/output-formats-07.png)	
+_Table 6.2: Uropa_Reformatted_HitsperPeak for multiple queries part two_
 
 #Summary Vizualisation
 
 For every run there is also a summary output, vizualising the results for a global overview of the final annotation. Within this document one can find : 
 
----> Graphs based on the 'BestperQuery_Hits' output:
-
-* A pairwise comparison among all queries is evaluated within a venn diagram, when more than one query is given in the config file. 
-* A distribution of the distances per feature per query are displayed in a histogram.
-* A pie chart illustrating the genomic location of the peaks per annotated feature.
-* A barplot displaying the occurrence of the different features, if there is more than one feature assigned for peak annotation.
-
+A summery of the UROPA run: Used peak and annotation files, number of peaks and number of annotated peaks, specified queries, value of priority flag (Fig. 1A). If not all queries annotated peaks, this is also mentioned.
 
 ---> Graphs based on the 'FinalHits' output:
 
-* A density plot displaying the distance per feature per query. 
-* A pie chart illustrating the genomic locations of the peaks per annotated feature.
-* A barplot displaying the occurrence of the different features, if there is more than one feature assigned for peak annotation.
+* A density plot displaying the distance per feature across all queries (Fig. 1B). 
+* A pie chart illustrating the genomic locations of the peaks per annotated feature (Fig. 1C).
+* A barplot displaying the occurrence of the different features, if there is more than one feature assigned for peak annotation (not illustrated due to one feature in this example).
+**Figure 1 A-C would be the summary for the first UROPA run with only one query***
+
+---> Graphs based on the 'BestperQuery_Hits' output:
+
+* A distribution of the distances per feature per query are displayed in a histogram (Figure 1D).
+* A pairwise comparison among all queries is evaluated within a venn diagram, when more than one query is given in the config file (One pairwise comparison displayed in Figure 1E). 
+* Chow Ruskey plot with comparison across all defined queries (for three to five annotation queries)(Figure 1F).
+
+![summary](img/output-formats-summary.png)	
+_Figure 1: Summary Example for queries as above described._
+
+
+
+
