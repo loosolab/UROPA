@@ -235,23 +235,21 @@ Configuration for the second annotation:
  "bed":"ENCFF001VFA.bed"
 }
 ```
-	If 'priority' is 'True', UROPA will annotate peaks with the **first feature given** in the set of queries. Unless genes are not found for a peak, 'transcripts' will then be searched and validated by the query’s parameters in order to be assigned to a peak. The example is based on the same three cases, explained above.
-	That is why there will be no peak in the output tables annotated for both features at the same time. 
-	Each peak is allowed to have the 1st feature or the 2nd, or the 3rd, etc.
 
+If 'priority' is 'True', UROPA will annotate peaks with the **first feature given** in the set of queries. Unless genes are not found for a peak, 'transcripts' will then be searched and validated by the query’s parameters in order to be assigned to a peak. The example is based on the same three cases, explained above.
+That is why there will be no peak in the output tables annotated for both features at the same time. 
+Each peak is allowed to have the 1st feature or the 2nd, or the 3rd, etc.
 
-	The first difference to the example without priority is that in 'AllHits' [Table 4], the peaks with no annotation for both queries are merged in one line and both queries are reported.    
-	This is why the entries for peaks without any annotation will look the same in 'AllHits' and 'BestHits'.
-
-	In the case of  'peak_6'  there is an annotation for the priorized query 0, so the other query is not further analyzed. 
-	    
-	For 'peak_10' there was no annotation identified for the query 0, but two 'transcripts' are found for query-1. The annotation with the closest distance, *SNHG3*  is displayed at the BestHits (Table 5).	
+The first difference to the example without priority is that in 'AllHits' [Table 4], the peaks with no annotation for both queries are merged in one line and both queries are reported.    
+This is why the entries for peaks without any annotation will look the same in 'AllHits' and 'BestHits'.
+In the case of  'peak_6'  there is an annotation for the priorized query 0, so the other query is not further analyzed. 
+    
+For 'peak_10' there was no annotation identified for the query 0, but two 'transcripts' are found for query-1. The annotation with the closest distance, *SNHG3*  is displayed at the BestHits (Table 5).	
 	
-	![table7](img/ex1_table-07.png )
+![table7](img/ex1_table-07.png )
+_Table 7: AllHits with two queries with priority='True'._
 	
-	_Table 7: AllHits with two queries with priority='True'._
-	
-	So, in the case of 'priority' = True, the features are mutually exclusive, and the queries are parsed for valid hits in an escalating priority.
+So, in the case of 'priority' = True, the features are mutually exclusive, and the queries are parsed for valid hits in an escalating priority.
 	
 Used peak and annotation files 
 ------------------------------ 
