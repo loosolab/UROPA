@@ -3,8 +3,8 @@ For running UROPA, a template of the config file as below will be provided:
 ```json
 {
 "queries":[ 
-	{"feature":"",    "feature.anchor": "",    "distance":"",    "strand":"",    "direction":"",    "internals":"",          
-	"filter.attribute":"",    "attribute.value":"",     "show.attributes":"" }
+	{"feature":"",    "feature.anchor": "",    "distance":"",    "strand":"",    "direction":"",
+	"internals":"",	    "filter.attribute":"",    "attribute.value":"",     "show.attributes":"" }
           ],
 "priority": "",
 "gtf": ".gtf",
