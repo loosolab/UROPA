@@ -2,7 +2,7 @@ UROPA provides many output files, each providing valuable information in either 
 
 The different outputs will be explained thoroughly below.
 
-#Output Files
+# File overview
 * **Uropa_AllHits**  : The basic output table giving for each peak all valid annotations and additionally NA rows for invalid annotations.
 
 * **Uropa_FinalHits** : The table which can be the most useful for peak annotation.It provides the best-selected feature according to the config criteria for annotating each peak. The closest distance is the basic parameter for the selection. It also summarizes the 'BestperQuery_Hits' by chosing the closest feature for each peak in case more queries are given and each query validates a different feature.
@@ -48,8 +48,9 @@ With a configuration as followed, a cut out of the AllHits would look as in Tabl
 ```json
 {
 "queries":[
-		{"feature":"gene", "distance":10000, "feature.anchor":"start", "internals":"True", "filter.attribute":"gene_type",  
-		"attribute.value":"protein_coding","show.attributes":["gene_name","gene_type"]}], 
+		{"feature":"gene", "distance":10000, "feature.anchor":"start", "internals":"True", 
+			"filter.attribute":"gene_type", "attribute.value":"protein_coding",
+			"show.attributes":["gene_name","gene_type"]}], 
  "priority" : "False",
  "gtf":"gencode.v19.annotation.gtf" ,
  "bed":"ENCFF001VFA.bed"
