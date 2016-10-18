@@ -1,3 +1,0 @@
-
-* In order for the default values to be active, the key itself shouldn't be present and empty in the config file
-* Make sure to give any attributes, otherwise the annotated peaks will be displayed without any assignment
