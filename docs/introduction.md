@@ -1,9 +1,9 @@
-UROPA ('Universal RObust Peak Annotator') is a tool designed for annotating peaks generated from any peak caller (e.g. MACS2, MUSIC, FindPeaks, CisGenome, PeakSeq), derived from next-generation sequencing methods for chromatin biology (e.g.  ChIP-seq, ATAC-seq, FAIRE-seq). 
+UROPA ('Universal RObust Peak Annotator') is a tool facilitating the analysis of next-generation sequencing methods for chromatin biology, like ChIPseq or ATACseq. 
+It is designed to annotate enrichted genomic regions (peaks) of interest generated from any peak caller (e.g. MACS2, MUSIC, FindPeaks, CisGenome, PeakSeq). 
 
-The annotation source is a GTF file, which provides the information of the genomic features to be used for annotation of the overlapping enriched regions (peaks). 
-The annotation file as well as the peaks file should be defined in the configuration file, together with certain parameters that specify which features should be selected. 
-The output is given in an easily-readable tab-delimited table with the corresponding annotation, as it is validated by the configuration file for each peak. 
-Detailed information about the configuration file is in the section [Configuration file](http://uropa.readthedocs.io/en/latest/config/) and about the annotation output tables in the section [Output](http://uropa.readthedocs.io/en/latest/output/). 
+The annotation source is a GTF file, which provides the information of the genomic features to be used for annotation of the peaks. The peaks should be represented in BED file format.
+Annotation and peak files should be specified in the configuration file. Furthermore, certain parameters that define how peaks should be annotated can be adjusted. More [details](http://uropa.readthedocs.io/en/latest/config/). 
+The output is given in easily-readable tab-delimited tables with the corresponding annotation, as it is validated by the configuration file for each peak. More [details](http://uropa.readthedocs.io/en/latest/output/). 
 
 Running UROPA is very simple. It can be executed in UNIX environment in one command line. 
 By editing the configuration file all necessary parameters will be defined to obtain the peak annotation immediately. Within this configuration file, the peak-bed file and the annotation-GTF file need to be specified,as well.
@@ -13,8 +13,8 @@ Examples of application are presented in the [Usage Examples](http://uropa.readt
 To start the UROPA peak annotation, the basic command should be :  
 
 ```bash
-uropa.sh –i <config.json> –o <output_dir_name>
+uropa –i <config.json> –o <output_dir>
 ```
 
-A template of the file config.json is loaded in the working directory when downloading UROPA, named "a_config_example.json". A quick overview about UROPA usage is displayed with  *uropa.sh -h*. 
+A template of the file config.json is loaded in the working directory when downloading UROPA, named "a_config_example.json". A quick overview about UROPA usage is displayed with  *uropa -h*. 
 
