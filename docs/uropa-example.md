@@ -156,7 +156,7 @@ These examples make overally evident, that depending on the biological relevance
 
 
 
-Example 4: 'filter.attribute' + ' 'attribute.value' keys
+Example 4: 'filter.attribute' + 'attribute.value' keys
 ---------------------------------------------------------
 
 If the annotation should be more particularized, the linked keys 'filter.attribute' + ' 'attribute.value' can be used. With those it is possible to further restrict the annotation. 
