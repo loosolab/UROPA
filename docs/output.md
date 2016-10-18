@@ -1,4 +1,4 @@
-UROPA provides many output files, each providing a valuable information in either a more extended or a more condense way, to cover all needs and be useful for further downstream analysis.
+UROPA provides many output files, each providing valuable information in either a more extended or a more condense way, to cover all needs and be useful for further analyses.
 
 The different outputs will be explained thoroughly below.
 
@@ -11,7 +11,7 @@ The different outputs will be explained thoroughly below.
 
 * **Uropa_Reformatted_HitsperPeak** : Only if more than one query is specified and the *-r* parameter is used: Compact table with best per query annotation in one row. 
 
-* **Results_Summary.pdf** : Only if the *-s* parameter is used: Graphical information of the peak annotation run by UROPA.
+* **Uropa_Summary.pdf** : Only if the *-s* parameter is used: Graphical information of the peak annotation run by UROPA.
 
 **Note** : The output files will be named additionally by the output directory name where they are located, for convenience in further use and transfer of files.
 Example  : ChIPannot/Uropa_AllHits_*ChIPannot*.txt
@@ -26,13 +26,13 @@ The four output tables mentioned above contain many informative columns about th
 
 **feat_anchor**: The position of the genomic feature annotated, having the minimum distance to the peak.center. If 'feature.anchor' given in config only this will be shown.
 
-**distance** : The distance measured as following: `abs(peak.center-feature.anchor)`. If no feature.anchorgiven,then the minimum of 3 distances from each feature.anchor{start,center,end} to peak.center is chosen.
+**distance** : The distance measured as following: _abs(peak_center-feature_anchor)_. If no feature.anchor is given, the minimum of all feature.anchor {start,center,end} to peak_center is chosen.
 
 **genomic_location**: The position of the peak relative to the annotated feature direction (e.g. upstream = peak located upstream of the gene, see Figure 2 in [Usage Examples](http://uropa.readthedocs.io/en/latest/uropa-example/#example-2-direction-key)).
 
-**feat_ovl_peak**: When peak and feature overlap(i.e genomic_location = overlapStart), Ratio(overlapping region / peak.length) shows percentage of peak covered by the feature.(i.e 1.0 = 100% of peak covered, peak is internal.
+**feat_ovl_peak**: When peak and feature overlap(i.e genomic_location = overlapStart), Ratio(overlapping region / peak length) shows percentage of peak covered by the feature.(i.e 1.0 = 100% of peak covered, peak is internal.
 
-**peak_ovl_feat**: When peak and feature overlap(i.e genomic_location = overlapStart), Ratio(overlapping region / feature.length) shows percentage of feature covered by the peak.(i.e 1.0 = 100% of feature covered, feature is internal.)
+**peak_ovl_feat**: When peak and feature overlap(i.e genomic_location = FeatureInsidePeak), Ratio(overlapping region / feature length) shows percentage of feature covered by the peak.(i.e 1.0 = 100% of feature covered, feature is internal.)
 
 **gene_name, gene_id, gene_type** : Attributes that have been given in the key 'show.atttributes' will be shown here and their values extracted by the gtf will be displayed for each feature.If 'filter.attribute' contains same attribute keys, this column helps confirming the filtering.
 **Important Note** : Make sure to give any attributes for display in the output-if existant in the 9th column of the gtf - otherwise the annotated peaks will be reported 
@@ -43,12 +43,13 @@ without any information of the assigned features.
 
 #Output files (one query)
 UROPA annotation with one query results in two output tables. Those are the Uropa_AllHits and Uropa_FinalHits. 
-With a configuration as followed, a cut out of the AllHits would look as in Table 1, and a cut out of the FinalHits as displayed in Table 2. Peak and annotation files are further discribed [here](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files). 
+With a configuration as followed, a cut out of the AllHits would look as in Table 1, and a cut out of the FinalHits as displayed in Table 2. Peak and annotation files are further described [here](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files). 
 
 ```json
 {
 "queries":[
-		{"feature":"gene", "distance":10000, "feature.anchor":"start", "internals":"True", "filter.attribute":"gene_type",  "attribute.value":"protein_coding","show.attributes":["gene_name","gene_type"]}], 
+		{"feature":"gene", "distance":10000, "feature.anchor":"start", "internals":"True", "filter.attribute":"gene_type",  
+		"attribute.value":"protein_coding","show.attributes":["gene_name","gene_type"]}], 
  "priority" : "False",
  "gtf":"gencode.v19.annotation.gtf" ,
  "bed":"ENCFF001VFA.bed"
@@ -69,9 +70,13 @@ UROPA annotation with multiple queries result in at least three output tables. T
 With a configuration as followed, a cut out of all generated output files will look as in Table 3 to 6 and Figure 1. Peak and annotation files are further discribed [here](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files). 
 ```json
 "queries":[
-		{"feature":"gene", "distance":10000, "feature.anchor":"start", "internals":"True", "filter.attribute":"gene_type",  "attribute.value":"protein_coding","show.attributes":["gene_name","gene_type"]},
-		{"feature":"gene", "distance":10000, "feature.anchor":"start", "internals":"True", "filter.attribute":"gene_type",  "attribute.value":"lincRNA"},
-		{"feature":"gene", "distance":10000, "feature.anchor":"start", "internals":"True", "filter.attribute":"gene_type",  "attribute.value":"misc_RNA"},
+		{"feature":"gene", "distance":10000, "feature.anchor":"start", "internals":"True", 
+			"filter.attribute":"gene_type",  "attribute.value":"protein_coding",
+			"show.attributes":["gene_name","gene_type"]},
+		{"feature":"gene", "distance":10000, "feature.anchor":"start", "internals":"True", 
+			"filter.attribute":"gene_type",  "attribute.value":"lincRNA"},
+		{"feature":"gene", "distance":10000, "feature.anchor":"start", "internals":"True", 
+			"filter.attribute":"gene_type",  "attribute.value":"misc_RNA"},
           ],
 "priority" : "False",
 "gtf": "gencode.v19.annotation.gtf",
