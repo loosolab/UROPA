@@ -7,16 +7,19 @@ The Gencode v19 annotation GTF looks for example like shown in Table 1.
 |chr1|HAVANA|gene      |11869|14412|.|+|.|gene_id "ENSG00000223972"; transcript_id "ENSG00000223972.4"; gene_type "pseudogene"; gene_status "KNOWN"; gene_name "DDX11L1"; transcript_type "pseudogene";transcript_status "KNOWN";transcript_name "DDX11L1"; level 2; havana_gene "OTTHUMG00000000961.2";| 
 |...                                                                                                                                                                                                                                                                                                    | 
 
-Table 1: first row of gencode v19 GTF file, the columns are: chr, source, feature, start, end, score, strand, frame, and attributes. (Left out description header) 
+_Table 1: first row of gencode v19 GTF file, the columns are: chr, source, feature, start, end, score, strand, frame, and attributes. (Left out: description header)_
 
-For further extending the utility of UROPA, there is the UROPA.to.GTF tool which transforms annotation files that are not in this format.
+For further extending the utility of UROPA, there is the UROPAtoGTF tool which transforms annotation files that are not in this format.
 Files for annotation can be provided by the [UCSC Table Browser](https://genome.ucsc.edu/cgi-bin/hgTables), or many more data bases.   
-For the internal convertion, the input annotation file needs to have a header, and there need to be columns with information about the location,e.g. 'chr', 'start' and 'end' . Additionally, the file should be tab separated. Another requirement for the transformation is that the file name should be explicit for the file content. For example, if transcription factor binding sites (tfbs) were downloaded from UCSC table browser, the name of the file could be the name of the table 'wgEncodeAwgTfbsBroadHuvecCtcfUniPk.txt'. The file name will be one information in the attribute column. 
+For the internal convertion, the input annotation file needs to have a header, and there need to be columns with information about the location: 'chr', 'start', and 'end' .
+Additionally, the file should be tab separated. Another requirement for the transformation is that the file name should be explicit for the file content and does not contain dots.
+For example, if transcription factor binding sites (tfbs) from UCSC table browser were downloaded, the name of the file could be the name of the table 'wgEncodeAwgTfbsBroadHuvecCtcfUniPk.txt'. 
+The file name will be one information in the attribute column. 
 There are two variations of the GTF file generator:
 
-1.	One file should be converted and used for annotation. Then the file should be given in the key 'GTF' of the config file. 
+1.	One file should be converted and used for annotation. 
 2.	Several files should be used for annotation. In this case the input should be a folder with all files included (but no others).  
-	The files will be converted one by one; additionally one merged GTF file (called merged_custom_GTF.GTF) will be created. 
+	The files will be converted one by one; additionally one merged GTF file (called UROPAtoGTF_merged.GTF) will be created. 
 	For the merged file, the explicit file names are important for distinguishing the annotated features. 
 
 The generated files will be stored in the same directory as the input file is located. 
