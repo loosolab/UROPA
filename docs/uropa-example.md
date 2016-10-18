@@ -59,9 +59,10 @@ So,the location of the peak is relative to the feature’s direction, and furthe
 ![peak_upstream](img/peak_Upstream_Downstream_of_gene.png)
 
 
-_Figure 2 : Location of a peak shown upstream of the start of a gene. In some cases the 'upstream' direction will be matched with annotation of genomic_location 'overlapStart', the second peak would be an example for this genomic location.
-Respectively, if peak found on the right side it would be considered 'downstream' of the gene and the genomic_location would be 'overlapEnd' or 'downstream'._
-
+_Figure 2 : Possible locations of a peak. There are five peaks close to gene A: The first peak (from left) is located upstream of it, it would be annotated within a direction:upstream annotation an has the genomic location upstream. 
+The second peak would also be annotated within a direction:upstream process because the peak center is upstream of the feature start position, but the genomic location for this peak would be overlapStart instead of upstream. The third peak would not be annotated with direction:upstream, but if the configuration allows an annotation, the genomic location would be PeakInsideFeature. 
+Among other configurations, the next two peaks (third and fourth), would be annotated in a direction:downstream configuration. Like described for upstream, both peaks are located downstram of gene A, but with differen genomic locations: overlapEnd and downstream.
+The sixed peak from left could be annotated for gene B which is located inside it, representing the genomic location FeatureInsidePeak. The last two peaks close to gene C have the genomic locations overlapStart and overlapEnd, but due to that the center is not upstream or rather downstream, they would not be annotated for direction:upstream or direction:downstream annotation keys.  
 
 ![direction.key](img/chr1-1,403,500-1,408,500-01_h3k4me1_peaks.png)  
 
