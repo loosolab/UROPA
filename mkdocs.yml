@@ -11,8 +11,6 @@ pages:
 - Configuration file: 'config.md'
 - Output: 'output.md'
 - Usage Examples: 'uropa-example.md'
-- Notes: 'important-notes.md'
 - Side tool - 'UROPA to GTF': custom.md
 - MIT License: license.md
 - Help: help.md
-- Abbreviations: abbreviations.md
