@@ -1,28 +1,25 @@
 **Welcome to the UROPA documentation!**
 
-UROPA is a peak annotation tool facilitating the analysis of next-generation sequencing methods for chromatin biology, like ChIPseq or ATACseq. 
-There are already different peak annotation tools, like HOMER or ChIPpeakAnno, but the advantage of UROPA is, that it can easily be fitted to your requirements.
-UROPA was developed as an open source analysis pipeline for peaks generated from any peak caller, e.g. MUSIC.
+UROPA is a command line based tool, intended for genomic region annotation. Based on a configuration file, different target features can be prioritized with multiple integrated queries.
+These can be sensitive for feature type, distance, strand specificity, feature attributes (eg. protein_coding) or the anchor position relative to the feature.
+UROPA can incorporate reference annotation files (GTF) from different sources, like Gencode, Ensembl, or RefSeq, as well as custom reference files produced by the user.
 
 **Advantages of UROPA**
 
-* Annotation with default values 
-* Usage of all available GTF files as annotation database
+* Simple usage: No programming
+* Utilization of all available GTF files as annotation database
 * Detect the most appropriate annotation with flexible keys that allow robustness and simple customization, such as
 	* feature type
 	* feature anchor
 	* feature direction relative to peak location
-	* filter for feature attribute values
-	* peak strand
+	* filter for attribute values, e.g. "protein_coding"
+	* strand specificity
 * Preparation of custom annotation files
 * One run with multiple sets of parameters by multiple queries
-* Gives all annotations that fit to the custom configuration: Represented in the All_hits output
-* Offers also the best annotation for each query, if more than one was identified: Represented in the Best_hits output
-* For multiple queries the best annotation of all possible annotations across all queries is also provided: Merged_best_hits output
-* Graduated annotation with the priority key
-* Different easily-readable output tables (AllHits, FinalHits, Best_perQuery_Hits).
+* Graduated annotation due to priorization
+* Different easily-readable output tables (AllHits, FinalHits, BestperQuery_Hits).
 * Visual summary for annotation evaluation
-
+* Annotation with default values 
 
 **How to cite**
 
