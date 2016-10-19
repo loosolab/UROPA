@@ -26,14 +26,13 @@ The location of the gene and the peak of interest (highlighted in black colour) 
 
 ![table1](img/example-table-01.png )
 	
-_Table 1: AllHits with annotation of a peak from two queries with different 'feature.anchor' and 'priority' = 'False'
-
+_Table 1: AllHits with annotation with two queries containing different 'feature.anchor' and 'priority' = 'False'              
 The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
 
 
 ![peak71](img/chr22-18161287-18161496_peak71_h3k4me1_feature_pos.png)
 
-_Figure 1: From the histone mark H3K4me1, peak71(chr22:18161387-18161496) annotated with the gene *BCL2L13* from gencode, at a distance 1063bp from feature.center to peak.center_
+_Figure 1: The  peak71 (chr22:18161387-18161496) from annotated with the gene *BCL2L13* from gencode, at a distance 1063bp from feature.center to peak.center_
 
 Concerning the other output tables, 
 
@@ -69,10 +68,7 @@ The sixed peak from left could be annotated for gene B which is located inside i
 
 ![direction.key](img/chr1-1,403,500-1,408,500-01_h3k4me1_peaks.png)  
 
-_Figure 3: H3K4me1 peak annotated with the Gencode genome, the genomic location is chr1:1,403,500-1,408,500
-
-
-The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
+_Figure 3: H3K4me1 peak annotated with the Gencode genome, the genomic location is chr1:1,403,500-1,408,500_
 
 The peak, the following example is based on is displayed in Figure 3. 
 Configuration for the first annotation run:
@@ -87,8 +83,7 @@ The peak displayed in Figure 3 would be annotated for both genes as shown in the
 
 ![table2](img/example-table-02.png )
 
-_Table 2: AllHits for an H3K4me1 peak annotated for two genes with different directions of the peak 
-
+_Table 2: AllHits for an H3K4me1 peak annotated for two genes with different directions of the peak                      
 The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
 
 
@@ -110,9 +105,6 @@ In this case the peak will only be annotated for *ATAD3B* , because it is locate
 
 So, globally, this example shows that more specific annotation can be useful for peaks like this one, in order to obtain a unique feature matching more specific requirements. 
 There is interest in cases where for example, some genomic regions are known to be enriched in transcriptionally active promoters, and we would like to know to which features these regions are found upstream. Moreover, a ‘downstream’ direction could be useful for the targeted identification of miRNAs or 3’UTR-binding proteins.
-
-
-
 
 Example 3: 'internals' key
 --------------------------
@@ -141,8 +133,7 @@ Configuration for the first annotation run:
 
 ![table03](img/example-table-03.png )
 
-_Table 3: AllHits with "internals":"False" for the peak_13 of ENCFF001VFA.
-
+_Table 3: AllHits with "internals":"False" for the peak_13 of ENCFF001VFA.                    
 The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
 
 As displayed in Table 3, there are two valid annotation for the given configuration. But the third gene in this genomic regions is missed.
@@ -157,8 +148,7 @@ Configuration for the second annotation:
 
 ![table4](img/example-table-04.png )
 
-_Table 4: AllHits with "internals":"True" for the peak_13 of ENCFF001VFA.
-
+_Table 4: AllHits with "internals":"True" for the peak_13 of ENCFF001VFA.              
 The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
 
 As displayed in Table 3 there are three genes annotated for the peak. One more valid annotation as without the 'internals' key set True. All of them are located inside of the peak as shown in Figure 4.    
@@ -189,8 +179,7 @@ It is advised to use the 'filter.attribute' key also in 'show.attributes' key, t
 
 ![table5](img/example-table-05.png )
 
-_Table 5: AllHits for annotation with linked keys 'filter.attribute' + 'attribute.value'
-
+_Table 5: AllHits for annotation with linked keys 'filter.attribute' + 'attribute.value'.                    
 The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
 
 
@@ -220,8 +209,7 @@ For peak 10, there are only valid annotations for the second query, the annotati
 
 ![table6](img/example-table-06.png)	
 	
-_Table 6: AllHits for two queries with priority='False'.
-
+_Table 6: AllHits for two queries with priority='False'.              
 The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
 
 
@@ -248,8 +236,7 @@ Because for peak 6 there was a valid annotation for query 0, query 1 is not anal
 * The will be no BestperQuery_Hits if priority is true, because there is only one final annotation per peak
 
 ![table7](img/example-table-07.png)
-_Table 7: AllHits with two queries with priority='True'.
-
+_Table 7: AllHits with two queries with priority='True'.                     
 The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
 
 	

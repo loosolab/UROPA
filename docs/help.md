@@ -15,4 +15,6 @@ Here some frequently asked questions are answered:
 	If you want to annotate with only default values, do not remove the queries key, but leave it empty like "queries":[] **ATTENTION** annotated peaks will be displayed without any assignment, so you do not know what for the peaks are annotated!
 * **Where are multiple best hits in FinalHits?**
 	If there are multiple annotations with the same distance representing the best annotation (minimal distance), only the first will be represented in the FinalHits. If an overview about all is requested, the AllHits can be used. 
+
+	
 Got any other questions? Contact maria.kondili@mpi-bn.mpg.de
