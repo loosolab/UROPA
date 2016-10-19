@@ -44,7 +44,7 @@ Concerning the other output tables,
 
 
 **Note** : Similar cases of peaks being internally to the genomic region of a feature (and also features being internally to a peak region) 
-can be well-annotated using the key 'internals'. A example for this is presented in [TODO](todo).
+can be well-annotated using the key 'internals'. A example for this is presented in [Example 3](http://uropa.readthedocs.io/en/latest/uropa-example/#example-3-internals-key).
 
 
 
@@ -201,74 +201,57 @@ More than one query can be given, keeping the same gtf and bed files, allowing f
 If there are more queries, it is important to decide if they should be priorized. This can be done with the priority key in the config file.   
 The following examples illustrate how this can be beneficial for the annotation.
 
-The queries in the config file looks like the following.
-
 This example is based on POLR2A peaks annotated with the Ensembl genome. 
 Source files can be found here :[gtf and bed source files](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files)
 
-Configuration for the first annotation:
+Configuration for the first annotation with priority false:
 ```json
 {"queries": [{"feature":"gene", "distance":1000, "show.attributes":"gene_name"},     
-			{"feature":"transcript", "distance":1000 }], 
- "priority" : "False",
+			{"feature":"transcript", "distance":1000}], 
  "gtf":"Homo_sapiens.GRCh37.75_chr.gtf" ,
  "bed":"ENCFF001VFA.bed"
 }
 ```
 
-The above set of queries will allow UROPA to annotate peaks for genes and transcripts. As priority is False (default if no different value given),there is no feature priorized. 
-
-There can be three cases for the peak annotation: 
-
-* **Case 1**: No query gives any feature for annotating the peaks. 
-	
-* **Case 2**: One query gives a feature but the other not. 
-	
-* **Case 3**: Both queries validate features overlapping with the peaks.  
+The above set of queries will allow UROPA to annotate peaks for genes and transcripts. As priority is False (default), there is no query priorized. 
+As presented in the AllHits Table 6, there are valid annotations for peak 6 with both queries. The annotation for the feature gene would be presented in the FinalHits. In the BestperQuery_Hits both annotations with the minimum distance of 3 would be presented. 
+If there are multiple annotations with minimal distance, only the first one is represented in FinalHits.
+For peak 10, there are only valid annotations for the second query, the annotation for the gene *RCC1* correspond to the best annotation and would be resprented in the FinalHits. 
 
 ![table6](img/example-table-06.png)	
 	
-_Table 6: AllHits for two queries with priority='False'._
+_Table 6: AllHits for two queries with priority='False'.
 
-'peak_1' represents **Case 1**  where both queries validate no feature at all. In this case the peak is represented by 'NA' rows, for each query. 
-	
-**Case 2** is represented by 'peak_10', which has two annotations for the transcript feature but not the gene feature.       
-	
-'peak_6' is an example for the **Case 3** , with annotations for both queries. Transcripts (*ACTB*) are found by query 1 and a gene (*AC006483.1*) by query 0.
-	
-Concerning the other output tables, 
-
-* FinalHits will contain one NA row for peak_1 combining queries 0 and 1. The final hit for peak_6 will be the the hit for feature gene, distance 3bp. If there are more hits with same min distance for one peak, the first one will be displayed. Fore peak_10 the annotation for gene *RCC1* would be displayed.  
-
-* BestperQuery_Hits contains one NA row for both queries for peak_1. For peak_6 the best annotation for both queries would be represented, those with distance 3bp. The peak_10 will have one NA row for query 0 and the annotation for gene *RCC1* for query 1. 
+The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
 
 
-Configuration for the second annotation:
+
+Configuration for the second annotation with priority true:
 ```json
-{"queries": [	{"feature":"gene", "distance":1000, "show.attributes":"gene_name"}, 
-				{"feature":"transcript", "distance":1000 }], 
+{"queries":[{"feature":"gene", "distance":1000, "show.attributes":"gene_name"}, 
+			{"feature":"transcript", "distance":1000}], 
  "priority" : "True",
  "gtf":"Homo_sapiens.GRCh37.75_chr.gtf" ,
  "bed":"ENCFF001VFA.bed"
 }
 ```
 
-If 'priority' is 'True', UROPA will annotate peaks with the **first feature given** in the set of queries. Unless genes are not found for a peak, 'transcripts' will then be searched and validated by the query’s parameters in order to be assigned to a peak. The example is based on the same three cases, explained above.
-That is why there will be no peak in the output tables annotated for both features at the same time. 
-Each peak is allowed to have the 1st feature or the 2nd, or the 3rd, etc.
+If 'priority' is 'True', UROPA will annotate peaks with the **first feature given** in the set of queries. 
+Unless genes are not found for a peak, transcripts will then be validated by the query’s parameters in order to be assigned to a peak. 
+The example is based on the same cases as above but the AllHits Table 7 already looks different.
+Because for peak 6 there was a valid annotation for query 0, query 1 is not analyzed due to priorization. For peak 10, there was no valid annotation for query 0, thus query 1 was analyzed and valid annotation was identified. 
 
-The first difference to the example without priority is that in 'AllHits' [Table 4], the peaks with no annotation for both queries are merged in one line and both queries are reported.    
-This is why the entries for peaks without any annotation will look the same in 'AllHits' and 'BestHits'.
-In the case of  'peak_6'  there is an annotation for the priorized query 0, so the other query is not further analyzed. 
-    
-For 'peak_10' there was no annotation identified for the query 0, but two 'transcripts' are found for query-1. The annotation with the closest distance, *SNHG3*  is displayed at the BestHits (Table 5).	
-	
-![table7](img/example-table-07.png )
+** Attention ** 
+
+* For priority true there will not be an NA row for queries without valid annotations in case that one specified query provides a valid annotation. 
+* If there is no valid annotation for a peak across all queries, there is a combined NA row for all queries (NA NA ... NA 0,1)
+* The will be no BestperQuery_Hits if priority is true, because there is only one final annotation per peak
+
+![table7](img/example-table-07.png)
 _Table 7: AllHits with two queries with priority='True'.
 
 The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
-	
-So, in the case of 'priority' = True, the features are mutually exclusive, and the queries are parsed for valid hits in an escalating priority.
+
 	
 Used peak and annotation files 
 ------------------------------ 

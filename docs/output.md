@@ -122,6 +122,8 @@ _Table 5: Uropa_BestperQuery_Hits for multiple queries
 
 The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
 
+**Note** The BestperQuery_Hits is only generated if multiple queries are specified and the priority flag is set to FALSE! If this flag is TRUE, there will be only one valid query. There can be multiple valid annotations for one peak, but all based on one query.
+
 Same as in the example with one query, peak_355 has no valid annotation at all and is represented as NA row in all produced output tables, correspond to Case 1. In the AllHits (Table 3) and BestperQuery_Hits (Table 5) there will be one NA row for each query, but in the FinalHits (Table 4) there will be only one NA row for all queries. 
 The peak_356 has only for one query a valid annotation, this presented in AllHits, FinalHits, and BestperQuery_Hits conform to Case 2. In AllHits and BestperQuery_Hits there are additional NA rows for this peak for the other queries. 
 For peak_765 there are valid annotations for all queries as displayed in the AllHits, representing Case 4. The best of them with the smalles distance is the annotation for the lincRNA, this annotation is displayed in the FinalHits. 
@@ -143,7 +145,6 @@ The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_
 _Table 6.2: Uropa_Reformatted_HitsperPeak for multiple queries part two
 
 The column order is: feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
-
 
 
 
