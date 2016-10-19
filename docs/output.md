@@ -11,7 +11,7 @@ The different outputs will be explained thoroughly below.
 
 * **Uropa_Reformatted_HitsperPeak** : Only if more than one query is specified and the *-r* parameter is used: Compact table with best per query annotation in one row. 
 
-* **Uropa_Summary.pdf** : Only if the *-s* parameter is used: Graphical information of the peak annotation run by UROPA.
+* **Uropa_Summary** : Only if the *-s* parameter is used: Graphical information of the peak annotation run by UROPA.
 
 **Note** : The output files will be named additionally by the output directory name where they are located, for convenience in further use and transfer of files.
 Example  : ChIPannot/Uropa_AllHits_*ChIPannot*.txt
