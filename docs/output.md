@@ -44,6 +44,13 @@ without any information of the assigned features.
 #Output files (one query)
 UROPA annotation with one query results in two output tables. Those are the Uropa_AllHits and Uropa_FinalHits. 
 With a configuration as followed, a cut out of the AllHits would look as in Table 1, and a cut out of the FinalHits as displayed in Table 2. Peak and annotation files are further described [here](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files). 
+The UROPA annotation process for one query can run into three cases for each peak, those are:
+
+* **Case 1**: No query gives any feature for annotating the peaks, this leads to no valid annotation at all -> NA row in AllHits and FinalHits. 
+	
+* **Case 2**: There is one valid annotation for the specified query -> annotation will be given in AllHits and FinalHits. 
+	
+* **Case 3**: There are multiple valid anntoations for the specified query -> all valid annotations will be given in the AllHits, the best annotation (smallest distance) will be presented in the FinalHits.  
 
 ```json
 {
@@ -58,17 +65,29 @@ With a configuration as followed, a cut out of the AllHits would look as in Tabl
 ```
 
 ![table1](img/output-formats-01.png)	
-_Table 1: AllHits for one query_
+_Table 1: AllHits for one query
+The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
+
 
 ![table2](img/output-formats-02.png)	
-_Table 2: FinalHits for one query_
+_Table 2: FinalHits for one query
+The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
 
-As displayed in Table 1, peak_22 has two valid annotations, but only the best of those is presented in the FinalHits as displayed in Table2.
-The peaks peak_355 and peak_356 have either no valid annotation or only one valid annotation, thus they stay the same in both files. 
+
+As displayed in Table 1 and 2, peak_355 is a representative of Case 1. There is no valid annotation at all, there is an NA row in both output tables. 
+The peaks 356 and 765 belong to Case 2, there is one valid annotation for them, their annotation is displayed in the same way in AllHits and FinalHits (Table 1 and 2). 
+Whereas peak_769 has three valid annotations for the specified query. All of them are displayed in the AllHits output (Table 1). In the FinalHits only the best annotation, the one for gene NOP16 with the minimal distance of 937 is represented in the FinalHits (Table 2).
+
 
 #Output files (multiple queries)
 UROPA annotation with multiple queries result in at least three output tables. Those are the Uropa_AllHits, Uropa_FinalHits, and Uropa_BestperQuery_Hits. If the *-r* parameter is added in the command line call, there will the additional output Uropa_Reformatted_HitsperPeak file.
 With a configuration as followed, a cut out of all generated output files will look as in Table 3 to 6 and Figure 1. Peak and annotation files are further discribed [here](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files). 
+The UROPA annotation process for multiple queries can run into one more case as described for one query:
+
+* **Case 1 to 3** as described above
+
+* **Case 4**: There are valid annotations for multiple queries -> all valid annotations will be given in the AllHits, the best annotation (smallest distance across all queries) will be presented in the FinalHits. 
+
 ```json
 "queries":[
 		{"feature":"gene", "distance":10000, "feature.anchor":"start", "internals":"True", 
@@ -86,19 +105,37 @@ With a configuration as followed, a cut out of all generated output files will l
 ```
 
 ![table3](img/output-formats-03.png)	
-_Table 3: AllHits for multiple queries_
+_Table 3: AllHits for multiple queries
+The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
 
 ![table4](img/output-formats-04.png)	
-_Table 4: FinalHits for mulitple queries_
+_Table 4: FinalHits for mulitple queries
+The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
+
 
 ![table5](img/output-formats-05.png)	
-_Table 5: Uropa_BestperQuery_Hits for multiple queries_
+_Table 5: Uropa_BestperQuery_Hits for multiple queries
+The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
 
-![table6](img/output-formats-06.png)	
-_Table 6.1: Uropa_Reformatted_HitsperPeak for multiple queries part one_
+Same as in the example with one query, peak_355 has no valid annotation at all and is represented as NA row in all produced output tables, correspond to Case 1. In the AllHits (Table 3) and BestperQuery_Hits (Table 5) there will be one NA row for each query, but in the FinalHits (Table 4) there will be only one NA row for all queries. 
+The peak_356 has only for one query a valid annotation, this presented in AllHits, FinalHits, and BestperQuery_Hits conform to Case 2. In AllHits and BestperQuery_Hits there are additional NA rows for this peak for the other queries. 
+For peak_765 there are valid annotations for all queries as displayed in the AllHits, representing Case 4. The best of them with the smalles distance is the annotation for the lincRNA, this annotation is displayed in the FinalHits. 
+Because there is only one valid annotation for each query, all of this annotations are also displayed in the BestperQuery_Hits. 
+This is different for peak_769, as described above this peaks equates to Case 3. With multiple queries, there will be additional NA rows for the invalid queries in the AllHits and BestperQuery_Hits. 
 
-![table6](img/output-formats-07.png)	
-_Table 6.2: Uropa_Reformatted_HitsperPeak for multiple queries part two_
+With multiple queries it is also possible to reformat the BestperQuery_Hits the a condensed format with the best per query annotations for each peak in one row.
+A reformatted example for the BestperQuery_Hits of Table 5 is presented below. Because this Table is very broad, it is splitted into two part. The Reformatted_HitsperPeak represents all information for each peak in one row.  
+
+![table6](img/output-formats-06_1.png)	
+_Table 6.1: Uropa_Reformatted_HitsperPeak for multiple queries part one
+The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand_
+
+![table6](img/output-formats-06_2.png)	
+_Table 6.2: Uropa_Reformatted_HitsperPeak for multiple queries part two
+The column order is: feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
+
+
+
 
 #Summary Vizualisation
 
