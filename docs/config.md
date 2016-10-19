@@ -21,6 +21,7 @@ queries
 The very important queries key field with nested keys specifies the UROPA annotation process. It can contain more than one query, written inside '{}' and separated with commas. 
 
 **Hint** : 
+
 * If more than one query is given, they should be included in brackets like all values, i.e [{}, {}]. 
 * Make sure of correct spelling and comma placement, otherwise the UROPA annotation can be different as expected.
 
