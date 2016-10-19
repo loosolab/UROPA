@@ -13,8 +13,9 @@ If no value is given, the distances from all three positions to the peak center 
 There are two queries with different 'feature.anchor' for this example. 
 
 ```json
-"queries": [ {"feature":"gene", "distance":5000, "feature.anchor": "start", "show.attributes":"gene_name"},       
-		       {"feature": "gene","distance":5000, "feature.anchor": "center"} ]
+"queries": [ 
+	{"feature":"gene", "distance":5000, "feature.anchor": "start", "show.attributes":"gene_name"},       
+	{"feature": "gene","distance":5000, "feature.anchor": "center"}]
 "priority" : "False"
 "gtf": "gencode.v19.annotation.gtf",
 "bed": "ENCFF001SUE.bed"
@@ -23,9 +24,11 @@ There are two queries with different 'feature.anchor' for this example.
 As displayed in the output below (Table 1), the peak could only be annotated for query 1 where 'feature.anchor' is set to 'center' and the measured distance is within the accepted cut-off value. 
 The location of the gene and the peak of interest (highlighted in black colour) are shown in the Figure 1. The gene *BCL2L13*  is very large, that is why the measurement of distance from 'start' position couldn't return a valid annotation. _feature.start – peak.center = |18111621-18161442| = 49,821_
 
-![table1](img/ex1_table-01.png )
+![table1](img/example-table-01.png )
 	
-_Table 1: AllHits with annotation of a peak from two queries with different 'feature.anchor' and 'priority' = 'False'_
+_Table 1: AllHits with annotation of a peak from two queries with different 'feature.anchor' and 'priority' = 'False'
+
+The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
 
 
 ![peak71](img/chr22-18161287-18161496_peak71_h3k4me1_feature_pos.png)
@@ -66,12 +69,15 @@ The sixed peak from left could be annotated for gene B which is located inside i
 
 ![direction.key](img/chr1-1,403,500-1,408,500-01_h3k4me1_peaks.png)  
 
-_Figure 3: H3K4me1 peak annotated with the Gencode genome, the genomic location is chr1:1,403,500-1,408,500_
+_Figure 3: H3K4me1 peak annotated with the Gencode genome, the genomic location is chr1:1,403,500-1,408,500
+
+
+The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
 
 The peak, the following example is based on is displayed in Figure 3. 
 Configuration for the first annotation run:
 ```json
-"queries": [{ "feature": "gene", "attribute":"gene_name", "distance":1000, "direction":"any_direction" }]
+"queries": [{"feature": "gene", "attribute":"gene_name", "distance":1000, "direction":"any_direction"}]
 "priority" : "False"
 "gtf": "gencode.v19.annotation.gtf",
 "bed": "ENCFF001SUE.bed"
@@ -79,9 +85,11 @@ Configuration for the first annotation run:
 
 The peak displayed in Figure 3 would be annotated for both genes as shown in the table below:
 
-![table2](img/ex1_table-02.png )
+![table2](img/example-table-02.png )
 
-_Table 2: AllHits for an H3K4me1 peak annotated for two genes with different directions of the peak_
+_Table 2: AllHits for an H3K4me1 peak annotated for two genes with different directions of the peak 
+
+The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
 
 
 Due to the fact that no 'feature.anchor' was defined, the distance shown in the table is measured from the closed feature.anchor: 'start' for  *ATAD3B*, 'end' for *ATAD3C* .
@@ -131,11 +139,13 @@ Configuration for the first annotation run:
 "bed":"ENCFF001VFA.bed"
 ```
 
-![table03](img/ex1_table-03.png )
+![table03](img/example-table-03.png )
 
-_Table 3: AllHits with "internals":"False" for the peak_13 of ENCFF001VFA._
+_Table 3: AllHits with "internals":"False" for the peak_13 of ENCFF001VFA.
 
-As displayed in Table 10, there are two valid annotation for the given configuration. But the third gene in this genomic regions is missed.
+The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
+
+As displayed in Table 3, there are two valid annotation for the given configuration. But the third gene in this genomic regions is missed.
 
 Configuration for the second annotation:
  Configuration for the first annotation run:
@@ -145,9 +155,11 @@ Configuration for the second annotation:
 "bed":"ENCFF001VFA.bed"
 ```
 
-![table4](img/ex1_table-04.png )
+![table4](img/example-table-04.png )
 
-_Table 4: AllHits with "internals":"True" for the peak_13 of ENCFF001VFA._
+_Table 4: AllHits with "internals":"True" for the peak_13 of ENCFF001VFA.
+
+The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
 
 As displayed in Table 3 there are three genes annotated for the peak. One more valid annotation as without the 'internals' key set True. All of them are located inside of the peak as shown in Figure 4.    
 Whether the peak is inside the feature or the feature in the peak is displayed in the genomic_location column of the output files. 
@@ -163,20 +175,23 @@ If the annotation should be more particularized, the linked keys 'filter.attribu
 For example, the peaks should not just be annotated genes but protein coding genes. Things like this can be done with the linked keys, for example with the following configuration:
 
 ```json
-"queries":[{"feature":"gene", "distance":5000, "show.attributes":["gene_name","gene_biotype"],"filter.attribute": "gene_biotype", "attribute.value": "protein_coding" }]
+"queries":[{"feature":"gene", "distance":5000, "show.attributes":["gene_name","gene_biotype"],
+			"filter.attribute": "gene_biotype", "attribute.value": "protein_coding"}]
 "gtf":"Homo_sapiens.GRCh37.75_chr.gtf" ,
 "bed":"ENCFF001VFA.bed"
 ```
 
-**Attention** : These two keys are dependent to each other, so they must both be given for a proper use of filtering. Additionally, it is just possible to filter for values given in the attribute column. GTF source files can contain different attribute keys and values, so make sure the chosen values are present.
+**Attention** : The two keys "filter.attribute" and "attribute.value" are dependent, both have to be given for a proper use of filtering. Additionally, it is just possible to filter for values given in the attribute column. GTF source files can contain different attribute keys and values, so make sure the chosen values are present.
 
 As shown in the AllHits Table 4, the annotated peaks are only for protein coding genes. This is a stricter form of annotation. Of course all other attributes in the annotation file can be used.
 Using this keys can be very useful in combination with the 'priority' flag. With setting it 'True' it is possible to prioritize 'protein_coding' genes over 'pseudogenes' etc. 
 It is advised to use the 'filter.attribute' key also in 'show.attributes' key, too. With this is is displayed in the output files as well which is useful if several linked keys are represented in the configuration. 
 
-![table5](img/ex1_table-05.png )
+![table5](img/example-table-05.png )
 
-_Table 5: AllHits for annotation with linked keys 'filter.attribute' + 'attribute.value'_
+_Table 5: AllHits for annotation with linked keys 'filter.attribute' + 'attribute.value'
+
+The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
 
 
 Example 5: 'priority' flag
@@ -211,7 +226,7 @@ There can be three cases for the peak annotation:
 	
 * **Case 3**: Both queries validate features overlapping with the peaks.  
 
-![table6](img/ex1_table-06.png)	
+![table6](img/example-table-06.png)	
 	
 _Table 6: AllHits for two queries with priority='False'._
 
@@ -230,7 +245,8 @@ Concerning the other output tables,
 
 Configuration for the second annotation:
 ```json
-{"queries": [{"feature":"gene", "distance":1000, "show.attributes":"gene_name"}, {"feature":"transcript", "distance":1000 }], 
+{"queries": [	{"feature":"gene", "distance":1000, "show.attributes":"gene_name"}, 
+				{"feature":"transcript", "distance":1000 }], 
  "priority" : "True",
  "gtf":"Homo_sapiens.GRCh37.75_chr.gtf" ,
  "bed":"ENCFF001VFA.bed"
@@ -247,8 +263,10 @@ In the case of  'peak_6'  there is an annotation for the priorized query 0, so t
     
 For 'peak_10' there was no annotation identified for the query 0, but two 'transcripts' are found for query-1. The annotation with the closest distance, *SNHG3*  is displayed at the BestHits (Table 5).	
 	
-![table7](img/ex1_table-07.png )
-_Table 7: AllHits with two queries with priority='True'._
+![table7](img/example-table-07.png )
+_Table 7: AllHits with two queries with priority='True'.
+
+The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
 	
 So, in the case of 'priority' = True, the features are mutually exclusive, and the queries are parsed for valid hits in an escalating priority.
 	
