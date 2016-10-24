@@ -73,10 +73,10 @@ _Figure 3: H3K4me1 peak annotated with the Gencode genome, the genomic location 
 The peak, the following example is based on is displayed in Figure 3. 
 Configuration for the first annotation run:
 ```json
-"queries": [{"feature": "gene", "attribute":"gene_name", "distance":1000, "direction":"any_direction"}]
-"priority" : "False"
+{"queries": [{"feature": "gene", "attribute":"gene_name", "distance":1000, "direction":"any_direction"}],
+"priority" : "False",
 "gtf": "gencode.v19.annotation.gtf",
-"bed": "ENCFF001SUE.bed"
+"bed": "ENCFF001SUE.bed"}
 ```
 
 The peak displayed in Figure 3 would be annotated for both genes as shown in the table below:
@@ -93,10 +93,10 @@ In this case, the annotation for gene *ATAD3C* with a distance of 712 bp would b
 With this kind of estimation of your data, the 'direction' key can be used for a more specialized annotation.
 Configuration for the second annotation run:
 ```json
-"queries": [{ "feature": "gene", "attribute":"gene_name", "distance":1000, "direction":"upstream" }]
-"priority" : "False"
+{"queries": [{ "feature": "gene", "attribute":"gene_name", "distance":1000, "direction":"upstream" }],
+"priority" : "False",
 "gtf": "gencode.v19.annotation.gtf",
-"bed": "ENCFF001SUE.bed"
+"bed": "ENCFF001SUE.bed"}
 ```
 
 
@@ -244,16 +244,13 @@ Used peak and annotation files
 
 Annotation:  
 Ensembl database of the human genome, version hg19 (GRCh37): [Ensembl genome](ftp://ftp.ensembl.org/pub/release-75/gtf/homo_sapiens/)    
-                  
-Human Gencode genome, version hg19: [Gencode genome](ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_19/) 
+Human Gencode genome, version hg19: [Gencode genome](ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_19/)           
 
-Peak and signal files based on ChIP-seq of GM12878 immortalized cell line: 
- 
-[H3K4me1](https://www.encodeproject.org/experiments/ENCSR000AKF/)	(accession ENCFF001SUE for bed file)
-
+Peak and signal files based on ChIP-seq of GM12878 immortalized cell line:                           
+[H3K4me1](https://www.encodeproject.org/experiments/ENCSR000AKF/)	(accession ENCFF001SUE for bed file)                       
 [POLR2A](https://www.encodeproject.org/experiments/ENCSR000EAD/)	(accession ENCFF001VFA for bed file)
 
 **Note**: peak ids are manually added to make it easier to compare different tables or to combine tables with images. 
 
 
-Still not sure how to use the config file? Please contact Maria Kondili(maria.kondili@mpi-bn.mpg.de)
+Still not sure how to use UROPA? Please contact Maria Kondili (maria.kondili@mpi-bn.mpg.de)
