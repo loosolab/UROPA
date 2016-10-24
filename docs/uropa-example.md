@@ -124,7 +124,7 @@ _Figure 4: A polR2A-peak annotated with Ensembl, genomic location: chr6 : 27,858
  
 Configuration for the first annotation run:
 ```json
-{"queries":[{"feature":"gene", "distance":500, "show.attributes":"gene_name", "internals" : "False"}]
+{"queries":[{"feature":"gene", "distance":500, "show.attributes":"gene_name", "internals" : "False"}],
 "gtf":"Homo_sapiens.GRCh37.75_chr.gtf",
 "bed":"ENCFF001VFA.bed"}
 ```
@@ -139,7 +139,7 @@ As displayed in Table 3, there are two valid annotation for the given configurat
 Configuration for the second annotation:
  Configuration for the first annotation run:
 ```json
-{"queries":[{"feature":"gene", "distance":500, "show.attributes":"gene_name", "internals" : "True"}]
+{"queries":[{"feature":"gene", "distance":500, "show.attributes":"gene_name", "internals" : "True"}],
 "gtf":"Homo_sapiens.GRCh37.75_chr.gtf",
 "bed":"ENCFF001VFA.bed"}
 ```
@@ -164,7 +164,7 @@ For example, the peaks should not just be annotated genes but protein coding gen
 
 ```json
 {"queries":[{"feature":"gene", "distance":5000, "show.attributes":["gene_name","gene_biotype"],
-			"filter.attribute": "gene_biotype", "attribute.value": "protein_coding"}]
+			"filter.attribute": "gene_biotype", "attribute.value": "protein_coding"}],
 "gtf":"Homo_sapiens.GRCh37.75_chr.gtf",
 "bed":"ENCFF001VFA.bed"}
 ```
