@@ -137,7 +137,6 @@ The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_
 As displayed in Table 3, there are two valid annotation for the given configuration. But the third gene in this genomic regions is missed.
 
 Configuration for the second annotation:
- Configuration for the first annotation run:
 ```json
 {"queries":[{"feature":"gene", "distance":500, "show.attributes":"gene_name", "internals" : "True"}],
 "gtf":"Homo_sapiens.GRCh37.75_chr.gtf",
