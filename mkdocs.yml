@@ -10,7 +10,7 @@ pages:
 - Available parameters: 'parameters.md'
 - Configuration file: 'config.md'
 - Output: 'output.md'
-- Usage Examples: 'uropa-example.md'
+- Application examples: 'uropa-example.md'
 - Side tool - 'UROPA to GTF': custom.md
 - MIT License: license.md
 - Help: help.md
