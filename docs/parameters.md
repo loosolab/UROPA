@@ -1,7 +1,7 @@
 List of current parameters for command-line usage and their explanation: 
 
 ```bash                        
-	Usage: uropa.sh [options]          
+	Usage: uropa [options]          
 	Available options:           
 	- i, --input		configuration file             
 	- o, --output		output: folder for results and part of the output files in one           
