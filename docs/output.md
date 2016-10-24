@@ -20,7 +20,7 @@ Example  : ChIPannot/Uropa_AllHits_*ChIPannot*.txt
 #Output columns explanation
 
 The four output tables mentioned above contain many informative columns about the peak annotation performed. The headers and content of tables are explained here :
-**peak_id, peak_start, peak_center, peak_end** : Peak information with id if available, otherwise a peak id in chr:start-end scheme will be created.
+**peak_id, peak_start, peak_center, peak_end** : Peak information with id if available, otherwise a peak id in chr:start-end format will be created.
 
 **feature, feat_start, feat_end, feat_strand** : The information of the genomic feature that annotates the peak, as extracted by the gtf file.
 
@@ -70,8 +70,7 @@ The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_
 
 
 ![table2](img/output-formats-02.png)	
-_Table 2: FinalHits for one query
-
+_Table 2: FinalHits for one query     
 The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
 
 
@@ -105,19 +104,16 @@ The UROPA annotation process for multiple queries can run into one more case as 
 ```
 
 ![table3](img/output-formats-03.png)	
-_Table 3: AllHits for multiple queries
-
+_Table 3: AllHits for multiple queries               
 The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
 
 ![table4](img/output-formats-04.png)	
-_Table 4: FinalHits for mulitple queries
-
+_Table 4: FinalHits for mulitple queries               
 The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
 
 
 ![table5](img/output-formats-05.png)	
-_Table 5: Uropa_BestperQuery_Hits for multiple queries
-
+_Table 5: Uropa_BestperQuery_Hits for multiple queries            
 The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand, feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
 
 **Note** The BestperQuery_Hits is only generated if multiple queries are specified and the priority flag is set to FALSE! If this flag is TRUE, there will be only one valid query. There can be multiple valid annotations for one peak, but all based on one query.
@@ -152,7 +148,7 @@ For every run there is also a summary output, vizualising the results for a glob
 
 A summery of the UROPA run: Used peak and annotation files, number of peaks and number of annotated peaks, specified queries, value of priority flag (Fig. 1A). If not all queries annotated peaks, this is also mentioned.
 
----> Graphs based on the 'FinalHits' output:
+**Graphs based on the 'FinalHits' output:**
 
 * A density plot displaying the distance per feature across all queries (Fig. 1B). 
 * A pie chart illustrating the genomic locations of the peaks per annotated feature (Fig. 1C).
@@ -160,7 +156,7 @@ A summery of the UROPA run: Used peak and annotation files, number of peaks and 
 
 **Figure 1 A-C would be the summary for the first UROPA run with only one query***
 
----> Graphs based on the 'BestperQuery_Hits' output:
+**Graphs based on the 'BestperQuery_Hits' output:**
 
 * A distribution of the distances per feature per query are displayed in a histogram (Figure 1D).
 * A pie chart illustrating the genomic locations of the peaks per annotated feature (not illustrated).
