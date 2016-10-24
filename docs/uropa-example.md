@@ -13,12 +13,12 @@ If no value is given, the distances from all three positions to the peak center 
 There are two queries with different 'feature.anchor' for this example. 
 
 ```json
-"queries": [ 
+{"queries": [ 
 	{"feature":"gene", "distance":5000, "feature.anchor": "start", "show.attributes":"gene_name"},       
-	{"feature": "gene","distance":5000, "feature.anchor": "center"}]
-"priority" : "False"
+	{"feature": "gene","distance":5000, "feature.anchor": "center"}],
+"priority" : "False",
 "gtf": "gencode.v19.annotation.gtf",
-"bed": "ENCFF001SUE.bed"
+"bed": "ENCFF001SUE.bed"}
 ```
 
 As displayed in the output below (Table 1), the peak could only be annotated for query 1 where 'feature.anchor' is set to 'center' and the measured distance is within the accepted cut-off value. 
@@ -117,7 +117,7 @@ The 'internals' key was implemented exactly for these cases.
 So, peaks with a max distance from the feature are normally annotated with it, but **also** those who contain the feature internally, or are included in the features region. 
 These internal features are the only ones allowed to be in a larger distance than the set 'distance'.
 
-Especially, when predicted peaks used for annotation are very small (e.g. ATAc-se peaks) or very large, this option becomes very handy.   
+Especially, when predicted peaks used for annotation are very small (e.g. ATAC-seq peaks) or very large, this option becomes very handy.   
 This example is based on the peak displayed in Figure 4. The peak is very large and the region includes three different genes. 
 
 ![internal.feature](img/chr6-27,857,165-27,863,637_internal_feature-01.png)
@@ -126,9 +126,9 @@ _Figure 4: A polR2A-peak annotated with Ensembl, genomic location: chr6 : 27,858
  
 Configuration for the first annotation run:
 ```json
-"queries":[{"feature":"gene", "distance":500, "show.attributes":"gene_name", "internals" : "False"}]
-"gtf":"Homo_sapiens.GRCh37.75_chr.gtf" ,
-"bed":"ENCFF001VFA.bed"
+{"queries":[{"feature":"gene", "distance":500, "show.attributes":"gene_name", "internals" : "False"}]
+"gtf":"Homo_sapiens.GRCh37.75_chr.gtf",
+"bed":"ENCFF001VFA.bed"}
 ```
 
 ![table03](img/example-table-03.png )
@@ -141,9 +141,9 @@ As displayed in Table 3, there are two valid annotation for the given configurat
 Configuration for the second annotation:
  Configuration for the first annotation run:
 ```json
-"queries":[{"feature":"gene", "distance":500, "show.attributes":"gene_name", "internals" : "True"}]
-"gtf":"Homo_sapiens.GRCh37.75_chr.gtf" ,
-"bed":"ENCFF001VFA.bed"
+{"queries":[{"feature":"gene", "distance":500, "show.attributes":"gene_name", "internals" : "True"}]
+"gtf":"Homo_sapiens.GRCh37.75_chr.gtf",
+"bed":"ENCFF001VFA.bed"}
 ```
 
 ![table4](img/example-table-04.png )
@@ -165,10 +165,10 @@ If the annotation should be more particularized, the linked keys 'filter.attribu
 For example, the peaks should not just be annotated genes but protein coding genes. Things like this can be done with the linked keys, for example with the following configuration:
 
 ```json
-"queries":[{"feature":"gene", "distance":5000, "show.attributes":["gene_name","gene_biotype"],
+{"queries":[{"feature":"gene", "distance":5000, "show.attributes":["gene_name","gene_biotype"],
 			"filter.attribute": "gene_biotype", "attribute.value": "protein_coding"}]
-"gtf":"Homo_sapiens.GRCh37.75_chr.gtf" ,
-"bed":"ENCFF001VFA.bed"
+"gtf":"Homo_sapiens.GRCh37.75_chr.gtf",
+"bed":"ENCFF001VFA.bed"}
 ```
 
 **Attention** : The two keys "filter.attribute" and "attribute.value" are dependent, both have to be given for a proper use of filtering. Additionally, it is just possible to filter for values given in the attribute column. GTF source files can contain different attribute keys and values, so make sure the chosen values are present.
@@ -197,9 +197,8 @@ Configuration for the first annotation with priority false:
 ```json
 {"queries": [{"feature":"gene", "distance":1000, "show.attributes":"gene_name"},     
 			{"feature":"transcript", "distance":1000}], 
- "gtf":"Homo_sapiens.GRCh37.75_chr.gtf" ,
- "bed":"ENCFF001VFA.bed"
-}
+ "gtf":"Homo_sapiens.GRCh37.75_chr.gtf",
+ "bed":"ENCFF001VFA.bed"}
 ```
 
 The above set of queries will allow UROPA to annotate peaks for genes and transcripts. As priority is False (default), there is no query priorized. 
@@ -244,11 +243,14 @@ Used peak and annotation files
 ------------------------------ 
 
 Annotation:  
-Ensembl database of the human genome, version hg19 (GRC37): [Ensembl genome](ftp://ftp.ensembl.org/pub/release-75/gtf/homo_sapiens/)                      
+Ensembl database of the human genome, version hg19 (GRCh37): [Ensembl genome](ftp://ftp.ensembl.org/pub/release-75/gtf/homo_sapiens/)    
+                  
 Human Gencode genome, version hg19: [Gencode genome](ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_19/) 
 
-Peak and signal files based on ChIP-seq of GM12878 immortalized cell line:  
-[H3K4ME1](https://www.encodeproject.org/experiments/ENCSR000AKF/)	(accession ENCFF001SUE for bed file)
+Peak and signal files based on ChIP-seq of GM12878 immortalized cell line: 
+ 
+[H3K4me1](https://www.encodeproject.org/experiments/ENCSR000AKF/)	(accession ENCFF001SUE for bed file)
+
 [POLR2A](https://www.encodeproject.org/experiments/ENCSR000EAD/)	(accession ENCFF001VFA for bed file)
 
 **Note**: peak ids are manually added to make it easier to compare different tables or to combine tables with images. 
