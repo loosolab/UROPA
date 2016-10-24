@@ -56,7 +56,7 @@ When the direction key is set to **'upstream'**, peaks will be annotated to a fe
 
 So,the location of the peak is relative to the feature’s direction, and furthermore, the closest 'feature.anchor' is actually the 'start' when peak is upstream, while on the contrary, it is the 'end', if the peak is downstream.  This is why in the example the 'feature.anchor' will be used with default values.
 
-*An overlap of the feature to the start or end of the peak is partially allowed, but the overlap should allow a clear evidence of the upstream or downstream location of the peak.*
+An overlap of the feature to the start or end of the peak is partially allowed, but the overlap should allow a clear evidence of the upstream or downstream location of the peak.
 
 ![peak_upstream](img/peak_Upstream_Downstream_of_gene.png)
 
