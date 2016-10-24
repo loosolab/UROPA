@@ -54,14 +54,13 @@ The UROPA annotation process for one query can run into three cases for each pea
 
 ```json
 {
-"queries":[
+{"queries":[
 		{"feature":"gene", "distance":10000, "feature.anchor":"start", "internals":"True", 
 			"filter.attribute":"gene_type", "attribute.value":"protein_coding",
 			"show.attributes":["gene_name","gene_type"]}], 
  "priority" : "False",
  "gtf":"gencode.v19.annotation.gtf" ,
- "bed":"ENCFF001VFA.bed"
-}
+ "bed":"ENCFF001VFA.bed"}
 ```
 
 ![table1](img/output-formats-01.png)	
@@ -91,7 +90,7 @@ The UROPA annotation process for multiple queries can run into one more case as 
 * **Case 4**: There are valid annotations for multiple queries -> all valid annotations will be given in the AllHits, the best annotation (smallest distance across all queries) will be presented in the FinalHits. 
 
 ```json
-"queries":[
+{"queries":[
 		{"feature":"gene", "distance":10000, "feature.anchor":"start", "internals":"True", 
 			"filter.attribute":"gene_type",  "attribute.value":"protein_coding",
 			"show.attributes":["gene_name","gene_type"]},
@@ -102,8 +101,7 @@ The UROPA annotation process for multiple queries can run into one more case as 
           ],
 "priority" : "False",
 "gtf": "gencode.v19.annotation.gtf",
-"bed": "ENCFF001VFA.peaks.bed"
-}
+"bed": "ENCFF001VFA.peaks.bed"}
 ```
 
 ![table3](img/output-formats-03.png)	

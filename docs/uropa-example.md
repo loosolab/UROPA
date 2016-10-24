@@ -168,7 +168,8 @@ For example, the peaks should not just be annotated genes but protein coding gen
 "bed":"ENCFF001VFA.bed"}
 ```
 
-**Attention** : The two keys "filter.attribute" and "attribute.value" are dependent, both have to be given for a proper use of filtering. Additionally, it is just possible to filter for values given in the attribute column. GTF source files can contain different attribute keys and values, so make sure the chosen values are present.
+**Attention** : The two keys "filter.attribute" and "attribute.value" are dependent, both have to be given for a proper use of filtering. Additionally, it is just possible to filter for values given in the attribute column.         
+GTF source files can contain different attribute keys and values, so make sure the chosen values are present.
 
 As shown in the AllHits Table 4, the annotated peaks are only for protein coding genes. This is a stricter form of annotation. Of course all other attributes in the annotation file can be used.
 Using this keys can be very useful in combination with the 'priority' flag. With setting it 'True' it is possible to prioritize 'protein_coding' genes over 'pseudogenes' etc. 
@@ -187,7 +188,7 @@ More than one query can be given, keeping the same gtf and bed files, allowing f
 If there are more queries, it is important to decide if they should be priorized. This can be done with the priority key in the config file.   
 The following examples illustrate how this can be beneficial for the annotation.
 
-This example is based on POLR2A peaks annotated with the Ensembl genome. 
+This example is based on POLR2A peaks annotated with the Ensembl genome.                        
 Source files can be found here :[gtf and bed source files](http://uropa.readthedocs.io/en/latest/uropa-example/#used-peak-and-annotation-files)
 
 Configuration for the first annotation with priority false:
