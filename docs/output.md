@@ -131,13 +131,11 @@ The Reformatted_HitsperPeak represents all information for each peak in one row.
 To receive this output format, the parameter **_-r_** has to be added to the command line call.
 
 ![table6](img/output-formats-06_1.png)	
-_Table 6.1: Uropa_Reformatted_HitsperPeak for multiple queries part one
-
+_Table 6.1: Uropa_Reformatted_HitsperPeak for multiple queries part one    
 The column order is: peak_id, peak_chr, peak_start, peak_center, peak_end, peak_strand_
 
 ![table6](img/output-formats-06_2.png)	
-_Table 6.2: Uropa_Reformatted_HitsperPeak for multiple queries part two
-
+_Table 6.2: Uropa_Reformatted_HitsperPeak for multiple queries part two     
 The column order is: feature, feat_start, feat_end, feat_strand, distance, feat_anchor, genomic_location, feat_ovl_peak, peak_ovl_feat, gene_name, gene_type, query_
 
 
