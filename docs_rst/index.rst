@@ -31,7 +31,7 @@ Licence
 
 The project is licensed under the MIT license
 
-Manual
+Manual:
 -------
 
 .. toctree::
@@ -42,5 +42,4 @@ Manual
    parameter
    config
    output
-
  
