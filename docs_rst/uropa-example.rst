@@ -12,6 +12,7 @@ Typically, the distance is calculated from the TSS, correspond to 'start' in URO
 If no value is given, the distances from all three positions to the peak center are calculated and the closest is choosen. Only if the choosen distance is smaller or equal to the distance defined in the 'distance' key, the peak will be annotated for that feature.                                                                                        The position closer to the peak.center will be indicated in the output file in the column **'feat_anchor'**.
 
 There are two queries with different 'feature.anchor' for this example. 
+
 .. code:: json
 
     {"queries": [ 
