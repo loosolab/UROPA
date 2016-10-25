@@ -2,7 +2,7 @@ About UROPA
 ===========
 UROPA (‘Universal RObust Peak Annotator’) is a tool facilitating the
 analysis of next-generation sequencing methods for chromatin biology,
-like ChIPseq or ATACseq. It is designed to annotate enrichted genomic
+like ChIP-seq or ATAC-seq. It is designed to annotate enrichted genomic
 regions (peaks) of interest generated from any peak caller (e.g. MACS2,
 MUSIC, FindPeaks, CisGenome, PeakSeq).
 
@@ -10,10 +10,10 @@ The annotation source is a GTF file, which provides the information of
 the genomic features to be used for annotation of the peaks. The peaks
 should be represented in BED file format. Annotation and peak files
 should be specified in the configuration file. Furthermore, certain
-parameters that define how peaks should be annotated can be adjusted (`details <http://uropa2.readthedocs.io/en/latest/config.html>`_). 
+parameters that define how peaks should be annotated can be adjusted (`details <config>`_). 
 The output is given in easily-readable tab-delimited
 tables with the corresponding annotation, as it is validated by the
-configuration file for each peak (`details <http://uropa2.readthedocs.io/en/latest/output.html>`_).
+configuration file for each peak (`details <output>`_).
 
 Running UROPA is very simple. It can be executed in UNIX environment in
 one command line. By editing the configuration file all necessary
@@ -23,7 +23,7 @@ file need to be specified,as well. Without defining further parameters,
 the peaks will be annotated with a default annotation. To adjust the
 annotations to more flexible requirements, the different parameters of
 the config file should be used. Examples of application are presented in
-the `Application Examples <http://uropa2.readthedocs.io/en/latest/uropa-example.html>`_. 
+the `Application Examples <uropa-example>`_. 
 Further exploration is suggested.
 
 Run UROPA
