@@ -42,7 +42,7 @@ Manual:
    parameter
    config
    output
-   custom
+   uropa-example
    license
    help
- 
+   custom
