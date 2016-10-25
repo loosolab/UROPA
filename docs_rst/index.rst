@@ -42,4 +42,7 @@ Manual:
    parameter
    config
    output
+   custom
+   license
+   help
  
