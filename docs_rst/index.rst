@@ -31,8 +31,8 @@ Licence
 
 The project is licensed under the MIT license
 
-Contents:
-----------
+Manual:
+-------
 
 .. toctree::
    :maxdepth: 3
@@ -40,10 +40,5 @@ Contents:
    introduction
    install
    parameter
-   config
-   output
-   uropa-example
-   custom
-   license
-   help
+
  
