@@ -112,6 +112,7 @@ In this case, the annotation for gene *ATAD3C* with a distance of 712 bp would b
 With this kind of estimation of your data, the 'direction' key can be used for a more specialized annotation.
 
 Configuration for the second annotation run:
+
 .. code:: json
 
     {
@@ -151,9 +152,12 @@ Configuration for the first annotation run:
 
 .. code:: json
 
-    {"queries":[{"feature":"gene", "distance":500, "show.attributes":"gene_name", "internals" : "False"}],
+    {
+	"queries":[
+	{"feature":"gene", "distance":500, "show.attributes":"gene_name", "internals" : "False"}],
     "gtf":"Homo_sapiens.GRCh37.75_chr.gtf",
-    "bed":"ENCFF001VFA.bed"} 
+    "bed":"ENCFF001VFA.bed"
+	} 
 
 +---------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+-----------+-------+
 | peak_id | peak_chr | peak_start | peak_center | peak_end   | peak_strand | feature | feat_start | feature_end | feat_strand | feat_anchor | distance | genomic_location  | feat_ovl_peak | peak_ovl_feat | gene_name | query |
@@ -167,7 +171,7 @@ Configuration for the first annotation run:
 | …       |          |            |             |            |             |         |            |             |             |             |          |                   |               |               |           |       |
 +---------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+-----------+-------+
 
-*Table 3: AllHits for PolR2A peak_13 with query key "internals":"False". *
+*Table 3: AllHits for PolR2A peak_13 with query key "internals":"False".*
 
 
 As displayed in Table 3, there are two valid annotation for the given
@@ -211,11 +215,13 @@ Example 4: 'filter.attribute' + 'attribute.value' keys
 
 If the annotation should be more particularized, the linked keys 'filter.attribute' + ' 'attribute.value' can be used. With those it is possible to further restrict the annotation. 
 For example, the peaks should not just be annotated genes but protein coding genes. Things like this can be done with the linked keys, for example with the following configuration:
+
 .. code:: json
 
     {
-    "queries":[{"feature":"gene", "distance":5000, "show.attributes":["gene_name","gene_biotype"],
-                "filter.attribute": "gene_biotype", "attribute.value": "protein_coding"}],
+    "queries":[
+		{"feature":"gene", "distance":5000, "show.attributes":["gene_name","gene_biotype"],
+         "filter.attribute": "gene_biotype", "attribute.value": "protein_coding"}],
     "gtf":"Homo_sapiens.GRCh37.75_chr.gtf",
     "bed":"ENCFF001VFA.bed"
     }
@@ -253,6 +259,7 @@ This example is based on POLR2A peaks annotated with the Ensembl genome.
 Source files can be found here : gtf and bed source files **TODO**
 
 Configuration for the first annotation with priority false:
+
 .. code:: json
 
     {
@@ -272,3 +279,84 @@ are multiple annotations with minimal distance, only the first one is
 represented in FinalHits. For peak 10, there are only valid annotations
 for the second query, the annotation for the gene *RCC1* correspond to
 the best annotation and would be resprented in the FinalHits.
+
++---------+----------+------------+-------------+------------+-------------+------------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+------------+-------+
+| peak_id | peak_chr | peak_start | peak_center | peak_end   | peak_strand | feature    | feat_start | feature_end | feat_strand | feat_anchor | distance | genomic_location  | feat_ovl_peak | peak_ovl_feat | gene_name  | query |
++=========+==========+============+=============+============+=============+============+============+=============+=============+=============+==========+===================+===============+===============+============+=======+
+| …       |          |            |             |            |             |            |            |             |             |             |          |                   |               |               |            |       |
++---------+----------+------------+-------------+------------+-------------+------------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+------------+-------+
+| peak_6  | chr7     | 5562617    | 5567820     | 5573023    | .           | gene       | 5567734    | 5567817     | \-          | start       | 3        | FeatureInsidePeak | 0.01          | 1.0           | AC006483.1 | 0     |
++---------+----------+------------+-------------+------------+-------------+------------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+------------+-------+
+| peak_6  | chr7     | 5562617    | 5567820     | 5573023    | .           | transcript | 5566782    | 5567729     | \-          | start       | 91       | FeatureInsidePeak | 0.09          | 1.0           | ACTB       | 1     |
++---------+----------+------------+-------------+------------+-------------+------------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+------------+-------+
+| peak_6  | chr7     | 5562617    | 5567820     | 5573023    | .           | transcript | 5566787    | 5570232     | \-          | center      | 689      | FeatureInsidePeak | 0.33          | 1.0           | ACTB       | 1     |
++---------+----------+------------+-------------+------------+-------------+------------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+------------+-------+
+| peak_6  | chr7     | 5562617    | 5567820     | 5573023    | .           | transcript | 5567734    | 5567817     | \-          | start       | 3        | FeatureInsidePeak | 0.01          | 1.0           | AC006483.1 | 1     |
++---------+----------+------------+-------------+------------+-------------+------------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+------------+-------+
+| …       |          |            |             |            |             |            |            |             |             |             |          |                   |               |               |            |       |
++---------+----------+------------+-------------+------------+-------------+------------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+------------+-------+
+| peak_10 | chr1     | 28832002   | 28836390    | 28840778   | .           | NA         | NA         | NA          | NA          | NA          | NA       | NA                | NA            | NA            | NA         | 0     |
++---------+----------+------------+-------------+------------+-------------+------------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+------------+-------+
+| peak_10 | chr1     | 28832002   | 28836390    | 28840778   | .           | transcript | 28832863   | 28836145    | \+          | end         | 245      | FeatureInsidePeak | 0.37          | 1.0           | SNHG3      | 1     |
++---------+----------+------------+-------------+------------+-------------+------------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+------------+-------+
+| peak_10 | chr1     | 28832002   | 28836390    | 28840778   | .           | transcript | 28836589   | 28862538    | \+          | start       | 199      | overlapStart      | 0.48          | 0.16          | RCC1       | 1     |
++---------+----------+------------+-------------+------------+-------------+------------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+------------+-------+
+
+Table 6: AllHits for two queries with priority=‘False’.
+Configuration for the second annotation with priority true:
+
+.. code:: json
+
+    {
+	"queries":[{"feature":"gene", "distance":1000, "show.attributes":"gene_name"}, 
+                {"feature":"transcript", "distance":1000}], 
+     "priority" : "True",
+     "gtf":"Homo_sapiens.GRCh37.75_chr.gtf" ,
+     "bed":"ENCFF001VFA.bed"
+    }
+	
+If 'priority' is 'True', UROPA will annotate peaks with the **first feature given** in the set of queries. 
+Unless genes are not found for a peak, transcripts will then be validated by the query’s parameters in order to be assigned to a peak. 
+The example is based on the same cases as above but the AllHits Table 7 already looks different.
+Because for peak 6 there was a valid annotation for query 0, query 1 is not analyzed due to priorization. 
+For peak 10, there was no valid annotation for query 0, thus query 1 was analyzed and valid annotation was identified. 
+
+.. hint::
+   - For priority true there will not be an NA row for queries without valid annotations in case that one specified query provides a valid annotation. 
+   - If there is no valid annotation for a peak across all queries, there is a combined NA row for all queries (NA NA ... NA 0,1)
+   - The will be no BestperQuery_Hits if priority is true, because there is only one final annotation per peak
+   
+   
++---------+----------+------------+-------------+------------+-------------+------------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+------------+-------+
+| peak_id | peak_chr | peak_start | peak_center | peak_end   | peak_strand | feature    | feat_start | feature_end | feat_strand | feat_anchor | distance | genomic_location  | feat_ovl_peak | peak_ovl_feat | gene_name  | query |
++=========+==========+============+=============+============+=============+============+============+=============+=============+=============+==========+===================+===============+===============+============+=======+
+| …       |          |            |             |            |             |            |            |             |             |             |          |                   |               |               |            |       |
++---------+----------+------------+-------------+------------+-------------+------------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+------------+-------+
+| peak_6  | chr7     | 5562617    | 5567820     | 5573023    | .           | gene       | 5567734    | 5567817     | \-          | start       | 3        | FeatureInsidePeak | 0.01          | 1.0           | AC006483.1 | 0     |
++---------+----------+------------+-------------+------------+-------------+------------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+------------+-------+
+| …       |          |            |             |            |             |            |            |             |             |             |          |                   |               |               |            |       |
++---------+----------+------------+-------------+------------+-------------+------------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+------------+-------+
+| peak_10 | chr1     | 28832002   | 28836390    | 28840778   | .           | transcript | 28832863   | 28836145    | \+          | end         | 245      | FeatureInsidePeak | 0.37          | 1.0           | SNHG3      | 1     |
++---------+----------+------------+-------------+------------+-------------+------------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+------------+-------+
+| peak_10 | chr1     | 28832002   | 28836390    | 28840778   | .           | transcript | 28836589   | 28862538    | \+          | start       | 199      | overlapStart      | 0.48          | 0.16          | RCC1       | 1     |
++---------+----------+------------+-------------+------------+-------------+------------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+------------+-------+
+
+Table 7: AllHits with two queries with priority=‘True’. 
+
+
+Used peak and annotation files 
+------------------------------ 
+
+Annotation:  
+Ensembl database of the human genome, version hg19 (GRCh37): `Ensembl genome <ftp://ftp.ensembl.org/pub/release-75/gtf/homo_sapiens/>`_    
+Human Gencode genome, version hg19: `Gencode genome <ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_19/>`_          
+
+Peak and signal files based on ChIP-seq of GM12878 immortalized cell line:                           
+`H3K4me1 <https://www.encodeproject.org/experiments/ENCSR000AKF/>`_	(accession ENCFF001SUE for bed file)                       
+`POLR2A <https://www.encodeproject.org/experiments/ENCSR000EAD/>`_	(accession ENCFF001VFA for bed file)
+
+.. note:: peak ids are manually added to make it easier to compare different tables or to combine tables with images. 
+
+
+**Still not sure how to use UROPA? Please contact Maria Kondili (maria.kondili@mpi-bn.mpg.de)**
+
