@@ -1,21 +1,21 @@
 Side tool: UROPA to GTF
 =======================
 The GTF file is a very common format used for annotation. UROPA accepts all GTF files downloaded from any online databases,              
-such as UCSC, ensembl, GENCODE. The file fromat is well-explained by [Ensembl](http://www.ensembl.org/info/website/upload/gff.html )       
+such as UCSC, ensembl, GENCODE. The file fromat is well-explained by `Ensembl <http://www.ensembl.org/info/website/upload/gff.html>`_       
 The Gencode v19 annotation GTF looks for example like shown in Table 1.                 
 
-+------+--------+------+-------+-------+---+---+---+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| chr1 | HAVANA | gene | 11869 | 14412 | . | + | . | gene_id "ENSG00000223972" ; transcript_id "ENSG00000223972.4";gene_type "pseudogene"; gene_status "KNOWN"; gene_name "DDX11L1";transcript_type "pseudogene";transcript_status "KNOWN";transcript_name "DDX11L1"; level 2; havana_gene "OTTHUMG00000000961.2"; |
-+------+--------+------+-------+-------+---+---+---+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ...  |        |      |       |       |   |   |   |                                                                                                                                                                                                                                                               |
-+------+--------+------+-------+-------+---+---+---+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
++------+--------+------+-------+-------+---+-----+---+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| chr1 | HAVANA | gene | 11869 | 14412 | . | \+\ | . | gene_id "ENSG00000223972" ; transcript_id "ENSG00000223972.4";gene_type "pseudogene"; gene_status "KNOWN"; gene_name "DDX11L1";transcript_type "pseudogene";transcript_status "KNOWN";transcript_name "DDX11L1"; level 2; havana_gene "OTTHUMG00000000961.2"; |
++------+--------+------+-------+-------+---+-----+---+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ...  |        |      |       |       |   |     |   |                                                                                                                                                                                                                                                               |
++------+--------+------+-------+-------+---+-----+---+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 *Table 1: first row of gencode v19 GTF file, the columns are: chr,
 source, feature, start, end, score, strand, frame, and attributes. (Left
 out: description header)*
 
 For further extending the utility of UROPA, there is the UROPAtoGTFtool which transforms annotation files that are not in this format.
-Files for annotation can be provided by the `UCSC Table Browser`_, or
+Files for annotation can be provided by the `UCSC Table Browser <https://genome.ucsc.edu/cgi-bin/hgTables?hgsid=502498195_cPIoMqXhw14ApzQemlpIvSHD9o8D>`_, or
 many more data bases.
 For the internal convertion, the input annotation file needs to have aheader, and there need to be columns with information about the
 location: ‘chr’, ‘start’, and ‘end’ . Additionally, the file should betab separated. Another requirement for the transformation is that the
