@@ -105,11 +105,11 @@ Without adjustment of the direction the peak would be annotated as described bel
 .. code:: json
 
   {
-	"queries": [{"feature": "gene", "attribute":"gene_name", "distance":1000, 
+	"queries": [{"feature": "gene", "attribute":"gene_name", "distance":1000,
     "direction":"any_direction"}],
   "gtf": "gencode.v19.annotation.gtf",
   "bed": "ENCFF001SUE.bed"
-	}
+  }
 
 
 +------------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+------------------+---------------+---------------+-----------+-------+
@@ -140,7 +140,7 @@ It is possible to include the knowledge of probable genomic location of peaks wi
 .. code:: json
 
   {
-	"queries": [{ "feature": "gene", "attribute":"gene_name", "distance":1000, 
+  "queries": [{"feature": "gene", "attribute":"gene_name", "distance":1000, 
     "direction":"upstream" }],
   "gtf": "gencode.v19.annotation.gtf",
   "bed": "ENCFF001SUE.bed"
@@ -179,8 +179,8 @@ With default internals adjustment, the distance limit is fixed for any peak loca
 .. code:: json
 
   {
-	"queries":[
-	{"feature":"gene", "distance":500, "show.attributes":"gene_name", "internals" : "False"}],
+  "queries":[
+    {"feature":"gene", "distance":500, "show.attributes":"gene_name", "internals" : "False"}],
   "gtf":"Homo_sapiens.GRCh37.75.gtf",
   "bed":"ENCFF001VFA.bed"
 	} 
@@ -252,13 +252,13 @@ The main annotation is for a specific feature, for example genes. This is specif
 **Config**
 
 .. code:: json
-
-    {
-    "queries":[
+  
+  {
+  "queries":[
 		{"feature":"gene", "distance":5000, "show.attributes":["gene_name","gene_biotype"]}],
-    "gtf":"Homo_sapiens.GRCh37.75.gtf",
-    "bed":"ENCFF001VFA.bed"
-    }
+  "gtf":"Homo_sapiens.GRCh37.75.gtf",
+  "bed":"ENCFF001VFA.bed"
+  }
 
 +---------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+-----------+----------------+-------+
 | peak_id | peak_chr | peak_start | peak_center | peak_end   | peak_strand | feature | feat_start | feature_end | feat_strand | feat_anchor | distance | genomic_location  | feat_ovl_peak | peak_ovl_feat | gene_name | gene_biotype   | query |
@@ -327,12 +327,12 @@ No priorization
 .. code:: json
 
   {
-	"queries": [
+  "queries": [
     {"feature":"gene", "distance":1000, "show.attributes":"gene_name"},
 		{"feature":"transcript", "distance":1000}], 
   "gtf":"Homo_sapiens.GRCh37.75.gtf",
-	"bed":"ENCFF001VFA.bed"
-	}
+  "bed":"ENCFF001VFA.bed"
+  }
 
 +---------+----------+------------+-------------+------------+-------------+------------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+------------+-------+
 | peak_id | peak_chr | peak_start | peak_center | peak_end   | peak_strand | feature    | feat_start | feature_end | feat_strand | feat_anchor | distance | genomic_location  | feat_ovl_peak | peak_ovl_feat | gene_name  | query |
@@ -370,13 +370,13 @@ With  priorization
 .. code:: json
 
   {
-	"queries":[
+  "queries":[
     {"feature":"gene", "distance":1000, "show.attributes":"gene_name"},
-	 {"feature":"transcript", "distance":1000}], 
+    {"feature":"transcript", "distance":1000}],
   "priority" : "True",
-	"gtf":"Homo_sapiens.GRCh37.75.gtf",
-	"bed":"ENCFF001VFA.bed"
-	}
+  "gtf":"Homo_sapiens.GRCh37.75.gtf",
+  "bed":"ENCFF001VFA.bed"
+  }
 	
 +---------+----------+------------+-------------+------------+-------------+------------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+------------+-------+
 | peak_id | peak_chr | peak_start | peak_center | peak_end   | peak_strand | feature    | feat_start | feature_end | feat_strand | feat_anchor | distance | genomic_location  | feat_ovl_peak | peak_ovl_feat | gene_name  | query |
@@ -423,7 +423,7 @@ Peak and signal files based on ChIP-seq of GM12878 immortalized cell line:
 .. note:: Peak ids are manually added to make it easier to describe different peaks. 
 
 
-**Still not sure how to use UROPA? Please contact Maria Kondili (maria.kondili@mpi-bn.mpg.de)**
+**Still not sure how to use UROPA? Please contact `Maria Kondili <maria.kondili@mpi-bn.mpg.de>`_.
 
 .. _H3K4me1: https://www.encodeproject.org/experiments/ENCSR000AKF/
 .. _POLR2A: https://www.encodeproject.org/experiments/ENCSR000EAD/
