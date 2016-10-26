@@ -35,7 +35,7 @@ Install UROPA locally
 
 Run:
 
-.. code:: bash
+.. code-block:: bash
    git clone https://github.molgen.mpg.de/loosolab/UROPA.git
    export PATH=$PATH:dir/to/uropa/src
 
