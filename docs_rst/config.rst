@@ -43,6 +43,7 @@ keys
 
 -  **features** :['gene','transcript'] Or whatever features are defined
    in the 3rd column of the 'GTF'.       
+   
    By default all features present in the 'GTF' will be used.
 
 -  **feature.anchor** : ['start'] The position from which the distance
@@ -50,16 +51,19 @@ keys
    the closest distance. If default values are used, the distance from the peak center to all positions of the feature will be analyzed
    and if the minimum of the three calculated distances is less or equal to the specified distance key, the feature
    will be accepted for annotation.              
+   
    **Default: ['start', 'center', 'end']**.
 
 -  **distance**: [2000] or [5000,1000] Maximum allowed distance from the genomic feature anchor to peak
    center. If only one distance is specified, this distance is allowed in both directions from the
    feature anchor. If there are two distances defined, the first distance correspont to the distance upstream of the feature
    anchor, and the second distance to the distance downstream of the feature anchor.          
+   
    **Default: 100000**.
 
 -  **strand**: ['same'] The strand on which the annotated feature should
    be. If this feature should be specified, make sure that strand information is prepared.         
+   
    **Default: ['same', 'both', 'opposite']**. 
 
 -  **direction** : ['upstream','downstream'] Defining the peak
@@ -69,6 +73,7 @@ keys
    feature (compare Figure 2 in :doc:`/uropa-example`). If this key is
    specified, only peak located upstream/overlapStart or rather
    downstream/overlapEnd will be annotated.     
+   
    **Default:'any\_direction'**.
 
 -  **internals**: ['T',True','F','False','Y','Yes','N','No'] If True,
@@ -78,14 +83,17 @@ keys
    'distance'. This key can be helpful to identify peaks all along the
    features, or for the allocation of ATAC-seq peaks to very small
    transcription factor binding sites(tfbs).        
+   
    **Default:'False'**.
 
 -  **filter.attribute** : ['gene\_type'] Attribute key found in the 9th
    column of the GTF file for which should be filtered. This key is linked to the 'attribute.value'.          
+   
    **Default:'None'**.
 
 -  **attribute.value** : ['protein\_coding'] Corresponding attribute value found in the 9th
    column of the GTF file for which should be filtered. If the two linked keys are specified, only features accomplishing the specification of those keys will be used for annotation.       
+   
    **Default:'None'**.
 
 -  **show.attributes**: ['gene\_id', 'gene\_biotype'] Attributes found in the 9th
@@ -93,6 +101,7 @@ keys
    Thus, it is enough to specify them in the first query.
    If nonexistent attributes are specified, annotated peaks will display 'not.found' in
    this column.                  
+   
    **Default: 'None'**.
    
 Combination of config keys
