@@ -34,7 +34,7 @@ The four output tables mentioned above contain many informative columns about th
 
 - **distance** : The distance measured as following: _abs(peak_center-feature_anchor)_. If no feature.anchor is given, the minimum of all feature.anchor {start,center,end} to peak_center is chosen.
 
-- **genomic_location**: The position of the peak relative to the annotated feature direction (e.g. upstream = peak located upstream of the gene, see `Figure 2 <http://www.ensembl.org/info/website/upload/gff.html%3E>`_.
+- **genomic_location**: The position of the peak relative to the annotated feature direction (e.g. upstream = peak located upstream of the gene, see Figure 2 in :doc:`/uropa-example`.
 
 - **feat_ovl_peak**: Percentage of how much the peak is coverd by the feature (1.0 = 100%, this correspond to the genomic_location "PeakInsideFeature").
 
@@ -101,7 +101,7 @@ The UROPA annotation process for one query can run into three cases for each pea
 +----------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+-----------+----------------+-------+
 
 
-* **Table 1:** AllHits for one query as described in the configuration above.*
+**Table 1:** AllHits for one query as described in the configuration above.
 
 +----------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+-----------+----------------+-------+
 | peak_id  | peak_chr | peak_start | peak_center | peak_end   | peak_strand | feature | feat_start | feature_end | feat_strand | feat_anchor | distance | genomic_location  | feat_ovl_peak | peak_ovl_feat | gene_name | gene_type      | query |
@@ -124,7 +124,7 @@ The UROPA annotation process for one query can run into three cases for each pea
 +----------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+-----------+----------------+-------+
 
 
-* **Table 2:** FinalHits for one query as described in the configuration above.*
+**Table 2:** FinalHits for one query as described in the configuration above.
 
 As displayed in Table 1 and 2, peak 355 is a representative of Case 1. There is no valid annotation at all, there is an NA row in both output tables. 
 The peaks 356 and 765 belong to Case 2, there is one valid annotation for them, their annotation is displayed in the same way in AllHits and FinalHits. 
@@ -204,7 +204,7 @@ The UROPA annotation process for multiple queries can run into one more case as 
 | …        |          |            |             |            |             |         |            |             |             |             |          |                   |               |               |               |                |       |
 +----------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+---------------+----------------+-------+
 	
-* **Table 3:** AllHits for three queries as described in the configuration above.*
+**Table 3:** AllHits for three queries as described in the configuration above.
  
 +----------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+---------------+----------------+-------+
 | peak_id  | peak_chr | peak_start | peak_center | peak_end   | peak_strand | feature | feat_start | feature_end | feat_strand | feat_anchor | distance | genomic_location  | feat_ovl_peak | peak_ovl_feat | gene_name     | gene_type      | query |
@@ -226,7 +226,7 @@ The UROPA annotation process for multiple queries can run into one more case as 
 | …        |          |            |             |            |             |         |            |             |             |             |          |                   |               |               |               |                |       |
 +----------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+---------------+----------------+-------+
  
-* **Table 4:** FinalHits for three queries as described in the configuration above.*
+**Table 4:** FinalHits for three queries as described in the configuration above.
 
 +----------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+---------------+----------------+-------+
 | peak_id  | peak_chr | peak_start | peak_center | peak_end   | peak_strand | feature | feat_start | feature_end | feat_strand | feat_anchor | distance | genomic_location  | feat_ovl_peak | peak_ovl_feat | gene_name     | gene_type      | query |
@@ -264,7 +264,7 @@ The UROPA annotation process for multiple queries can run into one more case as 
 | …        |          |            |             |            |             |         |            |             |             |             |          |                   |               |               |               |                |       |
 +----------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+---------------+----------------+-------+
 
-* **Table 5:** BestperQuery_Hits for three queries as described in the configuration above.*
+**Table 5:** BestperQuery_Hits for three queries as described in the configuration above.
 
 .. note:: 
 	The BestperQuery_Hits is only generated if multiple queries are specified and the priority flag is set to FALSE! If this flag is TRUE, there will be only one valid query. There can be multiple valid annotations for one peak, but all based on one query. In this case only the AllHits and FinalHits are produced.
@@ -301,7 +301,7 @@ To receive this output format, the parameter **_-r_** has to be added to the com
 | …        |          |            |             |            |             |                |                            |                            |             |                   |             |                                  |               |               |                          |                                              |       |
 +----------+----------+------------+-------------+------------+-------------+----------------+----------------------------+----------------------------+-------------+-------------------+-------------+----------------------------------+---------------+---------------+--------------------------+----------------------------------------------+-------+
 
-* **Table 6:** Reformatted_HitsperPeak for three queries as described in the configuration above.*
+**Table 6:** Reformatted_HitsperPeak for three queries as described in the configuration above.
 
 
 Summary Vizualisation
