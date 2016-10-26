@@ -20,7 +20,7 @@ tba
 - `Source Code`_ 
 
 .. _Issue Tracker: https://github.molgen.mpg.de/loosolab/UROPA/issues
-.. _Source Code: https://github.molgen.mpg.de/loosolab/UROPA)/
+.. _Source Code: https://github.molgen.mpg.de/loosolab/UROPA
 
 
 **Support**
@@ -29,10 +29,9 @@ If you have any issue feel free to send an email to Maria Kondili (maria.kondili
 
 **Licence**
 
-The project is licensed under the MIT license (see :ref:`MIT License`)
+The project is licensed under the MIT license (see :doc:`/license`)
 
-Content of this manual:
-~~~~~~~~~~~~~~~~~~~~~~~
+**Content of this manual:**
 
 .. toctree::
    :maxdepth: 3
