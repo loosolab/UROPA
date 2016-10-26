@@ -406,10 +406,12 @@ Used peak and annotation files
 ------------------------------ 
 
 Annotation:  
+
 - Ensembl database of the human genome, version hg19 (GRCh37): `Ensembl genome`_ 
 - Human Gencode genome, version hg19: `Gencode genome`_        
 
-Peak and signal files based on ChIP-seq of GM12878 immortalized cell line:                           
+Peak and signal files based on ChIP-seq of GM12878 immortalized cell line:
+                       
 - `H3K4me1`_ (accession ENCFF001SUE for bed file)                       
 - `POLR2A`_  (accession ENCFF001VFA for bed file)
 
