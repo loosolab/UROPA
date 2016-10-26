@@ -415,7 +415,7 @@ Peak and signal files based on ChIP-seq of GM12878 immortalized cell line:
 - `H3K4me1`_ (accession ENCFF001SUE for bed file)                       
 - `POLR2A`_  (accession ENCFF001VFA for bed file)
 
-.. note:: Peak ids are manually added to make it easier to describe them. 
+.. note:: Peak ids are manually added to make it easier to describe different peaks. 
 
 
 **Still not sure how to use UROPA? Please contact Maria Kondili (maria.kondili@mpi-bn.mpg.de)**
