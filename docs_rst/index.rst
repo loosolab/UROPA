@@ -10,29 +10,29 @@ like Gencode, Ensembl, or RefSeq, as well as custom reference files
 produced by the user.
 
 How to cite
-------------
+~~~~~~~~~~~
 
 Please cite the paper describing UROPA when using it in your research:
 tba
 
 Contribute
-----------
+~~~~~~~~~~~
 
 * `Issue Tracker <https://github.molgen.mpg.de/loosolab/UROPA/issues>`_
 * `Source Code <https://github.molgen.mpg.de/loosolab/UROPA)/>`_
 
 Support
--------
+~~~~~~~
 
 If you have any issue feel free to send an email to Maria Kondili (maria.kondili@mpi-bn.mpg.de)
 
 Licence
---------
+~~~~~~~
 
-The project is licensed under the MIT license
+The project is licensed under the MIT license (see `MIT License`_)
 
-Manual:
--------
+Content of this manual:
+~~~~~~~~~~~~~~~~~~~~~~~
 
 .. toctree::
    :maxdepth: 3
