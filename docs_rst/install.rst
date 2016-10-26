@@ -35,10 +35,11 @@ Install UROPA locally
 
 Run:
 
-.. code-block:: console
-   git clone https://github.molgen.mpg.de/loosolab/UROPA.git
-   export PATH=$PATH:dir/to/uropa/src
+.. code:: bash
 
+        git clone https://github.molgen.mpg.de/loosolab/UROPA
+		export PATH=$PATH:dir/to/uropa/src
+		
 Now you can run uropa with the specified configuration file and the annotation database of interest. 
 
 .. _R/Rscript : http://www.r-project.org/
