@@ -1,22 +1,19 @@
 Installation
 ============
 
-For developping UROPA the following versions were used (make sure all prerequisites are met):
+For running UROPA locally, the following prerequisites have to be met:
 
-- `R/Rscript`_, v3.3.0
+- `R/Rscript`_, v3.3.0 or higher
 - `Python`_ , v2.7.8-anaconda-2.1.0
+- `htslib`_ 1.3.2 or higher
 
 Required packages
 -----------------
 
-For Bash:
-~~~~~~~~~
-- `htslib`_ 1.3.2
-
 For python:
 ~~~~~~~~~~~
-- numpy
-- pysam
+- `numpy`_
+- `pysam`_
 
 
 For R:
@@ -27,9 +24,8 @@ For R:
 - `jsonlite`_ 
 - `VennDiagram`_ 
 - Vennerable
-- If multiprocessing should be used: `snow`_ 
+- If multiprocessing should be available: `snow`_ 
 
-**TODO** what else?
 
 Install UROPA locally
 ---------------------
@@ -39,13 +35,15 @@ Run:
 .. code:: bash
 
 	git clone https://github.molgen.mpg.de/loosolab/UROPA
-	export PATH=$PATH:dir/to/uropa/src
+	export PATH=$PATH:dir/to/uropa
 		
 Now you can run uropa with the specified configuration file and the annotation database of interest. 
 
 .. _R/Rscript: http://www.r-project.org/
 .. _Python: http://continuum.io/downloads
 .. _htslib: http://www.htslib.org/download/
+.. _numpy: http://www.numpy.org
+.. _pysam: https://pysam.readthedocs.io/en/latest/index.html
 .. _ggplot2: https://cran.r-project.org/web/packages/ggplot2/index.html
 .. _gplots: https://cran.r-project.org/web/packages/gplots/index.html
 .. _gridExtra: https://cran.r-project.org/web/packages/gridExtra/index.html

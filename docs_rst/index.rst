@@ -1,10 +1,9 @@
 Welcome to the UROPA documentation!
 ===================================
-UROPA is a command line based tool, intended for genomic region
-annotation. Based on a configuration file, different target features can
-be prioritized with multiple integrated queries. These can be sensitive
-for feature type, distance, strand specificity, feature attributes (eg.
-protein_coding) or the anchor position relative to the feature. UROPA
+UROPA is a command line based tool intended for genomic region
+annotation. Different target features can be prioritized with multiple integrated queries based on a configuration file.
+Queries are sensitive for feature type, distance, strand specificity, feature attributes (eg.
+“protein\_coding”) or the anchor position relative to the feature. UROPA
 can incorporate reference annotation files (GTF) from different sources,
 like Gencode, Ensembl, or RefSeq, as well as custom reference files
 produced by the user.
@@ -12,19 +11,19 @@ produced by the user.
 
 **Advantages of UROPA**
 
--  Detect the most appropriate annotation with flexible parameter keys that allow
-   robustness and simple customization, such as
+-  Detect the most appropriate annotation according to flexible parameters that allow
+   robustness and simple customization of
    
-   -  feature type
-   -  feature anchor
-   -  feature direction relative to peak location
-   -  filter for attribute values, e.g. “protein\_coding”
+   -  feature type,
+   -  feature anchor,
+   -  feature direction relative to peak location,
+   -  filtering for attribute values, e.g. “protein\_coding”,
    -  strand specificity
 
--  Utilization of all available GTF files as annotation database
--  One run with variable sets of parameters by multiple queries
+-  Utilization of many available GTF files as annotation database
+-  Multiple queries of variable parameter sets can be processed in a single run
 -  Graduated annotation due to priorization
--  Different easily-readable output tables (AllHits, FinalHits, BestperQuery\_Hits).
+-  Different easily-readable output tables (AllHits, FinalHits, BestperQuery\_Hits)
 -  Visual summary for annotation evaluation
 -  Preparation of custom annotation files
 
