@@ -20,7 +20,7 @@ the config file as below will be provided:
 Three keys are required: ``'queries'``, ``'gtf'``, and ``'bed'``, additionally
 there is an optional key ``'priority'``.                
 In a default annotation, only the ``'gtf'`` and ``'bed'`` keys are specified with file paths. The queries key has to be present in the config file, but can be left empty
-(``'queries": []``,). Empty or missing key-value pairs are filled with their default values by UROPA.
+(e.g. ``'queries": []``). Empty or missing key-value pairs are filled with their default values by UROPA.
 
 Queries
 -------
@@ -74,7 +74,7 @@ Query-specific keys
    A peak is 'upstream' if its center is upstream of a feature anchor position. Similarly, a peak is 'downstream' if its center is downstream of a feature anchor position.
    Also compare to Figure 2 in :doc:`/uropa-example`.
    
-   Default: ``'any\_direction'``
+   Default: ``'any_direction'``
    
    Example: ``'direction': ['upstream','downstream']``
 
@@ -99,14 +99,14 @@ Query-specific keys
    
    Default: ``'None'``
    
-   Example: ``'attribute.value': ['protein\_coding']``
+   Example: ``'attribute.value': ['protein_coding']``
 
 -  **show.attributes**: A list of attributes found in the 9th column of the GTF file which should appear in the output tables. 
    If nonexistent attributes are specified, annotated peaks will display ``'not.found'`` in for those attributes.                  
    
    Default: ``'None'``
    
-   Example: ``['gene\_id', 'gene\_biotype']``
+   Example: ``['gene_id', 'gene_biotype']``
 
 Prioritizing queries
 --------------------
@@ -123,16 +123,19 @@ Example: ``'Yes'``
 GTF annotation database
 -----------------------
 
-**gtf (required)**: A path to a file in standard GTF format (9 columns), as described by `Ensembl GTF format`_.
+**gtf**: A path to a file in standard GTF format (9 columns), as described by `Ensembl GTF format`_.
 The GTF file acts as annotation database. If your annotation database is not in the Ensembl GTF format, a conversion can be done by
 UROPA. For more information see :doc:`/custom`.
 
+**Required**, no default.
 
 Genomic regions (BED)
 ---------------------
 
-**bed (required)**: A path to a file in BED format, as described by `Ensembl Bed format`_. 
+**bed**: A path to a file in BED format, as described by `Ensembl Bed format`_. 
 The BED file can be any tab-delimited file containing the genomic regions, e.g. enriched regions from a peak-calling tool (e.g. MACS2, MUSIC, FindPeaks, CisGenome, PeakSeq), with a minimum of 3 columns.
+
+**Required**, no default.
 
 .. _Ensembl GTF format: http://www.ensembl.org/info/website/upload/gff.html
 .. _Ensembl Bed format: http://www.ensembl.org/info/website/upload/BED.html
