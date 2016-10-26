@@ -25,7 +25,7 @@ tba
 
 **Support**
 
-If you have any issue feel free to send an email to Maria Kondili (maria.kondili@mpi-bn.mpg.de)
+If you have any issue feel free to send an email to `Maria Kondili <maria.kondili@mpi-bn.mpg.de>`_
 
 **Licence**
 
