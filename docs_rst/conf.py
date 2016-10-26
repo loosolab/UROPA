@@ -46,7 +46,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'UROPA'
-copyright = u'2016, Annika Fust, Maria Kondilli, Jens Preussner, Carsten Kuenne, Mario Looso'
+copyright = u'2016, M. Kondili, A. Fust, J. Preussner, C. Kuenne, M. Looso'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -199,7 +199,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
   ('index', 'UROPA.tex', u'UROPA Documentation',
-   u'Annika Fust, Maria Kondilli, Jens Preussner, Carsten Kuenne, Mario Looso', 'manual'),
+   u'M. Kondili, A. Fust, J. Preussner, C. Kuenne, M. Looso', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -229,7 +229,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'uropa', u'UROPA Documentation',
-     [u'Annika Fust, Maria Kondilli, Jens Preussner, Carsten Kuenne, Mario Looso'], 1)
+     [u'M. Kondili, A. Fust, J. Preussner, C. Kuenne, M. Looso'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -243,7 +243,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'UROPA', u'UROPA Documentation',
-   u'Annika Fust, Maria Kondilli, Jens Preussner, Carsten Kuenne, Mario Looso', 'UROPA', 'One line description of project.',
+   u'M. Kondili, A. Fust, J. Preussner, C. Kuenne, M. Looso', 'UROPA', 'One line description of project.',
    'Miscellaneous'),
 ]
 
@@ -264,9 +264,9 @@ texinfo_documents = [
 
 # Bibliographic Dublin Core info.
 epub_title = u'UROPA'
-epub_author = u'Annika Fust, Maria Kondilli, Jens Preussner, Carsten Kuenne, Mario Looso'
-epub_publisher = u'Annika Fust, Maria Kondilli, Jens Preussner, Carsten Kuenne, Mario Looso'
-epub_copyright = u'2016, Annika Fust, Maria Kondilli, Jens Preussner, Carsten Kuenne, Mario Looso'
+epub_author = u'M. Kondili, A. Fust, J. Preussner, C. Kuenne, M. Looso'
+epub_publisher = u'M. Kondili, A. Fust, J. Preussner, C. Kuenne, M. Looso'
+epub_copyright = u'2016, M. Kondili, A. Fust, J. Preussner, C. Kuenne, M. Looso'
 
 # The basename for the epub file. It defaults to the project name.
 #epub_basename = u'UROPA'
