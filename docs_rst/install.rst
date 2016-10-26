@@ -1,5 +1,6 @@
 Installation
 ============
+
 For developping UROPA the following versions were used (make sure all prerequisites are met):
 
 - `R/Rscript`_, v3.3.0
@@ -36,7 +37,7 @@ Install UROPA locally
 Run:
 
 .. code:: bash
-	
+
 	git clone https://github.molgen.mpg.de/loosolab/UROPA
 	export PATH=$PATH:dir/to/uropa/src
 		

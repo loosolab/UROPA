@@ -401,9 +401,9 @@ Because for peak 6 there was a valid annotation for query 0, query 1 is not anal
 For peak 10, there was no valid annotation for query 0, thus query 1 was analyzed and valid annotation was identified. 
 
 .. hint::
-   - For priority true there will not be an NA row for queries without valid annotations in case that one specified query provides a valid annotation. 
-   - If there is no valid annotation for a peak across all queries, there is a combined NA row for all queries (NA NA ... NA 0,1)
-   - The will be no BestperQuery_Hits if priority is true, because there is only one final annotation per peak
+  - For priority true there will not be an NA row for queries without valid annotations in case that one specified query provides a valid annotation. 
+  - If there is no valid annotation for a peak across all queries, there is a combined NA row for all queries (NA NA ... NA 0,1)
+  - The will be no BestperQuery_Hits if priority is true, because there is only one final annotation per peak
    
 
 
