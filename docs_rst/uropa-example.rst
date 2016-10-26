@@ -201,8 +201,8 @@ With default internals adjustment, the distance limit is fixed for any peak loca
 As displayed in Table 3, there are two valid annotation for the given
 configuration. But the third gene in this genomic regions is missed due to a to large distance to any feature.anchor.
 
-internals key set True
-~~~~~~~~~~~~~~~~~~~~~~
+Specified internals key
+~~~~~~~~~~~~~~~~~~~~~~~
 With internals key set to True, the distance limit is skiped for peaks inside features and inversely.
 
 **Config**
@@ -284,8 +284,7 @@ Specified linked keys
 
     {
     "queries":[
-		{"feature":"gene", "distance":5000, "show.attributes":["gene_name","gene_biotype"],
-         "filter.attribute": "gene_biotype", "attribute.value": "protein_coding"}],
+		{"feature":"gene", "distance":5000, "show.attributes":["gene_name","gene_biotype"], "filter.attribute": "gene_biotype", "attribute.value": "protein_coding"}],
     "gtf":"Homo_sapiens.GRCh37.75.gtf",
     "bed":"ENCFF001VFA.bed"
     }
@@ -323,13 +322,13 @@ No priorization
 **Config** 
 
 .. code:: json
-
-    {
-	"queries": [{"feature":"gene", "distance":1000, "show.attributes":"gene_name"},     
-                {"feature":"transcript", "distance":1000}], 
-     "gtf":"Homo_sapiens.GRCh37.75.gtf",
-     "bed":"ENCFF001VFA.bed"
-	 }
+	
+	{
+	"queries": [{"feature":"gene", "distance":1000, "show.attributes":"gene_name"},
+				{"feature":"transcript", "distance":1000}], 
+    "gtf":"Homo_sapiens.GRCh37.75.gtf",
+	"bed":"ENCFF001VFA.bed"
+	}
 
 +---------+----------+------------+-------------+------------+-------------+------------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+------------+-------+
 | peak_id | peak_chr | peak_start | peak_center | peak_end   | peak_strand | feature    | feat_start | feature_end | feat_strand | feat_anchor | distance | genomic_location  | feat_ovl_peak | peak_ovl_feat | gene_name  | query |
@@ -367,12 +366,12 @@ With  priorization
 .. code:: json
 
     {
-	"queries":[{"feature":"gene", "distance":1000, "show.attributes":"gene_name"}, 
-                {"feature":"transcript", "distance":1000}], 
-     "priority" : "True",
-     "gtf":"Homo_sapiens.GRCh37.75.gtf" ,
-     "bed":"ENCFF001VFA.bed"
-    }
+	"queries":[	{"feature":"gene", "distance":1000, "show.attributes":"gene_name"},
+				{"feature":"transcript", "distance":1000}], 
+    "priority" : "True",
+	"gtf":"Homo_sapiens.GRCh37.75.gtf",
+	"bed":"ENCFF001VFA.bed"
+	}
 	
 +---------+----------+------------+-------------+------------+-------------+------------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+------------+-------+
 | peak_id | peak_chr | peak_start | peak_center | peak_end   | peak_strand | feature    | feat_start | feature_end | feat_strand | feat_anchor | distance | genomic_location  | feat_ovl_peak | peak_ovl_feat | gene_name  | query |
@@ -407,17 +406,19 @@ Used peak and annotation files
 ------------------------------ 
 
 Annotation:  
-Ensembl database of the human genome, version hg19 (GRCh37): `Ensembl genome <ftp://ftp.ensembl.org/pub/release-75/gtf/homo_sapiens/>`_    
-Human Gencode genome, version hg19: `Gencode genome <ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_19/>`_          
+- Ensembl database of the human genome, version hg19 (GRCh37): `Ensembl genome`_ 
+- Human Gencode genome, version hg19: `Gencode genome`_        
 
 Peak and signal files based on ChIP-seq of GM12878 immortalized cell line:                           
-`H3K4me1>`_ (accession ENCFF001SUE for bed file)                       
-`POLR2A>`_  (accession ENCFF001VFA for bed file)
+- `H3K4me1`_ (accession ENCFF001SUE for bed file)                       
+- `POLR2A`_  (accession ENCFF001VFA for bed file)
 
 .. note:: Peak ids are manually added to make it easier to describe them. 
 
 
 **Still not sure how to use UROPA? Please contact Maria Kondili (maria.kondili@mpi-bn.mpg.de)**
 
-.. _H3K4me1:: https://www.encodeproject.org/experiments/ENCSR000AKF/
-.. _POLR2A:: https://www.encodeproject.org/experiments/ENCSR000EAD/
+.. _H3K4me1: https://www.encodeproject.org/experiments/ENCSR000AKF/
+.. _POLR2A: https://www.encodeproject.org/experiments/ENCSR000EAD/
+.. _Gencode genome: ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_19/ 
+.. _Ensembl genome: ftp://ftp.ensembl.org/pub/release-75/gtf/homo_sapiens/ 
