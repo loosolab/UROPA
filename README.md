@@ -28,7 +28,7 @@ Features
 
 Documentation
 --------------
-A detailed description of how to apply UROPA to your data can be found [here](uropa2.readthedocs.io).
+A detailed description of how to apply UROPA to your data can be found [here](http://readthedocs.org/projects/uropa2/).
 
 Installation and Command-line usage
 ------------------------------------
