@@ -1,6 +1,6 @@
 Help
 ====
-If you have trouble please email maria.kondili@mpi-bn.mpg.de
+If you have trouble please email maria.kondili@mpi-bn.mpg.de                                    
 Are there any bug and support issues? Please report them on our Github `issue tracker <https://github.molgen.mpg.de/loosolab/UROPA/issues>`_.
 They will be addressed as soon as possible. 
 
