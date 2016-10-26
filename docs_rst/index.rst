@@ -9,27 +9,27 @@ can incorporate reference annotation files (GTF) from different sources,
 like Gencode, Ensembl, or RefSeq, as well as custom reference files
 produced by the user.
 
-How to cite
-~~~~~~~~~~~
+**How to cite**
 
 Please cite the paper describing UROPA when using it in your research:
 tba
 
-Contribute
-~~~~~~~~~~~
+**Contribute**
 
-* `Issue Tracker <https://github.molgen.mpg.de/loosolab/UROPA/issues>`_
-* `Source Code <https://github.molgen.mpg.de/loosolab/UROPA)/>`_
+- `Issue Tracker`_
+- `Source Code`_ 
 
-Support
-~~~~~~~
+.. _Issue Tracker: https://github.molgen.mpg.de/loosolab/UROPA/issues
+.. _Source Code: https://github.molgen.mpg.de/loosolab/UROPA)/
+
+
+**Support**
 
 If you have any issue feel free to send an email to Maria Kondili (maria.kondili@mpi-bn.mpg.de)
 
-Licence
-~~~~~~~
+**Licence**
 
-The project is licensed under the MIT license (see `MIT License`_)
+The project is licensed under the MIT license (see :ref:`MIT License`)
 
 Content of this manual:
 ~~~~~~~~~~~~~~~~~~~~~~~
