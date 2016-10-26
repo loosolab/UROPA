@@ -9,6 +9,25 @@ can incorporate reference annotation files (GTF) from different sources,
 like Gencode, Ensembl, or RefSeq, as well as custom reference files
 produced by the user.
 
+
+**Advantages of UROPA**
+
+-  Detect the most appropriate annotation with flexible parameter keys that allow
+   robustness and simple customization, such as
+   
+   -  feature type
+   -  feature anchor
+   -  feature direction relative to peak location
+   -  filter for attribute values, e.g. “protein\_coding”
+   -  strand specificity
+
+-  Utilization of all available GTF files as annotation database
+-  One run with variable sets of parameters by multiple queries
+-  Graduated annotation due to priorization
+-  Different easily-readable output tables (AllHits, FinalHits, BestperQuery\_Hits).
+-  Visual summary for annotation evaluation
+-  Preparation of custom annotation files
+
 **How to cite**
 
 Please cite the paper describing UROPA when using it in your research:
@@ -42,6 +61,7 @@ The project is licensed under the MIT license (see :doc:`/license`)
    config
    output
    uropa-example
+   custom
    license
    help
-   custom
+   

@@ -1,5 +1,5 @@
-Side tool: UROPA to GTF
-=======================
+UROPA to GTF utility
+====================
 The GTF file is a very common format used for annotation. UROPA accepts all GTF files downloaded from any online databases,              
 such as UCSC, ensembl, GENCODE. The Gencode v19 annotation GTF looks for example like shown in Table 1.                 
 

@@ -14,7 +14,7 @@ For Bash:
 
 For python:
 ~~~~~~~~~~~
-- alumpy
+- numpy
 - pysam
 
 
@@ -42,7 +42,7 @@ Run:
 		
 Now you can run uropa with the specified configuration file and the annotation database of interest. 
 
-.. _R/Rscript : http://www.r-project.org/
+.. _R/Rscript: http://www.r-project.org/
 .. _Python: http://continuum.io/downloads
 .. _htslib: http://www.htslib.org/download/
 .. _ggplot2: https://cran.r-project.org/web/packages/ggplot2/index.html

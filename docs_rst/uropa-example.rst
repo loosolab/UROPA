@@ -29,10 +29,10 @@ Dependent of how the query is specified, there can be a valid annotation or not.
 **Config**
 
 .. code:: json
-
-    {
+  {
 	"queries": [
-		{"feature":"gene", "distance":5000, "feature.anchor": "start", "show.attributes":"gene_name"},
+		{"feature":"gene", "distance":5000, "feature.anchor": "start", 
+      "show.attributes":"gene_name"},
 		{"feature": "gene","distance":5000, "feature.anchor": "center"}],
     "priority" : "False",
     "gtf": "gencode.v19.annotation.gtf",
@@ -104,10 +104,11 @@ Without adjustment of the direction the peak would be annotated as described bel
 
 .. code:: json
 
-    {
-	"queries": [{"feature": "gene", "attribute":"gene_name", "distance":1000, "direction":"any_direction"}],
-    "gtf": "gencode.v19.annotation.gtf",
-    "bed": "ENCFF001SUE.bed"
+  {
+	"queries": [{"feature": "gene", "attribute":"gene_name", "distance":1000, 
+    "direction":"any_direction"}],
+  "gtf": "gencode.v19.annotation.gtf",
+  "bed": "ENCFF001SUE.bed"
 	}
 
 
@@ -138,10 +139,11 @@ It is possible to include the knowledge of probable genomic location of peaks wi
 
 .. code:: json
 
-    {
-	"queries": [{ "feature": "gene", "attribute":"gene_name", "distance":1000, "direction":"upstream" }],
-    "gtf": "gencode.v19.annotation.gtf",
-    "bed": "ENCFF001SUE.bed"
+  {
+	"queries": [{ "feature": "gene", "attribute":"gene_name", "distance":1000, 
+    "direction":"upstream" }],
+  "gtf": "gencode.v19.annotation.gtf",
+  "bed": "ENCFF001SUE.bed"
 	}
 
 In this case the peak will only be annotated for *ATAD3B*, because it is located 'upstream' to it. The annotation for *ATAD3C* is no longer valid.
@@ -176,11 +178,11 @@ With default internals adjustment, the distance limit is fixed for any peak loca
 
 .. code:: json
 
-    {
+  {
 	"queries":[
 	{"feature":"gene", "distance":500, "show.attributes":"gene_name", "internals" : "False"}],
-    "gtf":"Homo_sapiens.GRCh37.75.gtf",
-    "bed":"ENCFF001VFA.bed"
+  "gtf":"Homo_sapiens.GRCh37.75.gtf",
+  "bed":"ENCFF001VFA.bed"
 	} 
 
 +---------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+-----------+-------+
@@ -209,10 +211,11 @@ With internals key set to True, the distance limit is skiped for peaks inside fe
 
 .. code:: json
 
-    {
-	"queries":[{"feature":"gene", "distance":500, "show.attributes":"gene_name", "internals" : "True"}],
-    "gtf":"Homo_sapiens.GRCh37.75.gtf",
-    "bed":"ENCFF001VFA.bed"
+  {
+	"queries":[
+  {"feature":"gene", "distance":500, "show.attributes":"gene_name", "internals" : "True"}],
+  "gtf":"Homo_sapiens.GRCh37.75.gtf",
+  "bed":"ENCFF001VFA.bed"
 	}
 
 +---------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+-----------+-------+
@@ -281,13 +284,13 @@ Specified linked keys
 **Config**
 
 .. code:: json
-
-    {
-    "queries":[
-		{"feature":"gene", "distance":5000, "show.attributes":["gene_name","gene_biotype"], "filter.attribute": "gene_biotype", "attribute.value": "protein_coding"}],
-    "gtf":"Homo_sapiens.GRCh37.75.gtf",
-    "bed":"ENCFF001VFA.bed"
-    }
+  
+  {
+  "queries":[{"feature":"gene", "distance":5000, "show.attributes":["gene_name","gene_biotype"], 
+    "filter.attribute": "gene_biotype", "attribute.value": "protein_coding"}],
+  "gtf":"Homo_sapiens.GRCh37.75.gtf",
+  "bed":"ENCFF001VFA.bed"
+  }
 	
 +---------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+-----------+----------------+-------+
 | peak_id | peak_chr | peak_start | peak_center | peak_end   | peak_strand | feature | feat_start | feature_end | feat_strand | feat_anchor | distance | genomic_location  | feat_ovl_peak | peak_ovl_feat | gene_name | gene_biotype   | query |
@@ -322,11 +325,12 @@ No priorization
 **Config** 
 
 .. code:: json
-	
-	{
-	"queries": [{"feature":"gene", "distance":1000, "show.attributes":"gene_name"},
-				{"feature":"transcript", "distance":1000}], 
-    "gtf":"Homo_sapiens.GRCh37.75.gtf",
+
+  {
+	"queries": [
+    {"feature":"gene", "distance":1000, "show.attributes":"gene_name"},
+		{"feature":"transcript", "distance":1000}], 
+  "gtf":"Homo_sapiens.GRCh37.75.gtf",
 	"bed":"ENCFF001VFA.bed"
 	}
 
@@ -365,10 +369,11 @@ With  priorization
 
 .. code:: json
 
-    {
-	"queries":[	{"feature":"gene", "distance":1000, "show.attributes":"gene_name"},
-				{"feature":"transcript", "distance":1000}], 
-    "priority" : "True",
+  {
+	"queries":[
+    {"feature":"gene", "distance":1000, "show.attributes":"gene_name"},
+	 {"feature":"transcript", "distance":1000}], 
+  "priority" : "True",
 	"gtf":"Homo_sapiens.GRCh37.75.gtf",
 	"bed":"ENCFF001VFA.bed"
 	}
