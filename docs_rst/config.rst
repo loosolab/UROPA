@@ -143,14 +143,15 @@ priority
 **priority** : ['T', 'True', 'F', 'False', 'Y', 'Yes', 'N', or 'No']
 This key is useful when more than one query is defined. If 'True', a peak can be annotated according to the second query, only if a feature matching to the first query is not found. Respectively for
 further queries. If 'False', all given queries are considered equally and any feature matching with any of these queries will annotate the peaks. The query that allowed each feature to be selected for annotation will be shown 
-in the last column of the output tables. If only one query is provided, the value of 'priority' can be 'True' or 'False', without any difference in the output annotation. **Default :'False'**. 
+in the last column of the output tables. If only one query is provided, the value of 'priority' can be 'True' or 'False', without any difference in the output annotation.        
+**Default :'False'**. 
 
 gtf
 ---
 
 The GTF file should be of the standard GTF format (9 columns), as descriBED by `Ensembl GTF format`_ 
 The GTF file acts as annotation database. If your annotation database is not in the right format, a conversion can be done by
-UROPA. For more information see :doc:`/custom`
+UROPA. For more information see :doc:`/custom`.
 
 bed
 ---
