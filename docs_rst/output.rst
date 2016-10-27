@@ -307,7 +307,7 @@ To receive this output format, the parameter **_-r_** has to be added to the com
 Summary Vizualisation
 ---------------------
 For every run a summary can be produced using the *-s* parameter during the command line call. 
-This is vizualising the results for a global overview of the final annotation. Within this document one can find : 
+This is vizualising the results for a global overview of the final annotation. Within this document one can find: 
 
 - A summery of the UROPA run: Used peak and annotation files, number of peaks and number of annotated peaks, specified queries, value of priority flag (Figure 1A). If not all queries annotated peaks, this is also mentioned.
 
@@ -328,4 +328,6 @@ This is vizualising the results for a global overview of the final annotation. W
 
 .. figure:: img/output-formats-summary.png
 
-   Figure 1: Summary Example for queries as described above: (A) Summery of specified queries, used annotation and peak files, and how many peaks were present and annotated, (B) Distance density for all features based on FinalHits, (C) Pie Chart representing genomic location for each feature across FinalHits, (D) Distance per query per feature across BestperQuery_Hits, (E) Pairwise comparison across all queries displayed in Venn diagramms, (F) Chow Ruskey plot to compare all queries._
+   Figure 1: Summary Example for queries as described above: (A) Summery of specified queries, used annotation and peak files, and how many peaks were present and annotated, 
+   (B) Distance density for all features based on FinalHits, (C) Pie Chart representing genomic location for each feature across FinalHits, 
+   (D) Distance per query per feature across BestperQuery_Hits, (E) Pairwise comparison across all queries displayed in Venn diagramms, (F) Chow Ruskey plot to compare all queries.
