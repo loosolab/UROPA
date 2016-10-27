@@ -1,7 +1,7 @@
 MIT License
 ===========
 
-Copyright &copy; 2016 Maria Kondili and Mario Looso
+Copyright (c) 2016 Maria Kondili and Mario Looso
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the
@@ -24,4 +24,4 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 **Contact**
 
-Questions? Please contact maria.kondili@mpi-bn.mpg.de Thanks!
+Questions? Please contact `Maria Kondili <maria.kondili@mpi-bn.mpg.de>`_. Thanks!
