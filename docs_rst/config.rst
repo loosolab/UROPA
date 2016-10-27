@@ -28,7 +28,7 @@ Queries
 The queries key field is a list with (potentially) many queries, each specifying query-specific parameters
 for UROPAs annotation process.
 
-.. hint:: 
+.. admonition:: Correct Query Usage
 
 	-  	If more than one query is given, they should be included in curly brackets
 		like all values, i.e ``[{}, {}]``.
@@ -39,11 +39,11 @@ Each query can specify the following keys:
 
 .. rubric:: Query-specific keys
 
--  **features**: Peaks will be annotated only to listed features from the 3rd column of the file specified by ``'gtf'``.
+-  **feature**: Peaks will be annotated only to listed features from the 3rd column of the file specified by ``'gtf'``.
    
    Default: All features from ``'gtf'``.
    
-   Example: ``'features': ['gene','transcript']`` or ``'feature': 'exon'``.
+   Example: ``'feature': ['gene','transcript']`` or ``'feature': 'exon'``.
 
 -  **feature.anchor**: The position(s) from which the distance
    to the peak center will be calculated. The best annotation conforms to
