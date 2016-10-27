@@ -29,7 +29,6 @@ The queries key field is a list with (potentially) many queries, each specifying
 for UROPAs annotation process.
 
 .. admonition:: Correct Query Usage
-
 	-  	If more than one query is given, they should be included in curly brackets
 		like all values, i.e ``[{}, {}]``.
 	-  	Make sure of correct spelling and comma placement, otherwise the
