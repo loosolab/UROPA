@@ -30,7 +30,7 @@ There are two variations of the GTF file generator:
 The generated files will be stored in the same directory as the input file is located. 
 
 Furthermore, there are three optional arguments that can be given for the transformation. Those are source, feature and threads.     
-If an optional argument will be used, it should be used with source=yourSource, feature=yourFeature, and threads=#threads, e.g. source=UCSC feature=tfbs threads=5.  
+If an optional argument will be used, it should be used with ``source=yourSource``, ``feature=yourFeature``, and ``threads=#threads``, e.g. ``source=UCSC feature=tfbs threads=5``.  
 The two arguments source and feature are used for the GTF reformatting itself. The argument threads can be used if multiprocessing should be used.   
 There should be no spaces between the character and the equal sign when using the paramters in the command line call. 
 
@@ -40,7 +40,7 @@ If the information is present in the input file, it will be adopted to the GTF f
 The optional arguments are used in the GTF file for the corresponding column, if one optional argument is not given and this information is also not present in the input file,       
 the column will be filled with undefined. For other information that is not present in the input file, the column will be filled with dots.          
 All additional columns presented in the input file will be merged in the attributes column. All that information can be shown as annotation specification using the *show.attribute* key using UROPA.
-Furthermore, this are the attributes which can be filterd for specific values with the two linked keys *filter.attribute* and *attribute.value*.
+Furthermore, this are the attributes which can be filterd for specific values with the two linked keys ``filter.attribute`` and ``attribute.value``.
 
 The custom GTF transformation is useful if the peaks should not be annotated to a gene, but for example to known tfbs or other regulatory elements.            
 For instance, this is handy for an ATAC-seq peak annotation.  
@@ -57,7 +57,7 @@ For instance, this is handy for an ATAC-seq peak annotation.
 
 **Table 2:** Downloaded table from UCSC Table Browser (wgEncodeAwgTfbsBroadHuvecCtcfUniPk) for CTCF transcription factor from Uniform TFBS track.
 
-After transformation with feature=tfbs and source=tfbs, the GTF format annotation file will look as displayed in Table 3.  
+After transformation with ``feature=tfbs`` and ``source=tfbs``, the GTF format annotation file will look as displayed in Table 3.  
 
 +------+------+------+---------+---------+------+---+---+------------------------------------------------------------------------------------------------------------+
 | chr1 | ucsc | tfbs | 1310465 | 1310835 | 244  | . | . | bin 74; signalvalue 372.141; pvalue -1; qvalue 482.217; peak 185; table wgEncodeAwgTfbsBroadHuvecCtcfUniPk |
@@ -68,8 +68,8 @@ After transformation with feature=tfbs and source=tfbs, the GTF format annotatio
 **Table 3:** GTF file download from UCSC table browser for wgEncodeAwgTfbsBroadHuvecCtcfUniPk
 
 
-The major problem with the UCSC GTF file is that in this the exon location and not the tfbs location is displayed.         
+Using the UCSC Table Browser, it is also possible downloading the different tables in GTF file format. But the problem with those GTF files is that in the exon locations and not the tfbs locations are displayed.         
 That means, the peaks that should be annotated cannot be annotated for them tfbs itself. That is why the tables should be downloaded with the output format      
-'all fields from selected table' or with 'select fields from primary and related tabs'. 
+'all fields from selected table' or with 'select fields from primary and related tabs' and transform them by using the UROPA to GFT utility. 
 
 .. _UCSC Table Browser: https://genome.ucsc.edu/cgi-bin/hgTables?hgsid=502498195_cPIoMqXhw14ApzQemlpIvSHD9o8D
