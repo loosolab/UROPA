@@ -1,0 +1,8 @@
+{
+"queries":[
+		  {"feature":"", "distance":"", "show.attributes":"","filter.attribute":"", "attribute.value":"", "feature.position": "", "strand":"", "direction":"", "internals":"" }
+          ],
+"priority": "",
+"gtf": ".gtf",
+"bed": ".bed"
+}
