@@ -37,8 +37,7 @@ for UROPAs annotation process.
 
 Each query can specify the following keys:
 
-Query-specific keys
-~~~~~~~~~~~~~~~~~~~
+.. rubric:: Query-specific keys
 
 -  **features**: Peaks will be annotated only to listed features from the 3rd column of the file specified by ``'gtf'``.
    
@@ -85,7 +84,7 @@ Query-specific keys
    
    Default: ``'False'``
    
-   Example: ``'T'``
+   Example: ``'internals':'T'``
 
 -  **filter.attribute** : One of the attribute keys found in the 9th column of the GTF file.
    If a ``'filter.attribute'`` is given, only features that have a ``'attribute.value'`` for this attribute can be valid annotations. This key is needed to cooccur with the key ``'attribute.value'`` (see below).          
@@ -106,7 +105,7 @@ Query-specific keys
    
    Default: ``'None'``
    
-   Example: ``['gene_id', 'gene_biotype']``
+   Example: ``'show.attributes':['gene_id', 'gene_biotype']``
 
 Prioritizing queries
 --------------------
@@ -118,10 +117,10 @@ Allowed values are one of ``'T', True', 'Y', 'Yes'`` or ``'F', 'False' ,'N' ,'No
 
 Default: ``'False'``
 
-Example: ``'Yes'``
+Example: ``'priority':'Yes'``
 
-GTF annotation database
------------------------
+Annotation database (GTF)
+-------------------------
 
 **gtf**: A path to a file in standard GTF format (9 columns), as described by `Ensembl GTF format`_.
 The GTF file acts as annotation database. If your annotation database is not in the Ensembl GTF format, a conversion can be done by
