@@ -1,7 +1,7 @@
 About UROPA
 ===========
 UROPA (‘Universal RObust Peak Annotator’) is a tool facilitating the analysis of next-generation sequencing methods for chromatin biology, 
-like ChIP-seq or ATAC-seq. It is designed to annotate enrichted genomic regions (peaks) of interest, like peaks generated from any peak caller (e.g. MACS2, MUSIC, FindPeaks, CisGenome, PeakSeq).
+like ChIP-seq or ATAC-seq. It is designed to annotate enrichted genomic regions (peaks) of interest, like peaks generated from any peak caller (e.g. `MACS2`_ or `MUSIC`_).
 
 The annotation source is a GTF file, which provides the information of the genomic features to be used for annotation of the peaks. 
 The peaks should be represented in BED file format. Annotation and peak files are specified in the configuration file. Furthermore, certain
@@ -26,3 +26,5 @@ A template of the configuration file is available from our GitHub repository (se
     uropa --help
 
 .. _sample_config.json: https://github.molgen.mpg.de/loosolab/UROPA/blob/master/sample_config.json
+.. _MUSIC: http://genomebiology.biomedcentral.com/articles/10.1186/s13059-014-0474-3
+.. _ MACS2: https://genomebiology.biomedcentral.com/articles/10.1186/gb-2008-9-9-r137
