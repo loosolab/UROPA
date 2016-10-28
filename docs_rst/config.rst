@@ -1,7 +1,7 @@
 Configuration file
 ==================
 The configuration file is a **JavaScript Object Notation** formatted file that allows keys and
-values to be put in easily as textform. For running UROPA, a template of
+values to be put in easily as text form. For running UROPA, a template of
 the config file as below will be provided:
 
 .. code:: json
@@ -31,7 +31,7 @@ for UROPAs annotation process.
 .. hint:: 
 
 	-  	If more than one query is given, they should be included in curly brackets
-		like all values, i.e ``[{}, {}]``.
+		like all values, for example ``[{}, {}]``.
 	-  	Make sure of correct spelling and comma placement, otherwise the
 		UROPA annotation can be different as expected.
 
@@ -54,16 +54,16 @@ Each query can specify the following keys:
    Example: ``'feature.anchor': ['start']``
 
 -  **distance**: Maximum permitted distance from the genomic feature anchor to peak
-   center. If one value is gievn, this distance is allowed in both directions from the
-   feature anchor. If two values are given, the first value corresponts to the maximum permitted distance upstream of the feature
+   center. If one value is given, this distance is allowed in both directions from the
+   feature anchor. If two values are given, the first value corresponds to the maximum permitted distance upstream of the feature
    anchor, and the second value to the maximum permitted distance downstream of the feature anchor.        
    
    Default: ``100000``
    
    Example: ``'distance': [2000,5000]`` or ``'distance': [5000]`` or ``'distance': 5000``.
 
--  **strand**: The desired strand of the annotated feature relatve to the peak. Can be 'same', for feature and peak residing on the same strand, 'opposite' or 'both'. 
-   A contraint on strand specificity is only successful evaluated if strand information is available for the feature and the peak.
+-  **strand**: The desired strand of the annotated feature relative to the peak. 
+   A constraint on strand specificity is only successful evaluated if strand information is available for the feature and the peak.
    
    Default: ``['same', 'both', 'opposite']``
    
@@ -101,7 +101,7 @@ Each query can specify the following keys:
    Example: ``'attribute.value': ['protein_coding']``
 
 -  **show.attributes**: A list of attributes found in the 9th column of the GTF file which should appear in the output tables. 
-   If nonexistent attributes are specified, annotated peaks will display ``'not.found'`` in for those attributes.                  
+   If non existent attributes are specified, annotated peaks will display ``'not.found'`` in for those attributes.                  
    
    Default: ``'None'``
    
