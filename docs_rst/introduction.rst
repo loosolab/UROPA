@@ -27,4 +27,4 @@ A template of the configuration file is available from our GitHub repository (se
 
 .. _sample_config.json: https://github.molgen.mpg.de/loosolab/UROPA/blob/master/sample_config.json
 .. _MUSIC: http://genomebiology.biomedcentral.com/articles/10.1186/s13059-014-0474-3
-.. _ MACS2: https://genomebiology.biomedcentral.com/articles/10.1186/gb-2008-9-9-r137
+.. _MACS2: https://genomebiology.biomedcentral.com/articles/10.1186/gb-2008-9-9-r137
