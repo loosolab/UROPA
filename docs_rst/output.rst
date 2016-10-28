@@ -1,21 +1,22 @@
 Output tables
 =============
-UROPA provides many output files, each providing valuable information in either a more extended or a more condense way to cover all needs and be useful for further analyses.
+UROPA provides many output files each providing valuable information in either a more extended or a more condense way to cover all needs and be useful for further analyses.
 
 The different outputs will be explained thoroughly below.
 
 File overview
 -------------
 
-- **Uropa_AllHits** : Basic output table giving for each peak all valid annotations and additionally NA rows for invalid annotations.
+- **Uropa_AllHits**: Basic output table giving for each peak all valid annotations and additionally NA rows for invalid annotations.
 
-- **Uropa_FinalHits** : Table which can be the most useful for peak annotation.It provides the best selected feature according to the config criteria for annotating each peak. The closest distance is the basic parameter for the selection.
+- **Uropa_FinalHits**: Table which can be the most useful for peak annotation. It provides the best selected feature according to the config criteria for annotating each peak. 
+The closest distance is the basic parameter for the selection. 
 
-- **Uropa_BestperQuery_Hits** : This table is only produced if more than one query is specified and the priority key equals False. The best valid annotation per query for each peak is displayed.
+- **Uropa_BestperQuery_Hits**: This table is only produced if more than one query is specified and the priority key equals False. The best valid annotation per query for each peak is displayed.
 
-- **Uropa_Reformatted_HitsperPeak** : Another format of the BestperQuery Hits produced by using the ``-r`` parameter. A compact table with best per query annotation for each peak in one row is presented. 
+- **Uropa_Reformatted_HitsperPeak**: Another format of the BestperQuery Hits produced by using the ``-r`` parameter. A compact table with best per query annotation for each peak in one row is presented. 
 
-- **Uropa_Summary** : Statistical summary of the UROPA annotation by using the ``-s`` parameter.
+- **Uropa_Summary**: Statistical summary of the UROPA annotation by using the ``-s`` parameter.
 
 .. note::
 	The output files will be named additionally by the output directory name, for convenience in further use and transfer of files.
@@ -30,9 +31,10 @@ The four output tables mentioned above contain many informative columns about th
 
 - **feature, feat_start, feat_end, feat_strand**: The information of the genomic feature that annotates the peak as extracted by the GTF file.
 
-- **feat_anchor**: The position of the annotated genomic feature which was used for distance calculation. If ``feature.anchor`` is given in config, only this will be used. If multiple ``feature.anchor`` are valid, the distance to all of them is calculated and the minimum distance is chosen.
+- **feat_anchor**: The position of the annotated genomic feature which was used for distance calculation. If ``feature.anchor`` is given in config, only this will be used. 
+If multiple ``feature.anchor`` are valid, the distance to all of them is calculated and the minimum distance is chosen.
 
-- **distance** : Absolute distance from peak center to feature anchor. Closest feature anchor if non is specified, the specified otherwise
+- **distance** : Absolute distance from peak center to feature anchor. Closest feature anchor if non is specified, the specified otherwise.
 
 - **genomic_location**: The position of the peak relative to the annotated feature direction (e.g. upstream = peak located upstream of the feature, see Figure 2 in :doc:`/uropa-example`).
 
@@ -40,7 +42,7 @@ The four output tables mentioned above contain many informative columns about th
 
 - **peak_ovl_feat**: Percentage of how much the feature is coverd by the peak (1.0 corresponds to the genomic_location "FeatureInsidePeak").
 
-- **gene_name, gene_id, gene_type,...** : Values of attributes given in the ``show.atttributes`` key extracted from the GTF.
+- **gene_name, gene_id, gene_type,...**: Attributes that have been given in the key ``show.atttributes`` with their values extracted from the GTF.
 
 .. hint:: 
 	- If ``filter.attribute`` key is used make sure to specify this also in the ``show.attributes`` key, to have an easy confirmation of the filtering.
@@ -61,7 +63,7 @@ The UROPA annotation process for one query can run into three cases for each pea
 	
 - **Case 2**: There is one valid annotation for the specified query -> annotation will be given in AllHits and FinalHits. 
 	
-- **Case 3**: There are multiple valid anntations for the specified query -> all valid annotations will be given in the AllHits, the best annotation (smallest distance) will be presented in the FinalHits.  
+- **Case 3**: There are multiple valid annotations for the specified query -> all valid annotations will be given in the AllHits, the best annotation (smallest distance) will be presented in the FinalHits.  
 
 
 .. code:: json
@@ -142,9 +144,10 @@ Peak and annotation files are further described in the :doc:`/uropa-example` sec
 
 The UROPA annotation process for multiple queries can run into one more case as described for one query:
 
-- **Case 1 to 3** as described for one query.
+- **Case 1 to 3** as described for one query
 
-- **Case 4**: There are valid annotations for multiple queries -> all valid annotations will be given in the AllHits, the best annotation (smallest distance across all queries) will be presented in the FinalHits. Additionally, the best annotation per query will be displayed in the BestperQuery_Hits output.
+- **Case 4**: There are valid annotations for multiple queries -> all valid annotations will be given in the AllHits, the best annotation (smallest distance across all queries) will be presented in the FinalHits. 
+Additionally, the best annotation per query will be displayed in the BestperQuery_Hits output.
 
 .. code:: json
 
@@ -267,19 +270,19 @@ The UROPA annotation process for multiple queries can run into one more case as 
 **Table 5:** BestperQuery_Hits for three queries as described in the configuration above.
 
 .. note:: 
-	The BestperQuery_Hits is only generated if multiple queries are specified and the priority flag is set to FALSE! If this flag is TRUE, there will be only one valid query. There can be multiple valid annotations for one peak, but all based on one query. In this case only the AllHits and FinalHits are produced.
+	The BestperQuery_Hits is only generated if multiple queries are specified and the priority flag is set to False! If this flag is true, there will be only one valid query. There can be multiple valid annotations for one peak, but all based on one query. In this case only the AllHits and FinalHits are produced.
 
 Same as in the example with one query, peak_355 has no valid annotation at all and is represented as NA row in all produced output tables, correspond to Case 1. In the AllHits (Table 3) and BestperQuery_Hits (Table 5) there will be one NA row for each query, but in the FinalHits (Table 4) there will be only one NA row for all queries. 
 The peak_356 has only for one query a valid annotation, this presented in AllHits, FinalHits, and BestperQuery_Hits conform to Case 2. In AllHits and BestperQuery_Hits there are additional NA rows for this peak for the other queries. 
 For peak_765 there are valid annotations for all queries as displayed in the AllHits, representing Case 4. The best of them with the smallest distance is the annotation for the lincRNA, this annotation is displayed in the FinalHits. 
-Because there is only one valid annotation for each query,they will be displayed in the same way in the BestperQuery_Hits. 
+Because there is only one valid annotation for each query, they will be displayed in the same way in the BestperQuery_Hits. 
 This is different for peak_769, as described above this peaks equates to Case 3. With multiple queries, there will be additional NA rows for the invalid queries in the AllHits and BestperQuery_Hits. 
 
 With multiple queries it is also possible to reformat the BestperQuery_Hits the a condensed format with the best per query annotations for each peak in one row.
-A reformatted example for the BestperQuery_Hits of Table 5 is presented in Tables 6.1 and 6.2. Because this Table is very broad, it is splitted into two parts. 
+A reformatted example for the BestperQuery_Hits of Table 5 is presented in Tables 6. 
 The Reformatted_HitsperPeak represents all information for each peak in one row. Within this format the information for query 0 is always given at the first position, for query 1 at second positon and so on.
 
-To receive this output format, the parameter **_-r_** has to be added to the command line call.
+To receive this output format, the parameter ``-r`` has to be added to the command line call.
 
 +----------+----------+------------+-------------+------------+-------------+----------------+----------------------------+----------------------------+-------------+-------------------+-------------+----------------------------------+---------------+---------------+--------------------------+----------------------------------------------+-------+
 | peak_id  | peak_chr | peak_start | peak_center | peak_end   | peak_strand | feature        | feat_start                 | feature_end                | feat_strand | feat_anchor       | distance    | genomic_location                 | feat_ovl_peak | peak_ovl_feat | gene_name                | gene_type                                    | query |
@@ -309,7 +312,8 @@ Summary Visualisation
 For every run a summary can be produced using the ``-s`` parameter during the command line call. 
 This summary is visualising the results for a global overview of the UROPA annotation. Within this document one can find: 
 
-- An abstract of the UROPA run: Used peak and annotation files, number of peaks and number of annotated peaks, specified queries, value of priority flag (Figure 1A). If not all queries annotated peaks within the FinalHits this is also mentioned.
+- An abstract of the UROPA annotation including the used peak and annotation files, 
+number of peaks and number of annotated peaks, specified queries, and value of the priority flag (Figure 1A). If not all queries annotated peaks within the FinalHits this is also mentioned.
 
 **Graphs based on the 'FinalHits' output:**
 
@@ -317,13 +321,13 @@ This summary is visualising the results for a global overview of the UROPA annot
 - Pie chart illustrating the genomic locations of the peaks per annotated feature (Figure 1C).
 - Bar plot displaying the occurrence of the different features, if there is more than one feature assigned for peak annotation (not illustrated due to one feature in this example).
 
-*Figure 1A-C could be the summary for the first UROPA run with only one query (if always query 0 would provide the final hit)**
+*Figure 1A-C would be the summary for the first UROPA run with only one query**
 
 **Graphs based on the 'BestperQuery_Hits' output:**
 
 - Distribution of the distances per feature per query is displayed in a histogram (Figure 1D).
 - Pie chart illustrating the genomic locations of the peaks per annotated feature (not illustrated).
-- Pairwise comparison among all queries is evaluated within a Venn diagram, only if more than one query is given in the config file (one pairwise comparison displayed in Figure 1E). 
+- Pairwise comparisons among all queries is evaluated within a Venn diagram, only if more than one query is given in the config file (one pairwise comparison displayed in Figure 1E). 
 - Chow Ruskey plot with comparison across all defined queries (for three to five annotation queries)(Figure 1F).
 
 .. figure:: img/output-formats-summary.png
