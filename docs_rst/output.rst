@@ -1,16 +1,14 @@
 Output tables
 =============
-UROPA provides many output files each providing valuable information in either a more extended or a more condense way to cover all needs and be useful for further analyses.
-
+UROPA provides different output files each providing valuable information in either a more extended or a more condense way to cover all needs and be useful for further analyses.                                          
 The different outputs will be explained thoroughly below.
 
 File overview
 -------------
 
-- **Uropa_AllHits**: Basic output table giving for each peak all valid annotations and additionally NA rows for invalid annotations.
+- **Uropa_AllHits**: Basic output table gives for each peak all valid annotations and additionally NA rows for invalid annotations.
 
-- **Uropa_FinalHits**: Table which can be the most useful for peak annotation. It provides the best selected feature according to the config criteria for annotating each peak. 
-The closest distance is the basic parameter for the selection. 
+- **Uropa_FinalHits**: Table which can be the most useful for peak annotation. It provides the best selected feature according to the config criteria for annotating each peak.                                               The closest distance is the basic parameter for the selection. 
 
 - **Uropa_BestperQuery_Hits**: This table is only produced if more than one query is specified and the priority key equals False. The best valid annotation per query for each peak is displayed.
 
@@ -19,20 +17,24 @@ The closest distance is the basic parameter for the selection.
 - **Uropa_Summary**: Statistical summary of the UROPA annotation by using the ``-s`` parameter.
 
 .. note::
-	The output files will be named additionally by the output directory name, for convenience in further use and transfer of files.
-	Example: ChIPannot/Uropa_AllHits_ChIPannot.txt
+	The output files will be named additionally by the output directory name.
+	For example if uropa is used like this:
+	
+	.. code:: bash
+		uropa -i config.json -o ChIPanno
+	
+	The result would contain: ChIPannot/Uropa_AllHits_ChIPannot.txt
 
 Output columns explanation
 --------------------------
 
-The four output tables mentioned above contain many informative columns about the performed peak annotation. What the different columns are about is further explained below.
+The four output tables mentioned above contain many informative columns about the performed peak annotation:
 
 - **peak_id, peak_start, peak_center, peak_end, peak_strand**: Peak information with id if available, otherwise a peak id in chr:start-end format will be created.
 
 - **feature, feat_start, feat_end, feat_strand**: The information of the genomic feature that annotates the peak as extracted by the GTF file.
 
-- **feat_anchor**: The position of the annotated genomic feature which was used for distance calculation. If ``feature.anchor`` is given in config, only this will be used. 
-If multiple ``feature.anchor`` are valid, the distance to all of them is calculated and the minimum distance is chosen.
+- **feat_anchor**: The position of the annotated genomic feature which was used for distance calculation. If ``feature.anchor`` is given in config, only this will be used.                                    If multiple ``feature.anchor`` are valid, the distance to all of them is calculated and the minimum distance is chosen.
 
 - **distance** : Absolute distance from peak center to feature anchor. Closest feature anchor if non is specified, the specified otherwise.
 
@@ -128,9 +130,10 @@ The UROPA annotation process for one query can run into three cases for each pea
 
 **Table 2:** FinalHits for one query as described in the configuration above.
 
-As displayed in Table 1 and 2, peak 355 is a representative of Case 1. There is no valid annotation at all, there is an NA row in both output tables. 
+As displayed in Table 1 and 2, peak 355 is a representative of Case 1. There is no valid annotation at all, thus there is an NA row in both output tables. 
 The peaks 356 and 765 belong to Case 2, there is one valid annotation for them, their annotation is displayed in the same way in AllHits and FinalHits. 
-Whereas peak 769 has three valid annotations for the specified query. All of them are displayed in the AllHits output. In the FinalHits only the best annotation, the one for gene NOP16 with the minimal distance of 937 is represented.
+Whereas peak 769 has three valid annotations for the specified query (Case 3). All of them are displayed in the AllHits output. 
+In the FinalHits only the best annotation, the one for gene NOP16 with the minimal distance of 937, is represented.
 
 
 Output files (multiple queries)
