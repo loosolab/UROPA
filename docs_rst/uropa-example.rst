@@ -1,10 +1,38 @@
 Application examples
 ====================
-In this section several examples for the usage of the config file are presented. 
-A detailed introduction of how to use the config file can be found in the section :doc:`/config`.
+In this section several examples for the usage of UROPA are presented. It should help to become familiar with the config file and the different keys that have to be adjusted. 
+A detailed introduction of all different keys can be found in the section :doc:`/config`.
 There is also a detailed information about the different output formats in the section :doc:`/output`.
 
-The following examples are based on either H3K4me1 peaks (ENCFF001SUE) or POLR2A peaks (ENCFF001VFA), and on either Ensembl GTF file (Homo_sapiens.GRCh37.75) or Gencode v19 GTF file (gencode.v19.annotation).
+In :ref:`Figure 1 <genomic-location>` a general overview about the genomic location of peaks and their direction is displayed. 
+It can be very helpful for understanding the different config keys to know what is ment with terms like ``direction`` or ``internals``.
+In blue there are three features (genes) displayed, usually they have strand information to take their orientation into account. The feature start is presented with an arrow. 
+A peak can have different genomic locations with respect to the feature. It can either be upstream, overlap the feature start, inside the feature, overlap the feature end or downstream. 
+Additionally, the feature can be located inside the peak. The genomic location is close related to the direction of the peak. 
+A peak is located upstream of a feature if the peak center is upstream of the feature start. Thus, the genomic location could be upstream or overlap start. 
+The other way around for the direction downstream. 
+
+
+.. _genomic-location:
+
+.. figure:: img/peak_Upstream_Downstream_of_gene.png
+   :alt: peak\_upstream
+
+   Figure2: Possible locations and directions of a peak. There are five peaks close to gene A: The first peak (from left) is located upstream of it and would
+   be annotated within a ``direction:upstream`` annotation with the genomic location upstream. The second peak would also be annotated within a
+   ``direction:upstream`` process because the peak center is upstream of the feature start position, but the genomic location for this peak would be 
+   overlapStart instead of upstream. The third peak would not be annotated with ``direction:upstream``. If the config is phrased appropriate, 
+   the genomic location would be PeakInsideFeature.The next two peaks (third and fourth from right), would be annotated in a ``direction:downstream`` configuration. Like described for
+   upstream, both peaks are located downstream of gene A, but with different genomic locations: overlapEnd and downstream. 
+   The sixed peak from left could be annotated for gene B which is located inside it, representing the genomic location FeatureInsidePeak. 
+   The last two peaks close to gene C have the genomic locations overlapStart and overlapEnd. Only the last peak has a peak center located upstream of the peak and would be a hit in a ``direction:upstream`` annotation. 
+
+
+What the different config features are about and how to use them in the best way is presented in the following examples. 
+Those are based on either H3K4me1 (ENCFF001SUE) or POLR2A (ENCFF001VFA) peaks, and on either Ensembl (Homo_sapiens.GRCh37.75) or Gencode v19 (gencode.v19.annotation) GTF files. 
+Detailed references see :ref:`used-files`.
+
+.. _example-1:
 
 Example 1: ``feature.anchor``
 -----------------------------
@@ -16,25 +44,18 @@ This knowledge can be applied in the query definition by setting the ``feature.a
 If no value is given, the distances from all three positions to the peak center are calculated and the closest is chosen. 
 Only if the chosen distance is smaller or equal to the distance defined in the ``distance`` key, the peak will be annotated for that feature. 
 
-.. figure:: img/chr22-18161287-18161496_peak71_h3k4me1_feature_pos.png
+The Allhits Table 1 represents the annotation for a peak located inside a feature. Compare the third peak from right in :ref:`Figure 1 <genomic-location>`. 
+Assuming *gene A* is very large it could be that the peak center is to far away from the start of the gene. But using the center as ``feature.anchor`` it could be a valid annotation. 
 
-   *Figure 1:* H3K4me1 peak_71 (chr22:18161387-18161496) annotated with Gencode v19 GTF file. 
-   A valid annotation with specified feature.anchor:center in the config file is gene *BCL2L13*  with a distance of 1063 bp (feature_center to peak_center).
-
-In Figure 1 a histone mark is displayed. This is located within the gene body. 
-Dependent of how the query is specified, there can be a valid annotation or not. If histone marks in the promoter region of the gene should be annotated, the ``feature.anchor:start`` should be used like in query 0 of the following config. If it is possible that peaks are located in the gene body one could use the ``feature.anchor:center`` as in query 1. With this configuration the peak has to be in the specified distance to the ``feature.anchor:center``. 
-
-.. hint:: 
-	If the distance within a feature is variable, the key ``internals`` could be used (see Example 3).
-
-**Config**
+That is what happens for peak 71 with the configuration as followed: 
 
 .. code:: json
+
   	{
 	"queries": [
 		{"feature":"gene", "distance":5000, "feature.anchor": "start", 
 			"show.attributes":"gene_name"},
-		{"feature": "gene","distance":5000, "feature.anchor": "center"}],
+		{"feature": "gene","distance":5000, "feature.anchor":"center"}],
     "priority" : "False",
     "gtf": "gencode.v19.annotation.gtf",
     "bed": "ENCFF001SUE.bed"
@@ -52,47 +73,38 @@ Dependent of how the query is specified, there can be a valid annotation or not.
 | …       |          |            |             |            |             |         |            |             |             |             |          |                   |               |               |           |       |
 +---------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+-----------+-------+
 
-**Table 1:** AllHits with annotation with two queries containing a different ``feature.anchor`` and default priority. With ``feature.anchor:start`` there is no valid annotation (query 0), but with ``feature.anchor:center`` there is a valid annotation for gene *BCL2L13* (query 1).
+**Table 1:** AllHits for annotation with two queries containing different ``feature.anchor`` and default priority. With ``"feature.anchor":"start"`` there is no valid annotation (query 0), but with ``"feature.anchor":"center"`` the annotation for gene *BCL2L13* is valid (query 1).
 
-As displayed in Table 1 there is no valid annotation for query 0 but for query 1. It is very important to have a clear understanding of how and what should be annotated.
+As displayed in Table 1 there is no valid annotation for query 0 but for query 1. It is very important to have a clear understanding of how and what should be annotated. 
+The ``feature.anchor`` key is very important because it represents the region of the feature that is used for the annotation. 
 
+.. hint:: 
+	If the distance within a feature is variable, the key ``internals`` could be used (see :ref:`example-3`).
 
 Example 2: ``direction``
 ------------------------
 
-In the following example the utility of the key ``direction`` is illustrated. It can be a very important player for a specialized annotation, see Figure 2.
+In the following example the utility of the key ``direction`` is illustrated. It can be a very important player for a specialized annotation. 
+Compare the peaks with upstream direction in :ref:`Figure 1 <genomic-location>`.
 
-If the ``direction`` key is set to ``upstream``, peaks will be annotated to a feature if the peak center is upstream of the feature start and the distance from the ``feature.anchor`` is smaller than the limit distance. 
-Same for ``downstream``  where the location of the peak should be downstream of the gene.
-
-.. figure:: img/peak_Upstream_Downstream_of_gene.png
-   :alt: peak\_upstream
-
-   Figure2: Possible locations of a peak. There are five peaks close to gene A: The first peak (from left) is located upstream of it, it would
-   be annotated within a direction:upstream annotation an has the genomic location upstream. The second peak would also be annotated within a
-   direction:upstream process because the peak center is upstream of the feature start position, but the genomic location for this peak would be 
-   overlapStart instead of upstream. The third peak would not be annotated with direction:upstream, but if the configuration allows an annotation,
-   the genomic location would be PeakInsideFeature. Among other configurations, the next two peaks (third and fourth), would be annotated in a direction:downstream configuration. Like described for
-   upstream, both peaks are located downstream of gene A, but with different genomic locations: overlapEnd and downstream. The sixed peak from left
-   could be annotated for gene B which is located inside it, representing the genomic location FeatureInsidePeak. The last two peaks close to gene C have the genomic locations overlapStart and overlapEnd, but due to
-   that the center is not upstream or rather downstream, they would not be annotated for direction:upstream or direction:downstream annotation keys.
+If  ``direction:upstream`` is used, peaks will be annotated to a feature if the peak center is upstream of the feature start and the distance from the ``feature.anchor`` is smaller than the limit distance. 
+Same for ``downstream`` where the location of the peak should be downstream of the gene end.
 
 Thus, the location of the peak is relative to the feature's direction. 
 An overlap of the feature to the start or end of the peak is partially allowed, but the overlap should allow a clear evidence of the upstream or downstream location of the peak.
 
-The following Example is based on the peak displayed in Figure 3. This peak is located between two genes. With respect to gene *ATAD3C* it is located downstream, but with respect to *ATAD3B* is is located upstream. 
+The annotation displayed in this example is based on the peak displayed in Figure 3. It is located between two genes. Because both distances are very small, it can be tricky to decide which annotation is the best.
+With respect to gene *ATAD3C* it is located downstream, but with respect to *ATAD3B* is is located upstream. 
 Depending on the nature of the peaks, a more suitable configuration can be adjusted using the direction key.   
 
 .. figure:: img/chr1-1,403,500-1,408,500-01_h3k4me1_peaks.png
 
-   Figure 3: H3K4me1 peak_21044 (chr1:1,403,500-1,408,500) annotated with the Gencode GTF. By eye one would guess that there are two valid annotation, the genes ATAD3B and ATAD3C. Depending on the peak nature, it could be that one allocation is wiser than the other.
-   Due to the knowledge that the peaks represent H3K4me1 marks, a location upstream of a gene might be more likely than downstream, even if that location has a smaller distance. Specifications like this can be adjusted with the query key 'direction'. 
+   Figure 2: H3K4me1 peak_21044 (chr1:1,403,500-1,408,500) annotated with the Gencode GTF. By eye one would guess that there are two valid annotation, the genes *ATAD3B* and *ATAD3C*. 
+   Depending on the peak nature, it could be that one allocation is wiser than the other.
+   Due to the knowledge that the peaks represent H3K4me1 marks, a location upstream of a gene might be more likely than downstream, even if that location has a smaller distance. 
+   Specifications like this can be adjusted with the query key 'direction'. 
 
-The query 0 represents a not specified direction, either left out or ``"direction":"any_direction"``. The other query represents a annotation with specified direction. Within query 1 only annotations upstream of the feature are allowed. 
-
-
-
-**Config**
+The UROPA annotation was performed with two queries as described in the configuration below:
 
 .. code:: json
 
@@ -103,7 +115,6 @@ The query 0 represents a not specified direction, either left out or ``"directio
   "gtf": "gencode.v19.annotation.gtf",
   "bed": "ENCFF001SUE.bed"
   }
-
 
 +------------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+------------------+---------------+---------------+-----------+-------+
 | peak_id    | peak_chr | peak_start | peak_center | peak_end   | peak_strand | feature | feat_start | feature_end | feat_strand | feat_anchor | distance | genomic_location | feat_ovl_peak | peak_ovl_feat | gene_name | query |
@@ -119,27 +130,26 @@ The query 0 represents a not specified direction, either left out or ``"directio
 | …          |          |            |             |            |             |         |            |             |             |             |          |                  |               |               |           |       |
 +------------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+------------------+---------------+---------------+-----------+-------+
 
-**Table 2:** AllHits for H3K4me1 peak 21044 annotated for two genes with different directions of the peak.
+**Table 2:** AllHits for H3K4me1 peak 21044 annotated for two genes with different directions of the peak. The query 0 represents default direction, either left out or ``"direction":"any_direction"``. The other query represents a annotation with specified direction. Within query 1 only annotations upstream of the feature are allowed. 
 
-The peak 21044 displayed in Figure 3 would be annotated for both genes, displayed in Table 2. For query 0 the final hit for this peak would be the annotation for gene *ATAD3C* due to the minimal distance. But maybe the annotation for gene *ATAD3B* might be biologically more relevant because H3K4me1 markes are known to flank enhancers which are located upstream of genes. This is reached with query 1. In this case the annotation for the downstream located feature is no longer valid. 
+The peak 21044 displayed in Figure 2 would be annotated for both genes as displayed in Table 2. For query 0 the final hit for this peak would be the annotation for gene *ATAD3C* due to the minimal distance. But maybe the annotation for gene *ATAD3B* might be biologically more relevant because H3K4me1 markes are known to flank enhancers which are located upstream of genes. This is reached with query 1. In this case the annotation for the downstream located feature is no longer valid. 
 
 The ``direction`` key obtains a unique feature matching more specific requirements. 
+
+.. _example-3:
 
 Example 3: ``internals``
 ------------------------
 
-Sometimes the relation of feature size and peak size differs a lot. In this cases it can happen that peak annotations get lost even if the peak is located within a feature and vise versa because the limit distance is reached.                                           
+In some cases the relation of feature and peak size differs a lot. In this cases it can happen that peak annotations get lost even if the peak is located within a feature and vise versa because the limit distance is reached.                                           
 To avoid this, the ``internals`` key can be used. With this key, peaks are allowed to be annotated for peaks even if the distance is larger than specified, but only if the feature is inside the peak or inversely.
 By default the parameter is set to ``False``.       
 
 .. note::
-	Compare to Example 1: With ``"internals":"True"`` it would not be necessay to identify the best ``feature.anchor`` 
+	Compare to :ref:`example-1`: With ``"internals":"True"`` it would not be necessay to identify the most appropriate ``feature.anchor`` 
 	because the peak is located inside the feature and it would not be rejected by exceeding the distance.
 
 This example is based on the peak displayed in Figure 4. The peak is very large and the region includes three different genes. 
-
-Also the peak analysed in Example 1 is a good example for the usage of the internals key. 
-
 	
 .. figure:: img/chr6-27,857,165-27,863,637_internal_feature-01.png
    :alt: internal.feature
@@ -148,11 +158,10 @@ Also the peak analysed in Example 1 is a good example for the usage of the inter
    lots of features might get lost because of a to large distance.
    Including this key ensures to keep features that are located within peaks and vice versa, even if the distance exceeds the limit.
 
-The first query (query 0) of the following configuration displayes the default adjustment of the ``internals`` key. In the second query (query 1) this key is used and set to ``True``. 
-
-**Config**
+The first query (query 0) of the following configuration displayes the default adjustment of the ``internals`` key. In the second query (query 1) this key is used and set to ``True``:
 
 .. code:: json
+
 	{
 	"queries":[
 		{"feature":"gene", "distance":500, "show.attributes":"gene_name"},
@@ -197,18 +206,18 @@ The most frequently annotation is for a specific feature, e.g. genes. This is sp
 The first query of the following config has no further settings for the ``"feature":"gene"``, but the second asked only for genes that are "protein_coding". The attribute describing this is called "gene_biotype". 
 That attribute name has to be termed in the ``filter.attribute`` key and the value which should be accepted has to be named in the ``attribute.value`` key.
 
-**Config**
+The following config contains again two queries, query 0 represents the annotation without the usage of the linked keys and in query 1 only annotations for features with the gene biotype protein coding are allowed:
 
 .. code:: json
-  
-  {
-  "queries":[
+	
+	{
+	"queries":[
 		{"feature":"gene", "distance":5000, "show.attributes":["gene_name","gene_biotype"]},
 		{"feature":"gene", "distance":5000, "filter.attribute": "gene_biotype", 
 			"attribute.value": "protein_coding"}],
-  "gtf":"Homo_sapiens.GRCh37.75.gtf",
-  "bed":"ENCFF001VFA.bed"
-  }
+	"gtf":"Homo_sapiens.GRCh37.75.gtf",
+	"bed":"ENCFF001VFA.bed"
+	}
 
 +---------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+-----------+----------------+-------+
 | peak_id | peak_chr | peak_start | peak_center | peak_end   | peak_strand | feature | feat_start | feature_end | feat_strand | feat_anchor | distance | genomic_location  | feat_ovl_peak | peak_ovl_feat | gene_name | gene_biotype   | query |
@@ -241,7 +250,7 @@ More than one query can be given keeping the same gtf and bed files allowing for
 If there are more queries, it is important to decide if they should be priorized. In the preceded examples no priority was given. If there should be a prioritisation, the ``priority`` flag can be used. 
 The following examples illustrate how this can be beneficial for the annotation.
 
-**Config** 
+Configuration with two queries and without prioritisation:
 
 .. code:: json
 
@@ -284,7 +293,7 @@ gene would be presented in the FinalHits. For peak 10, there are only valid anno
 the best annotation and would be respresented in the FinalHits.
 Configuration for the second annotation with priority true:
 
-Now, changing only the ``priority`` flag in the configuration above to ``priority:TRUE`` would result in the following table.
+Now, changing only the ``priority`` flag in the configuration above to ``"priority":"TRUE"`` would result in the following table.
 	
 +---------+----------+------------+-------------+------------+-------------+------------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+------------+-------+
 | peak_id | peak_chr | peak_start | peak_center | peak_end   | peak_strand | feature    | feat_start | feature_end | feat_strand | feat_anchor | distance | genomic_location  | feat_ovl_peak | peak_ovl_feat | gene_name  | query |
@@ -314,6 +323,7 @@ For peak 10, there was no valid annotation for query 0, thus query 1 was analyse
   - The will be no BestperQuery_Hits if priority is true, because there is only one final annotation per peak
    
 
+.. _used-files:
 
 Used peak and annotation files 
 ------------------------------ 
@@ -331,7 +341,7 @@ Peak and signal files based on ChIP-seq of GM12878 immortalized cell line:
 .. note:: Peak ids are manually added to make it easier to describe different peaks. 
 
 
-**Still not sure how to use UROPA? Please contact `Maria Kondili <maria.kondili@mpi-bn.mpg.de>`_.
+Still not sure how to use UROPA? Please contact `Maria Kondili <maria.kondili@mpi-bn.mpg.de>`_.
 
 .. _H3K4me1: https://www.encodeproject.org/experiments/ENCSR000AKF/
 .. _POLR2A: https://www.encodeproject.org/experiments/ENCSR000EAD/
