@@ -1,7 +1,8 @@
 UROPA to GTF utility
 ====================
 The GTF file is a very common format used for annotation. UROPA accepts all GTF files downloaded from any online databases,              
-such as UCSC, ensembl, GENCODE. The Gencode v19 annotation GTF looks for example like shown in Table 1.                 
+such as UCSC, ensembl, or gencode. Of cours all existing custom GTF files can also be used. 
+The gencode v19 annotation GTF looks for example like shown in Table 1.                 
 
 +------+--------+------+-------+-------+---+-----+---+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | chr1 | HAVANA | gene | 11869 | 14412 | . | \+\ | . | gene_id "ENSG00000223972" ; transcript_id "ENSG00000223972.4";gene_type "pseudogene"; gene_status "KNOWN"; gene_name "DDX11L1";transcript_type "pseudogene";transcript_status "KNOWN";transcript_name "DDX11L1"; level 2; havana_gene "OTTHUMG00000000961.2"; |
@@ -9,7 +10,7 @@ such as UCSC, ensembl, GENCODE. The Gencode v19 annotation GTF looks for example
 | ...  |        |      |       |       |   |     |   |                                                                                                                                                                                                                                                               |
 +------+--------+------+-------+-------+---+-----+---+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
-**Table 1:** First row of gencode v19 GTF file, the columns are: chr, source, feature, start, end, score, strand, frame, and attributes.
+**Table 7.1:** First row of gencode v19 GTF file, the columns are: chr, source, feature, start, end, score, strand, frame, and attributes.
 
 For further extending the utility of UROPA, there is the UROPAtoGTF-tool which transforms annotation files that are not in this format.
 Files for annotation can for example be provided by the `UCSC Table Browser`_ , or many more data bases.
@@ -55,7 +56,7 @@ For instance, this is handy for an ATAC-seq peak annotation.
 | ...  |       |            |          |      |       |        |             |        |         |      |
 +------+-------+------------+----------+------+-------+--------+-------------+--------+---------+------+
 
-**Table 2:** Downloaded table from UCSC Table Browser (wgEncodeAwgTfbsBroadHuvecCtcfUniPk) for CTCF transcription factor from Uniform TFBS track.
+**Table 7.2:** Downloaded table from UCSC Table Browser (wgEncodeAwgTfbsBroadHuvecCtcfUniPk) for CTCF transcription factor from Uniform TFBS track.
 
 After transformation with ``feature=tfbs`` and ``source=tfbs``, the GTF format annotation file will look as displayed in Table 3.  
 
@@ -65,7 +66,7 @@ After transformation with ``feature=tfbs`` and ``source=tfbs``, the GTF format a
 | chr1 | ucsc | tfbs | 3407792 | 3408060 | 1000 | . | . | bin 76; signalvalue 178.305; pvalue -1; qvalue 482.217; peak 129; table wgEncodeAwgTfbsBroadHuvecCtcfUniPk |
 +------+------+------+---------+---------+------+---+---+------------------------------------------------------------------------------------------------------------+
 
-**Table 3:** GTF file download from UCSC table browser for wgEncodeAwgTfbsBroadHuvecCtcfUniPk
+**Table 7.3:** GTF file download from UCSC table browser for wgEncodeAwgTfbsBroadHuvecCtcfUniPk
 
 
 Using the UCSC Table Browser, it is also possible downloading the different tables in GTF file format. But the problem with those GTF files is that in the exon locations and not the tfbs locations are displayed.         
