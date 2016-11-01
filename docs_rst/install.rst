@@ -10,13 +10,13 @@ For running UROPA locally, the following prerequisites have to be met:
 Required packages
 -----------------
 
-For python:
-~~~~~~~~~~~
+For python
+~~~~~~~~~~
 - `numpy`_
 - `pysam`_
 
 
-For R:
+For R
 ~~~~~
 - `ggplot2`_
 - `gplots`_

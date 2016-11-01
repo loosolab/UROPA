@@ -2,7 +2,7 @@ UROPA to GTF utility
 ====================
 The GTF file is a very common format used for annotation. UROPA accepts all GTF files downloaded from any online databases,              
 such as UCSC, ensembl, or gencode. Of cours all existing custom GTF files can also be used. 
-The gencode v19 annotation GTF looks for example like shown in Table 1.                 
+The gencode v19 annotation GTF looks for example like shown in Table 7.1.                 
 
 +------+--------+------+-------+-------+---+-----+---+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | chr1 | HAVANA | gene | 11869 | 14412 | . | \+\ | . | gene_id "ENSG00000223972" ; transcript_id "ENSG00000223972.4";gene_type "pseudogene"; gene_status "KNOWN"; gene_name "DDX11L1";transcript_type "pseudogene";transcript_status "KNOWN";transcript_name "DDX11L1"; level 2; havana_gene "OTTHUMG00000000961.2"; |
@@ -40,7 +40,7 @@ Whitin the transformation, the input file is checked for information that is nec
 If the information is present in the input file, it will be adopted to the GTF file.                       
 The optional arguments are used in the GTF file for the corresponding column, if one optional argument is not given and this information is also not present in the input file,       
 the column will be filled with undefined. For other information that is not present in the input file, the column will be filled with dots.          
-All additional columns presented in the input file will be merged in the attributes column. All that information can be shown as annotation specification using the *show.attribute* key using UROPA.
+All additional columns presented in the input file will be merged in the attributes column. All that information can be shown as annotation specification using the ``show.attribute`` key using UROPA.
 Furthermore, this are the attributes which can be filterd for specific values with the two linked keys ``filter.attribute`` and ``attribute.value``.
 
 The custom GTF transformation is useful if the peaks should not be annotated to a gene, but for example to known tfbs or other regulatory elements.            
@@ -58,7 +58,7 @@ For instance, this is handy for an ATAC-seq peak annotation.
 
 **Table 7.2:** Downloaded table from UCSC Table Browser (wgEncodeAwgTfbsBroadHuvecCtcfUniPk) for CTCF transcription factor from Uniform TFBS track.
 
-After transformation with ``feature=tfbs`` and ``source=tfbs``, the GTF format annotation file will look as displayed in Table 3.  
+After transformation with ``feature=tfbs`` and ``source=tfbs``, the GTF format annotation file will look as displayed in Table 7.3.  
 
 +------+------+------+---------+---------+------+---+---+------------------------------------------------------------------------------------------------------------+
 | chr1 | ucsc | tfbs | 1310465 | 1310835 | 244  | . | . | bin 74; signalvalue 372.141; pvalue -1; qvalue 482.217; peak 185; table wgEncodeAwgTfbsBroadHuvecCtcfUniPk |

@@ -49,10 +49,9 @@ If you have any issue feel free to send an email to `Maria Kondili <maria.kondil
 
 The project is licensed under the MIT license (see :doc:`/license`)
 
-**Content of this manual**
-
 .. toctree::
    :maxdepth: 3
+   :caption: Content of this manual
 
    introduction
    install
