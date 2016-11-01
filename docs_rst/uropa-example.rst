@@ -18,7 +18,7 @@ The other way around for the direction downstream.
 .. figure:: img/peak_Upstream_Downstream_of_gene.png
    :alt: peak\_upstream
 
-   Figure2: Possible locations and directions of a peak. There are five peaks close to gene A: The first peak (from left) is located upstream of it and would
+   Figure1: Possible locations and directions of a peak. There are five peaks close to gene A: The first peak (from left) is located upstream of it and would
    be annotated within a ``direction:upstream`` annotation with the genomic location upstream. The second peak would also be annotated within a
    ``direction:upstream`` process because the peak center is upstream of the feature start position, but the genomic location for this peak would be 
    overlapStart instead of upstream. The third peak would not be annotated with ``direction:upstream``. If the config is phrased appropriate, 
@@ -50,15 +50,14 @@ Assuming *gene A* is very large it could be that the peak center is to far away 
 That is what happens for peak 71 with the configuration as followed: 
 
 .. code:: json
-
-  	{
+	
+	{
 	"queries": [
-		{"feature":"gene", "distance":5000, "feature.anchor": "start", 
-			"show.attributes":"gene_name"},
+		{"feature":"gene", "distance":5000, "feature.anchor": "start", "show.attributes":"gene_name"},
 		{"feature": "gene","distance":5000, "feature.anchor":"center"}],
-    "priority" : "False",
-    "gtf": "gencode.v19.annotation.gtf",
-    "bed": "ENCFF001SUE.bed"
+	"priority" : "False",
+	"gtf": "gencode.v19.annotation.gtf",
+	"bed": "ENCFF001SUE.bed"
 	}
 
 +---------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+-----------+-------+
@@ -79,7 +78,7 @@ As displayed in Table 1 there is no valid annotation for query 0 but for query 1
 The ``feature.anchor`` key is very important because it represents the region of the feature that is used for the annotation. 
 
 .. hint:: 
-	If the distance within a feature is variable, the key ``internals`` could be used (see :ref:`example-3`).
+	If the distance within a feature is variable, the key ``internals`` could be used (see :ref:`Example 3 <example-3>`).
 
 Example 2: ``direction``
 ------------------------
@@ -143,10 +142,10 @@ Example 3: ``internals``
 
 In some cases the relation of feature and peak size differs a lot. In this cases it can happen that peak annotations get lost even if the peak is located within a feature and vise versa because the limit distance is reached.                                           
 To avoid this, the ``internals`` key can be used. With this key, peaks are allowed to be annotated for peaks even if the distance is larger than specified, but only if the feature is inside the peak or inversely.
-By default the parameter is set to ``False``.       
+By default the parameter is set to False.       
 
 .. note::
-	Compare to :ref:`example-1`: With ``"internals":"True"`` it would not be necessay to identify the most appropriate ``feature.anchor`` 
+	Compare to :ref:`Example 1 <example-1>`: With ``"internals":"True"`` it would not be necessay to identify the most appropriate ``feature.anchor`` 
 	because the peak is located inside the feature and it would not be rejected by exceeding the distance.
 
 This example is based on the peak displayed in Figure 4. The peak is very large and the region includes three different genes. 
