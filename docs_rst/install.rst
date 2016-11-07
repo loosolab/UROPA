@@ -17,7 +17,8 @@ For python
 - `numpy`_
 - `pysam`_
 
-Install with ``pip install pysam numpy``
+Install with ``pip install pysam numpy``.
+Therefore, you should be at the same directory as set for python anaconda.
 
 For R
 ~~~~~
