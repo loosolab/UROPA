@@ -31,6 +31,10 @@ To use the package in R it has to be loaded with ``library("ggplot2")``, but wit
 - `jsonlite`_ 
 - `VennDiagram`_ 
 - Vennerable
+This package needs a couple of BioConductor packages. To install those start R and type ``source("https://bioconductor.org/biocLite.R")`` and ``biocLite(c("RBGL","graph"))``.
+Additionally, the package ``devtools`` is needed and should be installed from CRAN (``install.packages("devtools")``).
+Afterwards the package can be installed with ``install_github("jenzopr/Vennerable")`` and loaded with ``library(Vennerable)``. But again this will be done automatically within UROPA.
+
 - If multiprocessing should be available: `snow`_ 
 
 
