@@ -3,16 +3,11 @@ Installation
 
 For running UROPA locally, the following prerequisites have to be met:
 
-- `R/Rscript`_, v3.3.0 or higher
-install with:
-
-.. code:: bash
-	
-	sudo apt-get update
-	sudo apt-get install r-base
-
+- `R/Rscript`_, v3.3.0 or higher, follow instructions on url
 - `Python`_ , v2.7.8-anaconda-2.1.0
-- `htslib`_ 1.3.2 or higher
+with ``bash Anaconda2-4.2.0-Linux-x86_64.sh`` and ``PATH=dir/to/python_anaconda:$PATH``
+
+- `htslib`_ 1.3.2 or higher, follow instructions on url
 
 Required packages
 -----------------
@@ -22,23 +17,14 @@ For python
 - `numpy`_
 - `pysam`_
 
+Install with ``pip install pysam numpy``
 
 For R
 ~~~~~
 - `ggplot2`_
-To install R packages hosted by CRAN start R and then type 
-
-.. code-block::
-
-	install.packages("ggplot2")
-
-Then you have to choose a mirror where to download from. Afterwards you can load a packages with
-
-.. code-block::
-
-	library("ggplot2")
-	
-This will be done automatically using UROPA. 
+To install R packages hosted by CRAN start R and then type ``install.packages("ggplot2")``. 
+After choosing a downloading mirrow, the package will be downloaded and installed. 
+To use the package in R it has to be loaded with ``library("ggplot2")``, but within UROPA this will be done automatically.
 	
 - `gplots`_
 - `gridExtra`_ 
