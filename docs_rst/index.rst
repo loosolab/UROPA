@@ -29,8 +29,7 @@ produced by the user.
 
 **How to cite**
 
-Please cite the paper describing UROPA when using it in your research:
-tba
+Please cite the paper describing UROPA when using it in your research: *tba*
 
 **Contribute**
 

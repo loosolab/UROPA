@@ -4,6 +4,13 @@ Installation
 For running UROPA locally, the following prerequisites have to be met:
 
 - `R/Rscript`_, v3.3.0 or higher
+install with:
+
+.. code:: bash
+	
+	sudo apt-get update
+	sudo apt-get install r-base
+
 - `Python`_ , v2.7.8-anaconda-2.1.0
 - `htslib`_ 1.3.2 or higher
 
@@ -19,6 +26,20 @@ For python
 For R
 ~~~~~
 - `ggplot2`_
+To install R packages hosted by CRAN start R and then type 
+
+.. code-block::
+
+	install.packages("ggplot2")
+
+Then you have to choose a mirror where to download from. Afterwards you can load a packages with
+
+.. code-block::
+
+	library("ggplot2")
+	
+This will be done automatically using UROPA. 
+	
 - `gplots`_
 - `gridExtra`_ 
 - `jsonlite`_ 
