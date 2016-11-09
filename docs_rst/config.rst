@@ -1,8 +1,8 @@
 Configuration file
 ==================
 The configuration file is a **JavaScript Object Notation** formatted file that allows keys and
-values to be put in easily as text form. For running UROPA, a template of
-the config file as below will be provided:
+values easily to be set. For running UROPA, a template of
+the config file as below is provided:
 
 .. code:: json
 
@@ -17,23 +17,23 @@ the config file as below will be provided:
     "bed": ".bed"
     }
 
-Three keys are required: ``'queries'``, ``'gtf'``, and ``'bed'``, additionally
-there is an optional key ``'priority'``.                
-In a default annotation, only the ``'gtf'`` and ``'bed'`` keys are specified with file paths. The queries key has to be present in the config file, but can be left empty
+Three global keys are mandatory: ``'queries'``, ``'gtf'``, and ``'bed'``, additionally
+there is an optional global key ``'priority'``.                
+In a default annotation, only the ``'gtf'`` and ``'bed'`` keys needs to be specified by the user (relative file paths). The key ``'queries'`` has to be present in the config file, but can be left empty
 (e.g. ``'queries": []``). Empty or missing key-value pairs are filled with their default values by UROPA.
 
 Queries
 -------
 
-The queries key field is a list with (potentially) many queries, each specifying query-specific parameters
+The ``'queries'`` key field is a list with 1 to n entries, each specifying  one valid annotation query with specific parameters
 for UROPAs annotation process.
 
 .. hint:: 
 
-	-  	If more than one query is given, they should be included in curly brackets
-		like all values, for example ``[{}, {}]``.
-	-  	Make sure of correct spelling and comma placement, otherwise the
-		UROPA annotation can be different as expected.
+	-  	If more than one query is given, curly brackets should be used
+		, for example ``[{}, {}]``.
+	-  	Doublecheck spelling of keywords and comma settings, otherwise the
+		UROPA annotation might differ from expectations.
 
 Each query can specify the following keys:
 
@@ -41,58 +41,63 @@ Each query can specify the following keys:
 
 -  **feature**: Peaks will be annotated only to listed features from the 3rd column of the file specified by ``'gtf'``.
    
-   Default: All features from ``'gtf'``.
+   Default: All available features from ``'gtf'``.
    
    Example: ``'feature': ['gene','transcript']`` or ``'feature': 'exon'``.
 
+   
 -  **feature.anchor**: The position(s) from which the distance
-   to the peak center will be calculated. The best annotation conforms to
-   the closest distance if it is less or equal to the maximum permitted distance (specified by ``'distance'``, see below).            
+   to the peak center will be calculated. The best annotation is defined as the minimum distance if multiple anchors are defined. Valid distances are less or equal to the distance key value(specified by ``'distance'``, see below).            
    
    Default: ``['start', 'center', 'end']``
    
    Example: ``'feature.anchor': ['start']``
 
--  **distance**: Maximum permitted distance from the genomic feature anchor to peak
-   center. If one value is given, this distance is allowed in both directions from the
-   feature anchor. If two values are given, the first value corresponds to the maximum permitted distance upstream of the feature
-   anchor, and the second value to the maximum permitted distance downstream of the feature anchor.        
+   
+-  **distance**: Maximum permitted distance from the genomic feature anchor to the peak
+   center. If only one value is given, this distance is valid in both directions from the
+   feature anchor. If two values are given, the first value corresponds to the distance upstream of the feature
+   anchor, and the second value to the distance downstream of the feature anchor.        
    
    Default: ``100000``
    
    Example: ``'distance': [2000,5000]`` or ``'distance': [5000]`` or ``'distance': 5000``.
 
+   
 -  **strand**: The desired strand of the annotated feature relative to the peak. 
-   A constraint on strand specificity is only successful evaluated if strand information is available for the feature and the peak.
+   A constraint on strand specificity is only successfully evaluated if strand information is available for the feature **and** the peak.
    
    Default: ``['same', 'both', 'opposite']``
    
    Example: ``'strand': ['same']`` or ``'strand': 'same'``.
 
--  **direction**: Defining the peak location relative to the feature's location inclusive its orientation.
-   A peak is 'upstream' if its center is upstream of a feature anchor position. Similarly, a peak is 'downstream' if its center is downstream of a feature anchor position.
+-  **direction**: Define the peak location relative to the feature's location, in respect of its orientation.
+   A peak is 'upstream' if its center is upstream of a feature anchor position. Accordingly, a peak is 'downstream' if its center is downstream of a feature anchor position.
    Also compare to Figure 2 in :doc:`/uropa-example`.
    
    Default: ``'any_direction'``
    
    Example: ``'direction': ['upstream','downstream']``
 
--  **internals**: Allowing 'internals' will render valid annotation possible if a feature is found inside a peak region or vice versa.
-   This works even if the distance to the 'feature.anchor' is larger than the maximum permitted 'distance'. 
-   This key can be helpful to identify peaks all along the feature or for the allocation of ATAC-seq peaks to very small transcription factor binding sites.
+   
+-  **internals**: This key is an addon in respect to the ``'distance``' key. If ``'internals'`` is set to TRUE and a feature is located inside a peak region or vice versa,
+   the feature is treated as a valid annotation, not taking the ``'distance``' key into account.
+   This key can be helpful to annotate peaks to features with a wide size range, suchas genes.
    Allowed values are one of ``'T', True', 'Y', 'Yes'`` or ``'F', 'False' ,'N' ,'No'``.
    
    Default: ``'False'``
    
    Example: ``'internals':'T'``
+   
 
--  **filter.attribute** : One of the attribute keys found in the 9th column of the GTF file.
-   If a ``'filter.attribute'`` is given, only features that have a ``'attribute.value'`` for this attribute can be valid annotations. This key is needed to cooccur with the key ``'attribute.value'`` (see below).          
+-  **filter.attribute** : Key filters the attributes found in the 9th column of the GTF file.
+   If a ``'filter.attribute'`` is given, only features that have a ``'attribute.value'`` for this attribute is kept as valid annotations. If this key is set, the key ``'attribute.value'`` is mandatory, too (see below).          
    
    Default: ``'None'``
    
    Example: ``'filter.attribute': ['gene_type']``
 
+   
 -  **attribute.value** : Corresponding attribute value for the ``'filter.attribute'`` found in the 9th column of the GTF file.
    If a ``'filter.attribute'`` is given, only features that have a ``'attribute.value'`` for this attribute can be valid annotations.
    
@@ -100,8 +105,9 @@ Each query can specify the following keys:
    
    Example: ``'attribute.value': ['protein_coding']``
 
--  **show.attributes**: A list of attributes found in the 9th column of the GTF file which should appear in the output tables. 
-   If non existent attributes are specified, annotated peaks will display ``'not.found'`` in for those attributes.                  
+   
+-  **show.attributes**: A list of attributes found in the 9th column of the GTF file which should appear in the final output tables. 
+   If non existent attributes are specified, annotated peaks will display ``'not.found'`` for those attributes.                  
    
    Default: ``'None'``
    
@@ -132,7 +138,7 @@ Genomic regions (BED)
 ---------------------
 
 **bed**: A path to a file in BED format, as described by `Ensembl Bed format`_. 
-The BED file can be any tab-delimited file containing the genomic regions, e.g. enriched regions from a peak-calling tool (e.g. MACS2, MUSIC, FindPeaks, CisGenome, PeakSeq), with a minimum of 3 columns.
+The BED file can be any tab-delimited file containing the genomic regions, e.g. enriched regions from a peak-calling tool (e.g. MACS2, MUSIC, FindPeaks, CisGenome, PeakSeq), with a minimum of 3 columns (chr/start/stop).
 
 **Required**, no default.
 
