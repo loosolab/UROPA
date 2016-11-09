@@ -1,15 +1,21 @@
 About UROPA
 ===========
-UROPA (‘Universal RObust Peak Annotator’) is a tool facilitating the analysis of next-generation sequencing methods for chromatin biology, 
-like ChIP-seq or ATAC-seq. It is designed to annotate enrichted genomic regions (peaks) of interest, like peaks generated from any peak caller (e.g. `MACS2`_ or `MUSIC`_).
+UROPA (‘Universal RObust Peak Annotator’)  is a command line based tool, intended for universal genomic range (eg. Peaks) annotation.
+Based on a configuration file, different target features can be prioritized with multiple integrated queries. 
+These can be sensitive for feature type, distance, strand specificity, feature attributes (eg. protein_coding) or anchor position relative to the feature. 
+UROPA can incorporate reference annotation files (GTF) from different sources, as well as custom reference annotation files produced
+ by the user. Statistics and plots transparently summarize the annotation process. UROPA is implemented in Python and R.
 
-The annotation source is a GTF file, which provides the information of the genomic features to be used for annotation of the peaks. 
-The peaks should be represented in BED file format. Annotation and peak files are specified in the configuration file. Furthermore, certain
-parameters that define how peaks should be annotated can be adjusted (see :doc:`/config`). The output is given in easily-readable tab-delimited
-tables with the corresponding annotation, as it is validated by the configuration file for each peak (see :doc:`/output`).
+- The user provides a reference annotation file in GTF format 
+- The user provides ranges/peaks of interest in BED file format
+- The user provides a configuration file in JavaScript Object Notation (JSON) format, incorporating multiple annotation queries 
 
-Without defining further parameters, the peaks will be annotated with a default annotation. To allow the
-annotations to specific but flexible requirements, different parameters are available (see :doc:`/parameter`). Many usage examples are presented in the :doc:`/uropa-example`. Further exploration of those is advisable.
+The tool permits linkage of individual queries including prioritization (see :doc:`/config`).
+Arbitrary features in the reference annotation file can be addressed in a granular way (see :doc:`/parameter`).
+Filtering on additional annotation columns in the reference annotation file is supported. 
+UROPA generates publication ready graphical statistics.The output is given in easily-readable tab-delimited (see :doc:`/output`)
+
+Many usage examples are presented in the :doc:`/uropa-example`. Further exploration of those is advisable.
 
 **Run UROPA**
 
@@ -19,7 +25,7 @@ To start the UROPA peak annotation, the minimal command is:
 
     uropa –i <config.json> –o <output_dir>
 
-A template of the configuration file is available from our GitHub repository (see `sample_config.json`_). A quick overview about the usage and available parameters is displayed with
+A template of the configuration file is available from our GitHub repository (see `sample_config.json`_). An overview about the usage and available parameters is displayed with
 
 .. code:: bash
 
