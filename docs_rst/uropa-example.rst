@@ -84,7 +84,7 @@ Example 2: ``direction``
 In the following example the utility of the key ``direction`` is illustrated. It can be a very important player for a specialized annotation. 
 Compare the peaks with upstream direction in :ref:`Figure 1 <genomic-location>`.
 
-If  ``direction:upstream`` is used, peaks will be annotated to a feature if the peak center is upstream of the feature start and the distance from the ``feature.anchor`` is smaller than the chosen ``distance`` value. 
+If  ``direction:upstream`` is used, peaks will be annotated to a feature if the peak centre is upstream of the feature start and the distance from the ``feature.anchor`` is smaller than the chosen ``distance`` value. 
 Same takes effect for ``direction:downstream`` where the location of the peak is expected to be downstream of the gene end.
 
 Thus, the location of the peak is relative to the feature's direction. 
@@ -283,7 +283,7 @@ Configuration with two queries and without prioritisation:
 **Table 6.5:** Excerpt of AllHits table for two queries without prioritisation.
 
 The above set of queries will allow UROPA to annotate peaks for genes and transcripts. As priority is False (default), there is no query
-priorized. As presented in the AllHits Table 5, there are valid annotations for peak 6 with both queries. The annotation for the feature
+prioritized. As presented in the AllHits Table 5, there are valid annotations for peak 6 with both queries. The annotation for the feature
 gene would be presented in the FinalHits. For peak 10, there are only valid annotations for the second query, the annotation for the gene *RCC1* correspond to
 the best annotation and would be represented in the FinalHits.
 
@@ -308,7 +308,7 @@ Next, after changing the ``priority`` flag in the configuration above to ``"prio
 **Table 6.6:** Excerpt of AllHits table with two queries with prioritisation. 
 
 If priority is TRUE, UROPA will annotate peaks with the **first feature** found, taking the order of queries into account. 
-Once an annotation is assigned, the following queries are not evaulated at all for the current peak.
+Once an annotation is assigned, the following queries are not evaluated at all for the current peak.
 The example is based on the same cases as above.
 As peak 6 was annotated by query 0, query 1 is not evaluated. 
 For peak 10, there was no valid annotation for query 0, thus query 1 was evaluated and a valid annotation was identified. 
