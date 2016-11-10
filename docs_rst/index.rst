@@ -36,7 +36,7 @@ Please cite the paper describing UROPA when using it in your research: *tba*
 
 **Support**
 
-If you have any issue feel free to send an email to `mario Looso<mario.looso@mpi-bn.mpg.de>`_
+If you have any issue feel free to send an email to `Mario Looso <mario.looso@mpi-bn.mpg.de>`_
 
 **Licence**
 
