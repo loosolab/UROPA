@@ -1,18 +1,12 @@
 Welcome to the UROPA documentation!
 ===================================
 UROPA is a command line based tool intended for genomic region
-annotation. Different target features can be prioritized with multiple integrated queries based on a configuration file.
-Queries are sensitive for feature type, distance, strand specificity, feature attributes (e.g.
-“protein\_coding”) or the anchor position relative to the feature. UROPA
-can incorporate reference annotation files (GTF) from different sources,
-like Gencode, Ensembl, or RefSeq, as well as custom reference files
-produced by the user.
+annotation. 
 
 
 **Advantages of UROPA**
 
--  Detect the most appropriate annotation according to flexible parameters that allow
-   robustness and simple customization of
+-  Detect the most appropriate annotation of peaks, utilizing parameters such as
    
    -  feature type,
    -  feature anchor,
@@ -20,10 +14,10 @@ produced by the user.
    -  filtering for attribute values, e.g. “protein\_coding”,
    -  strand specificity
 
--  Utilization of many available GTF files as annotation database
--  Multiple queries of variable parameter sets can be processed in a single run
--  Graduated annotation due to priorization
--  Different easily-readable output tables (AllHits, FinalHits, BestperQuery\_Hits)
+-  Utilization of any available GTF files as annotation reference
+-  Multiple queries can be processed in a single run
+-  Graduated annotation due to prioritization
+-  Multiple output tables (AllHits, FinalHits, BestperQuery\_Hits)
 -  Visual summary for annotation evaluation
 -  Preparation of custom annotation files with the UROPA to GTF utility
 
@@ -42,7 +36,7 @@ Please cite the paper describing UROPA when using it in your research: *tba*
 
 **Support**
 
-If you have any issue feel free to send an email to `Maria Kondili <maria.kondili@mpi-bn.mpg.de>`_
+If you have any issue feel free to send an email to `mario Looso<mario.looso@mpi-bn.mpg.de>`_
 
 **Licence**
 
