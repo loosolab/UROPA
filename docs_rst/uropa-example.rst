@@ -145,12 +145,12 @@ By default the parameter is set to False.
 	Compare to :ref:`Example 1 <example-1>`: With ``"internals":"True"`` it would not be necessary to identify the most appropriate ``feature.anchor`` 
 	because the peak is located inside the feature and it would not be rejected by exceeding the given distance value.
 
-This example is based on the peak displayed in Figure 4. The peak is very large and the region includes three different genes. 
+This example is based on the peak displayed in Figure 3. The peak is very large and the region includes three different genes. 
 	
 .. figure:: img/chr6-27,857,165-27,863,637_internal_feature-01.png
    :alt: internal.feature
    
-   Figure 4: POLR2A  peak 13 (chr6:27,858,000-27,863,000) annotated with Ensembl. The peak is very large: without using ``internals``, 
+   Figure 3: POLR2A  peak 13 (chr6:27,858,000-27,863,000) annotated with Ensembl. The peak is very large: without using ``internals``, 
    some features get lost because of large distances.
    Setting this key ensures to keep features that are located within peaks and vice versa.
 

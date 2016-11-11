@@ -105,7 +105,7 @@ The UROPA annotation process for one query can run into three cases for each pea
 +----------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+-----------+----------------+-------+
 
 
-**Table 1:** AllHits for one query as described in the configuration above.
+**Table 5.1:**  Excerpt of table AllHits for one query as described in the configuration above.
 
 +----------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+-----------+----------------+-------+
 | peak_id  | peak_chr | peak_start | peak_center | peak_end   | peak_strand | feature | feat_start | feature_end | feat_strand | feat_anchor | distance | genomic_location  | feat_ovl_peak | peak_ovl_feat | gene_name | gene_type      | query |
@@ -128,7 +128,7 @@ The UROPA annotation process for one query can run into three cases for each pea
 +----------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+-----------+----------------+-------+
 
 
-**Table 2:** FinalHits for one query as described in the configuration above.
+**Table 5.2:**  Excerpt of table FinalHits for one query as described in the configuration above.
 
 As displayed in Table 1 and Table 2, peak 355 is a representative of Case 1. There is no valid annotation at all, thus there is an NA row in both output tables. 
 
@@ -213,7 +213,7 @@ Additionally, the best annotation per query will be displayed in the BestperQuer
 | …        |          |            |             |            |             |         |            |             |             |             |          |                   |               |               |               |                |       |
 +----------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+---------------+----------------+-------+
 	
-**Table 3:** AllHits for three queries as described in the configuration above.
+**Table 5.3:**  Excerpt of table AllHits for three queries as described in the configuration above.
  
 +----------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+---------------+----------------+-------+
 | peak_id  | peak_chr | peak_start | peak_center | peak_end   | peak_strand | feature | feat_start | feature_end | feat_strand | feat_anchor | distance | genomic_location  | feat_ovl_peak | peak_ovl_feat | gene_name     | gene_type      | query |
@@ -235,7 +235,7 @@ Additionally, the best annotation per query will be displayed in the BestperQuer
 | …        |          |            |             |            |             |         |            |             |             |             |          |                   |               |               |               |                |       |
 +----------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+---------------+----------------+-------+
  
-**Table 4:** FinalHits for three queries as described in the configuration above.
+**Table 5.4:**  Excerpt of table FinalHits for three queries as described in the configuration above.
 
 +----------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+---------------+----------------+-------+
 | peak_id  | peak_chr | peak_start | peak_center | peak_end   | peak_strand | feature | feat_start | feature_end | feat_strand | feat_anchor | distance | genomic_location  | feat_ovl_peak | peak_ovl_feat | gene_name     | gene_type      | query |
@@ -273,7 +273,7 @@ Additionally, the best annotation per query will be displayed in the BestperQuer
 | …        |          |            |             |            |             |         |            |             |             |             |          |                   |               |               |               |                |       |
 +----------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+---------------+----------------+-------+
 
-**Table 5:** BestperQuery_Hits for three queries as described in the configuration above.
+**Table 5.5:**  Excerpt of table BestperQuery_Hits for three queries as described in the configuration above.
 
 .. note:: 
 	The BestperQuery_Hits is only generated if multiple queries are specified and the priority flag is set to FALSE! If this flag is TRUE, there will be only one valid query. There can be multiple valid annotations for one peak, but all based on one query. In this case only the AllHits and FinalHits are produced.
@@ -314,7 +314,7 @@ To receive this output format, the parameter ``-r`` has to be added to the comma
 | …        |          |            |             |            |             |                |                            |                            |             |                   |             |                                  |               |               |                          |                                              |       |
 +----------+----------+------------+-------------+------------+-------------+----------------+----------------------------+----------------------------+-------------+-------------------+-------------+----------------------------------+---------------+---------------+--------------------------+----------------------------------------------+-------+
 
-**Table 6:** Reformatted_HitsperPeak for three queries as described in the configuration above.
+**Table 5.6:**  Excerpt of table Reformatted_HitsperPeak for three queries as described in the configuration above.
 
 
 Summary Visualisation

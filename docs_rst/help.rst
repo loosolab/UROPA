@@ -1,6 +1,6 @@
 Help
 ====
-If you have trouble please email mario.looso@mpi-bn.mpg.de                                    
+If you have trouble please email `Mario Looso <mario.looso@mpi-bn.mpg.de>`_.                                    
 Please report bugs on our Github `issue tracker <https://github.molgen.mpg.de/loosolab/UROPA/issues>`_.
 They will be addressed as soon as possible. 
 
