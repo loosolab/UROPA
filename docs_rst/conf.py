@@ -199,7 +199,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
   ('index', 'UROPA.tex', u'UROPA Documentation',
-   u'M. Kondili, A. Fust, J. Preussner, C. Kuenne, M. Looso', 'manual'),
+   u'M. Kondili, A. Fust, J. Preussner, C. Kuenne, T. Braun, M. Looso', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
