@@ -178,6 +178,6 @@ This summary is visualising a global overview of the generated UROPA annotations
 
 .. figure:: img/output-formats-summary.png
 
-   Figure 1: Summary file example for queries as described above: (A) Summary of specified queries, used annotation and peak files, and how many peaks were present and annotated, 
+   Summary file example for queries as described above: (A) Summary of specified queries, used annotation and peak files, and how many peaks were present and annotated, 
    (B) Distance density for all features based on FinalHits, (C) Pie Chart representing genomic location for each feature across FinalHits, 
    (D) Distance per query per feature across BestperQuery_Hits, (E) Pairwise comparison across all queries displayed in Venn diagrams, (F) Chow Ruskey plot to compare all queries.
