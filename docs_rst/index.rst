@@ -8,10 +8,10 @@ annotation.
 
 -  Detect the most appropriate annotation of peaks, utilizing parameters such as
    
-   -  feature type,
-   -  feature anchor,
-   -  feature direction relative to peak location,
-   -  filtering for attribute values, e.g. “protein\_coding”,
+   -  feature type
+   -  feature anchor
+   -  feature direction relative to peak location
+   -  filtering for attribute values, e.g. “protein\_coding”
    -  strand specificity
 
 -  Utilization of any available GTF files as annotation reference
