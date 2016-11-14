@@ -25,6 +25,15 @@ annotation.
 
 Please cite the paper describing UROPA when using it in your research: *tba*
 
+**PDF version**
+
+Choose master version for better pdf layout. 
+
+.. hint::
+  - On the bottom right there is a drop down menu
+  - click master
+  - click PDF
+
 **Contribute**
 
 - `Issue Tracker`_
@@ -50,9 +59,9 @@ The project is licensed under the MIT license (see :doc:`/license`)
    install
    parameter
    config
-   output-pdf
-   uropa-example-pdf
-   custom-pdf
+   output
+   uropa-example
+   custom
    license
    help
    
