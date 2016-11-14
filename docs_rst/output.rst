@@ -17,12 +17,8 @@ File overview
 - **Uropa_Summary**: Statistical summary of the UROPA annotation by using the ``-s`` parameter.
 
 .. note::
-	The output files will be named additionally by the output directory name.
-	For example if uropa is used like this:
-	
-	.. code:: bash
-	
-		uropa.py -i config.json -o ChIPanno
+	The output files will be named additionally by the output directory name. 
+	For example if uropa is used like this:	``uropa.py -i config.json -o ChIPanno``
 	
 	The result would contain: ChIPannot/Uropa_AllHits_ChIPannot.txt
 

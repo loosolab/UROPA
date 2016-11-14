@@ -59,9 +59,9 @@ The project is licensed under the MIT license (see :doc:`/license`)
    install
    parameter
    config
-   output
-   uropa-example
-   custom
+   output-pdf
+   uropa-example-pdf
+   custom-pdf
    license
    help
    

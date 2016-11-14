@@ -5,12 +5,3 @@ repo_url: 'https://github.molgen.mpg.de/loosolab/UROPA'
 repo_name: 'GitHub'
 pages:
 - Home: 'index.md'
-- About UROPA: 'introduction.md'
-- Installation: 'install.md'
-- Available parameters: 'parameters.md'
-- Configuration file: 'config.md'
-- Output: 'output.md'
-- Application examples: 'uropa-example.md'
-- Side tool - 'UROPA to GTF': custom.md
-- MIT License: license.md
-- Help: help.md
