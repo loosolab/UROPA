@@ -31,7 +31,7 @@ Choose master version for better pdf layout.
 
 .. hint::
   - On the bottom right there is a drop down menu
-  - click master
+  - click latest
   - click PDF
 
 **Contribute**
