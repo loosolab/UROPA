@@ -21,7 +21,8 @@ File overview
 	For example if uropa is used like this:
 	
 	.. code:: bash
-	- uropa -i config.json -o ChIPanno
+	
+		uropa.py -i config.json -o ChIPanno
 	
 	The result would contain: ChIPannot/Uropa_AllHits_ChIPannot.txt
 
