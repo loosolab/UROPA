@@ -59,7 +59,7 @@ The project is licensed under the MIT license (see :doc:`/license`)
    install
    parameter
    config
-   output-pdf
+   output
    uropa-example
    custom
    license
