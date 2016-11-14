@@ -60,8 +60,8 @@ The project is licensed under the MIT license (see :doc:`/license`)
    parameter
    config
    output-pdf
-   uropa-example-pdf
-   custom-pdf
+   uropa-example
+   custom
    license
    help
    
