@@ -1,0 +1,43 @@
+## 1.0 (2016-11-22)
+
+- Fixed bug for log files in subdirectories
+- Added new parameter --no-comments to skip comments in output tables
+- Moved reduced annotation to output folder
+- Minor changes in parameter descriptions
+
+## 0.3 (2016-10-10)
+
+- Changed function "valid_fsa" to check for strand[ignore,same,opposite]+filter.attributes + hit.feature//mk
+- Added new parameters debug, log and threads. 
+- Added config file help as epilog.
+- Parsing queries now accounts for empty ("") values.
+- Invalid features result in a Warning, not in a program stop.
+- Invalid queries (with more than one attribute.filter or more than two distances) are deleted, program continues on other queries.
+- Annotation logic is moved out of main script
+- Multiprocess splitting of peaks is save against peak loss now
+- Multiprocessing falls back to one thread if split did not work
+- Cleaned up some code lints, reformatted with autopep8
+
+## 0.2 (2016-10-09)
+
+- When Priority = True but no hit validates query No.1 , the queries No 2,3 if existent, will be read for finding a valid hit.
+- The command line arguments -i, -o are flexible in position "
+- The non overlapping peaks are saved in All_hits and in Best_hits table.
+- All and Best hits will contain all peaks, with NAs in Best_tab when hit is in D > config "distance".
+- Query column shown only if more than 1 query given.
+- Check for all keys not to have EMPTY values.
+- Check distance of p.center -gene.center,start,end  for valid_dist of hit.
+- Fix cases of checking peak columns(make 3 'if's for diff sizes).Also read strand and replace to None if strand == ".".
+- Extract attrib value one by one from all queries and give "not.found" if key doesn't exist.(get_hit_attribute)
+- When correct_dir but best_hit or All_hits already written, just "continue", no NAs bcs it overwrites best hit of same peak,or keeps NA while there is also hit.
+- Hits from all queries are visible in All_hits, per query, and in Best Hits the best per Query. BestBest hits table has the best of all queries.
+- Features of gtf are extracted and replaced as default if no key given. If wrong feat_value given ->Error proposing gtf features.
+- Fix NAs when pr=True and quer>1
+- Add genomic_location, min_pos of the Dmin, overlap ratio, in the output tables.Remove internal_features key, but Find 'inside' or 'includefeature'(genom_location)
+- Add 'filter.attribute' &  attribute.value' as extra keys in config for validating a hit.
+- Add possibility of keeping different cut-off distance for Upstream and Downstream direction of peak when Distance = [x,y]
+- Call script for Summary graphs and create file after creation of tables.
+
+## 0.1
+
+- Initial version
