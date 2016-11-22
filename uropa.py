@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 """
-@author: Maria Kondili
+uropa.py: UROPA - Universal RObust Peak Annotator
+
+@authors: Maria Kondili, Jens Preussner and Annika Fust
+@license: MIT
+@version: 1.0
+@maintainer: Mario Looso
+@email: mario.looso@mpi-bn.mpg.de
 """
 
 from __future__ import division
