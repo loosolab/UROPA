@@ -177,9 +177,9 @@ def parse_first_gtf_line(gtf):
     return(has_chr, num_cols)
 
 
-def cut_gtf_perFeat(gtf, features):
+def cut_gtf_perFeat(gtf, features, prefix):
     """Removes lines with features not in features from a gtf file."""
-    gtf_per_feat = os.path.basename(gtf).split(".gtf")[0] + "_cut_per_feat.gtf"
+    gtf_per_feat = prefix + os.path.basename(gtf).split(".gtf")[0] + "_cut_per_feat.gtf"
     feat2cut = np.unique(features)
 
     f = open(gtf, "r")

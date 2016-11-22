@@ -137,6 +137,7 @@ if __name__ == "__main__":
         gtf_has_chr, gtf_cols = cfg.parse_first_gtf_line(annot_gtf)
     except IOError:
         logger.error("File %s does not exist or is not readable.", annot_gtf)
+	sys.exit()
 
     # > Check GTF format
     if gtf_cols == 9:
@@ -173,7 +174,7 @@ if __name__ == "__main__":
     # > Cut gtf according to features of config, and index the cut.gtf for Faster Annotation
     # ! Attention : In the UCSC transformed gtf files,the feature is put by default "tfbs"
     if len(gtf_feat) > 1:
-        gtf_cut_file = cfg.cut_gtf_perFeat(annot_gtf, feat_valid)
+        gtf_cut_file = cfg.cut_gtf_perFeat(annot_gtf, feat_valid, outdir)
         mygtf = gtf_cut_file
     else:
         mygtf = annot_gtf
