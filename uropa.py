@@ -31,15 +31,9 @@ if __name__ == "__main__":
         epilog=cfg.howtoconfig(),
         formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument(
-        "-v",
-        "--version",
-        help="prints the version and exits",
-        action="version",
-        version="%(prog)s 1.0")
-    parser.add_argument(
         "-i",
         "--input",
-        help="Config file",
+        help="filename of configuration file",
         required=True,
         action="store",
         metavar="config.json")
@@ -47,39 +41,27 @@ if __name__ == "__main__":
         "-o",
         "--output",
         dest="output",
-        help="Output dir, will also be used as prefix of result files",
+        help="directory for results and prefix of the output file name",
         required=False,
         action="store",
         metavar="uropa_out/",
         default="uropa_out/")
     parser.add_argument(
-        "-d",
-        "--debug",
-        help="Print verbose messages to stdout and log (for debugging)",
-        required=False,
-        action="store_true")
-    parser.add_argument(
-        "-l",
-        "--log",
-        help="Log file for messages and warnings",
-        action="store",
-        metavar="uropa.log")
-    parser.add_argument(
         "-r",
         "--reformat",
-        help="A more compact line-reduced table of merged All_hits table",
+        help="create an additional compact and line-reduced table as result file",
         required=False,
         action="store_true")
     parser.add_argument(
         "-s",
         "--summary",
-        help="Visualization of results in graphical format",
+        help="filename of additional visualisation of results in graphical format",
         required=False,
         action="store_true")
     parser.add_argument(
         "-t",
         "--threads",
-        help="Number of threads to run the annotation process in parallel",
+        help="multiprocessed run: n = number of threads to run annotation process",
         type=int,
         required=False,
         action="store",
@@ -87,9 +69,27 @@ if __name__ == "__main__":
         default=1)
     parser.add_argument(
         "--no-comments",
-        help="Do not show comment lines in output files",
+        help="do not show comment lines in output files",
         required=False,
         action="store_true")
+    parser.add_argument(
+        "-l",
+        "--log",
+        help="log file name for messages and warnings",
+        action="store",
+        metavar="uropa.log")
+    parser.add_argument(
+        "-d",
+        "--debug",
+        help="print verbose messages (for debugging) to stdout and log",
+        required=False,
+        action="store_true")
+    parser.add_argument(
+        "-v",
+        "--version",
+        help="prints the version and exits",
+        action="version",
+        version="%(prog)s 1.0")
     args = parser.parse_args()
 
     config = args.input
