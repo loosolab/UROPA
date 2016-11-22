@@ -33,7 +33,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-v",
         "--version",
-        help="Prints the version and exits",
+        help="prints the version and exits",
         action="version",
         version="%(prog)s 1.0")
     parser.add_argument(
@@ -87,7 +87,7 @@ if __name__ == "__main__":
         default=1)
     parser.add_argument(
         "--no-comments",
-        help="Skips comments in output files",
+        help="Do not show comment lines in output files",
         required=False,
         action="store_true")
     args = parser.parse_args()
@@ -229,7 +229,8 @@ if __name__ == "__main__":
     NAsList[nas_len - 1] = "- "
 
     header_comments = outdir + "cfg_header.txt"
-    ovls.write_header(header_comments, queries, str(pr), annot_gtf, peaks_bed)
+    if not args.no_comments:
+        ovls.write_header(header_comments, queries, str(pr), annot_gtf, peaks_bed)
 
     header_base = [
         "peak_id",
@@ -307,82 +308,47 @@ if __name__ == "__main__":
         # Write out conc_files + header
         allhits_partials = glob.glob(outdir + "AllHits_Partial*")
         besthits_partials = glob.glob(outdir + "BestHits_Partial*")
-
-        if len(allhits_partials) == args.threads:
-            # Concat.partials -> hits_file, hits_file + header -> outfile
-            ovls.write_final_file(
-                args.threads,
-                outdir,
-                allhits_file,
-                allhits_partials,
-                allhits_outfile,
-                header_comments,
-                header,
-                logger)
-            ovls.write_final_file(
-                args.threads,
-                outdir,
-                besthits_file,
-                besthits_partials,
-                besthits_outfile,
-                header_comments,
-                header,
-                logger)
-
-            if len(queries) > 1 and not pr:
-                MergedBest_partials = glob.glob(
-                    outdir + "Merged_BestHits_Partial*")
-                ovls.write_final_file(
-                    args.threads,
-                    outdir,
-                    merged_besthits_file,
-                    MergedBest_partials,
-                    merged_outfile,
-                    header_comments,
-                    header,
-                    logger)
-
     else:
         ant.annotation_process(input_args, peaks_bed, logger)
         # Files created after annot.process:
         allhits_partials = glob.glob(outdir + "AllHits_Partial*")
         besthits_partials = glob.glob(outdir + "BestHits_Partial*")
 
-        if len(allhits_partials) == 1:
-            # Rename partial-> hits_file(no concat), hits_file + header ->
-            # outfile
-            ovls.write_final_file(
-                args.threads,
-                outdir,
-                allhits_file,
-                allhits_partials,
-                allhits_outfile,
-                header_comments,
-                header,
-                logger)
-            ovls.write_final_file(
-                args.threads,
-                outdir,
-                besthits_file,
-                besthits_partials,
-                besthits_outfile,
-                header_comments,
-                header,
-                logger)
+    
+    ovls.write_final_file(
+        args.threads,
+        outdir,
+        allhits_file,
+        allhits_partials,
+        allhits_outfile,
+        header_comments,
+        header,
+        args.no_comments,
+        logger)
+    ovls.write_final_file(
+        args.threads,
+        outdir,
+        besthits_file,
+        besthits_partials,
+        besthits_outfile,
+        header_comments,
+        header,
+        args.no_comments,
+        logger)
 
-            if len(queries) > 1 and not pr:
-                MergedBest_partials = glob.glob(
-                    outdir + "Merged_BestHits_Partial*")
-                if len(MergedBest_partials) == 1:
-                    ovls.write_final_file(
-                        args.threads,
-                        outdir,
-                        merged_besthits_file,
-                        MergedBest_partials,
-                        merged_outfile,
-                        header_comments,
-                        header,
-                        logger)
+    if len(queries) > 1 and not pr:
+        MergedBest_partials = glob.glob(
+          outdir + "Merged_BestHits_Partial*")
+        ovls.write_final_file(
+            args.threads,
+            outdir,
+            merged_besthits_file,
+            MergedBest_partials,
+            merged_outfile,
+            header_comments,
+            header,
+            args.no_comments,
+            logger)
 
     outputs_ready = os.path.exists(
         allhits_outfile) and os.path.exists(besthits_outfile)
@@ -475,7 +441,8 @@ if __name__ == "__main__":
     if outputs_ready:
         os.remove(gtf_index)  # .gz
         os.remove(gtf_index + ".tbi")
-        os.remove(header_comments)
+        if not args.no_comments:
+            os.remove(header_comments)
         if len(gtf_feat) > 1:
             os.remove(gtf_cut_file)
             os.remove(gtf_cut_file + ".sorted")

@@ -445,19 +445,18 @@ def concatenate_partials(outdir, conc_file, partials):
                     outTable.write(line)
 
 
-def write_final_file(threads, outdir, hits_file, partials, outfile, header_file, header, log=None):
+def write_final_file(threads, outdir, hits_file, partials, outfile, header_file, header, skip_header=False, log=None):
     """Writes a final file."""
     if threads > 1:
         concatenate_partials(outdir, hits_file, partials)
-        #concat_ready = os.path.exists(outdir+hits_file)
     else:
-        # skip concatenation-partial=hits_file, add header to the final partial
-        # file
         partials = partials[0]
         os.rename(partials, outdir + hits_file)
     try:
-        with open(outfile, "w") as of, open(header_file, "r") as hf:
-            of.write(hf.read())
+        with open(outfile, "w") as of:
+            if not skip_header:
+                with open(header_file, "r") as hf:
+                    of.write(hf.read())
             of.write(header + "\n")
             with open(outdir + hits_file, "r") as cf:
                 for line in cf:
@@ -465,7 +464,6 @@ def write_final_file(threads, outdir, hits_file, partials, outfile, header_file,
     except IOError:
         log.error("\nUnable to open file " +
                   outfile + " for writing results !")
-        # sys.exit()
 
 
 def delete_partials(tab, outdir, outname, spl_dir, threads):
