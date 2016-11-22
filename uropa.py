@@ -110,10 +110,18 @@ if __name__ == "__main__":
     logger.addHandler(streamHandle)
     
     if args.log is not None:
-        fileHandle = logging.FileHandler(args.log, mode='w')
-        fileHandle.setLevel(logging.DEBUG)
-        fileHandle.setFormatter(loggerFormat)
-        logger.addHandler(fileHandle)
+	logpath = os.path.dirname(args.log)
+        if not os.path.exists(logpath):
+            try:
+                os.makedirs(logpath)
+                fileHandle = logging.FileHandler(args.log, mode='w')
+                fileHandle.setLevel(logging.DEBUG)
+                fileHandle.setFormatter(loggerFormat)
+                logger.addHandler(fileHandle)
+            except OSError:
+                logger.error("Could not create directory for log file {}".format(logpath))
+            except IOError:
+                logger.error("Could not create log file {}".format(args.log))
 
     logger.info("Start time: %s", datetime.datetime.now().strftime("%d.%m.%Y %H:%M"))
 
