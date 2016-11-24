@@ -274,11 +274,12 @@ if __name__ == "__main__":
                spl_dir + 'spl_peak_']
 
         try:
-            sp.check_call(cmd)
+            sp.check_call(cmd, stderr=open(os.devnull, 'w'))
         except sp.CalledProcessError:
             args.threads = 1
             logger.warning(
                 "Unable to split peak input into smaller files. Falling back to one thread.")
+            logger.info("Check if split command is installed in version 8.22 or higher.")
         except OSError as e:
             args.threads = 1
             logger.warning(
