@@ -67,7 +67,7 @@ Each query can specify the following keys:
 -  **strand**: The desired strand of the annotated feature relative to the peak. 
    A constraint on strand specificity is only successfully evaluated if strand information is available for the feature **and** the peak.
    
-   Default: ``['same', 'both', 'opposite']``
+   Default: ``['ignore', 'same', 'opposite']``
    
    Example: ``'strand': ['same']`` or ``'strand': 'same'``.
 
