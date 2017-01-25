@@ -46,13 +46,14 @@ Install required packages for R:
 install.packages("ggplot2", "devtools", "gplots", "gridExtra", "jsonlite", "VennDiagram")
 source("https://bioconductor.org/biocLite.R")
 biocLite(c("RBGL","graph"))
-# to install the last required packaged, devtools has to be loades
+# to install the last required packaged, devtools has to be loaded to use the install from github function
 library(devtools)
 install_github("jenzopr/Vennerable")
 ```
 
 
-Install UROPA locally by running:
+Install UROPA locally 
+:--------------------:
 
 ```bash
 git clone https://github.molgen.mpg.de/loosolab/UROPA.git
