@@ -34,14 +34,29 @@ Installation and Command-line usage
 ------------------------------------
 Make sure all prerequisites are met:
 
-- [R/Rscript](http://www.r-project.org/)
-- [Python](http://continuum.io/downloads)
+- [R/Rscript](http://www.r-project.org/) (v3.3.0 or higher, follow instructions on url)
+- [Python](http://continuum.io/downloads) (v2.7.8-anaconda-2.1.0)
+Install with 
+```bash Anaconda2-4.2.0-Linux-x86_64.sh``` and ```PATH=dir/to/python_anaconda:$PATH```
+- [htslib](http://www.htslib.org/download/) 1.3.2 or higher (follow installation instructions on url)
+
+
+Install required packages for R:
+```bash
+install.packages("ggplot2", "devtools", "gplots", "gridExtra", "jsonlite", "VennDiagram")
+source("https://bioconductor.org/biocLite.R")
+biocLite(c("RBGL","graph"))
+# to install the last required packaged, devtools has to be loades
+library(devtools)
+install_github("jenzopr/Vennerable")
+```
+
 
 Install UROPA locally by running:
 
 ```bash
 git clone https://github.molgen.mpg.de/loosolab/UROPA.git
-export PATH=$PATH:dir/to/uropa/src
+export PATH=$PATH:dir/to/uropa
 ```
 
 ```bash                        
@@ -49,7 +64,7 @@ Usage: uropa [options]
 
 Available options:
 	
-	- h, --help             print this help message and further details on the configuration file
+		- h, --help             print this help message and further details on the configuration file
         - i, --input            filename of configuration file
         - o, --output           directory for results and prefix of the output file name
         - r, --reformat         create an additional compact and line-reduced table as result file
