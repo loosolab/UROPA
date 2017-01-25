@@ -52,8 +52,7 @@ install_github("jenzopr/Vennerable")
 ```
 
 
-Install UROPA locally 
-:--------------------:
+### Install UROPA locally 
 
 ```bash
 git clone https://github.molgen.mpg.de/loosolab/UROPA.git
