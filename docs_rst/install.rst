@@ -42,14 +42,14 @@ The HTSlib library is necessary for the indexing of the reference features using
 UROPA
 ~~~~~
 
-Run:
+UROPA itself can be installed by simply cloning the Github library and adding the target folder to the system environment variable.
 
 .. code:: bash
 
 	git clone https://github.molgen.mpg.de/loosolab/UROPA
 	export PATH=$PATH:dir/to/uropa
 		
-Now you can run uropa with the specified configuration file and the annotation database of interest. 
+
 
 .. _R/Rscript: http://www.r-project.org/
 .. _Python: http://continuum.io/downloads
