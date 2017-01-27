@@ -1,3 +1,10 @@
+## 1.0.1 (2017-01-27)
+
+- updated summary script for new gridExtra requirements (rows=NULL instead of show.rownames=FALSE)
+- fixed log file bug 
+- fixed internals feature to work for distances larger than default distance
+- removed summary config after usage
+
 ## 1.0 (2016-11-22)
 
 - Fixed bug for log files in subdirectories
