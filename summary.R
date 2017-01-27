@@ -134,8 +134,14 @@ features <- c()
 	if(num.queries != nrow(config.query)){
 		mtext(paste("Only queries", paste(queries, collapse=","), "are represented in the FinalHits", sep=" "), side=3, line=-5,outer=FALSE, cex=.7)	
 	}
-	g <- tableGrob(config.query, gpar.coretext = gpar(col = "black", cex = .5), gpar.coltext = gpar(col = "black", cex = .5, fontface = "bold"),show.rownames=FALSE)
+
+
+
+	mytheme <- ttheme_default(core = list(fg_params=list(cex = 0.5)),colhead = list(fg_params=list(cex = 0.5)),rowhead = list(fg_params=list(cex = 0.5)))
+	config.query <- data.frame(lapply(config.query, as.character), stringsAsFactors=FALSE)	
+	g <- tableGrob(format(config.query), theme=mytheme,rows=NULL)
 	grid.draw(g)
+	
 	mtext(paste0("priority: ", priority), cex=.7,side=1, line=-2)
 	input <- paste("Input:",unlist(config$bed),collapse=" ")
 	anno <- paste("Anno:",unlist(config$gtf),collapse=" ")
