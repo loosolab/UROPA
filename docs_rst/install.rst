@@ -14,8 +14,7 @@ Instructions
 
 Python
 ~~~~~~~~~~
-As numpy and sampy packages can be taxing to install in Python, we recommend the usage of the Anaconda distribution instead (v2.7.8-anaconda-2.1.0 or higher)
-Install with eg. ``bash Anaconda2-4.2.0-Linux-x86_64.sh`` and include the path in the environment variable ``PATH=dir/to/python_anaconda:$PATH``
+As numpy and sampy packages can be taxing to install in Python, we recommend the usage of the `Anaconda` distribution instead (v2.7.8-anaconda-2.1.0 or higher). Install with eg. ``bash Anaconda2-4.2.0-Linux-x86_64.sh`` and include the path in the environment variable ``PATH=dir/to/python_anaconda:$PATH``.
 
 Using standard Python 2.7, the packages can be installed with ``pip install pysam numpy``.
 
@@ -49,6 +48,7 @@ Now you can run uropa with the specified configuration file and the annotation d
 
 .. _R/Rscript: http://www.r-project.org/
 .. _Python: http://continuum.io/downloads
+.. _Anaconda: http://continuum.io/downloads
 .. _htslib: http://www.htslib.org/download/
 .. _numpy: http://www.numpy.org
 .. _pysam: https://pysam.readthedocs.io/en/latest/index.html
