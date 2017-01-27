@@ -5,42 +5,35 @@ Prerequisites
 -----------------
 For running UROPA locally, the following prerequisites have to be met:
 
-- `R/Rscript`_, v3.3.0 or higher
-	-ggplot2
-- `Python`_, v2.7, Anaconda distribution, v2.7.8-anaconda-2.1.0 or higher
-Install with eg. ``bash Anaconda2-4.2.0-Linux-x86_64.sh`` and include in environment path ``PATH=dir/to/python_anaconda:$PATH``
+- `Python`_, v2.7 (packages: numpy, sampy)
+- `R/Rscript`_, v3.3.0 or higher (packages: devtools, ggplot2, gplots, gridExtra, jsonlite, RBGL, graph, VennDiagram, Vennerable, snow)
+- `htslib`_ 1.3.2 or higher
 
-- `htslib`_ 1.3.2 or higher, follow instructions on url
-
-Required packages
+Instructions
 -----------------
 
-For python
+Python
 ~~~~~~~~~~
-- `numpy`_
-- `pysam`_
+As numpy and sampy packages can taxing to install in R, we recommend the usage of the Anaconda distribution instead (v2.7.8-anaconda-2.1.0 or higher)
+Install with eg. ``bash Anaconda2-4.2.0-Linux-x86_64.sh`` and include in environment path ``PATH=dir/to/python_anaconda:$PATH``
 
-Install with ``pip install pysam numpy``.
-Therefore, you should be at the same directory as set for python anaconda.
+Using standard R, the packages can be installed with ``pip install pysam numpy``.
 
-For R
+R
 ~~~~~
+The following packages are hosted by CRAN and can be installed with the following syntax: ``install.packages("packagename")``. 
+After choosing a download mirror, the package will be downloaded and installed. 
+- `devtools`_
 - `ggplot2`_
-To install R packages hosted by CRAN start R and then type ``install.packages("ggplot2")``. 
-After choosing a downloading mirrow, the package will be downloaded and installed. 
-To use the package in R it has to be loaded with ``library("ggplot2")``, but within UROPA this will be done automatically.
-	
 - `gplots`_
 - `gridExtra`_ 
 - `jsonlite`_ 
 - `VennDiagram`_ 
-- Vennerable
-This package needs a couple of BioConductor packages. To install those start R and type ``source("https://bioconductor.org/biocLite.R")`` and ``biocLite(c("RBGL","graph"))``.
-Additionally, the package ``devtools`` is needed and should be installed from CRAN (``install.packages("devtools")``).
-Afterwards the package can be installed with ``install_github("jenzopr/Vennerable")`` and loaded with ``library(Vennerable)``. But again this will be done automatically within UROPA.
+- `snow`_ 
 
-- If multiprocessing should be available: `snow`_ 
+The RBGL and graph packages are hosted by BioConductor. To install those start R and type ``source("https://bioconductor.org/biocLite.R")`` and ``biocLite(c("RBGL","graph"))``.
 
+Vennerable has to be installed with ``install_github("jenzopr/Vennerable")``.
 
 Install UROPA locally
 ---------------------
