@@ -104,7 +104,7 @@ if __name__ == "__main__":
     # Configure logging
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
-    
+
     streamHandle = logging.StreamHandler()
     loggerFormat = logging.Formatter('[%(levelname)s] - %(message)s')
     streamHandle.setFormatter(loggerFormat)
@@ -114,20 +114,21 @@ if __name__ == "__main__":
     else:
         streamHandle.setLevel(logging.WARNING)
     logger.addHandler(streamHandle)
-    
+
     if args.log is not None:
 	logpath = os.path.dirname(args.log)
         if not os.path.exists(logpath):
             try:
                 os.makedirs(logpath)
-                fileHandle = logging.FileHandler(args.log, mode='w')
-                fileHandle.setLevel(logging.DEBUG)
-                fileHandle.setFormatter(loggerFormat)
-                logger.addHandler(fileHandle)
             except OSError:
                 logger.error("Could not create directory for log file {}".format(logpath))
-            except IOError:
-                logger.error("Could not create log file {}".format(args.log))
+        try:
+            fileHandle = logging.FileHandler(args.log, mode='w')
+            fileHandle.setLevel(logging.DEBUG)
+            fileHandle.setFormatter(loggerFormat)
+            logger.addHandler(fileHandle)
+        except IOError:
+            logger.error("Could not create log file {}".format(args.log))
 
     logger.info("Start time: %s", datetime.datetime.now().strftime("%d.%m.%Y %H:%M"))
 
@@ -181,7 +182,7 @@ if __name__ == "__main__":
     query_features = list(chain.from_iterable([q["feature"] for q in queries]))
     feat_not_valid = [f for f in query_features if f not in gtf_feat]
     feat_valid = [f for f in query_features if f not in feat_not_valid]
-    
+
     if feat_not_valid:
         logger.warning("Invalid features present (found in a query but not in the GTF): %s", ','.join(feat_not_valid))
 
@@ -200,7 +201,7 @@ if __name__ == "__main__":
     summ_dict["gtf"] = annot_gtf
     summ_dict["bed"] = peaks_bed
 
-    with open("summary_config.json", "w") as fj:
+    with open(outdir+"summary_config.json", "w") as fj:
         json.dump(summ_dict, fj, indent=4)
 
     distances = reduce(list.__add__, map(lambda q: q["distance"], queries))
@@ -226,9 +227,9 @@ if __name__ == "__main__":
     # Table-columns for All queries
     query_attributes_none = list([q["show.attributes"] for q in queries])
     query_attributes = [a for a in np.unique(list(chain.from_iterable(query_attributes_none))) if a is not None and a != 'None']
-    
+
     logger.info("Additional attributes included in output: %s", ','.join(query_attributes))
-    
+
     # query included, when there is no hit from tabix
     nas_len = len(query_attributes) + 10
     NAsList = list(np.repeat("NA", nas_len))
@@ -253,7 +254,7 @@ if __name__ == "__main__":
         "genomic_location",
         "feat_ovl_peak",
         "peak_ovl_feat"]
-    
+
     header = "\t".join(header_base + query_attributes + ["query"])
 
     outdir_len = len(outdir.split("/"))
@@ -321,7 +322,7 @@ if __name__ == "__main__":
         allhits_partials = glob.glob(outdir + "AllHits_Partial*")
         besthits_partials = glob.glob(outdir + "BestHits_Partial*")
 
-    
+
     ovls.write_final_file(
         args.threads,
         outdir,
@@ -441,11 +442,11 @@ if __name__ == "__main__":
             logger.warning("Visualized summary output could not be created from %s.", ' '.join(call))
         except OSError:
             logger.warning("Rscript command not available for summary output.")
-        if os.path.exists(summary_output):
-            os.remove("summary_config.json")
 
-# Remove all other un-necessary files :
+    # Remove all other un-necessary files :
     if outputs_ready:
+        if os.path.exists(outdir+"summary_config.json"):
+            os.remove(outdir+"summary_config.json")
         os.remove(gtf_index)  # .gz
         os.remove(gtf_index + ".tbi")
         if not args.no_comments:
