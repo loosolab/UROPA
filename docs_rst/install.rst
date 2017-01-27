@@ -14,7 +14,7 @@ Instructions
 
 Python
 ~~~~~~~~~~
-As numpy and sampy packages can be taxing to install in Python, we recommend the usage of the `Anaconda` distribution instead (v2.7.8-anaconda-2.1.0 or higher). Install with eg. ``bash Anaconda2-4.2.0-Linux-x86_64.sh`` and include the path in the environment variable ``export PATH=dir/to/python_anaconda:$PATH``.
+As numpy and sampy packages can be taxing to install in Python, we recommend the usage of the `Anaconda`_ distribution instead (v2.7.8-anaconda-2.1.0 or higher). Install with eg. ``bash Anaconda2-4.2.0-Linux-x86_64.sh`` and include the path in the environment variable ``export PATH=dir/to/python_anaconda:$PATH``.
 
 Using standard Python 2.7, the packages can be installed with ``pip install pysam numpy``.
 
@@ -36,7 +36,7 @@ Vennerable has to be installed with ``library("devtools")`` followed by ``instal
 
 HTSlib
 ~~~~~
-The HTSlib library is necessary for the indexing of the reference features using Tabix. For installation instruction please refer to the following url `htslib`_.
+The HTSlib library is necessary for the indexing of the reference features using Tabix. For installation instructions please refer to the following url: `htslib`_.
 
 
 UROPA
