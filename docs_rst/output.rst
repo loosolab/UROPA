@@ -317,7 +317,11 @@ To receive this output format, the parameter ``-r`` has to be added to the comma
 Summary Visualisation
 ---------------------
 In order to generate a global summary, one can apply the ``-s`` parameter during the command line call. 
-This summary is visualising a global overview of the generated UROPA annotations. Within this document one can find: 
+This summary is visualising a global overview of the generated UROPA annotations, and several usefull plots, 
+like the distribution of the annotated peaks to the features of interst and the genomic locations according to the features of interest.
+Detailed information about the different plots and how they are dedicated to the different output file formats is explained below.  
+
+**Summary what can be found in the summary visualsation** 
 
 - An abstract of the UROPA annotation including the used peak and annotation files
 - Number of peaks and number of annotated peaks
