@@ -222,19 +222,14 @@ def get_distance_by_dir(inputD, genom_loc, intern_loc, Dhit):
     """Limits the hit by a distance window depending on peak's position relative-to-feature """
 
     [D_upstr, D_downstr] = inputD
-    # D_upstr = D_downstr when len(input_D) = 1
 
     if genom_loc == "upstream" or genom_loc == "overlapStart":
         return Dhit <= D_upstr
     if genom_loc == "downstream" or genom_loc == "overlapEnd":
         return Dhit <= D_downstr
 
-    if any(intern_loc):
-        best_dist = map(lambda l: Dhit <= D_upstr if l ==
-                        "upstream" else Dhit <= D_downstr, intern_loc)
-        # when 3 positions given: any Dhit inside limit-> hit accepted // if 1
-        # given any(True) =True
-        return any(best_dist)
+    # Rescue if internal peak
+    return(any(intern_loc))
 
 
 def detect_internals(pstart, pend, hit_start, hit_end):
@@ -297,8 +292,7 @@ def define_genom_loc(current_loc, pstart, p_center, pend, hit_start, hit_end, hi
 
 def overlap_peak_feature(genom_loc, pstart, p_center, pend, peakL, featL, hit_start, hit_end, hit_strand):
     """Gives the collective information of the location and overlap of a peak to a feature """
-
-# A/ Find internal features/peaks
+    # A/ Find internal features/peaks
     # hit_start, hit_end : as given in gtf/no inversion for '-'strand.
     genom_loc = detect_internals(pstart, pend, hit_start, hit_end)
     # B/ Calculate overlap Ratio peak/feat and feat/peak
