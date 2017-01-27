@@ -14,13 +14,13 @@ Instructions
 
 Python
 ~~~~~~~~~~
-As numpy and sampy packages can be taxing to install in Python, we recommend the usage of the `Anaconda` distribution instead (v2.7.8-anaconda-2.1.0 or higher). Install with eg. ``bash Anaconda2-4.2.0-Linux-x86_64.sh`` and include the path in the environment variable ``PATH=dir/to/python_anaconda:$PATH``.
+As numpy and sampy packages can be taxing to install in Python, we recommend the usage of the `Anaconda`_ distribution instead (v2.7.8-anaconda-2.1.0 or higher). Install with eg. ``bash Anaconda2-4.2.0-Linux-x86_64.sh`` and include the path in the environment variable ``export PATH=dir/to/python_anaconda:$PATH``.
 
 Using standard Python 2.7, the packages can be installed with ``pip install pysam numpy``.
 
 R
 ~~~~~
-The following packages are hosted by CRAN and can be installed with the syntax ``install.packages("packagename")``.
+The following packages are hosted by CRAN and can be installed from the R console with the syntax ``install.packages("packagename")``.
 
 - `devtools`_
 - `ggplot2`_
@@ -34,17 +34,22 @@ The RBGL and graph packages are hosted by BioConductor. To install those start R
 
 Vennerable has to be installed with ``library("devtools")`` followed by ``install_github("jenzopr/Vennerable")``.
 
-UROPA
----------------------
+HTSlib
+~~~~~
+The HTSlib library is necessary for the indexing of the reference features using Tabix. For installation instructions please refer to the following url: `htslib`_.
 
-Run:
+
+UROPA
+~~~~~
+
+UROPA itself can be installed by simply cloning the Github library and adding the target folder to the system environment variable.
 
 .. code:: bash
 
 	git clone https://github.molgen.mpg.de/loosolab/UROPA
 	export PATH=$PATH:dir/to/uropa
 		
-Now you can run uropa with the specified configuration file and the annotation database of interest. 
+
 
 .. _R/Rscript: http://www.r-project.org/
 .. _Python: http://continuum.io/downloads
