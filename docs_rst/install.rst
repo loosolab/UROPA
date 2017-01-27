@@ -40,7 +40,7 @@ The HTSlib library is necessary for the indexing of the reference features using
 
 
 UROPA
----------------------
+~~~~~
 
 Run:
 
