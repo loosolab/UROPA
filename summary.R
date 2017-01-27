@@ -14,6 +14,7 @@
 suppressPackageStartupMessages(library(ggplot2))
 suppressPackageStartupMessages(library(jsonlite))
 suppressPackageStartupMessages(library(gridExtra))
+suppressPackageStartupMessages(library(grid))
 # script gets arguments
 args <- commandArgs(TRUE)
 # basic information independent if there are 3 or 4 input arguments, used otherwhere as .basic.summary
@@ -141,7 +142,7 @@ features <- c()
 	config.query <- data.frame(lapply(config.query, as.character), stringsAsFactors=FALSE)	
 	g <- tableGrob(format(config.query), theme=mytheme,rows=NULL)
 	grid.draw(g)
-	
+
 	mtext(paste0("priority: ", priority), cex=.7,side=1, line=-2)
 	input <- paste("Input:",unlist(config$bed),collapse=" ")
 	anno <- paste("Anno:",unlist(config$gtf),collapse=" ")
