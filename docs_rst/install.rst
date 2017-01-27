@@ -20,8 +20,7 @@ Using standard Python 2.7, the packages can be installed with ``pip install pysa
 
 R
 ~~~~~
-The following packages are hosted by CRAN and can be installed with the following syntax: ``install.packages("packagename")``. 
-After choosing a download mirror, the package will be downloaded and installed.
+The following packages are hosted by CRAN and can be installed with the syntax ``install.packages("packagename")``.
 
 - `devtools`_
 - `ggplot2`_
@@ -59,3 +58,4 @@ Now you can run uropa with the specified configuration file and the annotation d
 .. _jsonlite: https://cran.r-project.org/web/packages/jsonlite/index.html
 .. _VennDiagram: https://cran.r-project.org/web/packages/VennDiagram/index.html
 .. _snow: https://cran.r-project.org/web/packages/snow/index.html
+.. _devtools: https://cran.r-project.org/web/packages/devtools/
