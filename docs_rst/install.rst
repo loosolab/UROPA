@@ -32,7 +32,7 @@ The following packages are hosted by CRAN and can be installed with the syntax `
 
 The RBGL and graph packages are hosted by BioConductor. To install those start R and type ``source("https://bioconductor.org/biocLite.R")`` and ``biocLite(c("RBGL","graph"))``.
 
-Vennerable has to be installed with ``install_github("jenzopr/Vennerable")``.
+Vennerable has to be installed with ``library("devtools")`` followed by ``install_github("jenzopr/Vennerable")``.
 
 UROPA
 ---------------------
