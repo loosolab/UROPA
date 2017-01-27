@@ -20,7 +20,7 @@ Using standard Python 2.7, the packages can be installed with ``pip install pysa
 
 R
 ~~~~~
-The following packages are hosted by CRAN and can be installed with the syntax ``install.packages("packagename")``.
+The following packages are hosted by CRAN and can be installed from the R console with the syntax ``install.packages("packagename")``.
 
 - `devtools`_
 - `ggplot2`_
