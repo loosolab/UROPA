@@ -21,7 +21,8 @@ Using standard Python 2.7, the packages can be installed with ``pip install pysa
 R
 ~~~~~
 The following packages are hosted by CRAN and can be installed with the following syntax: ``install.packages("packagename")``. 
-After choosing a download mirror, the package will be downloaded and installed. 
+After choosing a download mirror, the package will be downloaded and installed.
+
 - `devtools`_
 - `ggplot2`_
 - `gplots`_
@@ -34,7 +35,7 @@ The RBGL and graph packages are hosted by BioConductor. To install those start R
 
 Vennerable has to be installed with ``install_github("jenzopr/Vennerable")``.
 
-Install UROPA locally
+UROPA
 ---------------------
 
 Run:
