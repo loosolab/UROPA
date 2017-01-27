@@ -1,10 +1,12 @@
 Installation
 ============
 
+Prerequisites
+-----------------
 For running UROPA locally, the following prerequisites have to be met:
 
 - `R/Rscript`_, v3.3.0 or higher, follow instructions on url
-- `Python`_ , v2.7.8-anaconda-2.1.0
+- `Python`_ , Anaconda distribution, v2.7.8-anaconda-2.1.0 or higher
 Install with ``bash Anaconda2-4.2.0-Linux-x86_64.sh`` and ``PATH=dir/to/python_anaconda:$PATH``
 
 - `htslib`_ 1.3.2 or higher, follow instructions on url
