@@ -34,6 +34,11 @@ The RBGL and graph packages are hosted by BioConductor. To install those start R
 
 Vennerable has to be installed with ``library("devtools")`` followed by ``install_github("jenzopr/Vennerable")``.
 
+HTSlib
+~~~~~
+The HTSlib library is necessary for the indexing of the reference features using Tabix. For installation instruction please refer to the following url `htslib`_.
+
+
 UROPA
 ---------------------
 
