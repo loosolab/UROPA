@@ -14,7 +14,7 @@ Instructions
 
 Python
 ~~~~~~~~~~
-As numpy and sampy packages can taxing to install in R, we recommend the usage of the Anaconda distribution instead (v2.7.8-anaconda-2.1.0 or higher)
+As numpy and sampy packages can be taxing to install in R, we recommend the usage of the Anaconda distribution instead (v2.7.8-anaconda-2.1.0 or higher)
 Install with eg. ``bash Anaconda2-4.2.0-Linux-x86_64.sh`` and include in environment path ``PATH=dir/to/python_anaconda:$PATH``
 
 Using standard R, the packages can be installed with ``pip install pysam numpy``.
