@@ -34,7 +34,7 @@ def howtoconfig():
 	"gtf": "/path/to/annotation/file.gtf"
 	}
 	
-	Optionally, the priority and bigwig keys can be used to fine tune UROPAs behaviour:
+	Optionally, the priority key can be used to fine tune UROPAs behaviour:
 	
 	{
 	"queries": [
