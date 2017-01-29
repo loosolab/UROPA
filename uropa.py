@@ -143,7 +143,7 @@ if __name__ == "__main__":
         logger.error("File %s contains malformed JSON. %s", config, e)
         sys.exit()
 
-    parameters = cfg.parse_parameters(cfg_dict, log=None)  # ,logger
+    parameters = cfg.parse_parameters(cfg_dict, logger)
     priority = parameters["priority"]
     annot_gtf = parameters["gtf"]
     peaks_bed = parameters["bed"]
