@@ -117,7 +117,7 @@ if __name__ == "__main__":
 
     if args.log is not None:
 	logpath = os.path.dirname(args.log)
-        if not os.path.exists(logpath):
+        if not os.path.exists(logpath) and logpath != '':
             try:
                 os.makedirs(logpath)
             except OSError:
@@ -361,7 +361,7 @@ if __name__ == "__main__":
     outputs_ready = os.path.exists(
         allhits_outfile) and os.path.exists(besthits_outfile)
     # Delete partials after the concatenation
-    if outputs_ready:
+    if outputs_ready and False:
         del_tmp1 = ovls.delete_partials(
             "All", outdir, outname, spl_dir, args.threads)
         del_tmp2 = ovls.delete_partials(
