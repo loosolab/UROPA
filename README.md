@@ -2,9 +2,9 @@ UROPA - Universal RObust Peak Annotator
 =======================================
 
 UROPA (‘Universal RObust Peak Annotator’) is a command line based tool, intended for genomic region
-annotation. Based on a configuration file, different target features can be prioritized with multiple integrated queries. 
-These can be sensitive for feature type, distance, strand specificity, feature attributes (eg. protein_coding) or the anchor position relative to the feature. 
-UROPA can incorporate reference annotation files (GTF) from different sources, like Gencode, Ensembl, or RefSeq, 
+annotation. Based on a configuration file, different target features can be prioritized with multiple integrated queries.
+These can be sensitive for feature type, distance, strand specificity, feature attributes (eg. protein_coding) or the anchor position relative to the feature.
+UROPA can incorporate reference annotation files (GTF) from different sources, like Gencode, Ensembl, or RefSeq,
 as well as custom reference files produced by the user.
 
 Features
@@ -12,7 +12,7 @@ Features
 
 -  Detect the most appropriate annotation with flexible parameter keys that allow
    robustness and simple customization, such as
-   
+
    -  feature type
    -  feature anchor
    -  feature direction relative to peak location
@@ -45,14 +45,14 @@ install.packages(c("ggplot2", "devtools", "gplots", "gridExtra", "jsonlite", "Ve
 source("https://bioconductor.org/biocLite.R")
 biocLite(c("RBGL","graph"))
 # to install the last required package, devtools has to be loaded to use the install from github function
-# if you copy this and want to use it in once, 
+# if you copy this and want to use it in once,
 # make sure the library loading is not interrupted by the question if present packages should be updated
 library(devtools)
 install_github("jenzopr/Vennerable")
 ```
 
 
-### Install UROPA locally 
+### Install UROPA locally
 
 ```bash
 git clone https://github.molgen.mpg.de/loosolab/UROPA.git
@@ -63,11 +63,10 @@ export PATH=$PATH:dir/to/uropa
 Usage: uropa [options]          
 
 Available options:
-	
+
 		-h, --help             	print this help message and further details on the configuration file
         -i, --input            	filename of configuration file [mandatory]
-        -o, --output           	directory for results of the output file name [current dir]
-		-p, --prefix			prefix for output file [basename of input bed]
+        -p, --prefix           	prefix for output files, can include subdirectories [basename of --input]
         -r, --reformat         	create an additional compact and line-reduced table as result file
         -s, --summary          	additional visualisation of results in graphical format will be created
         -t n, --threads n      	multiprocessed run: n = number of threads to run annotation process
