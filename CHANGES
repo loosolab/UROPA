@@ -1,9 +1,12 @@
-## 1.0.1 (2017-01-27)
+## 1.0.1 (2017-01-30)
 
-- updated summary script for new gridExtra requirements (rows=NULL instead of show.rownames=FALSE)
-- fixed log file bug 
-- fixed internals feature to work for distances larger than default distance
-- removed summary config after usage
+- Introduced parameter -p/--prefix, replaces -o/--output
+- Replaced parameter --no-comment by --add-comments
+- Renamed output files to prefix_allhits.txt, prefix_finalhits.txt and prefix_besthits.txt
+- Updated summary script for new gridExtra requirements (rows=NULL instead of show.rownames=FALSE)
+- Fixed bug in log file handling
+- Fixed bug in internals features, now works for distances larger than default distance
+- Removed summary config after usage, removed split_peaks subdirectory in case of multithreading
 
 ## 1.0 (2016-11-22)
 
@@ -15,7 +18,7 @@
 ## 0.3 (2016-10-10)
 
 - Changed function "valid_fsa" to check for strand[ignore,same,opposite]+filter.attributes + hit.feature//mk
-- Added new parameters debug, log and threads. 
+- Added new parameters debug, log and threads.
 - Added config file help as epilog.
 - Parsing queries now accounts for empty ("") values.
 - Invalid features result in a Warning, not in a program stop.

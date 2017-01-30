@@ -17,6 +17,7 @@ import glob
 import argparse
 import logging
 import datetime
+import shutil
 import subprocess as sp
 import multiprocessing as mp
 from itertools import chain
@@ -44,14 +45,13 @@ if __name__ == "__main__":
         action="store",
         metavar="config.json")
     parser.add_argument(
-        "-o",
-        "--output",
-        dest="output",
-        help="directory for results and prefix of the output file name",
+        "-p",
+        "--prefix",
+        dest="prefix",
+        help="prefix for result file names (defaults to basename of input file)",
         required=False,
         action="store",
-        metavar="uropa_out/",
-        default="uropa_out/")
+        metavar="prefix")
     parser.add_argument(
         "-r",
         "--reformat",
@@ -99,7 +99,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     config = args.input
-    outdir = args.output.strip("/") + "/"  # if '/' given ignored.
 
     # Configure logging
     logger = logging.getLogger(__name__)
@@ -116,7 +115,7 @@ if __name__ == "__main__":
     logger.addHandler(streamHandle)
 
     if args.log is not None:
-	logpath = os.path.dirname(args.log)
+        logpath = os.path.dirname(args.log)
         if not os.path.exists(logpath) and logpath != '':
             try:
                 os.makedirs(logpath)
@@ -130,10 +129,23 @@ if __name__ == "__main__":
         except IOError:
             logger.error("Could not create log file {}".format(args.log))
 
+    if args.prefix is not None:
+        prefixpath = os.path.dirname(args.prefix)
+        if not os.path.exists(prefixpath):
+            if not prefixpath == '':
+                try:
+                    os.makedirs(prefixpath)
+                except IOError:
+                    logger.error("Could not create directory {} for output".format(prefixpath))
+            else:
+                prefixpath = '.'
+        outdir = prefixpath + '/' + os.path.basename(args.prefix) + '_'
+    else:
+        outdir = "./" + os.path.splitext(args.input)[0] + '_'
+
+    logger.debug("Directory for output files is {}".format(outdir))
     logger.info("Start time: %s", datetime.datetime.now().strftime("%d.%m.%Y %H:%M"))
 
-    if not os.path.exists(outdir):
-        os.makedirs(outdir)
     try:
         cfg_dict = cfg.parse_json(config)
     except IOError:
@@ -253,15 +265,12 @@ if __name__ == "__main__":
 
     header = "\t".join(header_base + query_attributes + ["query"])
 
-    outdir_len = len(outdir.split("/"))
-    outname = "" if outdir == "." else "_" + outdir.split("/")[outdir_len - 2]
-    spl_dir = "splitted_peaks/"
-
     #
     # Preparation of multiprocessing
     #
     if args.threads > 1:
         logger.info("Multiprocessing: Peak file will be split in %s smaller files.", args.threads)
+        spl_dir = outdir + "split_peaks/"
         if not os.path.exists(spl_dir):
             os.makedirs(spl_dir)
         cmd = ['split',
@@ -299,7 +308,7 @@ if __name__ == "__main__":
         # Files created after annot.process:
 
     allhits_partials = glob.glob(outdir + "allhits_part_*")
-    besthits_partials = glob.glob(outdir + "besthits_part_*")
+    finalhits_partials = glob.glob(outdir + "finalhits_part_*")
 
     logger.info("Writing output files to {}".format(outdir))
 
@@ -317,14 +326,16 @@ if __name__ == "__main__":
         besthits_outfile = outdir + "besthits.txt"
         merged_outfile = outdir + "finalhits.txt"
 
-        finalhits_partials = glob.glob(outdir + "finalhits_part_*")
+        besthits_partials = glob.glob(outdir + "besthits_part_*")
         ovls.finalize_file(merged_outfile, finalhits_partials, header, comments, log=logger)
+        ovls.finalize_file(besthits_outfile, besthits_partials, header, comments, log=logger)
     else:
         besthits_outfile = outdir + "finalhits.txt"
+        ovls.finalize_file(besthits_outfile, finalhits_partials, header, comments, log=logger)
+
+    logger.debug("Filenames for output files are: {}, {}". format(allhits_outfile, besthits_outfile))
 
     ovls.finalize_file(allhits_outfile, allhits_partials, header, comments, log=logger)
-    ovls.finalize_file(besthits_outfile, besthits_partials, header, comments, log=logger)
-
     #
     # Reformat output
     #
@@ -399,6 +410,8 @@ if __name__ == "__main__":
         #logger.debug("Attempting to clean {}".format(outdir))
         ovls.cleanup(outdir, logger)
 
+        if os.path.exists(spl_dir):
+            shutil.rmtree(spl_dir)
         if os.path.exists(outdir+"summary_config.json"):
             os.remove(outdir+"summary_config.json")
         os.remove(gtf_index)  # .gz
