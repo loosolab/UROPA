@@ -20,7 +20,6 @@ def annotation_process(input_args, peak_file, log=None):
 
     try:
         prefix_pk = peak_file.split("_peak_")[1].split(".bed")[0]
-        prefix_pk = "_" + prefix_pk
     except IndexError:
         # In case peaks file is small and not splitted
         prefix_pk = ""
@@ -439,12 +438,12 @@ def annotation_process(input_args, peak_file, log=None):
                         BestBest_hits[k] = Best_combo[k]
 
         # > Write in file
-        allhits_file = outdir + "AllHits_PartialTable" + prefix_pk + ".txt"
-        besthits_file = outdir + "BestHits_PartialTable" + prefix_pk + ".txt"
-
+        allhits_file = outdir + "allhits_part_" + prefix_pk + ".txt"
+        finalhits_file = outdir + "finalhits_part_" + prefix_pk + ".txt"
+        
         try:
             ovls.write_partial_file(allhits_file, All_combo)
-            ovls.write_partial_file(besthits_file, Best_combo)
+            ovls.write_partial_file(finalhits_file, Best_combo)
         except IOError:
             if not log is None:
                 log.error("Unable to open file " + allhits_file + " for writing results!")
@@ -453,7 +452,7 @@ def annotation_process(input_args, peak_file, log=None):
         # Create the Merged also when Pr=True for merging any occasional Best
         # hits with same distance
         if len(queries) > 1 and not priority:
-            mergedBest_hits_file = outdir + "Merged_BestHits_PartialTable" + prefix_pk + ".txt"
-            ovls.write_partial_file(mergedBest_hits_file, BestBest_hits)
+            besthits_file = outdir + "besthits_part_" + prefix_pk + ".txt"
+            ovls.write_partial_file(besthits_file, BestBest_hits)
 
     return
