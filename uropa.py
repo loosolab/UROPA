@@ -141,7 +141,7 @@ if __name__ == "__main__":
                 prefixpath = '.'
         outdir = prefixpath + '/' + os.path.basename(args.prefix) + '_'
     else:
-        outdir = "./" + os.path.splitext(args.input)[0] + '_'
+        outdir = "./" + os.path.splitext(os.path.basename(args.input))[0] + '_'
 
     logger.debug("Directory for output files is {}".format(outdir))
     logger.info("Start time: %s", datetime.datetime.now().strftime("%d.%m.%Y %H:%M"))
