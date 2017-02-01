@@ -4,7 +4,7 @@ uropa.py: UROPA - Universal RObust Peak Annotator
 
 @authors: Maria Kondili, Jens Preussner and Annika Fust
 @license: MIT
-@version: 1.0
+@version: 1.1.0
 @maintainer: Mario Looso
 @email: mario.looso@mpi-bn.mpg.de
 """
@@ -17,6 +17,7 @@ import glob
 import argparse
 import logging
 import datetime
+import shutil
 import subprocess as sp
 import multiprocessing as mp
 from itertools import chain
@@ -44,14 +45,13 @@ if __name__ == "__main__":
         action="store",
         metavar="config.json")
     parser.add_argument(
-        "-o",
-        "--output",
-        dest="output",
-        help="directory for results and prefix of the output file name",
+        "-p",
+        "--prefix",
+        dest="prefix",
+        help="prefix for result file names (defaults to basename of input file)",
         required=False,
         action="store",
-        metavar="uropa_out/",
-        default="uropa_out/")
+        metavar="prefix")
     parser.add_argument(
         "-r",
         "--reformat",
@@ -74,8 +74,8 @@ if __name__ == "__main__":
         metavar="n",
         default=1)
     parser.add_argument(
-        "--no-comments",
-        help="do not show comment lines in output files",
+        "--add-comments",
+        help="add comment lines to output files",
         required=False,
         action="store_true")
     parser.add_argument(
@@ -95,11 +95,10 @@ if __name__ == "__main__":
         "--version",
         help="prints the version and exits",
         action="version",
-        version="%(prog)s 1.0")
+        version="%(prog)s 1.1.0")
     args = parser.parse_args()
 
     config = args.input
-    outdir = args.output.strip("/") + "/"  # if '/' given ignored.
 
     # Configure logging
     logger = logging.getLogger(__name__)
@@ -116,8 +115,8 @@ if __name__ == "__main__":
     logger.addHandler(streamHandle)
 
     if args.log is not None:
-	logpath = os.path.dirname(args.log)
-        if not os.path.exists(logpath):
+        logpath = os.path.dirname(args.log)
+        if not os.path.exists(logpath) and logpath != '':
             try:
                 os.makedirs(logpath)
             except OSError:
@@ -130,10 +129,23 @@ if __name__ == "__main__":
         except IOError:
             logger.error("Could not create log file {}".format(args.log))
 
+    if args.prefix is not None:
+        prefixpath = os.path.dirname(args.prefix)
+        if not os.path.exists(prefixpath):
+            if not prefixpath == '':
+                try:
+                    os.makedirs(prefixpath)
+                except IOError:
+                    logger.error("Could not create directory {} for output".format(prefixpath))
+            else:
+                prefixpath = '.'
+        outdir = prefixpath + '/' + os.path.basename(args.prefix) + '_'
+    else:
+        outdir = "./" + os.path.splitext(os.path.basename(args.input))[0] + '_'
+
+    logger.debug("Directory for output files is {}".format(outdir))
     logger.info("Start time: %s", datetime.datetime.now().strftime("%d.%m.%Y %H:%M"))
 
-    if not os.path.exists(outdir):
-        os.makedirs(outdir)
     try:
         cfg_dict = cfg.parse_json(config)
     except IOError:
@@ -235,10 +247,6 @@ if __name__ == "__main__":
     NAsList = list(np.repeat("NA", nas_len))
     NAsList[nas_len - 1] = "- "
 
-    header_comments = outdir + "cfg_header.txt"
-    if not args.no_comments:
-        ovls.write_header(header_comments, queries, str(pr), annot_gtf, peaks_bed)
-
     header_base = [
         "peak_id",
         "peak_chr",
@@ -257,15 +265,12 @@ if __name__ == "__main__":
 
     header = "\t".join(header_base + query_attributes + ["query"])
 
-    outdir_len = len(outdir.split("/"))
-    outname = "" if outdir == "." else "_" + outdir.split("/")[outdir_len - 2]
-    spl_dir = "splitted_peaks/"
-
     #
     # Preparation of multiprocessing
     #
     if args.threads > 1:
         logger.info("Multiprocessing: Peak file will be split in %s smaller files.", args.threads)
+        spl_dir = outdir + "split_peaks/"
         if not os.path.exists(spl_dir):
             os.makedirs(spl_dir)
         cmd = ['split',
@@ -291,99 +296,49 @@ if __name__ == "__main__":
 #
     input_args = [outdir, gtf_index, query_attributes, queries, max_distance, pr, gtf_has_chr]
 
-    # Output FileNames common for any thread option
-    allhits_file = "AllHits" + outname + ".txt"
-    allhits_outfile = outdir + "Uropa_" + allhits_file
-    besthits_file = "BestHits" + outname + ".txt"
-    besthits_outfile = outdir + "Uropa_" + besthits_file if len(
-        queries) > 1 and not pr else outdir + "Uropa_FinalHits" + outname + ".txt"
-
-    if len(queries) > 1 and not pr:
-        merged_besthits_file = "Merged_BestHits" + outname + ".txt"
-        merged_outfile = outdir + "Uropa_FinalHits" + outname + ".txt"
-
     # > Write output according to Thread option
     if args.threads > 1:
-        if not os.path.exists(spl_dir):
-            os.makedirs(spl_dir)
-
         pool = mp.Pool(args.threads)
         partial_func = partial(ant.annotation_process, input_args)
         pool.map(partial_func, glob.glob(spl_dir + "*.bed"))
         pool.close()
         pool.join()
-
-        # Write out conc_files + header
-        allhits_partials = glob.glob(outdir + "AllHits_Partial*")
-        besthits_partials = glob.glob(outdir + "BestHits_Partial*")
     else:
         ant.annotation_process(input_args, peaks_bed, logger)
         # Files created after annot.process:
-        allhits_partials = glob.glob(outdir + "AllHits_Partial*")
-        besthits_partials = glob.glob(outdir + "BestHits_Partial*")
 
+    allhits_partials = glob.glob(outdir + "allhits_part_*")
+    finalhits_partials = glob.glob(outdir + "finalhits_part_*")
 
-    ovls.write_final_file(
-        args.threads,
-        outdir,
-        allhits_file,
-        allhits_partials,
-        allhits_outfile,
-        header_comments,
-        header,
-        args.no_comments,
-        logger)
-    ovls.write_final_file(
-        args.threads,
-        outdir,
-        besthits_file,
-        besthits_partials,
-        besthits_outfile,
-        header_comments,
-        header,
-        args.no_comments,
-        logger)
+    logger.info("Writing output files to {}".format(outdir))
+
+    if args.add_comments:
+        comments = ovls.concat_comments(queries, str(pr), annot_gtf, peaks_bed)
+    else:
+        comments = None
+
+    #
+    # Merging output files
+    #
+    allhits_outfile = outdir + "allhits.txt"
 
     if len(queries) > 1 and not pr:
-        MergedBest_partials = glob.glob(
-          outdir + "Merged_BestHits_Partial*")
-        ovls.write_final_file(
-            args.threads,
-            outdir,
-            merged_besthits_file,
-            MergedBest_partials,
-            merged_outfile,
-            header_comments,
-            header,
-            args.no_comments,
-            logger)
+        besthits_outfile = outdir + "besthits.txt"
+        merged_outfile = outdir + "finalhits.txt"
 
-    outputs_ready = os.path.exists(
-        allhits_outfile) and os.path.exists(besthits_outfile)
-    # Delete partials after the concatenation
-    if outputs_ready:
-        del_tmp1 = ovls.delete_partials(
-            "All", outdir, outname, spl_dir, args.threads)
-        del_tmp2 = ovls.delete_partials(
-            "Best", outdir, outname, spl_dir, args.threads)
-        if del_tmp1 and del_tmp2:
-            if len(queries) > 1 and not pr:
-                del_tmp3 = ovls.delete_partials(
-                    "Merged_Best", outdir, outname, spl_dir, args.threads)
-                if del_tmp3:
-                    if args.threads > 1:
-                        ovls.del_spl_pks(spl_dir)
+        besthits_partials = glob.glob(outdir + "besthits_part_*")
+        ovls.finalize_file(merged_outfile, finalhits_partials, header, comments, log=logger)
+        ovls.finalize_file(besthits_outfile, besthits_partials, header, comments, log=logger)
+    else:
+        besthits_outfile = outdir + "finalhits.txt"
+        ovls.finalize_file(besthits_outfile, finalhits_partials, header, comments, log=logger)
 
-            elif len(queries) == 1 or pr:
-                if args.threads > 1:
-                    if del_tmp2:
-                        ovls.del_spl_pks(spl_dir)
-                else:
-                    spl_dir = ""  # no splitting with t=1
-                    del_tmp2 = ovls.delete_partials(
-                        "Best", outdir, outname, spl_dir, args.threads)
+    logger.debug("Filenames for output files are: {}, {}". format(allhits_outfile, besthits_outfile))
 
-    # Reformat All_hits if asked so :
+    ovls.finalize_file(allhits_outfile, allhits_partials, header, comments, log=logger)
+    #
+    # Reformat output
+    #
     if args.reformat and len(queries) > 1 and not pr:
         logger.info("Reformatting output...")
         R_reform_Best = [
@@ -416,7 +371,9 @@ if __name__ == "__main__":
             logger.info("Reformatted BestHits output: %s", reformatted_outfile)
             os.remove(outdir + reformatBest_out)
 
-    #> Create the Visualisation Summary Output
+    #
+    # Visual summary
+    #
     if args.summary:
         logger.info("Creating the Summary graphs of the results...")
         summary_script = "summary.R"
@@ -443,14 +400,22 @@ if __name__ == "__main__":
         except OSError:
             logger.warning("Rscript command not available for summary output.")
 
-    # Remove all other un-necessary files :
+    #
+    # Clean up of temporary files
+    #
+    outputs_ready = os.path.exists(
+        allhits_outfile) and os.path.exists(besthits_outfile)
+
     if outputs_ready:
+        #logger.debug("Attempting to clean {}".format(outdir))
+        ovls.cleanup(outdir, logger)
+
+        if os.path.exists(spl_dir):
+            shutil.rmtree(spl_dir)
         if os.path.exists(outdir+"summary_config.json"):
             os.remove(outdir+"summary_config.json")
         os.remove(gtf_index)  # .gz
         os.remove(gtf_index + ".tbi")
-        if not args.no_comments:
-            os.remove(header_comments)
         if len(gtf_feat) > 1:
             os.remove(gtf_cut_file)
             os.remove(gtf_cut_file + ".sorted")

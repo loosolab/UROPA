@@ -7,6 +7,7 @@ import sys
 import subprocess
 import logging
 import shlex
+import shutil
 import glob
 import numpy as np
 
@@ -380,35 +381,32 @@ def write_hit_to_All(All_hits_tab, p_name, attrib_k, Dhit, hit, peak_id, chrom, 
     return All_hits_tab[j][p_name]
 
 
-def write_header(file, queries, priority, annot_gtf, peaks_bed):
-    """Writes a file header."""
-    with open(file, "w") as cof:
-        cof.write("#UROPA-Universal RObust Peak Annotator\n")
-        for q in enumerate(queries):
-            cof.write("#Query No {} :".format(q[0]))
-            cof.write("\n#feature: {}, strand: {}, feature.anchor: {}, distance : {} , direction : {}, internals :{},\n#show.attribute(s): {}, filter.attribute: {},attribute.value:{}".format(
+def concat_comments(queries, priority, annot_gtf, peaks_bed):
+    """Puts together comments for file header."""
+    comments = ["#UROPA-Universal RObust Peak Annotator"]
+    for q in enumerate(queries):
+        comments.append("#Query No {} :".format(q[0]))
+        comments.append("#feature: {}, strand: {}, feature.anchor: {}, distance : {} , direction : {}, internals :{},\n#show.attribute(s): {}, filter.attribute: {},attribute.value:{}".format(
                 q[1]['feature'], q[1]['strand'], q[1]['feature.anchor'], q[
                     1]['distance'], q[1]['direction'], q[1]['internals'],
-                q[1]['show.attributes'], q[1]['filter.attribute'], q[1]['attribute.value'])
-                     )
-            cof.write("\n")
-        cof.write("#priority:{}\n".format(priority))
-        cof.write("#GTF: {}\n".format(annot_gtf))
-        cof.write("#BED: {}\n".format(peaks_bed))
-        cof.write("#Columns.terminology:\n")
-        cof.write("#feature, feature_start, feature_end, feature_strand: The information of the genomic feature that annotates the peak, as extracted by the gtf file.\n")
-        cof.write(
-            "#distance:The distance measured as following: abs(peak.center-feature.anchor).If no feature.anchor given,then the minimum of 3 distances from each feature.anchor{start,center,end} to peak.center is chosen.\n")
-        cof.write("#feat_anchor : The position of the genomic feature chosen for annotation that had the minimum distance to the peak.center.If feature.anchor given in config this will be shown also here.\n")
-        cof.write(
-            "#genomic_location: The position of the peak relative to the annotated feature direction.\n")
-        cof.write("#feat_ovl_peak : When peak and feature overlap(i.e genomic_location = overlapStart), Ratio(overlapping region / peak.length) shows percentage of peak covered by the feature.(i.e 1.0 = 100% of peak covered, peak is internal.\n")
-        cof.write("#peak_ovl_feat : When peak and feature overlap(i.e genomic_location = overlapStart), Ratio(overlapping region / feature.length) shows percentage of feature covered by the peak.(i.e 1.0 = 100% of feature covered, feature is internal.)\n")
-        cof.write("#Attributes that have been given in the key 'show.atttributes' will be shown here and their values extracted by the gtf will be displayed for each feature.If 'filter.attribute' contains same attribute, this column helps confirm the filtering.\n")
-        cof.write("#query:The query that validates with its given parameters the feature to be assigned to the peak.If only one query given, column will always display '0',the first query.\n")
-        cof.write("#---------------------------------------------------------------------------------------------------------------------------------------#\n")
-    return None
+                q[1]['show.attributes'], q[1]['filter.attribute'], q[1]['attribute.value']))
+    comments.append("#priority:{}".format(priority))
+    comments.append("#GTF: {}".format(annot_gtf))
+    comments.append("#BED: {}".format(peaks_bed))
+    comments.append("#Columns.terminology:")
+    comments.append("#feature, feature_start, feature_end, feature_strand: The information of the genomic feature that annotates the peak, as extracted by the gtf file.")
+    comments.append(
+            "#distance:The distance measured as following: abs(peak.center-feature.anchor).If no feature.anchor given,then the minimum of 3 distances from each feature.anchor{start,center,end} to peak.center is chosen.")
+    comments.append("#feat_anchor : The position of the genomic feature chosen for annotation that had the minimum distance to the peak.center.If feature.anchor given in config this will be shown also here.")
+    comments.append(
+            "#genomic_location: The position of the peak relative to the annotated feature direction.")
+    comments.append("#feat_ovl_peak : When peak and feature overlap(i.e genomic_location = overlapStart), Ratio(overlapping region / peak.length) shows percentage of peak covered by the feature.(i.e 1.0 = 100% of peak covered, peak is internal.")
+    comments.append("#peak_ovl_feat : When peak and feature overlap(i.e genomic_location = overlapStart), Ratio(overlapping region / feature.length) shows percentage of feature covered by the peak.(i.e 1.0 = 100% of feature covered, feature is internal.)")
+    comments.append("#Attributes that have been given in the key 'show.atttributes' will be shown here and their values extracted by the gtf will be displayed for each feature.If 'filter.attribute' contains same attribute, this column helps confirm the filtering.")
+    comments.append("#query:The query that validates with its given parameters the feature to be assigned to the peak.If only one query given, column will always display '0',the first query.")
+    comments.append("#---------------------------------------------------------------------------------------------------------------------------------------#")
 
+    return '\n'.join(comments)
 
 def write_partial_file(outfile, Table):
     """Writes a partial file."""
@@ -429,71 +427,27 @@ def merge_queries(Best_combo_k):
     Best_merg_q = Best_combo_k_0 + "\t" + joined_q
     return Best_merg_q
 
-
-def concatenate_partials(outdir, conc_file, partials):
-    """Concatenates multiple partial files."""
-    with open(outdir + conc_file, 'w') as outTable:
-        for fname in partials:
-            with open(fname) as infile:
-                for line in infile:
-                    outTable.write(line)
-
-
-def write_final_file(threads, outdir, hits_file, partials, outfile, header_file, header, skip_header=False, log=None):
-    """Writes a final file."""
-    if threads > 1:
-        concatenate_partials(outdir, hits_file, partials)
-    else:
-        partials = partials[0]
-        os.rename(partials, outdir + hits_file)
+def finalize_file(ffile, partials, header, comments=None, log=None):
+    """Writes a output table of UROPA."""
     try:
-        with open(outfile, "w") as of:
-            if not skip_header:
-                with open(header_file, "r") as hf:
-                    of.write(hf.read())
-            of.write(header + "\n")
-            with open(outdir + hits_file, "r") as cf:
-                for line in cf:
-                    of.write(line)
+        with open(ffile, "w") as f:
+            if not comments is None:
+                f.write(comments+'\n')
+            f.write(header+'\n')
+            for p in partials:
+                with open(p) as pf:
+                    shutil.copyfileobj(pf, f)
     except IOError:
-        log.error("\nUnable to open file " +
-                  outfile + " for writing results !")
+        if not log is None:
+            log.error("Unable to write to file {}".format(ffile))
 
-
-def delete_partials(tab, outdir, outname, spl_dir, threads):
-    """Removes partial files from the directory."""
-    if threads > 1:
-        spl_peakfiles = os.listdir(spl_dir)
-        # Delete partial tables of multiprocessing
-        finished = (len(glob.glob(outdir + tab + "Hits_Partial*"))
-                    == len(spl_peakfiles))
-        # Check if concatenated files are complete to delete them too(only
-        # created in multicore process)
-        complete = map(lambda fh: os.path.exists(
-            fh), glob.glob(outdir + tab + "Hits.txt"))
-        if finished and all(complete):
-            for tmp in glob.glob(outdir + tab + "Hits_Partial*"):
-                os.remove(tmp)
-            # delete files without header
-            for f in glob.glob(outdir + tab + "Hits" + outname + ".txt"):
-                # when cores>1, concatenated files should be deleted too.
-                os.remove(f)
-            return True
-        else:
-            return False
-    elif threads == 1:
-        finished = (len(glob.glob(outdir + tab + "Hits*")) > 0)
-        if finished:
-            for tmp in glob.glob(outdir + tab + "Hits*"):
-                os.remove(tmp)
-            return True
-        else:
-            return False
-
-
-def del_spl_pks(spl_dir):
-    """Removes partial input files."""
-    for sp in glob.glob(spl_dir + "spl_peak_*.bed"):
-        os.remove(sp)
-        if not any(glob.glob(spl_dir + "spl_peak_*.bed")):
-            os.rmdir(spl_dir)
+def cleanup(directory, log=None):
+    """Removes temporary files from a UROPA directory."""
+    temp_files = glob.glob(directory + '*_part_*')
+    for f in temp_files:
+        try:
+            os.remove(f)
+        except OSError:
+            if not log is None:
+                log.error("Could not remove temporary file {}".format(f))
+            continue
