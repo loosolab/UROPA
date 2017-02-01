@@ -390,21 +390,21 @@ def concat_comments(queries, priority, annot_gtf, peaks_bed):
                 q[1]['feature'], q[1]['strand'], q[1]['feature.anchor'], q[
                     1]['distance'], q[1]['direction'], q[1]['internals'],
                 q[1]['show.attributes'], q[1]['filter.attribute'], q[1]['attribute.value']))
-        comments.append("#priority:{}".format(priority))
-        comments.append("#GTF: {}".format(annot_gtf))
-        comments.append("#BED: {}".format(peaks_bed))
-        comments.append("#Columns.terminology:")
-        comments.append("#feature, feature_start, feature_end, feature_strand: The information of the genomic feature that annotates the peak, as extracted by the gtf file.")
-        comments.append(
+    comments.append("#priority:{}".format(priority))
+    comments.append("#GTF: {}".format(annot_gtf))
+    comments.append("#BED: {}".format(peaks_bed))
+    comments.append("#Columns.terminology:")
+    comments.append("#feature, feature_start, feature_end, feature_strand: The information of the genomic feature that annotates the peak, as extracted by the gtf file.")
+    comments.append(
             "#distance:The distance measured as following: abs(peak.center-feature.anchor).If no feature.anchor given,then the minimum of 3 distances from each feature.anchor{start,center,end} to peak.center is chosen.")
-        comments.append("#feat_anchor : The position of the genomic feature chosen for annotation that had the minimum distance to the peak.center.If feature.anchor given in config this will be shown also here.")
-        comments.append(
+    comments.append("#feat_anchor : The position of the genomic feature chosen for annotation that had the minimum distance to the peak.center.If feature.anchor given in config this will be shown also here.")
+    comments.append(
             "#genomic_location: The position of the peak relative to the annotated feature direction.")
-        comments.append("#feat_ovl_peak : When peak and feature overlap(i.e genomic_location = overlapStart), Ratio(overlapping region / peak.length) shows percentage of peak covered by the feature.(i.e 1.0 = 100% of peak covered, peak is internal.")
-        comments.append("#peak_ovl_feat : When peak and feature overlap(i.e genomic_location = overlapStart), Ratio(overlapping region / feature.length) shows percentage of feature covered by the peak.(i.e 1.0 = 100% of feature covered, feature is internal.)")
-        comments.append("#Attributes that have been given in the key 'show.atttributes' will be shown here and their values extracted by the gtf will be displayed for each feature.If 'filter.attribute' contains same attribute, this column helps confirm the filtering.")
-        comments.append("#query:The query that validates with its given parameters the feature to be assigned to the peak.If only one query given, column will always display '0',the first query.")
-        comments.append("#---------------------------------------------------------------------------------------------------------------------------------------#")
+    comments.append("#feat_ovl_peak : When peak and feature overlap(i.e genomic_location = overlapStart), Ratio(overlapping region / peak.length) shows percentage of peak covered by the feature.(i.e 1.0 = 100% of peak covered, peak is internal.")
+    comments.append("#peak_ovl_feat : When peak and feature overlap(i.e genomic_location = overlapStart), Ratio(overlapping region / feature.length) shows percentage of feature covered by the peak.(i.e 1.0 = 100% of feature covered, feature is internal.)")
+    comments.append("#Attributes that have been given in the key 'show.atttributes' will be shown here and their values extracted by the gtf will be displayed for each feature.If 'filter.attribute' contains same attribute, this column helps confirm the filtering.")
+    comments.append("#query:The query that validates with its given parameters the feature to be assigned to the peak.If only one query given, column will always display '0',the first query.")
+    comments.append("#---------------------------------------------------------------------------------------------------------------------------------------#")
 
     return '\n'.join(comments)
 
