@@ -61,7 +61,7 @@ export PATH=$PATH:dir/to/uropa
 ```
 
 ```bash                        
-Usage: uropa [options]          
+Usage: uropa.py [options]          
 
 Available options:
 	
