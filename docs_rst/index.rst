@@ -1,7 +1,6 @@
 Welcome to the UROPA documentation!
 ===================================
-UROPA is a command line based tool intended for genomic region
-annotation. 
+UROPA is a command line based tool intended for genomic region annotation. 
 
 
 **Advantages of UROPA**
@@ -17,7 +16,7 @@ annotation.
 -  Utilization of any available GTF files as annotation reference
 -  Multiple queries can be processed in a single run
 -  Graduated annotation due to prioritization
--  Multiple output tables (AllHits, FinalHits, BestperQuery\_Hits)
+-  Multiple output tables (allhits, finalhits, besthits)
 -  Visual summary for annotation evaluation
 -  Preparation of custom annotation files with the UROPA to GTF utility
 

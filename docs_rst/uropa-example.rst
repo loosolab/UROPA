@@ -44,7 +44,7 @@ This could be useful for the annotation of histone marks and can be applied in t
 By default, the distances from all three positions to the peak center are calculated and the closest distance is chosen. 
 Only if the chosen distance is smaller or equal to the maximum distance defined in the ``distance`` key, the peak will be annotated for that feature. 
 
-The Allhits Table 1 represents the annotation for a peak located inside a feature(third peak from right in :ref:`Figure 1 <genomic-location>`). 
+The allhits Table 1 represents the annotation for a peak located inside a feature(third peak from right in :ref:`Figure 1 <genomic-location>`). 
 Assuming *gene A* is very large, the peak center is far away from the start of the gene. If using the center as ``feature.anchor`` it is found as a valid annotation. 
 
 That is what happens for peak 71 with the configuration as followed: 
@@ -72,7 +72,7 @@ That is what happens for peak 71 with the configuration as followed:
 | …       |          |            |             |            |             |         |            |             |             |             |          |                   |               |               |           |       |
 +---------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+-----------+-------+
 
-**Table 6.1:** Excerpt of AllHits result file for a configuration with two queries applying different ``feature.anchor`` values. With ``"feature.anchor":"start"`` there is no valid annotation (query 0), with ``"feature.anchor":"center"`` the annotation for gene *BCL2L13* is valid (query 1).
+**Table 6.1:** Excerpt of allhits result file for a configuration with two queries applying different ``feature.anchor`` values. With ``"feature.anchor":"start"`` there is no valid annotation (query 0), with ``"feature.anchor":"center"`` the annotation for gene *BCL2L13* is valid (query 1).
 
 
 .. hint:: 
@@ -127,7 +127,7 @@ In the following excerpt of a result file, the UROPA annotation was performed wi
 | …          |          |            |             |            |             |         |            |             |             |             |          |                  |               |               |           |       |
 +------------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+------------------+---------------+---------------+-----------+-------+
 
-**Table 6.2:** Result table AllHits for H3K4me1 peak 21044, annotated for two genes. The query 0 represents default direction(``"direction":"any_direction"``). The second query represents an annotation with specified direction. Within query 1 only annotations upstream of the feature are allowed. 
+**Table 6.2:** Result table allhits for H3K4me1 peak 21044, annotated for two genes. The query 0 represents default direction(``"direction":"any_direction"``). The second query represents an annotation with specified direction. Within query 1 only annotations upstream of the feature are allowed. 
 
 The peak 21044 displayed in Figure 2 would be annotated for both genes as displayed in Table 2. For query 0 the final hit for this peak is gene *ATAD3C* due to the smaller distance. However, the annotation for gene *ATAD3B* might be more suitable, because H3K4me1 is known to flank enhancers which are located upstream of genes. This annotation behaviour is reached with query 1. In this case the annotation for the downstream located feature is no longer valid. 
 
@@ -185,12 +185,12 @@ The first query (query 0) of the following configuration displays the default be
 | …       |          |            |             |            |             |         |            |             |             |             |          |                   |               |               |           |       |
 +---------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+-----------+-------+
 
-**Table 6.3:** AllHits for POLR2A peak_13 with query key ``"internals":"False"`` for query 0 and ``"internals":"True"`` for query 1.
+**Table 6.3:** allhits for POLR2A peak_13 with query key ``"internals":"False"`` for query 0 and ``"internals":"True"`` for query 1.
 
 
 As displayed in Table 3, there are two valid annotation for the given configuration for query 0. But the third gene in this genomic regions is missed due to the large distance to any ``feature.anchor``. 
 This is different for query 1. Even with the exceeded distance limit, the third gene is annotated for this peak. The annotation for this peak is also a good example for the usage of the different output tables. 
-The annotation for gene *HIST1H2AM* would be represented in the FinalHits for both queries.
+The annotation for gene *HIST1H2AM* would be represented in the finalhits for both queries.
 
 Example 4: ``filter.attribute`` + ``attribute.value`` 
 -----------------------------------------------------
@@ -230,9 +230,9 @@ That attribute name has to be termed in the ``filter.attribute`` key. The corres
 | …       |          |            |             |            |             |         |            |             |             |             |          |                   |               |               |           |                |       |
 +---------+----------+------------+-------------+------------+-------------+---------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+-----------+----------------+-------+
 
-**Table 6.4:** Excerpt of table AllHits with key ``feature:gene`` and ``distance:5000``. For query 0 all annotations for the feature gene are valid, in query 1 the gene has to be protein coding to be a valid annotation.
+**Table 6.4:** Excerpt of table allhits with key ``feature:gene`` and ``distance:5000``. For query 0 all annotations for the feature gene are valid, in query 1 the gene has to be protein coding to be a valid annotation.
 
-As shown in the AllHits Table 4, there are three valid annotations for peak 10 for query 0 but only one valid annotation for query 1. The final hit for query 0 would be the annotation for *SNHG3* with a distance of 1014 bp. But this might not what one is expecting from an annotation run, as the gene biotype is intronic. 
+As shown in the allhits Table 4, there are three valid annotations for peak 10 for query 0 but only one valid annotation for query 1. The final hit for query 0 would be the annotation for *SNHG3* with a distance of 1014 bp. But this might not what one is expecting from an annotation run, as the gene biotype is intronic. 
 
 
 .. tip:: It is just possible to filter for values given in the attribute column. GTF source files can contain different attribute keys and values, so make sure the chosen values are present.
@@ -280,12 +280,12 @@ Configuration with two queries and without prioritisation:
 | peak_10 | chr1     | 28832002   | 28836390    | 28840778   | .           | transcript | 28836589   | 28862538    | \+          | start       | 199      | overlapStart      | 0.48          | 0.16          | RCC1       | 1     |
 +---------+----------+------------+-------------+------------+-------------+------------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+------------+-------+
 
-**Table 6.5:** Excerpt of AllHits table for two queries without prioritisation.
+**Table 6.5:** Excerpt of allhits table for two queries without prioritisation.
 
 The above set of queries will allow UROPA to annotate peaks for genes and transcripts. As priority is False (default), there is no query
-prioritized. As presented in the AllHits Table 5, there are valid annotations for peak 6 with both queries. The annotation for the feature
-gene would be presented in the FinalHits. For peak 10, there are only valid annotations for the second query, the annotation for the gene *RCC1* correspond to
-the best annotation and would be represented in the FinalHits.
+prioritized. As presented in the allhits Table 5, there are valid annotations for peak 6 with both queries. The annotation for the feature
+gene would be presented in the finalhits. For peak 10, there are only valid annotations for the second query, the annotation for the gene *RCC1* correspond to
+the best annotation and would be represented in the finalhits.
 
 
 
@@ -305,7 +305,7 @@ Next, after changing the ``priority`` flag in the configuration above to ``"prio
 | peak_10 | chr1     | 28832002   | 28836390    | 28840778   | .           | transcript | 28836589   | 28862538    | \+          | start       | 199      | overlapStart      | 0.48          | 0.16          | RCC1       | 1     |
 +---------+----------+------------+-------------+------------+-------------+------------+------------+-------------+-------------+-------------+----------+-------------------+---------------+---------------+------------+-------+
 
-**Table 6.6:** Excerpt of AllHits table with two queries with prioritisation. 
+**Table 6.6:** Excerpt of allhits table with two queries with prioritisation. 
 
 If priority is TRUE, UROPA will annotate peaks with the **first feature** found, taking the order of queries into account. 
 Once an annotation is assigned, the following queries are not evaluated at all for the current peak.
@@ -316,7 +316,7 @@ For peak 10, there was no valid annotation for query 0, thus query 1 was evaluat
 .. hint::
   - For priority true there will not be an NA row for queries without valid annotations. 
   - If there is no valid annotation for a peak across all queries, there is a combined NA row for all queries (NA NA ... NA 0,1)
-  - There will be no BestperQuery_Hits if priority is TRUE, as there is only one final annotation per peak
+  - There will be no besthist if priority is TRUE, as there is only one final annotation per peak
    
 
 .. _used-files:

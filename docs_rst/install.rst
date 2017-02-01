@@ -5,43 +5,24 @@ Prerequisites
 -----------------
 For running UROPA locally, the following prerequisites have to be met:
 
-- `Python`_, v2.7 (packages: numpy, sampy)
-- `R/Rscript`_, v3.3.0 or higher (packages: devtools, ggplot2, gplots, grid, gridExtra, jsonlite, RBGL, graph, VennDiagram, Vennerable, snow)
-- `htslib`_ 1.3.2 or higher
-
-Instructions
------------------
-
-Python
-~~~~~~~~~~
-As numpy and sampy packages can be taxing to install in Python, we recommend the usage of the `Anaconda`_ distribution instead (v2.7.8-anaconda-2.1.0 or higher). Install with eg. ``bash Anaconda2-4.2.0-Linux-x86_64.sh`` and include the path in the environment variable ``export PATH=dir/to/python_anaconda:$PATH``.
-
-Using standard Python 2.7, the packages can be installed with ``pip install pysam numpy``.
-
-R
-~~~~~
-The following packages are hosted by CRAN and can be installed from the R console with the syntax ``install.packages("packagename")``.
-
-- `devtools`_
-- `ggplot2`_
-- `gplots`_
-- `gridExtra`_ 
-- `jsonlite`_ 
-- `VennDiagram`_ 
-- `snow`_ 
-
-The RBGL and graph packages are hosted by BioConductor. To install those start R and type ``source("https://bioconductor.org/biocLite.R")`` and ``biocLite(c("RBGL","graph"))``.
-
-Vennerable has to be installed with ``library("devtools")`` followed by ``install_github("jenzopr/Vennerable")``.
-
-HTSlib
-~~~~~
-The HTSlib library is necessary for the indexing of the reference features using Tabix. For installation instructions please refer to the following url: `htslib`_.
-
+- `Python`_, v2.7 
+	- download Anaconda for Linux version Python 2.7 to direction where python should be installed
+	- run ``bash Anaconda2-4.3.0-Linux-x86_64.sh``
+	- Answer the question "Do you wish the installer to prepend the Anaconda2 install location to PATH in your /home/.../.bashrc ?" with yes OR do ``PATH=dir/to/python_anaconda:$PATH`` after th installation process has finished
+	- run ``conda install -c bioconda pysam``
+	- if you are NOT using the anaconda version of python 2, the packages `pysam`_ and `numpy`_ can be installed with ``pip install pysam numpy``
+- `R/Rscript`_, v3.3.0 or higher (follow the instructions on url)
+	Install packages:
+	- ``install.packages(c("`ggplot2`_", "`devtools`_", "`gplots`_", "`gridExtra`_", "`jsonlite`_", "`VennDiagram`_"))``
+	## choose mirrow
+	- ``source("https://bioconductor.org/biocLite.R")``
+	- ``biocLite(c("RBGL","graph"))``
+	- ``library(devtools)``
+	- ``install_github("jenzopr/Vennerable")``
+- `git`_ with ``bash sudo apt-get install git``
 
 UROPA
-~~~~~
-
+-----
 UROPA itself can be installed by simply cloning the Github library and adding the target folder to the system environment variable.
 
 .. code:: bash
@@ -54,7 +35,7 @@ UROPA itself can be installed by simply cloning the Github library and adding th
 .. _R/Rscript: http://www.r-project.org/
 .. _Python: http://continuum.io/downloads
 .. _Anaconda: http://continuum.io/downloads
-.. _htslib: http://www.htslib.org/download/
+.. _git: https://git-scm.com/
 .. _numpy: http://www.numpy.org
 .. _pysam: https://pysam.readthedocs.io/en/latest/index.html
 .. _ggplot2: https://cran.r-project.org/web/packages/ggplot2/index.html
