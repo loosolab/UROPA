@@ -275,7 +275,6 @@ if __name__ == "__main__":
             os.makedirs(spl_dir)
         cmd = ['split',
                '-n l/' + str(args.threads),
-               '--additional-suffix=.bed',
                peaks_bed,
                spl_dir + 'spl_peak_']
 
@@ -300,7 +299,7 @@ if __name__ == "__main__":
     if args.threads > 1:
         pool = mp.Pool(args.threads)
         partial_func = partial(ant.annotation_process, input_args)
-        pool.map(partial_func, glob.glob(spl_dir + "*.bed"))
+        pool.map(partial_func, glob.glob(spl_dir + "spl_peak_*"))
         pool.close()
         pool.join()
     else:
