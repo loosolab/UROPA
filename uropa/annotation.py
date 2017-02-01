@@ -439,20 +439,19 @@ def annotation_process(input_args, peak_file, log=None):
 
         # > Write in file
         allhits_file = outdir + "allhits_part_" + prefix_pk + ".txt"
-        finalhits_file = outdir + "finalhits_part_" + prefix_pk + ".txt"
-        
+
         try:
             ovls.write_partial_file(allhits_file, All_combo)
-            ovls.write_partial_file(finalhits_file, Best_combo)
         except IOError:
             if not log is None:
                 log.error("Unable to open file " + allhits_file + " for writing results!")
             sys.exit()
 
-        # Create the Merged also when Pr=True for merging any occasional Best
-        # hits with same distance
+        finalhits_file = outdir + "finalhits_part_" + prefix_pk + ".txt"
         if len(queries) > 1 and not priority:
             besthits_file = outdir + "besthits_part_" + prefix_pk + ".txt"
-            ovls.write_partial_file(besthits_file, BestBest_hits)
-
+            ovls.write_partial_file(besthits_file, Best_combo)
+            ovls.write_partial_file(finalhits_file, BestBest_hits)
+        else:
+            ovls.write_partial_file(finalhits_file, Best_combo)
     return
