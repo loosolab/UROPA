@@ -34,23 +34,24 @@ Installation and Command-line usage
 ------------------------------------
 Make sure all prerequisites are met:
 
+- [Python](http://continuum.io/downloads) 
+	- download Anaconda for Linux version Python 2.7 to direction where python should be installed
+	- run ```bash Anaconda2-4.3.0-Linux-x86_64.sh``` 
+	- Answer the question "Do you wish the installer to prepend the Anaconda2 install location to PATH in your /home/.../.bashrc ?" with yes 
+		OR do ```PATH=dir/to/python_anaconda:$PATH``` after installation process
+	- run ```conda install -c bioconda pysam```
+
 - [R/Rscript](http://www.r-project.org/) (v3.3.0 or higher; follow instructions on url)
-- [Python](http://continuum.io/downloads) (v2.7.8-anaconda-2.1.0 (packages numpy and sampy are included), install with ```bash Anaconda2-4.2.0-Linux-x86_64.sh``` and ```PATH=dir/to/python_anaconda:$PATH```)
-- [htslib](http://www.htslib.org/download/) (v1.3.2 or higher; follow instructions on url)
-
-
-Install required packages for R:
-```bash
-install.packages(c("ggplot2", "devtools", "gplots", "gridExtra", "jsonlite", "VennDiagram"))
-source("https://bioconductor.org/biocLite.R")
-biocLite(c("RBGL","graph"))
-# to install the last required package, devtools has to be loaded to use the install from github function
-# if you copy this and want to use it in once, 
-# make sure the library loading is not interrupted by the question if present packages should be updated
-library(devtools)
-install_github("jenzopr/Vennerable")
-```
-
+	- install required packages step by step: 
+	```bash
+	install.packages(c("ggplot2", "devtools", "gplots", "gridExtra", "jsonlite", "VennDiagram"))
+	source("https://bioconductor.org/biocLite.R")
+	biocLite(c("RBGL","graph"))
+	# to install the last required package, devtools has to be loaded to use the install from github function
+	library(devtools)
+	install_github("jenzopr/Vennerable")
+	```
+- [Git](https://git-scm.com/): run ```bash sudo apt-get install git``` 
 
 ### Install UROPA locally 
 
