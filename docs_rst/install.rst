@@ -6,7 +6,7 @@ Prerequisites
 For running UROPA locally, the following prerequisites have to be met:
 
 - `Python`_, v2.7 (packages: numpy, sampy)
-- `R/Rscript`_, v3.3.0 or higher (packages: devtools, ggplot2, gplots, gridExtra, jsonlite, RBGL, graph, VennDiagram, Vennerable, snow)
+- `R/Rscript`_, v3.3.0 or higher (packages: devtools, ggplot2, gplots, grid, gridExtra, jsonlite, RBGL, graph, VennDiagram, Vennerable, snow)
 - `htslib`_ 1.3.2 or higher
 
 Instructions
@@ -59,6 +59,7 @@ UROPA itself can be installed by simply cloning the Github library and adding th
 .. _pysam: https://pysam.readthedocs.io/en/latest/index.html
 .. _ggplot2: https://cran.r-project.org/web/packages/ggplot2/index.html
 .. _gplots: https://cran.r-project.org/web/packages/gplots/index.html
+.. _gridExtra: https://cran.r-project.org/web/packages/gridExtra/index.html
 .. _gridExtra: https://cran.r-project.org/web/packages/gridExtra/index.html
 .. _jsonlite: https://cran.r-project.org/web/packages/jsonlite/index.html
 .. _VennDiagram: https://cran.r-project.org/web/packages/VennDiagram/index.html
