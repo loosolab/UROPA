@@ -22,7 +22,7 @@ Features
 -  Utilization of all available GTF files as annotation database
 -  One run with variable sets of parameters by multiple queries
 -  Graduated annotation due to priorization
--  Different easily-readable output tables (AllHits, FinalHits, BestperQuery\_Hits).
+-  Different easily-readable output tables (allhits, finalfits, besthits).
 -  Visual summary for annotation evaluation
 -  Preparation of custom annotation files
 
