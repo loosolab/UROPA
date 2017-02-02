@@ -376,13 +376,14 @@ if __name__ == "__main__":
     if args.summary:
         logger.info("Creating the Summary graphs of the results...")
         summary_script = "summary.R"
-        summary_output = outdir + "Uropa_Summary.pdf"
+        summary_output = outdir + "summary.pdf"
 
         if len(queries) > 1 and not pr and os.path.exists(merged_outfile):
             call = [
+                "Rscript",
                 summary_script,
                 merged_outfile,
-                "summary_config.json",
+                outdir + "summary_config.json",
                 summary_output,
                 besthits_outfile]
         else:
@@ -390,7 +391,7 @@ if __name__ == "__main__":
                 "Rscript",
                 summary_script,
                 besthits_outfile,
-                "summary_config.json",
+                outdir + "summary_config.json",
                 summary_output]
         try:
             sum_pr = sp.check_output(call)
