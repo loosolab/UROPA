@@ -126,6 +126,7 @@ features <- c()
 		q <- paste0("query",q)
 		df.query_anno <- rbind(df.query_anno, data.frame(query=q,peaks=as.character(num.peaks),peaks_with_annotation=as.character(count)))
 	}
+
 	df.query_anno <- df.query_anno[2:nrow(df.query_anno),]
 	df.query_anno <- df.query_anno[order(df.query_anno$query),]
 
@@ -149,9 +150,13 @@ features <- c()
 	mytheme <- ttheme_default(core = list(fg_params=list(cex = 1)),colhead = list(fg_params=list(cex = 0.5)),rowhead = list(fg_params=list(cex = 0.5)))
 	res <- tableGrob(format(df.query_anno), theme=mytheme,rows=NULL)
 
-	grid.arrange(grid.text("UROPA summary", gp=gpar(fontsize=20),draw = FALSE), grid.text("Input:", gp=gpar(fontsize=15), draw = FALSE), conf, info, 
-		grid.text("Results:", gp=gpar(fontsize=15),draw = FALSE), res, grid.text(paste0("UROPA annotated ", anno.peaks, " peaks.\n")), nrow=7)
-	
+	if(num.queries == nrow(config.query)){
+		grid.arrange(grid.text("UROPA summary", gp=gpar(fontsize=20),draw = FALSE), grid.text("Input:", gp=gpar(fontsize=15), draw = FALSE), conf, info, 
+			grid.text("Results:", gp=gpar(fontsize=15),draw = FALSE), res, grid.text(paste0("UROPA annotated ", anno.peaks, " peaks.\n")), nrow=7)
+	} else {
+		grid.arrange(grid.text("UROPA summary", gp=gpar(fontsize=20),draw = FALSE), grid.text("Input:", gp=gpar(fontsize=15), draw = FALSE), conf, info, 
+			grid.text("Results:", gp=gpar(fontsize=15),draw = FALSE), res, grid.text(paste0("UROPA annotated ", anno.peaks, " peaks.\nNot all queries represent final hits!"),gp=gpar(fontsize=15), draw = FALSE), nrow=7)
+	}
 	# plot 1 
 	# description
 	plot1 <- paste0("1. Distances of annotated peaks in finalhits:",
@@ -370,9 +375,9 @@ if(length(args)==3){
 				SetLabels[i,"x"] <- max.x+2
 				SetLabels[i,"hjust"] <- "right"
 				if(i==1){
-					SetLabels[i,"y"] <- max.y/2
+					SetLabels[i,"y"] <- max.y/3
 				} else {
-					SetLabels[i,"y"] <- as.numeric(SetLabels[i-1,"y"])-(3*num.queries)
+					SetLabels[i,"y"] <- (as.numeric(SetLabels[i-1,"y"])-2)-(2.5*num.queries)
 				}
 			}
 			cv <- VennSetSetLabels(cv,SetLabels)
@@ -381,8 +386,8 @@ if(length(args)==3){
 			facelabel <- as.data.frame(VennGetFaceLabels(cv))
 			face.labels <- nrow(facelabel)
 			for(i in 1:(face.labels-2)){
-				facelabel[i,"x"] <- 1.8*facelabel[i,"x"]
-				facelabel[i,"y"] <- 1.8*facelabel[i,"y"]
+				facelabel[i,"x"] <- 1.15*facelabel[i,"x"]
+				facelabel[i,"y"] <- 1.15*facelabel[i,"y"]
 			}
 			cv <- VennSetFaceLabels(cv,facelabel)
 
