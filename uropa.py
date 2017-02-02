@@ -268,9 +268,9 @@ if __name__ == "__main__":
     #
     # Preparation of multiprocessing
     #
+    spl_dir = outdir + "split_peaks/"
     if args.threads > 1:
         logger.info("Multiprocessing: Peak file will be split in %s smaller files.", args.threads)
-        spl_dir = outdir + "split_peaks/"
         if not os.path.exists(spl_dir):
             os.makedirs(spl_dir)
         cmd = ['split',
