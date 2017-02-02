@@ -189,20 +189,25 @@ def annotation_process(input_args, peak_file, log=None):
 
                     if len(queries[j]["distance"]) == 2:
                         d_is_best = ovls.get_distance_by_dir([min_dist[j][peak['id']][0][0], min_dist[
-                            j][peak['id']][0][1]], genomic_location, internals_location, Dhit)
+                            j][peak['id']][0][1]], genomic_location, internals_location, Dhit, queries[j]["internals"])
                     if len(queries[j]["distance"]) == 1:
                         d_is_best = ovls.get_distance_by_dir([min_dist[j][peak['id']][0], min_dist[j][
-                            peak['id']][0]], genomic_location, internals_location, Dhit)
+                            peak['id']][0]], genomic_location, internals_location, Dhit, queries[j]["internals"])
+                        #log.debug('Called with {} (q {}): {}, {}, {}, {}'.format(peak['id'], j, min_dist[j][peak['id']][0], genomic_location, internals_location, Dhit))
+                        #log.debug('Returned {} {}'.format(peak['id'], d_is_best))
 
                     # print "Best distance found :{}".format(d_is_best)
                     if d_is_best and not same_gene:  # Dhit < Dbest
-                        #log.debug("\nDistance of Hit from Peak Center = {}, INFERIOR to current Min Distance = {} ".format(Dhit, min_dist[j][peak['id']][0]))
-                        min_dist[j][peak['id']] = ovls.get_besthit(j, len(queries[j]["distance"]), peak[
-                            'id'], hit, attrib_k, Dhit, min_dist)
-                        #print("Minimum distance updated: {}".format(min_dist[j][peak['id']][0]))
-                        Best_res = ovls.create_table(peak['name'], peak['chr'], peak['start'], peak['end'], str(
-                            peak['center']), min_dist[j][peak['id']], attrib_k, min_pos, genomic_location, ovl_pk, ovl_feat, j)
-                        Best_hits_tab[j][peak['id']] = Best_res
+                        best_hit_dist = min_dist[j][peak['id']][0]
+                        current_overlap = ovls.get_besthit(j, len(queries[j]["distance"]), peak['id'], hit, attrib_k, Dhit)
+                        #log.debug("best_hit_dist is {}".format(best_hit_dist))
+                        #log.debug("current_overlap dist is {}".format(current_overlap[0]))
+
+                        if current_overlap[0] <= best_hit_dist:
+                            #log.debug("I just confirmed that {} is smaller than {}, or internals T".format(current_overlap[0], best_hit_dist))
+                            min_dist[j][peak['id']] = current_overlap
+                            Best_res = ovls.create_table(peak['name'], peak['chr'], peak['start'], peak['end'], str(peak['center']), min_dist[j][peak['id']], attrib_k, min_pos, genomic_location, ovl_pk, ovl_feat, j)
+                            Best_hits_tab[j][peak['id']] = Best_res
 
                     # Dhit > Dbest
                     # only if empty fill in with NAs
@@ -210,15 +215,16 @@ def annotation_process(input_args, peak_file, log=None):
                         #log.debug("\nDistance of Hit from Peak Center = {}, LARGER THAN current Min Distance = {}\n".format(Dhit, min_dist[j][peak['id']][0]))
                         Best_hits_tab[j][peak['id']] = "\t".join(np.hstack([peak['name'], peak['chr'], peak[
                             'start'], str(peak['center']), peak['end'], NAsList_q, str(j) + "\n"]))
+                    #log.debug("min_dist is {}".format(min_dist[j][peak['id']]))
 
                     # EVERY HIT getting registered in Allhits file if Dhit <
                     # query.distance
                     if len(queries[j]["distance"]) > 1:
                         Dhit_smaller = ovls.get_distance_by_dir([queries[j]["distance"][0], queries[j][
-                            "distance"][1]], genomic_location, internals_location, Dhit)
+                            "distance"][1]], genomic_location, internals_location, Dhit, queries[j]["internals"])
                     else:
                         Dhit_smaller = ovls.get_distance_by_dir([queries[j]["distance"][0], queries[j][
-                            "distance"][0]], genomic_location, internals_location, Dhit)
+                            "distance"][0]], genomic_location, internals_location, Dhit, queries[j]["internals"])
 
                     if Dhit_smaller and not same_gene:
                         #log.debug("Distance of hit SMALLER than Config Distance -> Hit written to All_Hits.")

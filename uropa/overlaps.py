@@ -219,7 +219,7 @@ def find_internals_dir(anchor, p_center, feat_start, feat_end, strand):
         return "upstream" if feat_pos[anchor] < p_center else "downstream"
 
 
-def get_distance_by_dir(inputD, genom_loc, intern_loc, Dhit):
+def get_distance_by_dir(inputD, genom_loc, intern_loc, Dhit, internals_allowed=["False"]):
     """Limits the hit by a distance window depending on peak's position relative-to-feature """
 
     [D_upstr, D_downstr] = inputD
@@ -230,7 +230,11 @@ def get_distance_by_dir(inputD, genom_loc, intern_loc, Dhit):
         return Dhit <= D_downstr
 
     # Rescue if internal peak
-    return(any(intern_loc))
+    if internals_allowed == ["True"]:
+        return(any(intern_loc))
+    else:
+        best_dist = map(lambda l: Dhit <= D_upstr if l == "upstream" else Dhit <= D_downstr, intern_loc)
+        return(any(best_dist))
 
 
 def detect_internals(pstart, pend, hit_start, hit_end):
@@ -322,20 +326,21 @@ def get_hit_attribute(hit, attribute):
         return "not.found"
 
 
-def get_besthit(q, len_q_dist, p_nm, hit, attrib_keys, Dhit, min_dist):
+def get_besthit(q, len_q_dist, p_nm, hit, attrib_keys, Dhit):
     """Defines the best hit for a query."""
     Dhit = [Dhit, Dhit] if len_q_dist == 2 else Dhit
 
+    ret = None
     if attrib_keys != ["None"]:
         #attr_val = map(lambda k:  re.split(k+" ", hit[8])[1].split(';')[0].strip('"\'').rstrip('\"'), attrib_keys)
         # list of all values if multiple keys
         attr_val = map(lambda a: get_hit_attribute(hit, a), attrib_keys)
-        min_dist[q][p_nm] = [Dhit, [hit[2], hit[3], hit[4], hit[6], attr_val]]
+        ret = [Dhit, [hit[2], hit[3], hit[4], hit[6], attr_val]]
 
     elif attrib_keys == ["None"]:
-        min_dist[q][p_nm] = [Dhit, [hit[2], hit[3], hit[4], hit[6]]]
+        ret = [Dhit, [hit[2], hit[3], hit[4], hit[6]]]
 
-    return min_dist[q][p_nm]
+    return ret
 
 
 def create_table(peak_id, chrom, pstart, pend, p_center, min_dist_hit, attrib_keys, min_pos, genom_loc, ovl_pf, ovl_fp, i):
