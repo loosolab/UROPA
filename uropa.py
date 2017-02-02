@@ -380,7 +380,6 @@ if __name__ == "__main__":
 
         if len(queries) > 1 and not pr and os.path.exists(merged_outfile):
             call = [
-                "Rscript",
                 summary_script,
                 merged_outfile,
                 outdir + "summary_config.json",
@@ -388,7 +387,6 @@ if __name__ == "__main__":
                 besthits_outfile]
         else:
             call = [
-                "Rscript",
                 summary_script,
                 besthits_outfile,
                 outdir + "summary_config.json",
