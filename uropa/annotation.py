@@ -19,7 +19,7 @@ def annotation_process(input_args, peak_file, log=None):
         log.error("Tabix index file is missing ({})".format(gtf_index))
 
     try:
-        prefix_pk = peak_file.split("_peak_")[1].split(".bed")[0]
+        prefix_pk = peak_file.split("_peak_")[1]
     except IndexError:
         # In case peaks file is small and not splitted
         prefix_pk = ""
