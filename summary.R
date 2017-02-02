@@ -154,7 +154,8 @@ features <- c()
 	
 	# plot 1 
 	# description
-	plot1 <- paste0("Plot 1:\n\nThe following density plot displays the distance of anntotated peaks\nto its feature(s) based on the finalhits.\n\n",
+	plot1 <- paste0("1. Distances of annotated peaks in finalhits:",
+		"\n\nThe following density plot displays the distance of anntotated peaks\nto its feature(s) based on the finalhits.\n\n",
 		"Additional Info:\nThis is independent of the number of queries,\nall features present in the finalhits are displayed.",
 		"\n\n\nNote on output files:\n",
 		"\nallhits: All candidate features resulting from any query\n(1 peak :  x queries : y annotations)",
@@ -180,7 +181,8 @@ features <- c()
 
 	# plot 2
 	# description
-	plot2 <- paste0("Plot 2:\n\nThe following pie chart(s) illustrate the relativ location of the peaks\nin relation the respective annotated feature as represented in the finalhits",
+	plot2 <- paste0("2. Relative locations of annotated peaks to features in finalhits:",
+		"\n\nThe following pie chart(s) illustrate the relativ location of the peaks\nin relation the respective annotated feature as represented in the finalhits",
 		"\nThe best feature found amoung all of the queries is used for this plot.",
 		"\n\nAdditional Info:\nThis is independent of the number of queries,\nall represented features of the finalhits are displayed.")
 	grid.newpage()
@@ -191,7 +193,8 @@ features <- c()
 
 	# plot
 	if(num.features > 1){
-		plot3 <- paste0("Plot 3:\n\nBar plot displaying the occurrence of the different features if there is",
+		plot3 <- paste0("3. Allocation of available features in finalhits:",
+			"\n\nBar plot displaying the occurrence of the different features if there is",
 			"\nmore than one feature assigned for peak annotation based on the finalhits.",
 			"\nThe best annotation found amoung all of the queries is used for this plot.",
 			"\n\nAdditional Info:\nThis is independent of the number of queries;",
@@ -234,7 +237,8 @@ if(length(args)==3){
 
 	# plot 4
 	# description
-	plot4 <- paste0("Plot 4:\n\nThe distribution of the distances per feature per query",
+	plot4 <- paste0("4. Distances of annotated peaks seperated for features and queries in besthits:",
+		"\n\nThe distribution of the distances per feature per query",
 	"\nis displayed in histograms based on the besthits.",
 		"\n\nAdditional Info:\nThis is dependent on the number of queries;",
 		"\nall features present in any query are displayed.")
@@ -263,7 +267,8 @@ if(length(args)==3){
 
 	# plot 5
 	# description
-	plot5 <- paste0("Plot 5:\n\nThe following pie chart(s) illustrate the relativ location of\nthe peaks in relation the respective annotated feature as represented in the besthits.\n\n",
+	plot5 <- paste0("5. Relative locations of annotated peaks in besthits:",
+		"\n\nThe following pie chart(s) illustrate the relativ location of\nthe peaks in relation the respective annotated feature as represented in the besthits.\n\n",
 		"Additional Info:\nThis is dependent on the number of queries;\nall features present in the besthits are displayed.")
 	grid.newpage()
 	mtext(plot5, cex=1, adj=0, padj=1)
@@ -271,7 +276,8 @@ if(length(args)==3){
 	.plot.genomic.location.per.feature(df.uropa.best.per.query, "besthits Hits")
 	# plot 6
 	if(num.features > 1){
-		plot6 <- paste0("Plot 6:\n\nBar plot displaying the occurrence of the different features if there is more",
+		plot6 <- paste0("6. Allocation of available featurs in besthits:",
+			"\n\nBar plot displaying the occurrence of the different features if there is more",
 		"\nthan one feature assigned for peak annotation based on the besthits.",
 		"\nThe best annotation found in each query is used for this plot",
 		"\n\nAdditional Info:\nThis is independent of the number of queries,\nall features present in the besthits are displayed.",
@@ -284,8 +290,8 @@ if(length(args)==3){
 	}
 	# plot 7
 	# description
-	plot7 <- paste0("Plot 7:\n\nThe following venn diagrams display peak based pairwise comparisons\namong all queries based on the besthits.",
-		"\nThe best annotation found among all queries is used for this plot.",
+	plot7 <- paste0("7: Pairwise comparisons of query annotations:",
+		"\n\nThe following venn diagrams display peak based pairwise comparisons\namong all queries based on the besthits.",
 		"\n\nAdditional Info:\nIf only one query is present,",
 		"\nthis plot will be skipped.")
 	grid.newpage()
@@ -336,7 +342,8 @@ if(length(args)==3){
 
 		suppressPackageStartupMessages(library(Vennerable))
 		tryCatch({
-			plot8 <- paste0("Plot 8:\n\nThe following Chow Ruskey plot compares all specified queries\nbased on the besthits.",
+			plot8 <- paste0("8: Comparison of all specified queries:",
+				"\n\nThe following Chow Ruskey plot compares all queries\nbased on the besthits.",
 				"\nIt represents an area-proportional Venn diagram,\nrevealing the distribution of peaks that could be annotated\nper query and works for up to 5 queries.",
 				"\n\nAdditional Info:\nIt is evalueated whether peaks are annotated,\nbut not whether they are annotated for the same feature")
 			grid.newpage()
