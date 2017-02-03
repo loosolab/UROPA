@@ -150,8 +150,7 @@ The UROPA annotation process for multiple queries allows an additional case in r
 
 - **Case 1 to 3** as described for one query
 
-- **Case 4**: There are valid annotations for one peak for multiple queries -> all valid annotations will be given in the allhits, the best annotation (smallest distance across all queries) will be presented in the finalhits. 
-Additionally, the best annotation per query will be displayed in the besthits output.
+- **Case 4**: There are valid annotations for one peak for multiple queries -> all valid annotations will be given in the allhits, the best annotation (smallest distance across all queries) will be presented in the finalhits. Additionally, the best annotation per query will be displayed in the besthits output.
 
 .. code:: json
 

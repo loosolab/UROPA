@@ -16,7 +16,6 @@ The genomic location of a peak is illustrated with its entities (given in the :d
    :alt: peak\_upstream
 
    Figure1: Locations and directions of peaks (green) and features(blue).
-
    There are five peaks in close proximity to gene A: The first peak (from left) is located upstream of Gene A and would
    be annotated, if ``direction:upstream`` is configured. The second peak would also be annotated within a
    ``direction:upstream`` configuration, because the peak center is upstream of the feature start position(genomic location for this peak is 
@@ -322,7 +321,7 @@ For peak 10, there was no valid annotation for query 0, thus query 1 was evaluat
 .. _used-files:
 
 Used example peak and annotation files 
------------------------------- 
+-------------------------------------- 
 
 Annotation:  
 
