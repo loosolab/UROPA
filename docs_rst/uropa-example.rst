@@ -30,7 +30,7 @@ The genomic location of a peak is illustrated with its entities (given in the :d
 
 
 The following examples are based on either H3K4me1 (ENCFF001SUE) or POLR2A (ENCFF001VFA) peaks, and on either Ensembl (Homo_sapiens.GRCh37.75) or Gencode v19 (gencode.v19.annotation) GTF files. 
-Detailed references see :ref:`used-files`.
+Detailed references see :ref:`usedfiles`.
 
 .. _example-1:
 
@@ -318,7 +318,7 @@ For peak 10, there was no valid annotation for query 0, thus query 1 was evaluat
   - There will be no besthist if priority is TRUE, as there is only one final annotation per peak
    
 
-.. _used-files:
+.. _usedfiles:
 
 Used example peak and annotation files 
 -------------------------------------- 
