@@ -20,6 +20,7 @@ def howtoconfig():
 	The configuration file should at least contain paths for bed and GTF files:
 	
 	{
+	"queries": [],
 	"bed": "/path/to/bed/file.bed",
 	"gtf": "/path/to/annotation/file.gtf"
 	}
