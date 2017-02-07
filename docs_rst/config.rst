@@ -20,7 +20,7 @@ the config file as below is provided:
 Three global keys are mandatory: ``'queries'``, ``'gtf'``, and ``'bed'``, additionally
 there is an optional global key ``'priority'``.                
 In a default annotation, only the ``'gtf'`` and ``'bed'`` keys needs to be specified by the user (relative file paths). The key ``'queries'`` has to be present in the config file, but can be left empty
-(e.g. ``'queries": []``). Empty or missing key-value pairs are filled with their default values by UROPA.
+(e.g. ``"queries": []``). Empty or missing key-value pairs are filled with their default values by UROPA.
 
 Queries
 -------
