@@ -1,4 +1,10 @@
-## 1.0.1 (2017-01-30)
+## 1.1.1 (2017-03-08)
+
+- Bug fix for possible older versions of GNU sort, the order of results may have changed now
+- Added protection against empty GTF files
+- Clarified Tabix warning messages with proper genome coordinates.
+
+## 1.1 (2017-01-30)
 
 - Introduced parameter -p/--prefix, replaces -o/--output
 - Replaced parameter --no-comment by --add-comments

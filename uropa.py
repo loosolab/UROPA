@@ -95,7 +95,7 @@ if __name__ == "__main__":
         "--version",
         help="prints the version and exits",
         action="version",
-        version="%(prog)s 1.1.0")
+        version="%(prog)s 1.1.1")
     args = parser.parse_args()
 
     config = args.input
