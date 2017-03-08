@@ -13,13 +13,16 @@ For running UROPA locally, the following prerequisites have to be met:
 	- if you are NOT using the anaconda version of python 2, the packages `pysam`_ and `numpy`_ can be installed with ``pip install pysam numpy``
 - `R/Rscript`_, v3.3.0 or higher (follow the instructions on url)
 	Install packages:
-	- ``install.packages(c("ggplot2", "devtools", "gplots", "gridExtra", "jsonlite", "VennDiagram"))``
+	
+	- ``install.packages(c("ggplot2", "devtools", "gplots", "gridExtra", "jsonlite", "VennDiagram", "snow"))``
+	
 	## choose mirrow
 	
 	- ``source("https://bioconductor.org/biocLite.R")``
 	- ``biocLite(c("RBGL","graph"))``
 	- ``library(devtools)``
 	- ``install_github("jenzopr/Vennerable")``
+	- further package infos can be found at `CRAN`_
 - `git`_ with ``bash sudo apt-get install git``
 
 UROPA
@@ -39,11 +42,4 @@ UROPA itself can be installed by simply cloning the Github library and adding th
 .. _git: https://git-scm.com/
 .. _numpy: http://www.numpy.org
 .. _pysam: https://pysam.readthedocs.io/en/latest/index.html
-.. _ggplot2: https://cran.r-project.org/web/packages/ggplot2/index.html
-.. _gplots: https://cran.r-project.org/web/packages/gplots/index.html
-.. _gridExtra: https://cran.r-project.org/web/packages/gridExtra/index.html
-.. _gridExtra: https://cran.r-project.org/web/packages/gridExtra/index.html
-.. _jsonlite: https://cran.r-project.org/web/packages/jsonlite/index.html
-.. _VennDiagram: https://cran.r-project.org/web/packages/VennDiagram/index.html
-.. _snow: https://cran.r-project.org/web/packages/snow/index.html
-.. _devtools: https://cran.r-project.org/web/packages/devtools/
+.. _CRAN: https://cran.r-project.org/web/packages/
