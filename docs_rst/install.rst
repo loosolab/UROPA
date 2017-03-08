@@ -13,8 +13,9 @@ For running UROPA locally, the following prerequisites have to be met:
 	- if you are NOT using the anaconda version of python 2, the packages `pysam`_ and `numpy`_ can be installed with ``pip install pysam numpy``
 - `R/Rscript`_, v3.3.0 or higher (follow the instructions on url)
 	Install packages:
-	- ``install.packages(c("`ggplot2`_", "`devtools`_", "`gplots`_", "`gridExtra`_", "`jsonlite`_", "`VennDiagram`_"))``
+	- ``install.packages(c("ggplot2", "devtools", "gplots", "gridExtra", "jsonlite", "VennDiagram"))``
 	## choose mirrow
+	
 	- ``source("https://bioconductor.org/biocLite.R")``
 	- ``biocLite(c("RBGL","graph"))``
 	- ``library(devtools)``
