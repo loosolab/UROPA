@@ -67,8 +67,8 @@ def annotation_process(input_args, peak_file, log=None):
             except ValueError:
                 hits = list()
                 if log is not None:
-                    log.warning("Region {} could not be found in GTF annotation for peak {}. Tabix query was: {}-{}".format(
-                        chrom_db, peak['id'], str(peak['estart']), str(peak['eend'])))
+                    log.warning("Region {} could not be found in GTF annotation for peak {}. Tabix query was: {}:{}-{}".format(
+                        chrom_db, peak['id'], chrom_db, str(peak['estart']), str(peak['eend'])))
 
             has_hits = list()
             # keep array of  all valid queries (T,F) for all hits in the peak.
