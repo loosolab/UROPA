@@ -333,7 +333,9 @@ Peak and signal files based on ChIP-seq of GM12878 immortalized cell line:
 - `H3K4me1`_ (accession ENCFF001SUE for bed file)                       
 - `POLR2A`_  (accession ENCFF001VFA for bed file)
 
-.. note:: Peak ids are manually added to make it easier to describe different peaks. 
+.. note:: To find the used peak files you have to choose *hg19* at **Processed data** (default is GRCh38). 
+
+.. hint:: Peak ids are manually added to simplify the description of different peaks. 
 
 .. _H3K4me1: https://www.encodeproject.org/experiments/ENCSR000AKF/
 .. _POLR2A: https://www.encodeproject.org/experiments/ENCSR000EAD/
