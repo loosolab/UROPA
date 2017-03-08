@@ -48,7 +48,7 @@ def tabix_index(annot_gtf):
 
     with open(out_zipped, 'w'):
         os.system('grep  -v  ^#  ' + annot_gtf +
-                  '  |  sort -V  -k1,1 -k4,4 > ' + annot_gtf + '.sorted')
+                  '  |  sort -k1,1 -k4,4n > ' + annot_gtf + '.sorted')
         os.system('bgzip -c  -f ' + annot_gtf +
                   '.sorted ' + ' > ' + out_zipped)
 
