@@ -15,18 +15,18 @@ def howtoconfig():
 	chromatin biology, like ChIPseq or ATACseq. There are already different peak annotation tools, like
 	HOMER or ChIPpeakAnno, but the advantage of UROPA is, that it can easily be fitted to your requirements.
 	UROPA was developed as an open source analysis pipeline for peaks generated from any peak caller.
-	
-	All parameters and paths to input or output files should be reported in a JSON configuration file. 
+
+	All parameters and paths to input or output files should be reported in a JSON configuration file.
 	The configuration file should at least contain paths for bed and GTF files:
-	
+
 	{
 	"queries": [],
 	"bed": "/path/to/bed/file.bed",
 	"gtf": "/path/to/annotation/file.gtf"
 	}
-	
+
 	Different query types can be defined using the queries key:
-	
+
 	{
 	"queries": [
 	  {...},
@@ -34,9 +34,9 @@ def howtoconfig():
 	"bed": "/path/to/bed/file.bed",
 	"gtf": "/path/to/annotation/file.gtf"
 	}
-	
+
 	Optionally, the priority key can be used to fine tune UROPAs behaviour:
-	
+
 	{
 	"queries": [
 	  {...},
@@ -45,7 +45,7 @@ def howtoconfig():
 	"gtf": "/path/to/annotation/file.gtf",
 	"priority": "True"
 	}
-	
+
 	Please visit http://uropa-manual.readthedocs.io/config.html for detailed information on configuration.
 	""")
     return epilog
@@ -60,7 +60,7 @@ def parse_json(infile):
         return ast.literal_eval(json.dumps(json.load(f)))
 
 
-def column_from_file(file, column):
+def column_from_file(file, column, log=None):
     """Extracts a given column from a file, and returns unified values as list."""
     assert isinstance(file, str), 'Argument {0} of wrong type ({1}), should be {2}!'.format(
         'column', type(file), 'str')
@@ -69,7 +69,12 @@ def column_from_file(file, column):
 
     cmd = 'cut -f' + str(column) + ' ' + str(file) + \
         ' | sort | uniq | grep -v "^#"'
-    vals = subprocess.check_output(cmd, shell=True)
+    try:
+        vals = subprocess.check_output(cmd, shell=True)
+    except subprocess.CalledProcessError:
+        if log is not None:
+            log.warning("File {} might be empty or has not enough columns".format(file))
+        return([])
     return([v for v in vals.split('\n') if v != ""])
 
 
@@ -103,12 +108,12 @@ def parse_queries(config, gtf_feat, log=None):
         query_list = [defaults]
         if not log is None:
             log.warning("No 'queries' key given, so the default values will be used: {}".format(query_list))
-    
+
     if len(query_list) == 0:
         if not log is None:
             log.info('Empty queries given ("queries":[]). Will use defaults.')
         query_list = [defaults]
-    
+
     if not isinstance(query_list, list):
         query_list = [query_list]
 
@@ -145,10 +150,10 @@ def remove_invalid_queries(queries, log=None):
     if not all(has_valid_attributes) and log is not None:
         log.warning("Queries with invalid filter.attribute and attribute.value pairings present! Affected queries: {}".format(
             [i for i, x in enumerate(has_valid_attributes) if not x]))
-            
+
     # Validate strand attribute
     has_valid_strand = map(lambda q: True if q["strand"] in [["ignore"],["same"],["opposite"]] else False, queries)
-    
+
     if not all(has_valid_strand) and log is not None:
         log.warning("Queries with invalid strand values present! Affected queries: {}".format(
             [i for i, x in enumerate(has_valid_strand) if not x]))

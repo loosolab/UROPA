@@ -172,7 +172,10 @@ if __name__ == "__main__":
     else:
         logger.warning("File %s is not a proper GTF file!", annot_gtf)
 
-    gtf_feat = cfg.column_from_file(annot_gtf, 3)
+    gtf_feat = cfg.column_from_file(annot_gtf, 3, logger)
+    if len(gtf_feat) < 1:
+        logger.error("No features found in file {} for annotation.".format(annot_gtf))
+        sys.exit()
 
     if not os.path.exists(peaks_bed):
         logger.error("File %s does not exists or is not readable.", peaks_bed)
