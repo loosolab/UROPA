@@ -22,7 +22,7 @@ For running UROPA locally, the following prerequisites have to be met:
 	- ``biocLite(c("RBGL","graph"))``
 	- ``library(devtools)``
 	- ``install_github("jenzopr/Vennerable")``
-	- further package infos can be found at `CRAN`_
+	- further package infos can be found at `CRAN`_ and `Bioconductor`_
 - `git`_ with ``bash sudo apt-get install git``
 
 UROPA
@@ -43,3 +43,4 @@ UROPA itself can be installed by simply cloning the Github library and adding th
 .. _numpy: http://www.numpy.org
 .. _pysam: https://pysam.readthedocs.io/en/latest/index.html
 .. _CRAN: https://cran.r-project.org/web/packages/
+.. _Bioconductor: http://bioconductor.org/
