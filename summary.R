@@ -14,6 +14,7 @@
 suppressPackageStartupMessages(library(ggplot2))
 suppressPackageStartupMessages(library(jsonlite))
 suppressPackageStartupMessages(library(gridExtra))
+suppressPackageStartupMessages(library(grid))
 
 # script gets arguments
 args <- commandArgs(TRUE)
@@ -97,7 +98,7 @@ features <- c()
 
 # load finalhits file, create coverpage, and calculate basic plots
 .basic.summary <- function(final.hits, conf, out){
-	pdf(file=out,paper="a4")
+	pdf(file=out)
 	plot.new()
 	df.uropa.final <- read.table(final.hits, header=TRUE, sep="\t",stringsAsFactors = FALSE)
 	# number of peaks annoteted with uropa run
@@ -116,20 +117,6 @@ features <- c()
 	# queries of uropa annotation run
 	queries <- sort.int(as.numeric(unique(df.uropa.final$query)))
 	num.queries <- length(queries)
-	# prepare result overview
-
-	df.query_anno <- data.frame(query="",peaks="", peaks_with_annotation="")
-	for(i in 1:num.queries){
-		q <- queries[i]
-		count <- nrow(df.uropa.final[df.uropa.final$query==q,])
-		q <- sprintf("%02d", q)
-		q <- paste0("query",q)
-		df.query_anno <- rbind(df.query_anno, data.frame(query=q,peaks=as.character(num.peaks),peaks_with_annotation=as.character(count)))
-	}
-
-	df.query_anno <- df.query_anno[2:nrow(df.query_anno),]
-	df.query_anno <- df.query_anno[order(df.query_anno$query),]
-
 	queries <- sprintf("%02d", queries)
 
 	features <<- as.character(unique(df.uropa.final$feature))
@@ -142,21 +129,25 @@ features <- c()
 	config.query <- config.query[,c("query", "feature", "distance", "feature.anchor","internals", "strand","direction","filter.attribute", "attribute.value","show.attributes")]
 	# replaye "start,center,end" position by "any_pos" 
 	config.query$feature.anchor <- sapply(config.query$feature.anchor, function(x) if(length(x)==3){return("any_pos")}else{return(x)})
+	mtext("UROPA summary", side=3, line=0,outer=FALSE, cex=2)
+	mtext(paste0("There were ", num.peaks, " peaks in the input bed file,\nUROPA annotated ", anno.peaks, " peaks\n"),side=3, line=-3,outer=FALSE, cex=.7)
+	if(num.queries != nrow(config.query)){
+		mtext(paste("Only queries", paste(queries, collapse=","), "are represented in the FinalHits", sep=" "), side=3, line=-5,outer=FALSE, cex=.7)	
+	}
+
+
+
 	mytheme <- ttheme_default(core = list(fg_params=list(cex = 0.5)),colhead = list(fg_params=list(cex = 0.5)),rowhead = list(fg_params=list(cex = 0.5)))
 	config.query <- data.frame(lapply(config.query, as.character), stringsAsFactors=FALSE)	
-	conf <- tableGrob(config.query, theme=mytheme,rows=NULL)
-	df.info <- data.frame(config_key=c("priority:","bed:", "gtf:"), specification=c(priority, unlist(config$bed), unlist(config$gtf)))
-	info <- tableGrob(format(df.info), theme=mytheme,rows=NULL)
-	mytheme <- ttheme_default(core = list(fg_params=list(cex = 1)),colhead = list(fg_params=list(cex = 0.5)),rowhead = list(fg_params=list(cex = 0.5)))
-	res <- tableGrob(format(df.query_anno), theme=mytheme,rows=NULL)
+	g <- tableGrob(format(config.query), theme=mytheme,rows=NULL)
+	grid.draw(g)
+	
+	mtext(paste0("priority: ", priority), cex=.7,side=1, line=-2)
+	input <- paste("Input:",unlist(config$bed),collapse=" ")
+	anno <- paste("Anno:",unlist(config$gtf),collapse=" ")
+	input.anno <- paste(input,anno,sep="\n")
+	mtext(input.anno,cex=.6, side=1, line=0)
 
-	if(num.queries == nrow(config.query)){
-		grid.arrange(grid.text("UROPA summary", gp=gpar(fontsize=20),draw = FALSE), grid.text("Input:", gp=gpar(fontsize=15), draw = FALSE), conf, info, 
-			grid.text("Results:", gp=gpar(fontsize=15),draw = FALSE), res, grid.text(paste0("UROPA annotated ", anno.peaks, " peaks.\n")), nrow=7)
-	} else {
-		grid.arrange(grid.text("UROPA summary", gp=gpar(fontsize=20),draw = FALSE), grid.text("Input:", gp=gpar(fontsize=15), draw = FALSE), conf, info, 
-			grid.text("Results:", gp=gpar(fontsize=15),draw = FALSE), res, grid.text(paste0("UROPA annotated ", anno.peaks, " peaks.\nNot all queries represent final hits!"),gp=gpar(fontsize=15), draw = FALSE), nrow=7)
-	}
 	# plot 1 
 	# description
 	plot1 <- paste0("1. Distances of annotated peaks in finalhits:",
