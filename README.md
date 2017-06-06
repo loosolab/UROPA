@@ -79,7 +79,7 @@ Available options:
 How to cite
 -----------
 
-Kondili M, Fust A, Preussner J, Kuenne C, Braun T, and Looso M, UROPA: a tool for Universal RObust Peak Annotation. *(in preparation)*
+Kondili M, Fust A, Preussner J, Kuenne C, Braun T, and Looso M. UROPA: a tool for Universal RObust Peak Annotation. *Scientific Reports* **7** (2017), doi: [10.1038/s41598-017-02464-y](https://www.nature.com/articles/s41598-017-02464-y)
 
 Contribute
 ----------
