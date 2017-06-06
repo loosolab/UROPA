@@ -64,7 +64,7 @@ Usage: uropa.py [options]
 
 Available options:
 
-		-h, --help             	print this help message and further details on the configuration file
+	-h, --help             	print this help message and further details on the configuration file
         -i, --input            	filename of configuration file [mandatory]
         -p, --prefix           	prefix for output files, can include subdirectories [basename of --input]
         -r, --reformat         	create an additional compact and line-reduced table as result file
