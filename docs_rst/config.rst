@@ -80,14 +80,14 @@ Each query can specify the following keys:
    Example: ``'direction': ['upstream','downstream']``
 
    
--  **internals**: This key is an addon in respect to the ``'distance``' key. If ``'internals'`` is set to TRUE and a feature is located inside a peak region or vice versa,
-   the feature is treated as a valid annotation, not taking the ``'distance``' key into account.
-   This key can be helpful to annotate peaks to features with a wide size range, suchas genes.
-   Allowed values are one of ``'T', True', 'Y', 'Yes'`` or ``'F', 'False' ,'N' ,'No'``.
+-  **internals**: This key represents a modifier with respect to the ``'distance``' key. This can be helpful to annotate peaks to features with a wide size range, such as genes, which would otherwise be removed due to the distance thresholds.
+   'center': If the center of a feature is located inside a peak region or vice versa, the ``'distance``' key filtering is disabled.  This parameter ensures that the majority of the peak intersects with the feature.
+   'any': If a feature intersects with a peak region or vice versa, the ``'distance``' key filtering is disabled. An overlap of >= 1 nt is sufficient.
+   Allowed values are one of ``'F', 'False', 'N', 'No'``, 'center', or 'any'.
    
-   Default: ``'False'``
+   Default: ``'any'``
    
-   Example: ``'internals':'T'``
+   Example: ``'internals':'center'``
    
 
 -  **filter.attribute** : Key filters the attributes found in the 9th column of the GTF file.
