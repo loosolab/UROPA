@@ -82,11 +82,11 @@ Each query can specify the following keys:
    
 -  **internals**: This key represents a modifier with respect to the ``'distance'`` key. This can be helpful to annotate peaks to features with a wide size range, such as genes, which would otherwise be removed due to the distance thresholds. So even if the desired feature anchor is located too far away, a feature can still be included if it is overlapped.
 
-   'center': If the center of a peak intersects with a feature region or vice versa, the ``'distance'`` key filtering is disabled. This parameter ensures that the majority of the peak intersects with the feature.
+   ``'center'``: If the center of a peak intersects with a feature region or vice versa, the ``'distance'`` key filtering is disabled. This parameter ensures that the majority of the peak intersects with the feature.
    
-   'any': If a peak intersects with a feature region or vice versa, the ``'distance'`` key filtering is disabled. An overlap of >= 1 nt is sufficient.
+   ``'any'``: If a peak intersects with a feature region or vice versa, the ``'distance'`` key filtering is disabled. An overlap of >= 1 nt is sufficient.
    
-   'none': Internals key is turned off. The ``'distance'`` key is active.
+   ``'none'``: Internals key is turned off. The ``'distance'`` key is active.
    
    Allowed values are one of ``'none', 'center', or 'any'.``
    
