@@ -88,7 +88,7 @@ Each query can specify the following keys:
    
    ``'none'``: Internals key is turned off. The ``'distance'`` key is active.
    
-   Allowed values are one of ``'none', 'center', or 'any'.``
+   Allowed values are one of ``'none', 'center', 'any'.``
    
    Furthermore, ``'T', 'True', 'Y', 'Yes'`` are allowed and will be treated as ``'center'``,
    
@@ -116,7 +116,7 @@ Each query can specify the following keys:
 
    
 -  **show.attributes**: A list of attributes found in the 9th column of the GTF file which should appear in the final output tables. 
-   If non existent attributes are specified, annotated peaks will display ``'not.found'`` for those attributes.                  
+   If non existent attributes are specified, annotated peaks will display ``'NA'`` for those attributes.                  
    
    Default: ``'None'``
    
