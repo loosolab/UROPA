@@ -91,7 +91,7 @@ def valid_attribute(attr_filter_key, attr_filter_val, hit):
             hit_attrib_val = re.split(
                 "; " + attr_filter_key + " ", hit[8])[1].split(';')[0].strip('"\'').rstrip('\"')
         except IndexError:  # if key doesn't exist re.split will give error
-            hit_attrib_val = "not.found"
+            hit_attrib_val = "NA"
 
         # If biotype of hit == attr_value from query-> continue annotation
         return attr_filter_val == hit_attrib_val
