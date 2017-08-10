@@ -22,7 +22,7 @@ UROPA is a command line based tool intended for genomic region annotation.
 
 **How to cite**
 
-Please cite the paper describing UROPA when using it in your research: *tba*
+Please cite the paper describing UROPA when using it in your research: **Kondili M, Fust A, Preussner J, Kuenne C, Braun T, Looso M. UROPA: a tool for Universal RObust Peak Annotation. Scientific Reports. 2017;7:2593. doi:10.1038/s41598-017-02464-y.**
 
 **Contribute**
 
