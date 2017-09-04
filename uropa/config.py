@@ -16,6 +16,11 @@ def howtoconfig():
 	HOMER or ChIPpeakAnno, but the advantage of UROPA is, that it can easily be fitted to your requirements.
 	UROPA was developed as an open source analysis pipeline for peaks generated from any peak caller.
 
+    Please cite upon usage:
+    Kondili M, Fust A, Preussner J, Kuenne C, Braun T, and Looso M.
+    UROPA: a tool for Universal RObust Peak Annotation.
+    Scientific Reports 7 (2017), doi: 10.1038/s41598-017-02464-y
+
 	All parameters and paths to input or output files should be reported in a JSON configuration file.
 	The configuration file should at least contain paths for bed and GTF files:
 

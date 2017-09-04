@@ -1,3 +1,9 @@
+## 1.1.2 (2017-09-04)
+
+- Added proper help for auxillary R scripts (exit code 0)
+- Made call to reformat_output.R multi-threaded
+- Cleaned some code, added citation
+
 ## 1.1.1 (2017-03-08)
 
 - Bug fix for possible older versions of GNU sort, the order of results may have changed now

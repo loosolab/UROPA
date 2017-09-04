@@ -4,7 +4,7 @@ uropa.py: UROPA - Universal RObust Peak Annotator
 
 @authors: Maria Kondili, Jens Preussner and Annika Fust
 @license: MIT
-@version: 1.1.0
+@version: 1.1.2
 @maintainer: Mario Looso
 @email: mario.looso@mpi-bn.mpg.de
 """
@@ -95,7 +95,7 @@ if __name__ == "__main__":
         "--version",
         help="prints the version and exits",
         action="version",
-        version="%(prog)s 1.1.1")
+        version="%(prog)s 1.1.2")
     args = parser.parse_args()
 
     config = args.input
@@ -338,6 +338,7 @@ if __name__ == "__main__":
     logger.debug("Filenames for output files are: {}, {}". format(allhits_outfile, besthits_outfile))
 
     ovls.finalize_file(allhits_outfile, allhits_partials, header, comments, log=logger)
+
     #
     # Reformat output
     #
@@ -345,33 +346,24 @@ if __name__ == "__main__":
         logger.info("Reformatting output...")
         R_reform_Best = [
             'reformat_output.R',
+            '-i',
             besthits_outfile,
+            '-k',
             'peak_id',
+            '-c',
             '1:5',
-            ',']
-        reformatBest_out = outdir + "Reformatted_" + \
-            os.path.basename(besthits_outfile)
+            '-d',
+            ',',
+            '-t',
+            str(args.threads)]
         try:
             # creates output of Best and gives name "Reformatted_"
+            logger.debug('Reformat output call is {}'.format(R_reform_Best))
             pr_R = sp.check_output(R_reform_Best)
         except sp.CalledProcessError:
             logger.warning("Reformatted output could not be created with call %s", ' '.join(R_reform_Best))
         except OSError:
             logger.warning("Rscript command not available for summary output.")
-
-        # Add header and write to new file:
-        reformatted_outfile = "Uropa_Reformatted_" + \
-            os.path.basename(besthits_outfile)
-        if os.path.exists(outdir + reformatBest_out):
-            ovls.write_out_file(
-                outdir +
-                reformatted_outfile,
-                reformatBest_out,
-                header_comments,
-                header)
-        if os.path.exists(outdir + reformatted_outfile):
-            logger.info("Reformatted BestHits output: %s", reformatted_outfile)
-            os.remove(outdir + reformatBest_out)
 
     #
     # Visual summary
@@ -384,17 +376,25 @@ if __name__ == "__main__":
         if len(queries) > 1 and not pr and os.path.exists(merged_outfile):
             call = [
                 summary_script,
+                "-f",
                 merged_outfile,
+                "-c",
                 outdir + "summary_config.json",
+                "-o",
                 summary_output,
+                "-b",
                 besthits_outfile]
         else:
             call = [
                 summary_script,
+                "-f",
                 besthits_outfile,
+                "-c",
                 outdir + "summary_config.json",
+                "-o",
                 summary_output]
         try:
+            logger.debug('Summary output call is {}'.format(call))
             sum_pr = sp.check_output(call)
         except sp.CalledProcessError:
             logger.warning("Visualized summary output could not be created from %s.", ' '.join(call))
