@@ -34,23 +34,23 @@ Installation and Command-line usage
 ------------------------------------
 Make sure all prerequisites are met:
 
-- [Python](http://continuum.io/downloads) 
+- [Python](http://continuum.io/downloads)
 	- download Anaconda for Linux version Python 2.7 to direction where python should be installed
-	- run ```bash Anaconda2-4.3.0-Linux-x86_64.sh``` 
-	- Answer the question "Do you wish the installer to prepend the Anaconda2 install location to PATH in your /home/.../.bashrc ?" with yes 
+	- run ```bash Anaconda2-4.3.0-Linux-x86_64.sh```
+	- Answer the question "Do you wish the installer to prepend the Anaconda2 install location to PATH in your /home/.../.bashrc ?" with yes
 		OR do ```PATH=dir/to/python_anaconda:$PATH``` after installation process
 	- run ```conda install -c bioconda pysam```
 - [R/Rscript](http://www.r-project.org/) (v3.3.0 or higher; follow instructions on url)
-	- install required packages step by step: 
+	- install required packages step by step:
 	```bash
-	install.packages(c("ggplot2", "devtools", "gplots", "gridExtra", "jsonlite", "VennDiagram", "getopt"))
+	install.packages(c("ggplot2", "devtools", "gplots", "gridExtra", "jsonlite", "VennDiagram", "getopt", "tidyr", "UpSetR"))
 	source("https://bioconductor.org/biocLite.R")
-	biocLite(c("RBGL","graph"))
-	# to install the last required package, devtools has to be loaded to use the install from github function
+	biocLite(c("RBGL", "graph"))
+	# In order to plot a Chow-Ruskey plot in summary.R, install Vennerable from our modified fork
 	library(devtools)
 	install_github("jenzopr/Vennerable")
 	```
-- [Git](https://git-scm.com/): run ```bash sudo apt-get install git``` 
+- [Git](https://git-scm.com/): run ```bash sudo apt-get install git```
 
 ### Install UROPA locally
 

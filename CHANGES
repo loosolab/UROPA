@@ -1,3 +1,9 @@
+## 1.2.0 (2017-09-05)
+
+- Added an UpSetR plot to summary.R to cancel the need for Vennerable R package
+- Added proper help to uropa2gtf.R script
+- Reflected changes in documentations
+
 ## 1.1.2 (2017-09-04)
 
 - Added proper help for auxillary R scripts (exit code 0)

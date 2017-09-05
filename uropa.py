@@ -4,7 +4,7 @@ uropa.py: UROPA - Universal RObust Peak Annotator
 
 @authors: Maria Kondili, Jens Preussner and Annika Fust
 @license: MIT
-@version: 1.1.2
+@version: 1.2.0
 @maintainer: Mario Looso
 @email: mario.looso@mpi-bn.mpg.de
 """
@@ -95,7 +95,7 @@ if __name__ == "__main__":
         "--version",
         help="prints the version and exits",
         action="version",
-        version="%(prog)s 1.1.2")
+        version="%(prog)s 1.2.0")
     args = parser.parse_args()
 
     config = args.input
