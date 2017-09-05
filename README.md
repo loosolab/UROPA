@@ -43,7 +43,7 @@ Make sure all prerequisites are met:
 - [R/Rscript](http://www.r-project.org/) (v3.3.0 or higher; follow instructions on url)
 	- install required packages step by step: 
 	```bash
-	install.packages(c("ggplot2", "devtools", "gplots", "gridExtra", "jsonlite", "VennDiagram"))
+	install.packages(c("ggplot2", "devtools", "gplots", "gridExtra", "jsonlite", "VennDiagram", "getopt"))
 	source("https://bioconductor.org/biocLite.R")
 	biocLite(c("RBGL","graph"))
 	# to install the last required package, devtools has to be loaded to use the install from github function
