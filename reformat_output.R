@@ -2,7 +2,7 @@
 
 ## author afust
 ## reformat BestperQuery_Hits table to table with all information about one peak in one row
-library(getopt)
+library(getopt, quietly=TRUE)
 
 ## columns given with $3 should be unique and not be seprated by the delimiter
 ## with the aggregate function the same entries are sepereated by it, so this has to be adjusted
@@ -18,8 +18,8 @@ library(getopt)
 # 2 optional parameter
 options <- matrix(c(
 	'input', 'i', 1, 'character', 'file which should be reformatted',
-	'key', 'k', 1, 'character', 'key columns seperated by "," without spaces',
-	'cols', 'c', 1, 'character', 'columns that should be kept ',
+	'key', 'k', 1, 'character', 'key column',
+	'cols', 'c', 1, 'character', 'columns that should be kept, e.g 1,2,5 or 1:5',
 	'delimiter', 'd', 2, 'character', 'delimiter [,]',
 	'threads', 't', 2, 'integer', 'cores to be used for reformatting',
 	'help', 'h', 0, 'logical','Provides command line help.'
