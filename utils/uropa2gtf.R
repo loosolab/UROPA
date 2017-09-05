@@ -2,7 +2,7 @@
 ## script loads file or folder with information about a given feature (e.g. downloaded tfbs downloaded from ucsc table browser)
 ## and generates custom gtf file from it
 ## columns in gtf file to creat:
-## chr | source | feature | start | end | score | strand | frame | attributes
+## chr | gtf_source | feature | start | end | score | strand | frame | attributes
 ## basic columns that need to be present in input file(s)
 ## chr | start | end 
 ## it does not matter if the column is called chr or chrom, start or chromStart etc., most cases are checked
@@ -11,7 +11,7 @@
 ## if there is a column without information, it is filled with dots
 ## column names of gtf file
 c <- "chr"
-so <- "source"
+so <- "gtf_source"
 f <- "feature"
 s <- "start"
 e <- "end"
@@ -58,27 +58,28 @@ dot <- "."
 
 
 # reformat the input file to gtf file format 
-.custom.gtf <- function(df.input, source, feature, threads){
+.custom.gtf <- function(df.input, gtf_source, feature, threads){
 	# chr, start, end have to be defined in the input file
-	# source and feature can be given due to command line (if present in input, they will be overwritten)
+	# gtf_source and feature can be given due to command line (if present in input, they will be overwritten)
 	# also if there are columns, they will be overwritten
 	# check for the other gtf columns if they are defined,
 	# if yes, add them to the gft file, otherwise add dots in that line
 	# order custom input
 	df.input <- df.input[order(df.input$chr),]
+	
 	tryCatch({
 	df.gtf <- df.input[, c(c,s,e)]
 	df.input$chr <- NULL
 	df.input$start <- NULL
 	df.input$end <- NULL	
-
 	cols <- colnames(df.input)
 	# process optional parameter columns
-	if(as.character(source)=="undefined" && any(grep(so, cols))){
-		df.gtf$source <- df.input$source
-		df.input$source <- NULL
+	
+	if(as.character(gtf_source)=="undefined" && any(grep(so, cols))){
+		df.gtf$gtf_source <- df.input$gtf_source
+		df.input$gtf_source <- NULL
 	} else {
-		df.gtf$source <- rep(source,nrow(df.gtf))
+		df.gtf$gtf_source <- rep(gtf_source,nrow(df.gtf))
 	}
 	if(as.character(feature)=="undefined" && any(grep(f, cols))){
 		df.gtf$feature <- df.input$feature
@@ -86,7 +87,6 @@ dot <- "."
 	} else {
 		df.gtf$feature <- rep(feature,nrow(df.gtf))
 	}
-
 	# if there are more columns, they will be checked for valid gtf cols, otherwise requiered cols will be filled with dots
 	if(ncol(df.input)>0) { 
 		cols <- colnames(df.input)
@@ -176,7 +176,7 @@ dot <- "."
 # every single file will be stored to the given output dir
 # filenames should be the table names, or at least a clearly id which table it is, 
 # because this will be added as table to the gtf file (attribute column)
-.merge.files <- function(indir,outdir, source, feature, threads){
+.merge.files <- function(indir,outdir, gtf_source, feature, threads){
 	# list all files from input folder
 	files<-list.files(indir,include.dirs = FALSE)  
   	setwd(indir)
@@ -192,29 +192,29 @@ dot <- "."
 
 	if(nrow(df.merged > 0)){
 		df.merged <- .adapt.header(df.merged)
-	  	# add file name as column to data frame
+	# add file name as column to data frame
 	 	current.table <- (strsplit(as.character(basename(files[1])),"[.]"))[[1]][1]
-	  	df.merged$table <- rep(current.table,nrow(df.merged))
-	  	current.table <- paste(current.table,"gtf",sep=".")
-	  	current.table <- paste(outdir,current.table,sep="")
-	  	
-	  	# remormatting 	
-	  	cat("\nto GTF",1, "/", num.files)
-	  	df.merged <- .custom.gtf(df.merged, source, feature, threads)  	
-	  	write.table(df.merged, file=current.table, append =FALSE, quote=FALSE,sep='\t', eol='\r\n',row.names = FALSE, col.names = FALSE)
-	  	# do the same for all table in input folder, plus merge them to existing data frame
-	  	count <- 2
-	  	for (file in files[2:num.files]){  
-	  		current.table <- (strsplit(as.character(basename(file)),"[.]"))[[1]][1]
-	  		cat("\rto GTF",count, "/", num.files)
-	  		df.tmp <- data.frame()
-	  		df.tmp <- try(read.csv(file, header=TRUE,sep="\t"), silent=TRUE)
+	df.merged$table <- rep(current.table,nrow(df.merged))
+	current.table <- paste(current.table,"gtf",sep=".")
+	current.table <- paste(outdir,current.table,sep="")
+	
+	# remormatting 	
+	cat("\nto GTF",1, "/", num.files)
+	df.merged <- .custom.gtf(df.merged, gtf_source, feature, threads)  	
+	write.table(df.merged, file=current.table, append =FALSE, quote=FALSE,sep='\t', eol='\r\n',row.names = FALSE, col.names = FALSE)
+	# do the same for all table in input folder, plus merge them to existing data frame
+	count <- 2
+	for (file in files[2:num.files]){  
+		current.table <- (strsplit(as.character(basename(file)),"[.]"))[[1]][1]
+		cat("\rto GTF",count, "/", num.files)
+		df.tmp <- data.frame()
+		df.tmp <- try(read.csv(file, header=TRUE,sep="\t"), silent=TRUE)
   			if(class(df.tmp)=="try-error"){
   				cat("\nFile with invalid input format, should be a tab seperated table with header! -> skipped\n")	
   			} else {
 				df.tmp <- .adapt.header(df.tmp)  
 		    	df.tmp$table <- current.table   	
-		    	df.tmp <- .custom.gtf(df.tmp,source, feature, threads)
+		    	df.tmp <- .custom.gtf(df.tmp,gtf_source, feature, threads)
 		    	current.table <- paste(current.table,"gtf",sep=".")
 		    	current.table <- paste(outdir,current.table,sep="")
 		    	write.table(df.tmp, file=current.table, append =FALSE, quote=FALSE,sep='\t', eol='\r\n',row.names = FALSE, col.names = FALSE)
@@ -229,90 +229,75 @@ dot <- "."
 }
 
 
-## Script gets arguments
-args <- commandArgs(TRUE)
-#positional argument
-# $1 = file or folder with input table(s) which should be reformatted to gtf file format
-# optional arguments, order does not matter, varyfied by argument=value pattern
-# $2 = source
-# $3 = feature
-# $4 = threads
-num.args <- length(unlist(args))
-if(num.args >= 1 && num.args <= 4){
-	cat("Preprocessing..")
-	# process input
-	input <- args[1]
-	if(num.args > 1 && !any(grepl("source",args)) && !any(grepl("feature",args)) && !any(grepl("threads",args))){
-		stop("Invalid optional argument, use optional arguments with source=yourSource feature=yourFeature threads=#threads")
-	}
-  	# check if optional inputs are given and validate them
-  	if(any(grep("source",args))){
-  		source <- grep("source",args, value=TRUE)
-  		source <- unlist(strsplit(source, "="))[2]
-	} else {
-		source <- "undefined"
-	}
-	if(any(grep("feature",args))){
-  		feature <- grep("feature",args, value=TRUE)
-  		feature <- unlist(strsplit(feature, "="))[2]
-	} else {
-		feature <- "undefined"
-	}
-	if(any(grep("threads",args))){
-  		threads <- grep("threads",args, value=TRUE)
-  		threads <- as.numeric(unlist(strsplit(threads, "="))[2])
-  		if(is.na(threads)){
-  			cat(" threads is not numeric will be set to 1.. ")
-  			threads <- 1
-  		}
-	} else {
-		cat(" no threads defined, will be set to 1.. ")
-		threads <- 1
-	}
+
+library(getopt, quietly=TRUE)
+
+#Script gets arguments
+# 0 flag
+# 1 mandatory parameter
+# 2 optional parameter
+options <- matrix(c(
+	'input', 'i', 1, 'character', 'file or folder with input table(s) which should be reformatted to gtf file format',
+	'gtf_source', 's', 2, 'character', 'gtf_source',
+	'feature', 'f', 2, 'character', 'feature',
+	'threads', 't', 2, 'integer', 'cores to be used for reformatting',
+	'help', 'h', 0, 'logical','Provides command line help.'
+	), byrow=TRUE, ncol=5)
+opt <- getopt(options)
+#help
+if (!is.null(opt$help)) { 
+	cat(getopt(options, usage=TRUE))
+	q(status=0) }
+#check for mandatory input
+if (is.null(opt$input) || !file.exists(opt$input)) { 
+	cat("\nInput file or directory is missing or not existend\n")
+	q(status=1) 
+}
+#set defaults
+if (is.null(opt$gtf_source)) { opt$gtf_source <- "undefined" }
+if (is.null(opt$feature)) { opt$feature <- "undefined" }
+if (is.null(opt$threads)) { opt$threads <- 1 }
+# distinguish between input file and dir
+if(file_test("-f",opt$input)) {
+	cat("Input file to GTF format..")
+ 	df.input <- try(read.csv(opt$input, header=TRUE, sep="\t"), silent=TRUE)
+	
+  if(class(df.input)=="try-error"){
+ 		cat("\n")
+ 		stop("File with invalid input format, should be a tab seperated table with header!\n")	
+ 	}
+	df.input <- .adapt.header(df.input)
+ 	# create output file name
+	# set outdir to to full path
+	outdir <- dirname(normalizePath(opt$input))
+	outdir <- paste(outdir, "/", sep="")
+	current.table <- (strsplit(as.character(basename(opt$input)),"[.]"))[[1]]
+	current.table <- current.table[1:(length(current.table)-1)]
+	if(length(current.table)>1){
+		current.table <-paste(current.table, collapse=".")
+	} 	
+	current.table <- paste(current.table,"gtf",sep=".")
+	output <- as.character(paste(outdir,current.table,sep=""))
+	df.gtf <- .custom.gtf(df.input, opt$gtf_source, opt$feature, opt$threads)
+	write.table(df.gtf, file=output, append =FALSE, quote=FALSE,sep='\t', eol='\r\n',row.names = FALSE, col.names = FALSE)
 	cat("done.\n")
-
-  	# distinguish between input file and dir
-  	if(file_test("-f",input)){
-  		cat("Input is a file: To GTF..")
-  		df.input <- try(read.csv(input, header=TRUE, sep="\t"), silent=TRUE)
-
-  		if(class(df.input)=="try-error"){
-  			cat("\n")
-  			stop("File with invalid input format, should be a tab seperated table with header!\n")	
-  		}
-		df.input <- .adapt.header(df.input)
-  		# create output file name
-		# set outdir to to full path
-	  	outdir <- dirname(normalizePath(input))
-	  	outdir <- paste(outdir, "/", sep="")
-	  	current.table <- (strsplit(as.character(basename(input)),"[.]"))[[1]]
-	  	current.table <- current.table[1:(length(current.table)-1)]
-	  	if(length(current.table)>1){
-	  			current.table <-paste(current.table, collapse=".")
-	  	} 	
-	  	current.table <- paste(current.table,"gtf",sep=".")
-	  	output <- as.character(paste(outdir,current.table,sep=""))
-	  	df.gtf <- .custom.gtf(df.input, source, feature, threads)
-	  	write.table(df.gtf, file=output, append =FALSE, quote=FALSE,sep='\t', eol='\r\n',row.names = FALSE, col.names = FALSE)
-	  	cat("done.\n")
-	  	
+	
   		
-  	}  else if(file_test("-d",input)){
-  		outdir <- paste(dirname(normalizePath(input)), basename(input), sep="/")
+} else if(file_test("-d",input)){
+  		outdir <- paste(dirname(normalizePath(opt$input)), basename(opt$input), sep="/")
   		outdir <- paste0(outdir,"/")
-  		cat("Input is a dir: Reformat to gtf file format and merge ..")
-  		df.merged <- .merge.files(input,outdir, source, feature, threads)
-  		output <- paste(outdir,"UROPAtoGTF_merged.gtf", sep="")
+  		cat("Input is a directory: Input files to GTF format and merge ..")
+  		df.merged <- .merge.files(opt$input,outdir, opt$gtf_source, opt$feature, opt$threads)
+  		output <- paste(outdir,"uropa2gtf_",basename(opt$input),".gtf", sep="")
   		write.table(df.merged, file=output, append =FALSE, quote=FALSE,sep='\t', eol='\r\n',row.names = FALSE, col.names = FALSE)
   		cat("\ndone.\n")
-  	}
-} else{
+} else {
 	# error message displayed if script is not called as it should be called
 	cat("ERROR:	Wrong use of custom gtf file generation script, use script like this: 
 
-	Rscript UROPAtoGTF.R <input> source=yourSource feature=yourFeature threads=#threads
+	Rscript UROPAtoGTF.R <input> gtf_source=yourgtf_source feature=yourFeature threads=#threads
 
-	--> source, feature, and threads are optional: depending from input, e.g. source=UCSC
+	--> gtf_source, feature, and threads are optional: depending from input, e.g. gtf_source=UCSC
 	<input> can be a file or a folder (transform one file / transform and merge many files)
 	output files will be stored in same direction as input.
 	Notes: 	Make sure input file(s) contain header with information about chr, start, and end
