@@ -16,7 +16,7 @@ suppressPackageStartupMessages(library(jsonlite))
 suppressPackageStartupMessages(library(gridExtra))
 suppressPackageStartupMessages(library(grid))
 suppressPackageStartupMessages(library(getopt))
-
+suppressPackageStartupMessages(library(tidyr))
 options = matrix(c(
   'finalhits', 'f', 1, 'character', 'file containing the final hits from UROPA.',
   'config', 'c', 1, 'character', 'file containing the json formatted configuration from the UROPA run.',
@@ -88,10 +88,16 @@ features <- c()
 	perc <- round(df.pie$value/sum(df.pie$value)*100,1)
 	df.pie$location <- paste0(df.pie$location, " (",perc, "%)")
 	# now background
-	blank_theme <- theme_minimal()+ theme(axis.title.x = element_blank(), axis.title.y = element_blank(), panel.border = element_blank(), panel.grid=element_blank(), axis.ticks = element_blank(), plot.title=element_text(size=14, face="bold"))
+	blank_theme <- theme_minimal()+ theme(axis.title.x = element_blank(), axis.title.y = element_blank(), 
+	                                      panel.border = element_blank(), panel.grid=element_blank(), 
+	                                      axis.ticks = element_blank(), plot.title=element_text(size=14, face="bold"))
 	# title
 	main <- paste0("Genomic location of '",feat, "' across ",pie.basic)
-	pie <- ggplot(df.pie, aes(x="", y=value, fill=location)) + geom_bar(width = 1, stat = "identity") + coord_polar("y", start=0) + blank_theme + theme(axis.text.x=element_blank()) + geom_text(aes(y = value/length(value) + c(0, cumsum(value)[-length(value)]),  label = rep("",nrow(df.pie))), size=2, nudge_x = 0.7, nudge_y = 0.7) + ggtitle(main) +  theme(plot.title = element_text(size = 10, face = "bold", , vjust=-10))
+	pie <- ggplot(df.pie, aes(x="", y=value, fill=location)) + geom_bar(width = 1, stat = "identity") + 
+	  coord_polar("y", start=0) + blank_theme + ggtitle(main) +
+	  theme(axis.text.x=element_blank(), plot.title = element_text(size = 10, face = "bold", vjust=-10)) + 
+	  geom_text(aes(y = value/length(value) + 
+	                  c(0, cumsum(value)[-length(value)]),  label = rep("",nrow(df.pie))), size=2, nudge_x = 0.7, nudge_y = 0.7)
 	print(pie, vp=.define_region(f))
 }
 
@@ -132,14 +138,26 @@ features <- c()
 	# get infos from config for overview page
 	config <- fromJSON(conf)
 	config.query <- as.data.frame(config$queries)
-
+	config.query$query <- 0:(nrow(config.query)-1)
 	config.cols <- colnames(config.query)
 	priority <- config$priority
-
-	# queries of uropa annotation run
-	queries <- sort.int(as.numeric(unique(df.uropa.final$query)))
-	num.queries <- length(queries)
-	queries <- sprintf("%02d", queries)
+  
+	
+	# specify y limit for plots
+	y.lim <- round(median(df.uropa.final[,"distance"]) + (max(df.uropa.final[,"distance"])/15))
+	if(y.lim > max(df.uropa.final[,"distance"]) || y.lim > 10000){
+	  if(median(df.uropa.final[,"distance"]) + 5000 > max(df.uropa.final[,"distance"])){
+	    y.lim <- median(df.uropa.final[,"distance"])
+	  } else {
+	    y.lim <- median(df.uropa.final[,"distance"]) + 5000
+	  }
+	  
+	}
+	
+	# expand multiple valid annotations to one row each
+	df.uropa.final <- separate_rows(df.uropa.final, query)	# queries of uropa annotation run
+	num.queries <- max(config.query$query)
+	queries <- sprintf("%02d", config.query$query)
 
 	features <<- as.character(unique(df.uropa.final$feature))
 	num.features <<- length(features)
@@ -148,18 +166,22 @@ features <- c()
 	}
 	# add query to query data frame
 	config.query$query <- paste0("query",sprintf("%02d",0:(nrow(config.query)-1)))
-	config.query <- config.query[,c("query", "feature", "distance", "feature.anchor", "internals", "direction", "filter.attribute", "attribute.value", "show.attributes")]
+	config.query <- config.query[,c("query", "feature", "distance", "feature.anchor", "internals", "direction",
+	                                "filter.attribute", "attribute.value", "show.attributes")]
 	# replaye "start,center,end" position by "any_pos"
 	config.query$feature.anchor <- sapply(config.query$feature.anchor, function(x) if(length(x)==3){return("any_pos")}else{return(x)})
 	mtext("UROPA summary", side=3, line=0,outer=FALSE, cex=2)
-	mtext(paste0("There were ", num.peaks, " peaks in the input bed file,\nUROPA annotated ", anno.peaks, " peaks\n"),side=3, line=-3,outer=FALSE, cex=.7)
+	mtext(paste0("There were ", num.peaks, " peaks in the input bed file,\nUROPA annotated ", anno.peaks, " peaks\n"),
+	      side=3, line=-3,outer=FALSE, cex=.7)
 	if(num.queries != nrow(config.query)){
-		mtext(paste("Only queries", paste(queries, collapse=","), "are represented in the FinalHits", sep=" "), side=3, line=-5,outer=FALSE, cex=.7)
+		mtext(paste("Only queries", paste(queries, collapse=","), "are represented in the FinalHits", sep=" "), 
+		      side=3, line=-5,outer=FALSE, cex=.7)
 	}
 
 
 
-	mytheme <- ttheme_default(core = list(fg_params=list(cex = 0.5)),colhead = list(fg_params=list(cex = 0.5)),rowhead = list(fg_params=list(cex = 0.5)))
+	mytheme <- ttheme_default(core = list(fg_params=list(cex = 0.5)),colhead = list(fg_params=list(cex = 0.5)),
+	                          rowhead = list(fg_params=list(cex = 0.5)))
 	config.query <- data.frame(lapply(config.query, as.character), stringsAsFactors=FALSE)
 	g <- tableGrob(format(config.query), theme=mytheme,rows=NULL)
 	grid.draw(g)
@@ -183,16 +205,6 @@ features <- c()
 	mtext(plot1, cex=1, adj=0, padj=1)
 
 	# plot
-	y.lim <- round(median(df.uropa.final[,"distance"]) + (max(df.uropa.final[,"distance"])/15))
-	if(y.lim > max(df.uropa.final[,"distance"]) || y.lim > 10000){
-		if(median(df.uropa.final[,"distance"]) + 5000 > max(df.uropa.final[,"distance"])){
-			y.lim <- median(df.uropa.final[,"distance"])
-			} else {
-				y.lim <- median(df.uropa.final[,"distance"]) + 5000
-			}
-
-	}
-
 	density <- subset(df.uropa.final[,c("distance","feature")], (df.uropa.final[,"distance"]<y.lim))
 	dpq <- qplot(distance,data=density, geom="density", color=feature, xlab = "Distance to feature", ylab = "Relative count")
 	print(dpq + ggtitle("Distance to features across finalhits"))
@@ -207,8 +219,8 @@ features <- c()
 	mtext(plot2 ,cex=1, adj=0, padj=1)
 	# plot
 	.plot.genomic.location.per.feature(df.uropa.final, "finalhits")
+	
 	# plot 3
-
 	# plot
 	if(num.features > 1){
 		plot3 <- paste0("3. Allocation of available features in finalhits:",
@@ -222,7 +234,6 @@ features <- c()
 		mtext(plot3, cex=1, adj=0, padj=1)
 		.plot.feature.distribution(df.uropa=df.uropa.final,header="Feature distribution across finalhits")
 	}
-
 	return(df.uropa.final)
 }
 
@@ -234,7 +245,7 @@ features <- c()
 ## basic summary -- only one query definded
 if (is.null(opt$besthits)) {
   df.uropa.final <- .basic.summary(opt$finalhits, opt$config, opt$output)
-  dev.off()
+  invisible(dev.off())
 } else
 {
 	suppressPackageStartupMessages(library(VennDiagram))
@@ -276,10 +287,12 @@ if (is.null(opt$besthits)) {
 		}
 
 	}
-	df.distance.query <- subset(df.uropa.best.per.query[,c("feature","distance","query")], (df.uropa.best.per.query[,"distance"] < considered.distance))
+	df.distance.query <- subset(df.uropa.best.per.query[,c("feature","distance","query")], 
+	                            (df.uropa.best.per.query[,"distance"] < considered.distance))
 	max.distance.query <- round(max(as.numeric(df.distance.query[,"distance"])))
 	bin.width <- round(max.distance.query/20)
-	dpq <- qplot(df.distance.query[,2],data =df.distance.query, facets=query~feature, geom="histogram", binwidth=bin.width, xlab = "Distance to feature", ylab = "Total count")
+	dpq <- qplot(df.distance.query[,2],data =df.distance.query, facets=query~feature, 
+	             geom="histogram", binwidth=bin.width, xlab = "Distance to feature", ylab = "Total count")
 	print(dpq + ggtitle("Distance of query vs. feature across besthits Hits"))
 
 
@@ -342,9 +355,11 @@ if (is.null(opt$besthits)) {
 	 				} else if(anno.compare.query == matches || anno.initial.query ==matches){
 	 					dist <- c(0.02, -0.02, -0.02)
 	 				}
-	 				venn.plot <- draw.triple.venn(num.peaks, anno.initial.query, anno.compare.query, anno.initial.query, matches, anno.compare.query, matches, category =c("all",paste0("query",queries[q]),paste0("query",queries[c])),
-	 					lwd = 2, lty ="solid", col =  c("black", "red","blue"), fill = c("white","red","blue"), cex=1, cat.pos = c(0,0,0), cat.dist = dist, reverse = FALSE,
-	 					cat.cex =1, cat.default.pos= "outer", alpha =  c(0,.4,.4), euler.d=TRUE, scaled=TRUE)
+	 				venn.plot <- draw.triple.venn(num.peaks, anno.initial.query, anno.compare.query, anno.initial.query, matches, 
+	 				                              anno.compare.query, matches, category =c("all",paste0("query",queries[q]),paste0("query",queries[c])),
+	 				                              lwd = 2, lty ="solid", col =  c("black", "red","blue"), fill = c("white","red","blue"), 
+	 				                              cex=1, cat.pos = c(0,0,0), cat.dist = dist, reverse = FALSE,cat.cex =1, 
+	 				                              cat.default.pos= "outer", alpha =  c(0,.4,.4), euler.d=TRUE, scaled=TRUE)
 	 				grid.draw(venn.plot)
 	 				mtext(paste0("Peak based pairwise compare of ", paste0("query",queries[q]), " and ", paste0("query",queries[c])), side=3, line=0,outer=FALSE, cex=1)
 	 				popViewport()
@@ -356,63 +371,72 @@ if (is.null(opt$besthits)) {
 
 	# plot 8
 	# only up to five queries because of Vennerable package support
-	if(num.queries>2 && num.queries<=5){
-
-		suppressPackageStartupMessages(library(Vennerable))
-		tryCatch({
-			plot8 <- paste0("8: Comparison of all specified queries:",
-				"\n\nThe following Chow Ruskey plot compares all queries\nbased on the besthits.",
-				"\nIt represents an area-proportional Venn diagram,\nrevealing the distribution of peaks that could be annotated\nper query and works for up to 5 queries.",
-				"\n\nAdditional Info:\nIt is evalueated whether peaks are annotated,\nbut not whether they are annotated for the same feature")
-			grid.newpage()
-			mtext(plot8, cex=1, adj=0, padj=1)
-
-			num <- venn(peaks.per.query)[,"num"]
-			if(num[length(num)] == 0){
-				num <- num+1
-			}
-			# compute distribution
-			v <- Venn(SetNames=paste0("query",queries), Weight=num)
-			cv <- compute.Venn(v, type="ChowRuskey", doWeights=TRUE)
-
-			# change FaceText size and line thickness
-			gp <- VennThemes(cv, colourAlgorithm = "signature")
-			gp[["FaceText"]] <- lapply(gp[["FaceText"]],function(gps){gps$fontsize<-10;gps})
-			gp[["Set"]] <- lapply(gp[["Set"]],function(gps){gps$lwd<-.8;gps})
-
-			#change label positions
-			SetLabels <- VennGetSetLabels(cv)
-			max.x <- max(VennGetUniverseRange(cv)[,"x"])
-			max.y <- max(VennGetUniverseRange(cv)[,"y"])
-			for(i in 1:nrow(SetLabels)){
-				SetLabels[i,"x"] <- max.x+2
-				SetLabels[i,"hjust"] <- "right"
-				if(i==1){
-					SetLabels[i,"y"] <- max.y/3
-				} else {
-					SetLabels[i,"y"] <- (as.numeric(SetLabels[i-1,"y"])-2)-(2.5*num.queries)
-				}
-			}
-			cv <- VennSetSetLabels(cv,SetLabels)
-
-			# change face label positions - not yet implemented in original package
-			facelabel <- as.data.frame(VennGetFaceLabels(cv))
-			face.labels <- nrow(facelabel)
-			for(i in 1:(face.labels-2)){
-				facelabel[i,"x"] <- 1.15*facelabel[i,"x"]
-				facelabel[i,"y"] <- 1.15*facelabel[i,"y"]
-			}
-			cv <- VennSetFaceLabels(cv,facelabel)
-
-			# draw plot
-			pushViewport(viewport(x=.5, y=0.5, width=.8, height=.7))
-			grid.rect(gp=gpar(fill="white",lty = "blank"),width = unit(1.5, "npc"), height = unit(1.5, "npc"))
-			venn.draw <- plot(cv, gp=gp)
-			grid.draw(venn.draw)
-			mtext("Chow Ruskey comparison of all peaks annotated with UROPA", side=3, line=0,outer=FALSE, cex=1)
-		}, error = function(e){
-			cat("\nChowRuskey plot was invalid\n")
-		})
+	if(requireNamespace("Vennerable", quietly = TRUE)){
+  	if(num.queries>2 && num.queries<=5){
+  
+  		suppressPackageStartupMessages(library(Vennerable))
+  		tryCatch({
+  			plot8 <- paste0("8: Comparison of all specified queries:",
+  				"\n\nThe following Chow Ruskey plot compares all queries\nbased on the besthits.",
+  				"\nIt represents an area-proportional Venn diagram,\nrevealing the distribution of peaks that could be annotated\nper query and works for up to 5 queries.",
+  				"\n\nAdditional Info:\nIt is evalueated whether peaks are annotated,\nbut not whether they are annotated for the same feature")
+  			grid.newpage()
+  			mtext(plot8, cex=1, adj=0, padj=1)
+  
+  			num <- venn(peaks.per.query)[,"num"]
+  			if(num[length(num)] == 0){
+  				num <- num+1
+  			}
+  			# compute distribution
+  			v <- Venn(SetNames=paste0("query",queries), Weight=num)
+  			cv <- compute.Venn(v, type="ChowRuskey", doWeights=TRUE)
+  
+  			# change FaceText size and line thickness
+  			gp <- VennThemes(cv, colourAlgorithm = "signature")
+  			gp[["FaceText"]] <- lapply(gp[["FaceText"]],function(gps){gps$fontsize<-10;gps})
+  			gp[["Set"]] <- lapply(gp[["Set"]],function(gps){gps$lwd<-.8;gps})
+  
+  			#change label positions
+  			SetLabels <- VennGetSetLabels(cv)
+  			max.x <- max(VennGetUniverseRange(cv)[,"x"])
+  			max.y <- max(VennGetUniverseRange(cv)[,"y"])
+  			for(i in 1:nrow(SetLabels)){
+  				SetLabels[i,"x"] <- max.x+2
+  				SetLabels[i,"hjust"] <- "right"
+  				if(i==1){
+  					SetLabels[i,"y"] <- max.y/3
+  				} else {
+  					SetLabels[i,"y"] <- (as.numeric(SetLabels[i-1,"y"])-2)-(2.5*num.queries)
+  				}
+  			}
+  			cv <- VennSetSetLabels(cv,SetLabels)
+  
+  			# change face label positions - not yet implemented in original package
+  			facelabel <- as.data.frame(VennGetFaceLabels(cv))
+  			face.labels <- nrow(facelabel)
+  			for(i in 1:(face.labels-2)){
+  				facelabel[i,"x"] <- 1.15*facelabel[i,"x"]
+  				facelabel[i,"y"] <- 1.15*facelabel[i,"y"]
+  			}
+  			cv <- VennSetFaceLabels(cv,facelabel)
+  
+  			# draw plot
+  			pushViewport(viewport(x=.5, y=0.5, width=.8, height=.7))
+  			grid.rect(gp=gpar(fill="white",lty = "blank"),width = unit(1.5, "npc"), height = unit(1.5, "npc"))
+  			venn.draw <- plot(cv, gp=gp)
+  			grid.draw(venn.draw)
+  			mtext("Chow Ruskey comparison of all peaks annotated with UROPA", side=3, line=0,outer=FALSE, cex=1)
+  		}, error = function(e){
+  			cat("\nChowRuskey plot was invalid do upsetR plot\n")
+  		  library(UpSetR,quietly = TRUE)
+  		  upset(fromList(peaks.per.query), keep.order=TRUE,nintersects = NA,empty.intersections = "on",number.angles=35,mainbar.y.label = "Peak Intersections", sets.x.label = "Annotated Genes")
+  		  #nsets=(ncol(combn(num.queries,2))+num.queries)
+  		})
+  	}
+	} else {
+	  library(UpSetR,quietly = TRUE)
+	  upset(fromList(peaks.per.query), keep.order=TRUE, nintersects = NA,empty.intersections = "on",number.angles=35,mainbar.y.label = "Gene Intersections", sets.x.label = "Annotated Genes")
+	  
 	}
-	dev.off()
+	invisible(dev.off())
 }
