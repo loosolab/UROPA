@@ -14,7 +14,7 @@ For running UROPA locally, the following prerequisites have to be met:
 - `R/Rscript`_, v3.3.0 or higher (follow the instructions on url)
 	Install packages:
 	
-	- ``install.packages(c("ggplot2", "devtools", "gplots", "gridExtra", "jsonlite", "VennDiagram", "snow", "getopt"))``
+	- ``install.packages(c("ggplot2", "devtools", "gplots", "gridExtra", "jsonlite", "VennDiagram", "snow", "getopt", "tidyr", UpSetR"))``
 	
 	## choose mirrow
 	
