@@ -1,3 +1,10 @@
+## 1.2.1 (2017-09-07)
+
+- Rearranged package structure towards a full Pypi packages
+- Renamed summary.R to utils/uropa_summary.R
+- Renamed reformat_output.R to utisl/uropa_reformat_output.R
+- Reflected changes in documentation
+
 ## 1.2.0 (2017-09-05)
 
 - Added an UpSetR plot to summary.R to cancel the need for Vennerable R package

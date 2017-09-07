@@ -1,10 +1,9 @@
-#!/usr/bin/env python
 """
 uropa.py: UROPA - Universal RObust Peak Annotator
 
 @authors: Maria Kondili, Jens Preussner and Annika Fust
 @license: MIT
-@version: 1.2.0
+@version: 1.2.1
 @maintainer: Mario Looso
 @email: mario.looso@mpi-bn.mpg.de
 """
@@ -26,14 +25,14 @@ from functools import reduce
 
 import numpy as np
 
-import uropa.config as cfg
-import uropa.overlaps as ovls
-import uropa.annotation as ant
+import config as cfg
+import overlaps as ovls
+import annotation as ant
 
-if __name__ == "__main__":
-
+#if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(
-        prog="uropa.py",
+        prog="uropa",
         description='UROPA - Universal RObust Peak Annotator.',
         epilog=cfg.howtoconfig(),
         formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -95,7 +94,7 @@ if __name__ == "__main__":
         "--version",
         help="prints the version and exits",
         action="version",
-        version="%(prog)s 1.2.0")
+        version="%(prog)s 1.2.1")
     args = parser.parse_args()
 
     config = args.input
@@ -345,7 +344,7 @@ if __name__ == "__main__":
     if args.reformat and len(queries) > 1 and not pr:
         logger.info("Reformatting output...")
         R_reform_Best = [
-            'reformat_output.R',
+            'uropa_reformat_output.R',
             '-i',
             besthits_outfile,
             '-k',
@@ -370,7 +369,7 @@ if __name__ == "__main__":
     #
     if args.summary:
         logger.info("Creating the Summary graphs of the results...")
-        summary_script = "summary.R"
+        summary_script = "uropa_summary.R"
         summary_output = outdir + "summary.pdf"
 
         if len(queries) > 1 and not pr and os.path.exists(merged_outfile):

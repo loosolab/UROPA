@@ -11,48 +11,47 @@ import numpy as np
 def howtoconfig():
     """Defines the epilog that is given when help is requested."""
     epilog = dedent("""\
-	UROPA is a peak annotation tool facilitating the analysis of next-generation sequencing methods for
-	chromatin biology, like ChIPseq or ATACseq. There are already different peak annotation tools, like
-	HOMER or ChIPpeakAnno, but the advantage of UROPA is, that it can easily be fitted to your requirements.
-	UROPA was developed as an open source analysis pipeline for peaks generated from any peak caller.
+    UROPA is a peak annotation tool facilitating the analysis of next-generation sequencing methods for
+    chromatin biology, like ChIPseq or ATACseq. There are already different peak annotation tools, like
+    HOMER or ChIPpeakAnno, but the advantage of UROPA is, that it can easily be fitted to your requirements.
+    UROPA was developed as an open source analysis pipeline for peaks generated from any peak caller.
 
     Please cite upon usage:
-    Kondili M, Fust A, Preussner J, Kuenne C, Braun T, and Looso M.
-    UROPA: a tool for Universal RObust Peak Annotation.
+    Kondili M, Fust A, Preussner J, Kuenne C, Braun T and Looso M. UROPA: A tool for Universal RObust Peak Annotation.
     Scientific Reports 7 (2017), doi: 10.1038/s41598-017-02464-y
 
-	All parameters and paths to input or output files should be reported in a JSON configuration file.
-	The configuration file should at least contain paths for bed and GTF files:
+    All parameters and paths to input or output files should be reported in a JSON configuration file.
+    The configuration file should at least contain paths for bed and GTF files:
 
-	{
-	"queries": [],
-	"bed": "/path/to/bed/file.bed",
-	"gtf": "/path/to/annotation/file.gtf"
-	}
+    {
+    "queries": [],
+    "bed": "/path/to/bed/file.bed",
+    "gtf": "/path/to/annotation/file.gtf"
+    }
 
-	Different query types can be defined using the queries key:
+    Different query types can be defined using the queries key:
 
-	{
-	"queries": [
-	  {...},
-	  {...}],
-	"bed": "/path/to/bed/file.bed",
-	"gtf": "/path/to/annotation/file.gtf"
-	}
+    {
+    "queries": [
+      {...},
+      {...}],
+    "bed": "/path/to/bed/file.bed",
+    "gtf": "/path/to/annotation/file.gtf"
+    }
 
-	Optionally, the priority key can be used to fine tune UROPAs behaviour:
+    Optionally, the priority key can be used to fine tune UROPAs behaviour:
 
-	{
-	"queries": [
-	  {...},
-	  {...}],
-	"bed": "/path/to/bed/file.bed",
-	"gtf": "/path/to/annotation/file.gtf",
-	"priority": "True"
-	}
+    {
+    "queries": [
+      {...},
+      {...}],
+    "bed": "/path/to/bed/file.bed",
+    "gtf": "/path/to/annotation/file.gtf",
+    "priority": "True"
+    }
 
-	Please visit http://uropa-manual.readthedocs.io/config.html for detailed information on configuration.
-	""")
+    Please visit http://uropa-manual.readthedocs.io/config.html for detailed information on configuration.
+    """)
     return epilog
 
 
