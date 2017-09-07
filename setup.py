@@ -21,5 +21,11 @@ setup(name='uropa',
         'numpy',
         'pysam'
       ],
+      classifiers = [
+        'License :: OSI Approved :: MIT License',
+        'Intended Audience :: Science/Research',
+        'Topic :: Scientific/Engineering :: Bio-Informatics',
+        'Programming Language :: Python :: 2.7'
+      ],
       zip_safe=False,
       include_package_data=True)
