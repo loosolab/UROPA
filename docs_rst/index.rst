@@ -1,10 +1,10 @@
 Welcome to the UROPA documentation!
 ===================================
 
-.. image:: https://badge.fury.io/py/uropa@2x.png
-    :target: https://badge.fury.io/py/uropa
-.. image:: https://anaconda.org/bioconda/uropa/badges/installer/conda.svg
+.. image:: https://img.shields.io/badge/Install%20with-conda-green.svg?style=plastic&logoWidth=40
     :target: https://conda.anaconda.org/bioconda
+.. image:: https://badge.fury.io/py/uropa.png
+    :target: https://badge.fury.io/py/uropa
 
 UROPA is a command line based tool intended for genomic region annotation.
 
