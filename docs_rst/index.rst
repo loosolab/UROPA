@@ -1,12 +1,18 @@
 Welcome to the UROPA documentation!
 ===================================
-UROPA is a command line based tool intended for genomic region annotation. 
+
+.. image:: https://badge.fury.io/py/uropa@2x.png
+    :target: https://badge.fury.io/py/uropa
+.. image:: https://anaconda.org/bioconda/uropa/badges/installer/conda.svg
+    :target: https://conda.anaconda.org/bioconda
+
+UROPA is a command line based tool intended for genomic region annotation.
 
 
 **Advantages of UROPA**
 
 -  Detect the most appropriate annotation of peaks, utilizing parameters such as
-   
+
    -  feature type
    -  feature anchor
    -  feature direction relative to peak location
@@ -27,7 +33,7 @@ Please cite the paper describing UROPA when using it in your research: **Kondili
 **Contribute**
 
 - `Issue Tracker`_
-- `Source Code`_ 
+- `Source Code`_
 
 .. _Issue Tracker: https://github.molgen.mpg.de/loosolab/UROPA/issues
 .. _Source Code: https://github.molgen.mpg.de/loosolab/UROPA
@@ -54,4 +60,3 @@ The project is licensed under the MIT license (see :doc:`/license`)
    custom
    license
    help
-   
