@@ -1,5 +1,7 @@
-Universal RObust Peak Annotator [![Anaconda-Server Badge](https://img.shields.io/badge/Install%20with-conda-green.svg?style=plastic&logoWidth=40)](https://conda.anaconda.org/bioconda) [![Docker Badge](https://img.shields.io/badge/Container-ready-green.svg?style=plastic&logoWidth=40)](http://biocontainers.pro/registry/#/) [![PyPI version](https://badge.fury.io/py/uropa.png)](https://badge.fury.io/py/uropa)
+Universal RObust Peak Annotator
 =======================================
+
+[![Anaconda-Server Badge](https://img.shields.io/badge/Install%20with-conda-green.svg?style=plastic&logoWidth=40)](https://conda.anaconda.org/bioconda) [![Docker Badge](https://img.shields.io/badge/Container-ready-green.svg?style=plastic&logoWidth=40)](http://biocontainers.pro/registry/#/) [![PyPI version](https://badge.fury.io/py/uropa.png)](https://badge.fury.io/py/uropa)
 
 The **Universal RObust Peak Annotator** (UROPA) is a command line based tool, intended for genomic region
 annotation. Based on a configuration file, different target features can be prioritized with multiple integrated queries.
@@ -48,7 +50,7 @@ The UROPA installation is now as easy as ```conda install -c bioconda uropa```.
 ### Biocontainers / Docker
 
 If you have a running [Docker](docker.com) environment, you can pull a biocontainer with UROPA and all dependencies via
-`docker pull quay.io/biocontainers/uropa`
+`docker pull quay.io/biocontainers/uropa:latest_tag` using the latest tag from the [taglist](https://quay.io/repository/biocontainers/uropa?tab=tags), e.g. `1.2.1--py27r3.3.2_0`
 
 ### Installation from source
 

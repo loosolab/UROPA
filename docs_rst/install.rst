@@ -18,7 +18,7 @@ Biocontainers / Docker
 ----------------------
 
 If you have a running `Docker`_ environment, you can pull a biocontainer with UROPA and all dependencies via
-``docker pull quay.io/biocontainers/uropa``
+``docker pull quay.io/biocontainers/uropa:latest_tag`` using the latest tag from the `taglist`_, e.g. ``1.2.1--py27r3.3.2_0``
 
 Installation from source
 ------------------------
@@ -66,6 +66,7 @@ Available options:
 
 .. _Miniconda: https://conda.io/miniconda.html
 .. _Docker: http://www.docker.com
+.. _taglist: https://quay.io/repository/biocontainers/uropa?tab=tags
 .. _R/Rscript: http://www.r-project.org/
 .. _CRAN: https://cran.r-project.org/web/packages/
 .. _Bioconductor: http://bioconductor.org/
