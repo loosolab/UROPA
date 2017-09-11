@@ -1,18 +1,19 @@
 Installation
 ============
 
+There are three different ways to install UROPA. We recommend to install UROPA using the conda package manager.
+
 Conda package manager
 ---------------------
-
-We recommend to install UROPA using the conda package manager. Make sure to have `conda` installed, e.g. via
+Make sure to have `conda` installed, e.g. via
 
 - `Miniconda`_
 	- download the Miniconda installer for **Python 2.7**
 	- run ``bash Miniconda2-latest-Linux-x86_64.sh`` to install Miniconda
 	- Answer the question "Do you wish the installer to prepend the Miniconda install location to PATH in your /home/.../.bashrc ?" with yes
-		OR do `PATH=dir/to/miniconda2:$PATH` after installation process
+		OR do ``export PATH=dir/to/miniconda2:$PATH`` after installation process
 
-The UROPA installation is now as easy as `conda install -c bioconda uropa``.
+The UROPA installation is now as easy as ``conda install -c bioconda uropa``.
 
 Biocontainers / Docker
 ----------------------
