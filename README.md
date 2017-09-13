@@ -106,12 +106,12 @@ Available options:
 Running UROPA from a docker container can be done using the following command:
 
 ```bash
-	sudo docker run --rm -v <path-to-input-files-on-HOST>:<path-to-container-mnt> UROPA:LATEST uropa <UROPA-Paramters> -p <path-to-container-mnt>/'your-file-prefix'
+sudo docker run --rm -v <path-to-input-files-on-HOST>:<path-to-container-mnt> UROPA:LATEST uropa <UROPA-Paramters> -p <path-to-container-mnt>/'your-file-prefix'
 ```
 
-*-v parameter mounts a HOST folder into your docker CONTAINER. This folder should contain the input files for UROPA and also the result files will be stored here. No files will be stored in the container!!*
+*-v parameter mounts a HOST folder into your docker CONTAINER. This folder should contain the input files for UROPA and also the result files will be stored here. No files will be stored in the container!*
 
-* --rm removes/closes the container after the run*
+*--rm removes/closes the container after the run*
 
 Make sure to use the uropa -p option specifying the output directory and prefix, otherwise results are lost in the container environment.
 
