@@ -50,7 +50,9 @@ The UROPA installation is now as easy as ```conda install -c bioconda uropa```.
 ### Biocontainers / Docker
 
 If you have a running [Docker](docker.com) environment, you can pull a biocontainer with UROPA and all dependencies via
-`docker pull quay.io/biocontainers/uropa:latest_tag` using the latest tag from the [taglist](https://quay.io/repository/biocontainers/uropa?tab=tags), e.g. `1.2.1--py27r3.3.2_0`
+
+-	`docker pull quay.io/biocontainers/uropa:latest_tag` using the latest tag from the [taglist](https://quay.io/repository/biocontainers/uropa?tab=tags), e.g. `1.2.1--py27r3.3.2_0`
+-	`docker pull loosolab/uropa`
 
 ### Installation from source
 
@@ -79,6 +81,8 @@ install_github("jenzopr/Vennerable")
 
 To effectively use UROPA, make yourself familiar with the command-line options:
 
+## Command-line usage
+
 ```bash
 $ uropa                   
 Usage: uropa [options]          
@@ -86,16 +90,30 @@ Usage: uropa [options]
 Available options:
 
 	-h, --help             	print this help message and further details on the configuration file
-  -i, --input            	filename of configuration file [mandatory]
-  -p, --prefix           	prefix for output files, can include subdirectories [basename of --input]
-  -r, --reformat         	create an additional compact and line-reduced table as result file
-  -s, --summary          	additional visualisation of results in graphical format will be created
-  -t n, --threads n      	multiprocessed run: n = number of threads to run annotation process
-  -add-comments          	show comment lines in output files explaining the columns
-  -l, --log              	log file name for messages and warnings
-  -d, --debug            	print verbose messages (for debugging purposes)
-  -v, --version          	print the version and exit
+	-i, --input            	filename of configuration file [mandatory]
+	-p, --prefix           	prefix for output files, can include subdirectories [basename of --input]
+	-r, --reformat         	create an additional compact and line-reduced table as result file
+	-s, --summary          	additional visualisation of results in graphical format will be created
+	-t n, --threads n      	multiprocessed run: n = number of threads to run annotation process
+	-add-comments          	show comment lines in output files explaining the columns
+	-l, --log              	log file name for messages and warnings
+	-d, --debug            	print verbose messages (for debugging purposes)
+	-v, --version          	print the version and exit
 ```
+
+## Biocontainer usage
+
+Running UROPA from a docker container can be done using the following command:
+
+```bash
+	sudo docker run --rm -v <path-to-input-files-on-HOST>:<path-to-container-mnt> UROPA:LATEST uropa <UROPA-Paramters> -p <path-to-container-mnt>/'your-file-prefix'
+```
+
+*-v parameter mounts a HOST folder into your docker CONTAINER. This folder should contain the input files for UROPA and also the result files will be stored here. No files will be stored in the container!!*
+
+* --rm removes/closes the container after the run*
+
+Make sure to use the uropa -p option specifying the output directory and prefix, otherwise results are lost in the container environment.
 
 How to cite
 -----------
