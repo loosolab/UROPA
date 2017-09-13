@@ -78,6 +78,8 @@ Each query can specify the following keys:
    Default: ``'any_direction'``
    
    Example: ``'direction': ['upstream','downstream']``
+   
+   Visual repesentation in :ref:`Figure 1 <genomic-location>` of section :doc:`/uropa-example` 
 
    
 -  **internals**: This key represents a modifier with respect to the ``'distance'`` key. This can be helpful to annotate peaks to features with a wide size range, such as genes, which would otherwise be removed due to the distance thresholds. So even if the desired feature anchor is located too far away, a feature can still be included if it is overlapped.
@@ -98,6 +100,7 @@ Each query can specify the following keys:
    
    Example: ``'internals':'center'``
    
+   Visual repesentation in :ref:`Figure 1 <genomic-location>` of section :doc:`/uropa-example`
 
 -  **filter.attribute** : Key filters the attributes found in the 9th column of the GTF file.
    If a ``'filter.attribute'`` is given, only features that have a ``'attribute.value'`` for this attribute is kept as valid annotations. If this key is set, the key ``'attribute.value'`` is mandatory, too (see below).          
