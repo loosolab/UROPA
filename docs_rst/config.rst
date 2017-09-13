@@ -73,16 +73,16 @@ Each query can specify the following keys:
 
 -  **direction**: Define the peak location relative to the feature's location, in respect of its orientation.
    A peak is 'upstream' if its center is upstream of a feature anchor position. Accordingly, a peak is 'downstream' if its center is downstream of a feature anchor position.
-   Also compare to Figure 2 in :doc:`/uropa-example`.
+   Visual repesentation in :ref:`Figure 1 <genomic-location>` of section :doc:`/uropa-example` 
    
    Default: ``'any_direction'``
    
    Example: ``'direction': ['upstream','downstream']``
-   
-   Visual repesentation in :ref:`Figure 1 <genomic-location>` of section :doc:`/uropa-example` 
-
-   
--  **internals**: This key represents a modifier with respect to the ``'distance'`` key. This can be helpful to annotate peaks to features with a wide size range, such as genes, which would otherwise be removed due to the distance thresholds. So even if the desired feature anchor is located too far away, a feature can still be included if it is overlapped.
+      
+-  **internals**: This key represents a modifier with respect to the ``'distance'`` key. 
+	This can be helpful to annotate peaks to features with a wide size range, such as genes, 
+	which would otherwise be removed due to the distance thresholds. So even if the desired feature anchor is located too far away, 
+	a feature can still be included if it is overlapped. Visual repesentation in :ref:`Figure 1 <genomic-location>` of section :doc:`/uropa-example`.
 
    ``'center'``: If the center of a peak intersects with a feature region or vice versa, the ``'distance'`` key filtering is disabled. This parameter ensures that the majority of the peak intersects with the feature.
    
@@ -100,7 +100,7 @@ Each query can specify the following keys:
    
    Example: ``'internals':'center'``
    
-   Visual repesentation in :ref:`Figure 1 <genomic-location>` of section :doc:`/uropa-example`
+   
 
 -  **filter.attribute** : Key filters the attributes found in the 9th column of the GTF file.
    If a ``'filter.attribute'`` is given, only features that have a ``'attribute.value'`` for this attribute is kept as valid annotations. If this key is set, the key ``'attribute.value'`` is mandatory, too (see below).          
