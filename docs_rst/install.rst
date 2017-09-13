@@ -19,7 +19,9 @@ Biocontainers / Docker
 ----------------------
 
 If you have a running `Docker`_ environment, you can pull a biocontainer with UROPA and all dependencies via
-``docker pull quay.io/biocontainers/uropa:latest_tag`` using the latest tag from the `taglist`_, e.g. ``1.2.1--py27r3.3.2_0``
+
+- ``docker pull quay.io/biocontainers/uropa:latest_tag`` using the latest tag from the `taglist`_, e.g. ``1.2.1--py27r3.3.2_0``
+- ``docker pull loosolab/uropa``
 
 Installation from source
 ------------------------
@@ -28,18 +30,18 @@ You can also install UROPA from the source PyPI package. Note that this comes wi
 
 ``pip install uropa``
 
-To fulfill all other dependencies, follow the instructions below:
+To fulfill all other dependencies, `R/Rscript`_, v3.3.0 or higher (follow the instructions on url) is needed. 
+Futhermore, follow the subsequent instructions within R environment to install needed packages:
 
-- `R/Rscript`_, v3.3.0 or higher (follow the instructions on url)
-  Install packages:
-
-	- ``install.packages(c("ggplot2", "devtools", "gplots", "gridExtra", "jsonlite", "VennDiagram", "snow", "getopt", "tidyr", UpSetR"))``
+	- ``install.packages(c("ggplot2", "devtools", "gplots", "gridExtra", "jsonlite", 
+	
+	"VennDiagram", "snow", "getopt", "tidyr", UpSetR"))``
 	- ``source("https://bioconductor.org/biocLite.R")``
 	- ``biocLite(c("RBGL","graph"))``
 	- further package infos can be found at `CRAN`_ and `Bioconductor`_
-  - In order to plot the Chow-Ruskey plot with uropa_summary.R, install the modified Vennerable package from our fork:
-  - ``library(devtools)``
-	- ``install_github("jenzopr/Vennerable")``
+	- In order to visualize the Chow-Ruskey plot with uropa_summary.R, install the modified Vennerable package from our fork:
+		- ``library(devtools)``
+		- ``install_github("jenzopr/Vennerable")``
 
 UROPA usage
 -----------
