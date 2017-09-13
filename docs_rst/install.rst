@@ -33,8 +33,7 @@ You can also install UROPA from the source PyPI package. Note that this comes wi
 To fulfill all other dependencies, `R/Rscript`_, v3.3.0 or higher (follow the instructions on url) is needed. 
 Futhermore, follow the subsequent instructions within R environment to install mandatory packages:
 
-	- ``install.packages(c("ggplot2", "devtools", "gplots", "gridExtra", "jsonlite", ``
-		``"VennDiagram", "snow", "getopt", "tidyr", UpSetR"))``
+	- ``install.packages(c("ggplot2","devtools","gplots","gridExtra","jsonlite", "VennDiagram","snow","getopt","tidyr","UpSetR"))``
 	- ``source("https://bioconductor.org/biocLite.R")``
 	- ``biocLite(c("RBGL","graph"))``
 	- further package infos can be found at `CRAN`_ and `Bioconductor`_
