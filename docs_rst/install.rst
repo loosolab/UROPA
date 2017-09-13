@@ -49,7 +49,7 @@ To effectively use UROPA, make yourself familiar with the command-line options:
 .. code:: bash
 
 $ uropa
-Usage: uropa.py [options]
+Usage: uropa [options]
 
 Available options:
 

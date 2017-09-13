@@ -16,7 +16,5 @@ They will be addressed as soon as possible.
 * **How to annotate with default values?**
 	In order to activate default values, the key itself shouldn't be present in the config file. 
 	If you want to annotate with default values only, do not remove the queries key, but leave it empty like "queries":[] 
-* **Why is the summary empty?**
-	It is a problem about gridExtra and ggplot2, the summary starts from page 2
 
 

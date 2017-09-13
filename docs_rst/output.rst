@@ -18,10 +18,10 @@ File overview
 
 .. note::
 	If no prefix is specified, the result files will be stored in the working diractory with the basename of the config file.
-	For example,``uropa.py -i histonMarkPeaks.json`` leads to an allhits file called histonMarkPeaks_allhits.txt stored in the working directory.
+	For example,``uropa -i histonMarkPeaks.json`` leads to an allhits file called histonMarkPeaks_allhits.txt stored in the working directory.
 	
 	With specified prefix, the result files will be stored in the working diractory with the prefix as part of the output file names.
-	``uropa.py -i histonMarkPeaks.json -p abc`` results in an allhits file called abc_allhits.txt.
+	``uropa -i histonMarkPeaks.json -p abc`` results in an allhits file called abc_allhits.txt.
 	But if for instance the prefix would be defined as ``-p xy/abc`` all results would be stored in folder xy, 
 	which is be created if it does not exist already, with abc as prefixes of the output files.
 	

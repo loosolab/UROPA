@@ -23,12 +23,12 @@ To start the UROPA peak annotation, the minimal command is:
 
 .. code:: bash
 
-    uropa.py –i <config.json>
+    uropa –i <config.json>
 
 A template of the configuration file is available from our GitHub repository (see `sample_config.json`_). An overview about the usage and available parameters is displayed with
 
 .. code:: bash
 
-    uropa.py --help
+    uropa --help
 
 .. _sample_config.json: https://github.molgen.mpg.de/loosolab/UROPA/blob/master/sample_config.json
