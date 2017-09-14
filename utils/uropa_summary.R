@@ -134,6 +134,9 @@ features <- c()
 	# stats is based on annoted peaks -> remove na rows
 	df.uropa.final[,"distance"] <- as.numeric(df.uropa.final[,"distance"])
 	df.uropa.final <- df.uropa.final[complete.cases(df.uropa.final),]
+	if(nrow(df.final)==0){
+		stop("No valid peak annotations with specified query/queries, summary unfeasible!")
+	}
 	anno.peaks <- nrow(df.uropa.final)
 	# get infos from config for overview page
 	config <- fromJSON(conf)
