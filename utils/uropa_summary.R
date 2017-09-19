@@ -431,14 +431,14 @@ if (is.null(opt$besthits)) {
   			mtext("Chow Ruskey comparison of all peaks annotated with UROPA", side=3, line=0,outer=FALSE, cex=1)
   		}, error = function(e){
   			cat("\nChowRuskey plot was invalid do upsetR plot\n")
-  		  library(UpSetR,quietly = TRUE)
+  		  suppressPackageStartupMessages(library(UpSetR,quietly = TRUE))
   		  upset(fromList(peaks.per.query), keep.order=TRUE,nintersects = NA,empty.intersections = "on",number.angles=35,mainbar.y.label = "Peak Intersections", sets.x.label = "Annotated Genes")
   		  #nsets=(ncol(combn(num.queries,2))+num.queries)
   		})
   	}
 	} else {
-	  library(UpSetR,quietly = TRUE)
-	  upset(fromList(peaks.per.query), keep.order=TRUE, nintersects = NA,empty.intersections = "on",number.angles=35,mainbar.y.label = "Gene Intersections", sets.x.label = "Annotated Genes")
+	  suppressPackageStartupMessages(library(UpSetR,quietly = TRUE))
+	  upset(fromList(peaks.per.query), keep.order=TRUE,nintersects = NA,empty.intersections = "on",number.angles=35,mainbar.y.label = "Peak Intersections", sets.x.label = "Annotated Genes")
 	  
 	}
 	invisible(dev.off())
