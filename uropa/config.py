@@ -60,7 +60,7 @@ def parse_json(infile):
     assert isinstance(infile, str), 'Argument {0} of wrong type ({1}), should be {2}!'.format(
         'column', type(infile), 'str')
 
-    with open(infile, 'r') as f:
+    with open(infile, 'r', encoding='utf-8') as f:
         return ast.literal_eval(json.dumps(json.load(f)))
 
 
@@ -73,8 +73,9 @@ def column_from_file(file, column, log=None):
 
     cmd = 'cut -f' + str(column) + ' ' + str(file) + \
         ' | sort | uniq | grep -v "^#"'
+
     try:
-        vals = subprocess.check_output(cmd, shell=True)
+        vals = str(subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True), encoding='utf-8')
     except subprocess.CalledProcessError:
         if log is not None:
             log.warning("File {} might be empty or has not enough columns".format(file))
@@ -86,16 +87,16 @@ def parse_parameters(config, log=None):
     """Fills the configuration with default values. Writes a warning to logs, if unknown keys are detected."""
     defaults = {"priority": "False", "bed": "no_peaks.bed",
                 "gtf": "no_annotation.gtf"}  # , "bigwig": "none.bw"
-    keys = defaults.keys()
-    values = map(lambda x: config[x] if x in config else defaults[x], keys)
+    keys = list(defaults.keys())
+    values = [config[x] if x in config else defaults[x] for x in keys]
 
     if log is not None:
-        unknown = [k for k in config.keys() if k not in keys and k !=
+        unknown = [k for k in list(config.keys()) if k not in keys and k !=
                    "queries"]
         if any(unknown):
             log.warning(
                 "Unknown keys detected in configuration: {}".format(unknown))
-    parameters = dict(zip(keys, values))
+    parameters = dict(list(zip(keys, values)))
     return parameters
 
 
@@ -104,7 +105,7 @@ def parse_queries(config, gtf_feat, log=None):
     defaults = {"feature": gtf_feat, "strand": "ignore", "show.attributes": "None", "filter.attribute": "None",
                 "attribute.value": "None", "distance": 100000, "feature.anchor": ["start", "center", "end"],
                 "direction": "any_direction", "internals": "False", "priority": "False"}
-    keys = defaults.keys()
+    keys = list(defaults.keys())
 
     try:
         query_list = config["queries"]
@@ -122,49 +123,49 @@ def parse_queries(config, gtf_feat, log=None):
         query_list = [query_list]
 
     def give_val(q):
-        return map(lambda x: q[x] if x in q and q[x] != "" else defaults[x], keys)
+        return [q[x] if x in q and q[x] != "" else defaults[x] for x in keys]
 
     def make_list(l):
-        return map(lambda v: [v] if not isinstance(v, list) else v, l)
+        return [[v] if not isinstance(v, list) else v for v in l]
 
-    vals = map(lambda l: give_val(l), query_list)
-    values = map(lambda l: make_list(l), vals)
+    vals = [give_val(l) for l in query_list]
+    values = [make_list(l) for l in vals]
 
     if not log is None:
-        unknown = [k for k in config.keys() if k not in list(set(['gtf', 'bed', 'queries']).union(keys))]
+        unknown = [k for k in list(config.keys()) if k not in list(set(['gtf', 'bed', 'queries']).union(keys))]
         if any(unknown):
             log.warning("Unknown keys detected in configuration: {}".format(unknown))
 
-    queries = map(lambda x: dict(zip(keys, x)), values)
+    queries = [dict(list(zip(keys, x))) for x in values]
     return queries
 
 
 def remove_invalid_queries(queries, log=None):
     """Removes queries that have multiple attribute.filter or filter.value values and more than two distance constraints."""
     # Validate distance constraints
-    has_valid_distance = map(lambda q: len(q["distance"]) < 3, queries)
+    has_valid_distance = [len(q["distance"]) < 3 for q in queries]
     if not all(has_valid_distance) and log is not None:
         log.warning("Queries with invalid distances present! Affected queries: {}".format(
             [i for i, x in enumerate(has_valid_distance) if not x]))
 
     # Validate query attributes
-    has_valid_attributes = map(lambda q: False if (q["filter.attribute"] != ['None'] and q["attribute.value"] == [
-        'None']) or (q["filter.attribute"] == ['None'] and q["attribute.value"] != ['None']) else True, queries)
+    has_valid_attributes = [False if (q["filter.attribute"] != ['None'] and q["attribute.value"] == [
+        'None']) or (q["filter.attribute"] == ['None'] and q["attribute.value"] != ['None']) else True for q in queries]
 
     if not all(has_valid_attributes) and log is not None:
         log.warning("Queries with invalid filter.attribute and attribute.value pairings present! Affected queries: {}".format(
             [i for i, x in enumerate(has_valid_attributes) if not x]))
 
     # Validate strand attribute
-    has_valid_strand = map(lambda q: True if q["strand"] in [["ignore"],["same"],["opposite"]] else False, queries)
+    has_valid_strand = [True if q["strand"] in [["ignore"], ["same"], ["opposite"]] else False for q in queries]
 
     if not all(has_valid_strand) and log is not None:
         log.warning("Queries with invalid strand values present! Affected queries: {}".format(
             [i for i, x in enumerate(has_valid_strand) if not x]))
 
     # Validate query attribute lengths
-    has_valid_attribute_lengths = map(lambda q: False if len(
-        q["filter.attribute"]) > 1 or len(q["attribute.value"]) > 1 else True, queries)
+    has_valid_attribute_lengths = [False if len(
+        q["filter.attribute"]) > 1 or len(q["attribute.value"]) > 1 else True for q in queries]
     if not all(has_valid_attribute_lengths) and log is not None:
         log.warning("Queries with more than one value for either filter.attribute or attribute.value present! Affected queries: {}".format(
             [i for i, x in enumerate(has_valid_attribute_lengths) if not x]))
@@ -176,7 +177,7 @@ def remove_invalid_queries(queries, log=None):
 
 def parse_first_gtf_line(gtf):
     """Removes comment lines, reads first line to check for prefix chr. Returns if chr was found and the number of columns."""
-    f = open(gtf, "r")
+    f = open(gtf, "r", encoding='utf-8')
     is_comment = True
     while is_comment:
         line = f.readline()
@@ -192,7 +193,7 @@ def cut_gtf_perFeat(gtf, features, prefix):
     gtf_per_feat = prefix + os.path.basename(gtf).split(".gtf")[0] + "_cut_per_feat.gtf"
     feat2cut = np.unique(features)
 
-    f = open(gtf, "r")
+    f = open(gtf, "r", encoding='utf-8')
     is_comment = True
     while is_comment:
         line = f.readline()

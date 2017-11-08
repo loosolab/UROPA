@@ -3,7 +3,7 @@ import sys
 import operator
 import numpy as np
 import pysam
-import overlaps as ovls
+from . import overlaps as ovls
 
 
 def annotation_process(input_args, peak_file, log=None):
@@ -113,7 +113,7 @@ def annotation_process(input_args, peak_file, log=None):
 
                 # Find hits with valid values for the queries (Search all
                 # queries ,Not only PRIORITY)
-                v_fsa = map(lambda q: ovls.valid_fsa(h, hit, q, peak['strand']), queries)
+                v_fsa = [ovls.valid_fsa(h, hit, q, peak['strand']) for q in queries]
 
                 # Pair the Valid query values(fsb) with valid_distance and
                 # valid strand for each query
@@ -138,7 +138,7 @@ def annotation_process(input_args, peak_file, log=None):
             NAsList_q = list(np.repeat("NA", nas_len))
 
             # Search hits with only Prior or Secondary Queries
-            for hitj, vq in dict_vqp.items():
+            for hitj, vq in list(dict_vqp.items()):
                 hit = hitj.split("\t")
                 hit_len = abs(int(hit[4]) - int(hit[3]))
                 strand = hit[6]
@@ -252,7 +252,7 @@ def annotation_process(input_args, peak_file, log=None):
 
             # > Add to Best Hits the Best Internal features(when internals=True, D>config."distance"),
             # after having filled-in the All Hits for the peak.
-            for hitj, vq in dict_vqp.items():
+            for hitj, vq in list(dict_vqp.items()):
                 for j in vq:
                     if Best_hits_tab[j][peak['id']] != "" and All_hits_tab[j][peak['id']] != "":
                         if (Best_hits_tab[j][peak['id']].split("\t")[10] == "NA" and
@@ -261,10 +261,9 @@ def annotation_process(input_args, peak_file, log=None):
 
                             hit_line = All_hits_tab[j][peak['id']].split("\n")
                             hit_line = [h for h in hit_line if h != '']
-                            internal = map(
-                                lambda h: h.split("\t")[11], hit_line)
-                            hit_dist = map(lambda h: int(
-                                h.split("\t")[10]), hit_line)
+                            internal = [h.split("\t")[11] for h in hit_line]
+                            hit_dist = [int(
+                                h.split("\t")[10]) for h in hit_line]
                             mv_pos, min_val = min(
                                 enumerate(hit_dist), key=operator.itemgetter(1))
 
@@ -343,8 +342,8 @@ def annotation_process(input_args, peak_file, log=None):
 
                 if all(isNA):
                     #logg.debug("\nNo query has any Hit.No replacement of Priority Query possible-> NAs will be filled in the Output.")
-                    TabInList_p = map(lambda l: All_hits_tab[l][
-                        peak['id']], range(len(queries)))
+                    TabInList_p = [All_hits_tab[l][
+                        peak['id']] for l in range(len(queries))]
                     ##log.debug("Hit lines for all queries are : {}".format(TabInList_p ))
                     # If all_hits_tab doesn't have all queries will have ""
                     TabInList_p = [Tab for Tab in TabInList_p if Tab != ""]
@@ -365,14 +364,14 @@ def annotation_process(input_args, peak_file, log=None):
 
         All_combo = OrderedDict()  # Output peaks with same order as All_hits_tab
         mydict = All_hits_tab
-        for k in mydict[0].iterkeys():
-            All_combo[k] = [pid[k] for q, pid in mydict.items()]
+        for k in mydict[0].keys():
+            All_combo[k] = [pid[k] for q, pid in list(mydict.items())]
 
         #  Best hits  #
         Best_combo = OrderedDict()
         mybestD = Best_hits_tab
-        for k in mybestD[0].iterkeys():
-            Best_combo[k] = [pid[k] for q, pid in mybestD.items()]
+        for k in mybestD[0].keys():
+            Best_combo[k] = [pid[k] for q, pid in list(mybestD.items())]
 
         def all_same(items):
             """Returns true if all items of a list are the same."""
@@ -383,34 +382,32 @@ def annotation_process(input_args, peak_file, log=None):
             BestBest_hits = OrderedDict()
             for k in Best_combo:
                 # [  [] , [] , [] ]-> can be of same query, same distance
-                records = map(lambda s: s.split("\n"), Best_combo[k])
+                records = [s.split("\n") for s in Best_combo[k]]
                 # split also internally each query's string to see if it
                 # contains more >1 hits(when same distance, more >1 are conc.
                 # to same query)
-                spl_rec = map(lambda r: map(
-                    lambda t: t if t != '' else None, r), records)
+                spl_rec = [[t if t != '' else None for t in r] for r in records]
                 recs = [x + "\n" for s in spl_rec for x in s if x != None]
 
                 if len(recs) > 1:  # Only when more than two hits, and no NAs here
-                    splitted_hits = map(
-                        lambda h: recs[h].split("\t"), range(len(recs)))
+                    splitted_hits = [recs[h].split("\t") for h in range(len(recs))]
                     # s= each hit line in string
                     splitted_hits = [s for s in splitted_hits if s != [""]]
-                    featOfHit = map(lambda s: splitted_hits[s][
-                        5], range(len(splitted_hits)))
-                    startPos = map(lambda s: splitted_hits[s][
-                        6], range(len(splitted_hits)))
-                    endPos = map(lambda s: splitted_hits[s][
-                        7], range(len(splitted_hits)))
-                    Dist_hits = map(lambda s: float(splitted_hits[s][10]) if splitted_hits[s][
-                        10] != "NA" else float("Inf"), range(len(splitted_hits)))  # 9th col= Distance
+                    featOfHit = [splitted_hits[s][
+                        5] for s in range(len(splitted_hits))]
+                    startPos = [splitted_hits[s][
+                        6] for s in range(len(splitted_hits))]
+                    endPos = [splitted_hits[s][
+                        7] for s in range(len(splitted_hits))]
+                    Dist_hits = [float(splitted_hits[s][10]) if splitted_hits[s][
+                        10] != "NA" else float("Inf") for s in range(len(splitted_hits))]  # 9th col= Distance
                     # Dist_hit = [Dist_hits[0] if all_same(Dist_hits) else
                     # Dist_hits]  #Either same dist or All NAs
 
                     # When All "NAs" for all queries-> keep only line from 1st
                     # query
-                    NA_hits = map(lambda s: "NA" if splitted_hits[s][
-                        10] == "NA" else None, range(len(splitted_hits)))
+                    NA_hits = ["NA" if splitted_hits[s][
+                        10] == "NA" else None for s in range(len(splitted_hits))]
                     # If None means ALL queries have a feature
                     all_have_feat = all(x is None for x in NA_hits)
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """Contains functions for UROPA overlap evaluation."""
-from __future__ import division
+
 import os
 import re
 import sys
@@ -134,11 +134,11 @@ def parse_peak(peakstr, extend=0, delim='\t'):
 
     defaults = {'id': p['chr'] + ":" + p['start'] + "-" + p['end'], 'name': p['chr'] + ":" + p['start'] + "-" + p['end'], 'score': 0, 'strand': ".",
                 'center': int(np.around(np.mean([int(p['start']), int(p['end'])]))), 'estart': max(1, int(p['start']) - extend), 'eend': int(p['end']) + extend, 'length': abs(int(p['end']) - int(p['start']))}
-    if 'name' in p.keys():
+    if 'name' in list(p.keys()):
         p['id'] = p['chr'] + ":" + p['start'] + "-" + p['end'] + "_" + p['name']
 
-    values = [p[k] if k in p else defaults[k] for k in defaults.keys()]
-    peak = dict(zip(p.keys() + defaults.keys(), p.values() + values))
+    values = [p[k] if k in p else defaults[k] for k in list(defaults.keys())]
+    peak = dict(list(zip(list(p.keys()) + list(defaults.keys()), list(p.values()) + values)))
     return peak
 
 
@@ -170,7 +170,7 @@ def distance_to_peak_center(p_center, hit3, hit4, strand, feat_pos):
 
     hit_center = np.mean([feat_start, feat_end])
     hit_pos = {"start": feat_start, "center": hit_center, "end": feat_end}
-    d_pos = map(lambda i: abs(hit_pos[i] - p_center), feat_pos)
+    d_pos = [abs(hit_pos[i] - p_center) for i in feat_pos]
     pos, dmin = min(enumerate(d_pos), key=operator.itemgetter(1))
 
     min_pos = feat_pos[pos]
@@ -233,7 +233,7 @@ def get_distance_by_dir(inputD, genom_loc, intern_loc, Dhit, internals_allowed=[
     if internals_allowed == ["True"]:
         return(any(intern_loc))
     else:
-        best_dist = map(lambda l: Dhit <= D_upstr if l == "upstream" else Dhit <= D_downstr, intern_loc)
+        best_dist = [Dhit <= D_upstr if l == "upstream" else Dhit <= D_downstr for l in intern_loc]
         return(any(best_dist))
 
 
@@ -261,8 +261,8 @@ def round_up(val):
 # import "division" allows decimals
 def calculate_overlap(pstart, pend, peakL, featL, hit_start, hit_end):
     """[Local] Returns value of overlap btw {0,1} representing percentage of length covered by the peak and that covered by the feature """
-    p_range = range(pstart, pend)
-    feat_range = range(hit_start, hit_end)
+    p_range = list(range(pstart, pend))
+    feat_range = list(range(hit_start, hit_end))
     pset = set(p_range)
 
     ovl_range = pset.intersection(feat_range)
@@ -315,10 +315,10 @@ def get_hit_attribute(hit, attribute):
     """Splits attributes from hit lines"""
     pos_match = [i if re.match(
         attribute, hit_a) else None for i, hit_a in enumerate(hit[8].split("; "))]
-    pos_match = filter(lambda x: x is not None, pos_match)
+    pos_match = [x for x in pos_match if x is not None]
     if len(pos_match) > 0:
-        attr_val = map(lambda m: hit[8].split("; ")[m].split(" ")[
-            1].strip('"\'').rstrip('\";'), pos_match)
+        attr_val = [hit[8].split("; ")[m].split(" ")[
+            1].strip('"\'').rstrip('\";') for m in pos_match]
         val = [av for av in attr_val if av is not None][0]
         val = val.replace("\t", "").replace("\r", "").replace("\n", "")
         return val
@@ -334,7 +334,7 @@ def get_besthit(q, len_q_dist, p_nm, hit, attrib_keys, Dhit):
     if attrib_keys != ["None"]:
         #attr_val = map(lambda k:  re.split(k+" ", hit[8])[1].split(';')[0].strip('"\'').rstrip('\"'), attrib_keys)
         # list of all values if multiple keys
-        attr_val = map(lambda a: get_hit_attribute(hit, a), attrib_keys)
+        attr_val = [get_hit_attribute(hit, a) for a in attrib_keys]
         ret = [Dhit, [hit[2], hit[3], hit[4], hit[6], attr_val]]
 
     elif attrib_keys == ["None"]:
@@ -367,7 +367,7 @@ def create_table(peak_id, chrom, pstart, pend, p_center, min_dist_hit, attrib_ke
 def write_hit_to_All(All_hits_tab, p_name, attrib_k, Dhit, hit, peak_id, chrom, pstart, pend, p_center, min_pos, genomic_location, ovl_pk, ovl_feat, j):
     """Writes an output table."""
     if attrib_k != ["None"]:
-        attr_val = map(lambda a: get_hit_attribute(hit, a), attrib_k)
+        attr_val = [get_hit_attribute(hit, a) for a in attrib_k]
         hit2add = [Dhit, [hit[2], hit[3], hit[4], hit[6], attr_val]]
         the_res = create_table(peak_id, chrom, pstart, pend, p_center,
                                hit2add, attrib_k, min_pos, genomic_location, ovl_pk, ovl_feat, j)
@@ -422,8 +422,8 @@ def write_partial_file(outfile, Table):
 
 def merge_queries(Best_combo_k):
     """Merges queries."""
-    merged_q = map(lambda l: Best_combo_k[l].split(
-        "\t")[-1].strip("\n"), range(len(Best_combo_k)))
+    merged_q = [Best_combo_k[l].split(
+        "\t")[-1].strip("\n") for l in range(len(Best_combo_k))]
     # Read if combo_k is "" and give it the q.numb, so I have it ready for
     # merging when one query =""
     merged_q[-1] = merged_q[-1] + "\n"

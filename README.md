@@ -40,10 +40,10 @@ Installation and Command-line usage
 We recommend to install UROPA using the conda package manager. Make sure to have `conda` installed, e.g. via
 
 - [Miniconda](https://conda.io/miniconda.html)
-	- download the Miniconda installer for **Python 2.7**
-	- run ```bash Miniconda2-latest-Linux-x86_64.sh``` to install Miniconda
+	- download the Miniconda installer for **Python 3**
+	- run ```bash Miniconda3-latest-Linux-x86_64.sh``` to install Miniconda
 	- Answer the question "Do you wish the installer to prepend the Miniconda install location to PATH in your /home/.../.bashrc ?" with yes
-		OR do ```PATH=dir/to/miniconda2:$PATH``` after installation process
+		OR do ```PATH=dir/to/miniconda3:$PATH``` after installation process
 
 The UROPA installation is now as easy as ```conda install -c bioconda uropa```.
 
