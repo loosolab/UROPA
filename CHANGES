@@ -1,8 +1,12 @@
+## 2.0.0-alpha (2017-11-08)
+
+- update uropa to python 3 format with the aid of python 2to3
+
 ## 1.2.1 (2017-09-07)
 
 - Rearranged package structure towards a full Pypi packages
 - Renamed summary.R to utils/uropa_summary.R
-- Renamed reformat_output.R to utisl/uropa_reformat_output.R
+- Renamed reformat_output.R to utils/uropa_reformat_output.R
 - Reflected changes in documentation
 
 ## 1.2.0 (2017-09-05)
@@ -13,7 +17,7 @@
 
 ## 1.1.2 (2017-09-04)
 
-- Added proper help for auxillary R scripts (exit code 0)
+- Added proper help for axillary R scripts (exit code 0)
 - Made call to reformat_output.R multi-threaded
 - Cleaned some code, added citation
 
@@ -31,7 +35,7 @@
 - Updated summary script for new gridExtra requirements (rows=NULL instead of show.rownames=FALSE)
 - Fixed bug in log file handling
 - Fixed bug in internals features, now works for distances larger than default distance
-- Removed summary config after usage, removed split_peaks subdirectory in case of multithreading
+- Removed summary config after usage, removed split_peaks subdirectory in case of multi threading
 
 ## 1.0 (2016-11-22)
 
@@ -63,7 +67,7 @@
 - Check for all keys not to have EMPTY values.
 - Check distance of p.center -gene.center,start,end  for valid_dist of hit.
 - Fix cases of checking peak columns(make 3 'if's for diff sizes).Also read strand and replace to None if strand == ".".
-- Extract attrib value one by one from all queries and give "not.found" if key doesn't exist.(get_hit_attribute)
+- Extract attribute value one by one from all queries and give "not.found" if key doesn't exist.(get_hit_attribute)
 - When correct_dir but best_hit or All_hits already written, just "continue", no NAs bcs it overwrites best hit of same peak,or keeps NA while there is also hit.
 - Hits from all queries are visible in All_hits, per query, and in Best Hits the best per Query. BestBest hits table has the best of all queries.
 - Features of gtf are extracted and replaced as default if no key given. If wrong feat_value given ->Error proposing gtf features.
