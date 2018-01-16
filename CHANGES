@@ -1,3 +1,7 @@
+## 2.0.1-alpha (2017-11-08)
+
+- added summary file for invalid annotations
+
 ## 2.0.0-alpha (2017-11-08)
 
 - update uropa to python 3 format with the aid of python 2to3
