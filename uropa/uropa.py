@@ -1,7 +1,9 @@
+#!/usr/bin/env python3
+# coding: utf-8
 """
 uropa.py: UROPA - Universal RObust Peak Annotator
 
-@authors: Maria Kondili, Jens Preussner and Annika Fust
+@authors: Annika Fust, Jens Preussner, Maria Kondili and Mario Looso
 @license: MIT
 @maintainer: Mario Looso
 @email: mario.looso@mpi-bn.mpg.de

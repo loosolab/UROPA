@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# coding: utf-8
 """Contains code for annotation process."""
 import sys
 import operator

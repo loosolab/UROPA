@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+# coding: utf-8
 """Contains functions for UROPA overlap evaluation."""
 
 import os

@@ -1,6 +1,7 @@
-## 2.0.1-alpha (2017-11-08)
+## 2.0.1-alpha (2018-01-16)
 
 - added summary file for invalid annotations
+- added proper magic line and file encodings for python source files
 
 ## 2.0.0-alpha (2017-11-08)
 
