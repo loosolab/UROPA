@@ -3,7 +3,7 @@ uropa.py: UROPA - Universal RObust Peak Annotator
 
 @authors: Maria Kondili, Jens Preussner and Annika Fust
 @license: MIT
-@version: 2.0.0-alpha
+@version: 2.0.1-alpha
 @maintainer: Mario Looso
 @email: mario.looso@mpi-bn.mpg.de
 """
