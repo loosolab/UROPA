@@ -95,7 +95,7 @@ def main():
 		"--version",
 		help="prints the version and exits",
 		action="version",
-		version="%(prog)s 2.0.1-alpha")
+		version="%(prog)s 2.0.2-alpha")
 	args = parser.parse_args()
 
 	config = args.input
