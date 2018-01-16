@@ -136,7 +136,7 @@ features <- c()
 	df.uropa.final <- df.uropa.final[complete.cases(df.uropa.final),]
 	if(nrow(df.uropa.final)==0){
 		mtext("UROPA summary", side=3, line=0,outer=FALSE, cex=2)
-		mtext("No valid peak annotations with specified query/queries, summary unfeasible!")
+		mtext("No valid peak annotations with specified query/queries, summary unfeasible!", line=-5)
 		invisible(dev.off())
 		stop("No valid peak annotations with specified query/queries, summary unfeasible!")
 	}
