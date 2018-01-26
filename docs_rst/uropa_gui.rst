@@ -9,7 +9,7 @@ Features
 ---------
 
 * **Input**: BED file of peaks or other genomic regions
-* **Reference**: GTF file of desired target features (e.g. genes, transcripts, probes, repeats, ...); source = Gencode/Ensembl (102 organisms included) or custom upload
+* **Reference**: GTF file of desired target features (e.g. genes, transcripts, probes, repeats, ...);                                                        source = Gencode/Ensembl (102 organisms included) or custom upload
 * **Association rules**: VERY diverse and easily combinable to a complex ruleset (see :doc:`/config`)
 * **Persistence**: Unique identifier is created on the server and results will remain available temporarily using the respective link
 * **Hosted**: Either online on our web server or as a local R Shiny installation
@@ -25,13 +25,10 @@ Try UROPA GUI
 
 The `UROPA_GUI`_ contains all necessary data to quickly sample the capabilities of UROPA GUI.
 *  **UROPA GUI user guide**: Stepwise tutorial.
-* **Example data**: The following demo GTF and BED files are available on the server. 
-      
-      Homo_sapiens.hg19.GRCh37.75_genes_v2.gft -> `Human GTF` file with reference genes
-      
-      ENCFF001VFA.pol2.sub.bed -> `POLR2A`_ ChIP-seq experiment (14989 peaks)
 
-..note::  It is mandatory to select filter.attribute before attribute.value. Depending on the GTF file, it might take some time for attribute.value to be loaded. Please be patient!
+* **Example data**: The following demo GTF and BED files are available on the server.                                                               Homo_sapiens.hg19.GRCh37.75_genes_v2.gft -> `Human GTF` file with reference genes                                   ENCFF001VFA.pol2.sub.bed -> `POLR2A`_ ChIP-seq experiment (14989 peaks)
+
+.. note::  It is mandatory to select ``filter.attribute`` before ``attribute.value``. Depending on the GTF file, it might take some time for the ``attribute.value`` to be loaded. Please be patient!
 
 How to cite
 ------------
