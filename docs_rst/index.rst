@@ -58,5 +58,6 @@ The project is licensed under the MIT license (see :doc:`/license`)
    output
    uropa-example
    custom
+   uropa_gui
    license
    help
