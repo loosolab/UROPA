@@ -13,7 +13,7 @@ Make sure to have `conda` installed, e.g. via
 	- Answer the question "Do you wish the installer to prepend the Miniconda install location to PATH in your /home/.../.bashrc ?" with yes
 		OR do ``export PATH=dir/to/miniconda2:$PATH`` after installation process
 
-The UROPA installation is now as easy as ``conda install -c bioconda uropa``.
+The UROPA installation is now as easy as ``conda install -c bioconda -c conda-forge uropa``.
 
 Biocontainers / Docker
 ----------------------
