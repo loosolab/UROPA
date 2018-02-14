@@ -45,7 +45,7 @@ We recommend to install UROPA using the conda package manager. Make sure to have
 	- Answer the question "Do you wish the installer to prepend the Miniconda install location to PATH in your /home/.../.bashrc ?" with yes
 		OR do ```PATH=dir/to/miniconda3:$PATH``` after installation process
 
-The UROPA installation is now as easy as ```conda install -c bioconda uropa```.
+The UROPA installation is now as easy as ```conda install -c bioconda -c conda-forge uropa```.
 
 ### Biocontainers / Docker
 
