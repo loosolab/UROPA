@@ -1,3 +1,8 @@
+## 2.0.2 (2019-01-09)
+
+- remove feature print
+- finalhits additionally in bed format available
+
 ## 2.0.2-alpha (2018-01-16)
 
 - added summary file for invalid annotations
