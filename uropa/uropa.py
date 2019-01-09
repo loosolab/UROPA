@@ -173,8 +173,6 @@ def main():
 		logger.warning("File %s is not a proper GTF file!", annot_gtf)
 
 	gtf_feat = cfg.column_from_file(annot_gtf, 3, logger)
-	
-	print("gtf_feat = ", gtf_feat)
 
 	if len(gtf_feat) < 1:
 		logger.error("No features found in file {} for annotation.".format(annot_gtf))
@@ -342,6 +340,17 @@ def main():
 
 	ovls.finalize_file(allhits_outfile, allhits_partials, header, comments, log=logger)
 
+
+	# finalhits in bed format
+	besthits_outfile_bed = outdir + "finalhits.bed"
+	# colnames: peak_chr	peak_start	peak_end	peak_id	peak_strand	peak_score	feature	feat_start	feat_end	feat_strand	feat_anchor	distance 	genomic_location
+	os.system("awk 'BEGIN { OFS = \"\t\" } ; { print $2,$3,$5,$1,\".\",\".\",$6,$7,$8,$9,$10,$11,$12 }' " + outdir + "finalhits.txt" + " | sed -e 1d |  sed -e 's/\t\t/\t/g' > " + besthits_outfile_bed + ".tmp")	
+	# append shown attributes
+	attributes = os.popen("head -1 "+ outdir + "finalhits.txt" + " | awk '{print NF}'").read() 
+	attributes = int(attributes) - 1
+	os.system("cut -f15-" + str(attributes) + " " + outdir + "finalhits.txt" + " | sed -e 1d | paste -d'\t' "+ besthits_outfile_bed + ".tmp - > " + besthits_outfile_bed)
+	os.system("sort -o " + besthits_outfile_bed + " -k1,1 -k2,2n " + besthits_outfile_bed)
+	os.system("rm "+ besthits_outfile_bed + ".tmp")
 	#
 	# Reformat output
 	#
@@ -420,7 +429,7 @@ def main():
 			os.remove(outdir+"summary_config.json")
 		os.remove(gtf_index)  # .gz
 		os.remove(gtf_index + ".tbi")
-		if len(gtf_feat) > 1:
+		if len(gtf_feat) >= 1:
 			os.remove(gtf_cut_file)
 			os.remove(gtf_cut_file + ".sorted")
 
