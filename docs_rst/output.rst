@@ -10,7 +10,7 @@ File overview
 
 - **finalhits.txt**: Filtered output table, it reports the best (closest) feature according to the config criteria for each peak. If multiple queries are given, it reports the best annotation taking multiple queries into account.
 
-- **finalhits.bed**: Similar tp finalhits.txt in bed format. This means there is no header, the column order is as followed: peak_chr	peak_start	peak_end	peak_id	peak_strand	peak_score	feature	feat_start	feat_end	feat_strand	feat_anchor	distance	genomic_location + all attributes that are given in the config file
+- **finalhits.bed**: Similar tp finalhits.txt in bed format. This means there is no header, the column order is as followed: peak_chr	peak_start	peak_end	peak_id	peak_strand	peak_score	feature	feat_start	feat_end	feat_strand	feat_anchor	distance	genomic_location **+ all attributes that are given in the config file**
 
 
 - **besthits.txt**: This table is only produced if more than one query is given. It reports the best annotation per query for each peak.
