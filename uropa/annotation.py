@@ -50,6 +50,7 @@ def annotation_process(input_args, peak_file, log=None):
             #    'name'] is not None else peak['id']
             # Re-initialise table records for each peak
             for q in enumerate(queries):
+                
                 All_hits_tab[q[0]][peak['id']] = ""
                 Best_hits_tab[q[0]][peak['id']] = ""
 
@@ -99,6 +100,7 @@ def annotation_process(input_args, peak_file, log=None):
                 # queries
                 valid_dist = any([dist_from_peak <= int(
                     max(q["distance"])) for q in queries])
+
                 # Keep hit if internals are required in any query
                 i_want_internals = any([q["internals"] in [
                     ['T'], ['True'], ['TRUE'], ['Yes'], ['YES'], ['Y'], ['yes'], ['F'], ['False'], ['FALSE'], ['No'], ['NO'], ['N'], ['no']] for q in queries])
@@ -116,13 +118,12 @@ def annotation_process(input_args, peak_file, log=None):
                 # Find hits with valid values for the queries (Search all
                 # queries ,Not only PRIORITY)
                 v_fsa = [ovls.valid_fsa(h, hit, q, peak['strand']) for q in queries]
-
                 # Pair the Valid query values(fsb) with valid_distance and
                 # valid strand for each query
                 vsd = [[x, valid_dist] for x in v_fsa]
                 valid_queries = [i for i, v in enumerate(vsd) if all(v)]
-
                 hitj = "\t".join(hit)
+
                 # Create dictionary of hit with its valid query per peak
                 if valid_queries:
                     has_hits.append(True)
@@ -133,7 +134,7 @@ def annotation_process(input_args, peak_file, log=None):
                     has_hits.append(False)
 
             # ----- All hits parsed. Check only hits with valid-queries now ----- #
-            #log.debug("\n---All hits parsed for the peak.Totally, the Peak has {} hits from which {} are Valid ---".format( len(has_hits), has_hits.count(True) ))
+            # log.debug("\n---All hits parsed for the peak. Totally, the Peak has {} hits from which {} are Valid ---".format( len(has_hits), has_hits.count(True) ))
             # 9 cols= feat, f.start, f.end, f.strand, dist, min_pos, genom_loc,
             # feat-to-peak-ovl , peak-to-feat-ovl (no Q)
             nas_len = len(attrib_k) + 9

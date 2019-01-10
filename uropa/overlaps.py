@@ -61,7 +61,9 @@ def tabix_index(annot_gtf):
 def valid_fsa(h, hit, q, pstrand):
     """Returns if a hit h is valid for query q in their basic common keys."""
 
-    vf = (h["feature"] == q["feature"][0])
+    # not just the first feature should be hit but any!
+    #vf = (h["feature"] == q["feature"][0])
+    vf = (h["feature"] in q["feature"])
     v_str = valid_strand(h["strand"], pstrand, q["strand"][0])
     va = valid_attribute(q["filter.attribute"][0], q["attribute.value"][0], hit)
     return all([vf, v_str, va])

@@ -95,7 +95,7 @@ def main():
 		"--version",
 		help="prints the version and exits",
 		action="version",
-		version="%(prog)s 2.0.2")
+		version="%(prog)s 2.0.3")
 	args = parser.parse_args()
 
 	config = args.input
@@ -173,7 +173,7 @@ def main():
 		logger.warning("File %s is not a proper GTF file!", annot_gtf)
 
 	gtf_feat = cfg.column_from_file(annot_gtf, 3, logger)
-
+	
 	if len(gtf_feat) < 1:
 		logger.error("No features found in file {} for annotation.".format(annot_gtf))
 		sys.exit()
@@ -207,6 +207,7 @@ def main():
 	if len(gtf_feat) > 1:
 		gtf_cut_file = cfg.cut_gtf_perFeat(annot_gtf, feat_valid, outdir)
 		mygtf = gtf_cut_file
+
 	else:
 		mygtf = annot_gtf
 
