@@ -120,13 +120,16 @@ features <- c()
 			occurence.features <- c(occurence.features,o)
 		}
 		names(occurence.features) <- features
-		barplot(occurence.features, ylab="occurence",main=header)
+		names(occurence.features) <- gsub("_", "\n", names(occurence.features))
+		occurence.features <- sort(occurence.features, decreasing=TRUE)
+		#par(mar=c(5,6,4,2)+0.1)
+		barplot(occurence.features, ylab="occurence", main=header, cex.names=.8, ,cex.axis=.8, las=2)
 	}
 }
 
 # load finalhits file, create coverpage, and calculate basic plots
 .basic.summary <- function(final.hits, conf, out){
-	pdf(file=out)
+	pdf(file=out, paper="a4")
 	plot.new()
 	df.uropa.final <- read.table(final.hits, header=TRUE, sep="\t",stringsAsFactors = FALSE)
 	# number of peaks annoteted with uropa run
@@ -144,6 +147,9 @@ features <- c()
 	# get infos from config for overview page
 	config <- fromJSON(conf)
 	config.query <- as.data.frame(config$queries)
+	config.query$feature <- substring(config.query$feature, 2)
+	config.query$feature <- gsub(pattern='\\(|\\)|\\"',"",config.query$feature)
+	config.query$feature <- gsub(pattern=',',"\n",config.query$feature)
 	config.query$query <- 0:(nrow(config.query)-1)
 	config.cols <- colnames(config.query)
 	priority <- config$priority
