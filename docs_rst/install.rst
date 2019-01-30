@@ -15,11 +15,9 @@ Make sure to have `conda` installed, e.g. via
 
 The UROPA installation is now as easy as 
 
-``conda create --name uropa
-
-conda activate uropa
-
-conda install python uropa``.
+``conda create --name uropa``
+``conda activate uropa``
+``conda install python uropa``.
 
 Biocontainers / Docker
 ----------------------
