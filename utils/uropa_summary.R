@@ -218,7 +218,7 @@ features <- c()
 
 	# plot
 	density <- subset(df.uropa.final[,c("distance","feature")], (df.uropa.final[,"distance"]<y.lim))
-	dpq <- qplot(distance,data=density, geom="density", color=feature, xlab = "Distance to feature", ylab = "Relative count")
+	dpq <- qplot (distance,data=density, geom="density", color=feature, xlab = "Distance to feature", ylab = "Relative count")
 	print(dpq + ggtitle("Distance to features across finalhits"))
 
 	# plot 2
