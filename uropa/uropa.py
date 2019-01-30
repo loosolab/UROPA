@@ -95,7 +95,7 @@ def main():
 		"--version",
 		help="prints the version and exits",
 		action="version",
-		version="%(prog)s 2.0.3")
+		version="%(prog)s 2.0.4")
 	args = parser.parse_args()
 
 	config = args.input
@@ -278,13 +278,19 @@ def main():
 		logger.info("Multiprocessing: Peak file will be split in %s smaller files.", args.threads)
 		if not os.path.exists(spl_dir):
 			os.makedirs(spl_dir)
-		cmd = ['split',
-			   '-n l/' + str(args.threads),
-			   peaks_bed,
-			   spl_dir + 'spl_peak_']
+		chunks = args.threads - 1
+		#cmd = ['split',
+		#	   '-n l/' + str(args.threads),
+		#	   peaks_bed,
+		#	   spl_dir + 'spl_peak_']
 
+		cmd = ["split", "-l $(expr `wc", peaks_bed, 
+			"| cut -d ' ' -f3` /", str(chunks), ")", peaks_bed, spl_dir + 'spl_peak_'
+		]
+		
 		try:
-			sp.check_call(cmd, stderr=open(os.devnull, 'w'))
+			#sp.check_call(cmd, stderr=open(os.devnull, 'w'))
+			os.system(str(" ".join(cmd)))
 		except sp.CalledProcessError:
 			args.threads = 1
 			logger.warning(

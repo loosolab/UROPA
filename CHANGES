@@ -1,3 +1,6 @@
+## 2.0.4 (2019-01-30)
+- fixed split command line call: should now work on different linux versions
+
 ## 2.0.3 (2019-01-10)
 - fixed critical features bug, now empty or multiple features in config are possible
 
