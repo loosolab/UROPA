@@ -1,6 +1,6 @@
 {
 "queries":[
-		  {"name":"", "feature":"", "distance":"", "feature_position": "", "strand":"",
+		  {"name":"", "feature":"", "distance":"", "feature_anchor": "", "strand":"",
 		   "filter_attribute":"", "attribute_value":"","direction":"", "internals":"" }
           ],
 "show_attributes":"",
