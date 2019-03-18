@@ -93,18 +93,45 @@ To effectively use UROPA, make yourself familiar with the command-line options:
 $ uropa                   
 Usage: uropa [options]          
 
-Available options:
+optional arguments:
+  -h, --help                       show this help message and exit
 
-	-h, --help             	print this help message and further details on the configuration file
-	-i, --input            	filename of configuration file [mandatory]
-	-p, --prefix           	prefix for output files, can include subdirectories [basename of --input]
-	-r, --reformat         	create an additional compact and line-reduced table as result file
-	-s, --summary          	additional visualisation of results in graphical format will be created
-	-t n, --threads n      	multiprocessed run: n = number of threads to run annotation process
-	-add-comments          	show comment lines in output files explaining the columns
-	-l, --log              	log file name for messages and warnings
-	-d, --debug            	print verbose messages (for debugging purposes)
-	-v, --version          	print the version and exit
+Arguments for one query:
+  -b , --bed                       Filename of .bed-file to annotate
+  -g , --gtf                       Filename of .gtf-file with features
+  --feature [ [ ...]]              Feature for annotation
+  --feature_anchor [ [ ...]]       Feature anchor to annotate to
+  --distance [ [ ...]]             Maximum permitted distance from feature (1 or 2
+                                   arguments)
+  --strand [ [ ...]]               Desired strand of annotated feature relative to peak
+  --relative_location [ [ ...]]    Peak locaion relative to feature location
+  --internals                      Set minimum overlap fraction for internal feature
+                                   annotations. 0 equates to internals=False and 1 equates
+                                   to internals=True. Default is False.
+  --filter_attribute               Filter on 9th column of GTF
+  --attribute_values [ [ ...]]     Value(s) of attribute corresponding to
+                                   --filter_attribute
+  --show_attributes [ [ ...]]      A list of attributes to show in output
+
+Multi-query configuration file:
+  -i config.json, --input config.json
+                                   Filename of configuration file (keys in this file
+                                   overwrite command-line arguments about query)
+
+Additional arguments:
+  -p , --prefix                    Prefix for result file names (defaults to basename of
+                                   .bed-file)
+  -o , --outdir                    Output directory for output files (default: current
+                                   dir)
+  -s, --summary                    Filename of additional visualisation of results in
+                                   graphical format
+  -t n, --threads n                Multiprocessed run: n = number of threads to run
+                                   annotation process
+  -l uropa.log, --log uropa.log    Log file name for messages and warnings (default: log
+                                   is written to stdout)
+  -d, --debug                      Print verbose messages (for debugging)
+  -v, --version                    Prints the version and exits
+
 ```
 
 ## Biocontainer usage
