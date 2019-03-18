@@ -5,7 +5,7 @@ def readme():
         return f.read()
 
 setup(name='uropa',
-      version='2.0.4',
+      version='3.0.0',
       description='UROPA is a command line based tool, intended for genomic region annotation',
       long_description=readme(),
       url='https://github.molgen.mpg.de/loosolab/UROPA',
@@ -16,10 +16,11 @@ setup(name='uropa',
       entry_points = {
         'console_scripts': ['uropa = uropa.uropa:main']
       },
-      scripts = ['utils/uropa_summary.R', 'utils/uropa_reformat_output.R', 'utils/uropa2gtf.R'],
+      scripts = ['utils/uropa_summary.R','utils/uropa2gtf.R'],
       install_requires=[
         'numpy',
-        'pysam'
+        'pysam',
+        'pandas'
       ],
       classifiers = [
         'License :: OSI Approved :: MIT License',
