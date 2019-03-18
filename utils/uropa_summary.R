@@ -21,7 +21,8 @@ options = matrix(c(
   'finalhits', 'f', 1, 'character', 'file containing the final hits from UROPA.',
   'config', 'c', 1, 'character', 'file containing the json formatted configuration from the UROPA run.',
   'output', 'o', 2, 'character', 'file name of output file [summary.pdf].',
-  'besthits', 'b', 2, 'character', 'file containing the best hits from UROPA.',
+  'allhits', 'b', 2, 'character', 'file containing all hits from UROPA.',
+  'call', 'a', 2, 'character', 'original command line call.',
   'help', 'h', 0, 'logical','Provides command line help.'
   ), byrow=TRUE, ncol=5)
 opt = getopt(options)
@@ -44,6 +45,7 @@ if (is.null(opt$output)) {
 # basic information independent if there are 3 or 4 input arguments, used otherwhere as .basic.summary
 num.features <- 0
 features <- c()
+
 
 # reformat every row of the config.query file to string for cover page
 .print.query <- function(row){
@@ -68,12 +70,12 @@ features <- c()
 
 	feat <- features[f]
 	df.feature <- subset(df.uropa, df.uropa$feature==feat)
-	unique.loci <- sort(unique(df.feature$genomic_location))
+	unique.loci <- sort(unique(df.feature$relative_location))
 
 	occurence.loci <- c()
 	for(j in 1:length(unique.loci)){
 		loci <- as.character(unique.loci[j])
-		occurence <- as.numeric(length(grep(loci, df.feature$genomic_location)))
+		occurence <- as.numeric(length(grep(loci, df.feature$relative_location)))
 		occurence.loci <- c(occurence.loci, occurence)
 	}
 	df.pie.full <- data.frame(location=unique.loci, value=occurence.loci)
@@ -138,7 +140,7 @@ features <- c()
 	df.uropa.final[,"distance"] <- as.numeric(df.uropa.final[,"distance"])
 	df.uropa.final <- df.uropa.final[complete.cases(df.uropa.final),]
 	if(nrow(df.uropa.final)==0){
-		mtext("UROPA summary", side=3, line=0,outer=FALSE, cex=2)
+		mtext("UROPA summary", side=3, line=-3,outer=FALSE, cex=2)
 		mtext("No valid peak annotations with specified query/queries, summary unfeasible!", line=-5)
 		invisible(dev.off())
 		stop("No valid peak annotations with specified query/queries, summary unfeasible!")
@@ -147,14 +149,16 @@ features <- c()
 	# get infos from config for overview page
 	config <- fromJSON(conf)
 	config.query <- as.data.frame(config$queries)
-	config.query$feature <- substring(config.query$feature, 2)
-	config.query$feature <- gsub(pattern='\\(|\\)|\\"',"",config.query$feature)
+	config.query$feature <- sapply(config.query$feature, paste, collapse=",")
 	config.query$feature <- gsub(pattern=',',"\n",config.query$feature)
-	config.query$query <- 0:(nrow(config.query)-1)
+	config.query$relative_location  <- sapply(config.query$relative_location, paste, collapse=", ")
+	config.query$distance  <- sapply(config.query$distance, paste, collapse=",")
+	config.query$relative_location <- gsub(pattern='PeakInsideFeature, FeatureInsidePeak, Upstream, Downstream, OverlapStart, OverlapEnd',"any",config.query$relative_location)
+	config.query$relative_location <- gsub(pattern=', ',"\n",config.query$relative_location)
+	config.query[is.null(config.query)] <- NA
 	config.cols <- colnames(config.query)
 	priority <- config$priority
-  
-	
+	show_attributes <- as.character(paste(config$show_attributes, collapse=", "))
 	# specify y limit for plots
 	y.lim <- round(median(df.uropa.final[,"distance"]) + (max(df.uropa.final[,"distance"])/15))
 	if(y.lim > max(df.uropa.final[,"distance"]) || y.lim > 10000){
@@ -167,9 +171,9 @@ features <- c()
 	}
 	
 	# expand multiple valid annotations to one row each
-	df.uropa.final <- separate_rows(df.uropa.final, query)	# queries of uropa annotation run
-	num.queries <- max(config.query$query)
-	queries <- sprintf("%02d", config.query$query)
+	df.uropa.final <- separate_rows(df.uropa.final, name)	# queries of uropa annotation run
+	num.queries <- length(config.query$name)
+	#queries <- sprintf("%02d", config.query$name)
 
 	features <<- as.character(unique(df.uropa.final$feature))
 	num.features <<- length(features)
@@ -177,32 +181,37 @@ features <- c()
 		priority <- paste0(priority, "\nNote: No pairwise comparisons and Chow Ruskey plot (no overlaps)")
 	}
 	# add query to query data frame
-	config.query$query <- paste0("query",sprintf("%02d",0:(nrow(config.query)-1)))
-	config.query <- config.query[,c("query", "feature", "distance", "feature.anchor", "internals", "direction",
-	                                "filter.attribute", "attribute.value", "show.attributes")]
-	# replaye "start,center,end" position by "any_pos"
-	config.query$feature.anchor <- sapply(config.query$feature.anchor, function(x) if(length(x)==3){return("any_pos")}else{return(x)})
-	mtext("UROPA summary", side=3, line=0,outer=FALSE, cex=2)
-	mtext(paste0("There were ", num.peaks, " peaks in the input bed file,\nUROPA annotated ", anno.peaks, " peaks\n"),
-	      side=3, line=-3,outer=FALSE, cex=.7)
-	if(num.queries != nrow(config.query)){
-		mtext(paste("Only queries", paste(queries, collapse=","), "are represented in the FinalHits", sep=" "), 
-		      side=3, line=-5,outer=FALSE, cex=.7)
+	#config.query$name <- paste0("query",sprintf("%02d",0:(nrow(config.query)-1)))
+	#config.query <- config.query[,c("name", "feature", "distance", "feature_anchor", "internals", "direction",
+	#                                "filter_attribute", "attribute_value")]
+	# replaye "start,center,end" position by "any"
+	config.query$feature_anchor <- sapply(config.query$feature_anchor, function(x) if(length(x)==3){return("any")}else{return(x)})
+	
+	mtext("UROPA summary", side=3, line=3.3,outer=FALSE, cex=1,col="red")
+	
+	if(!is.null(opt$call)){
+		mtext(paste0("UROPA command line call:\n", paste(strwrap(opt$call, width= 1.9 * getOption("width")), collapse="\n")),
+			side=3, line=1.5,cex=.5)
 	}
-
-
+	
+	mtext(paste0("There were ", num.peaks, " peaks in the input bed file, UROPA annotated ", anno.peaks, " peaks\n"),
+	      side=3, line=0,outer=FALSE, cex=.7)
+	if(num.queries != nrow(config.query)){
+		mtext(paste("Only queries", paste(queries, collapse=","), "are represented in the finalhits", sep=" "), 
+		      side=3, line=-0.5,outer=FALSE, cex=.7)
+	}
 
 	mytheme <- ttheme_default(core = list(fg_params=list(cex = 0.5)),colhead = list(fg_params=list(cex = 0.5)),
 	                          rowhead = list(fg_params=list(cex = 0.5)))
 	config.query <- data.frame(lapply(config.query, as.character), stringsAsFactors=FALSE)
 	g <- tableGrob(format(config.query), theme=mytheme,rows=NULL)
 	grid.draw(g)
-
-	mtext(paste0("priority: ", priority), cex=.7,side=1, line=-2)
-	input <- paste("Input:",unlist(config$bed),collapse=" ")
-	anno <- paste("Anno:",unlist(config$gtf),collapse=" ")
+	mtext(paste0("priority: ", priority), cex=.5,side=1, line=2)
+	mtext(paste0("show_attributes: ", show_attributes), cex=.5,side=1, line=2.6)
+	input <- paste("Input peak file:",unlist(config$bed),collapse=" ")
+	anno <- paste("Annotation file:",unlist(config$gtf),collapse=" ")
 	input.anno <- paste(input,anno,sep="\n")
-	mtext(input.anno,cex=.6, side=1, line=0)
+	mtext(input.anno,cex=.7, side=1, line=4)
 
 	# plot 1
 	# description
@@ -211,7 +220,7 @@ features <- c()
 		"Additional Info:\nThis is independent of the number of queries,\nall features present in the finalhits are displayed.",
 		"\n\n\nNote on output files:\n",
 		"\nallhits: All candidate features resulting from any query\n(1 peak :  x queries : y annotations)",
-		"\n\nbesthits: All candidate features resulting from any query\n(1 peak :  x queries : 1 annotation)",
+		"\n\nallhits: All candidate features resulting from any query\n(1 peak :  x queries : 1 annotation)",
 		"\n\nfinalhits: Only the one best feature among all queries\n(1 peak : 1 query : 1 annotation)")
 	grid.newpage()
 	mtext(plot1, cex=1, adj=0, padj=1)
@@ -246,16 +255,17 @@ features <- c()
 		mtext(plot3, cex=1, adj=0, padj=1)
 		.plot.feature.distribution(df.uropa=df.uropa.final,header="Feature distribution across finalhits")
 	}
+
 	return(df.uropa.final)
 }
 
 # arg 1 = finalhits
 # arg 2 = summery config
 # arg 3 = output pdf
-# arg 4 = besthits
+# arg 4 = allhits
 
 ## basic summary -- only one query definded
-if (is.null(opt$besthits)) {
+if (is.null(opt$allhits)) {
   df.uropa.final <- .basic.summary(opt$finalhits, opt$config, opt$output)
   invisible(dev.off())
 } else
@@ -265,29 +275,28 @@ if (is.null(opt$besthits)) {
 
   ## increased summary -- there is more than one query definded
 	df.uropa.final <- .basic.summary(opt$finalhits, opt$config, opt$output)
-	df.uropa.best.per.query <- read.table(opt$besthits, header=TRUE, sep="\t",stringsAsFactors = FALSE)
+	df.uropa.allhits <- read.table(opt$allhits, header=TRUE, sep="\t",stringsAsFactors = FALSE)
 	num.peaks <- length(unique(df.uropa.final$peak_id))
-	df.uropa.best.per.query[,"distance"] <- as.numeric(df.uropa.best.per.query[,"distance"])
-	df.uropa.best.per.query <- df.uropa.best.per.query[complete.cases(df.uropa.best.per.query),]
-	features <<- as.character(unique(df.uropa.best.per.query$feature))
+	df.uropa.allhits[,"distance"] <- as.numeric(df.uropa.allhits[,"distance"])
+	df.uropa.allhits <- df.uropa.allhits[complete.cases(df.uropa.allhits),]
+	features <<- as.character(unique(df.uropa.allhits$feature))
 	num.features <<- length(features)
-	queries <- sort.int(as.numeric(unique(df.uropa.best.per.query$query)))
-	queries <- sprintf("%02d", queries)
+	queries <- unique(df.uropa.allhits$name)
+	#queries <- sprintf("%02d", queries)
 	num.queries <- length(queries)
-
 
 	# plot 4
 	# description
-	plot4 <- paste0("4. Distances of annotated peaks seperated for features and queries in besthits:",
+	plot4 <- paste0("4. Distances of annotated peaks seperated for features and queries in allhits:",
 		"\n\nThe distribution of the distances per feature per query",
-	"\nis displayed in histograms based on the besthits.",
+	"\nis displayed in histograms based on the allhits.",
 		"\n\nAdditional Info:\nThis is dependent on the number of queries;",
 		"\nall features present in any query are displayed.")
 	grid.newpage()
 	mtext(plot4, cex=1, adj=0, padj=1)
 	# plot
 	# get max distance to calculate binwidth
-	dist <-  df.uropa.best.per.query[,"distance"]
+	dist <-  df.uropa.allhits[,"distance"]
 	median.uropa.best <- median(dist)
 	max.uropa.best <- max(dist)
 	considered.distance <- median.uropa.best + round(max.uropa.best/15)
@@ -299,42 +308,43 @@ if (is.null(opt$besthits)) {
 		}
 
 	}
-	df.distance.query <- subset(df.uropa.best.per.query[,c("feature","distance","query")], 
-	                            (df.uropa.best.per.query[,"distance"] < considered.distance))
+	
+	df.distance.query <- subset(df.uropa.allhits[,c("feature","distance","name")], 
+	                            (df.uropa.allhits[,"distance"] < considered.distance))
 	max.distance.query <- round(max(as.numeric(df.distance.query[,"distance"])))
 	bin.width <- round(max.distance.query/20)
-	dpq <- qplot(df.distance.query[,2],data =df.distance.query, facets=query~feature, 
+	dpq <- qplot(df.distance.query[,2],data =df.distance.query, facets=name~feature, 
 	             geom="histogram", binwidth=bin.width, xlab = "Distance to feature", ylab = "Total count")
-	print(dpq + ggtitle("Distance of query vs. feature across besthits Hits"))
+	print(dpq + ggtitle("Distance of query vs. feature across allhits"))
 
 
 	# plot 5
 	# description
-	plot5 <- paste0("5. Relative locations of annotated peaks in besthits:",
-		"\n\nThe following pie chart(s) illustrate the relativ location of\nthe peaks in relation the respective annotated feature as represented in the besthits.\n\n",
-		"Additional Info:\nThis is dependent on the number of queries;\nall features present in the besthits are displayed.")
+	plot5 <- paste0("5. Relative locations of annotated peaks in allhits:",
+		"\n\nThe following pie chart(s) illustrate the relativ location of\nthe peaks in relation the respective annotated feature as represented in the allhits.\n\n",
+		"Additional Info:\nThis is dependent on the number of queries;\nall features present in the allhits are displayed.")
 	grid.newpage()
 	mtext(plot5, cex=1, adj=0, padj=1)
 	# plot
-	.plot.genomic.location.per.feature(df.uropa.best.per.query, "besthits Hits")
+	.plot.genomic.location.per.feature(df.uropa.allhits, "allhits")
 	# plot 6
 	if(num.features > 1){
-		plot6 <- paste0("6. Allocation of available featurs in besthits:",
+		plot6 <- paste0("6. Allocation of available featurs in allhits:",
 			"\n\nBar plot displaying the occurrence of the different features if there is more",
-		"\nthan one feature assigned for peak annotation based on the besthits.",
+		"\nthan one feature assigned for peak annotation based on the allhits.",
 		"\nThe best annotation found in each query is used for this plot",
-		"\n\nAdditional Info:\nThis is independent of the number of queries,\nall features present in the besthits are displayed.",
+		"\n\nAdditional Info:\nThis is independent of the number of queries,\nall features present in the allhits are displayed.",
 		"\n\nIf only one feature is present,",
 		"\nthis plot will be skipped.")
 
 		grid.newpage()
 		mtext(plot6, cex=1, adj=0, padj=1)
-		.plot.feature.distribution(df.uropa=df.uropa.best.per.query,header="Feature distribution across besthits Hits")
+		.plot.feature.distribution(df.uropa=df.uropa.allhits,header="Feature distribution across allhits")
 	}
 	# plot 7
 	# description
 	plot7 <- paste0("7: Pairwise comparisons of query annotations:",
-		"\n\nThe following venn diagrams display peak based pairwise comparisons\namong all queries based on the besthits.",
+		"\n\nThe following venn diagrams display peak based pairwise comparisons\namong all queries based on the allhits.",
 		"\n\nAdditional Info:\nIf only one query is present,",
 		"\nthis plot will be skipped.")
 	grid.newpage()
@@ -342,19 +352,20 @@ if (is.null(opt$besthits)) {
 	# get annotated peaks unique for each query
 	peaks.per.query <- list()
 	for(q in 1:num.queries){
-		peaks.per.query[[q]] <- unique(df.uropa.best.per.query[as.numeric(df.uropa.best.per.query$query)==as.numeric(queries[q]),"peak_id"])
-		names(peaks.per.query)[[q]] <-  paste0("query",queries[q])
+		peaks.per.query[[q]] <- unique(df.uropa.allhits[df.uropa.allhits$name==queries[q],"peak_id"])
+		names(peaks.per.query)[[q]] <-  queries[q] #paste0("query",q)
 	}
 	# number of pairwise compares: (n-1)n/2 with n = # queries
 	# iterater for pairwise compare
 	tmp.num.query <- 1
-	all.peaks <- unique(df.uropa.best.per.query$peak_id)
+	all.peaks <- unique(df.uropa.allhits$peak_id)
 	for(q in 1:(num.queries-1)){
-		initial.query <- peaks.per.query[[paste0("query",queries[q])]]
+		#initial.query <- peaks.per.query[[paste0("query",queries[q])]]
+		initial.query <- peaks.per.query[[queries[q]]]
 		if(tmp.num.query < num.queries){
 			for(c in num.queries:tmp.num.query){
 				if(queries[q] != queries[c]){
-					compare.query <- peaks.per.query[[paste0("query",queries[c])]]
+					compare.query <- peaks.per.query[[queries[c]]]
 					venn.object <- venn(list(initial.query, compare.query))
 	 				pushViewport(viewport(x=.5, y=0.5, width=.72, height=.72))
 	 				grid.rect(gp=gpar(fill="white",lty = "blank"),width = unit(1, "npc"), height = unit(1, "npc"))
@@ -368,12 +379,12 @@ if (is.null(opt$besthits)) {
 	 					dist <- c(0.02, -0.02, -0.02)
 	 				}
 	 				venn.plot <- draw.triple.venn(num.peaks, anno.initial.query, anno.compare.query, anno.initial.query, matches, 
-	 				                              anno.compare.query, matches, category =c("all",paste0("query",queries[q]),paste0("query",queries[c])),
+	 				                              anno.compare.query, matches, category =c("all",queries[q],queries[c]),
 	 				                              lwd = 2, lty ="solid", col =  c("black", "red","blue"), fill = c("white","red","blue"), 
 	 				                              cex=1, cat.pos = c(0,0,0), cat.dist = dist, reverse = FALSE,cat.cex =1, 
 	 				                              cat.default.pos= "outer", alpha =  c(0,.4,.4), euler.d=TRUE, scaled=TRUE)
 	 				grid.draw(venn.plot)
-	 				mtext(paste0("Peak based pairwise compare of ", paste0("query",queries[q]), " and ", paste0("query",queries[c])), side=3, line=0,outer=FALSE, cex=1)
+	 				mtext(paste0("Peak based pairwise compare of ", queries[q], " and ", queries[c]), side=3, line=0,outer=FALSE, cex=1)
 	 				popViewport()
 				}
 			}
@@ -389,7 +400,7 @@ if (is.null(opt$besthits)) {
   		suppressPackageStartupMessages(library(Vennerable))
   		tryCatch({
   			plot8 <- paste0("8: Comparison of all specified queries:",
-  				"\n\nThe following Chow Ruskey plot compares all queries\nbased on the besthits.",
+  				"\n\nThe following Chow Ruskey plot compares all queries\nbased on the allhits.",
   				"\nIt represents an area-proportional Venn diagram,\nrevealing the distribution of peaks that could be annotated\nper query and works for up to 5 queries.",
   				"\n\nAdditional Info:\nIt is evalueated whether peaks are annotated,\nbut not whether they are annotated for the same feature")
   			grid.newpage()
@@ -440,14 +451,16 @@ if (is.null(opt$besthits)) {
   			mtext("Chow Ruskey comparison of all peaks annotated with UROPA", side=3, line=0,outer=FALSE, cex=1)
   		}, error = function(e){
   			cat("\nChowRuskey plot was invalid do upsetR plot\n")
-  		  suppressPackageStartupMessages(library(UpSetR,quietly = TRUE))
-  		  upset(fromList(peaks.per.query), keep.order=TRUE,nintersects = NA,empty.intersections = "on",number.angles=35,mainbar.y.label = "Peak Intersections", sets.x.label = "Annotated Genes")
+  		  	suppressPackageStartupMessages(library(UpSetR,quietly = TRUE))
+  		  	dt <- fromList(peaks.per.query)
+	  		upset(dt, sets=names(peaks.per.query), number.angles=15, mainbar.y.label = "Peak Intersections", sets.x.label = "Annotated Genes")
   		  #nsets=(ncol(combn(num.queries,2))+num.queries)
   		})
   	}
 	} else {
 	  suppressPackageStartupMessages(library(UpSetR,quietly = TRUE))
-	  upset(fromList(peaks.per.query), keep.order=TRUE,nintersects = NA,empty.intersections = "on",number.angles=35,mainbar.y.label = "Peak Intersections", sets.x.label = "Annotated Genes")
+	  dt <- fromList(peaks.per.query)
+	  upset(dt, sets=names(peaks.per.query), number.angles=15, mainbar.y.label = "Peak Intersections", sets.x.label = "Annotated Genes")
 	  
 	}
 	invisible(dev.off())
