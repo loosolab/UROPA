@@ -1,7 +1,9 @@
 {
 "queries":[
-		  {"feature":"", "distance":"", "show.attributes":"","filter.attribute":"", "attribute.value":"", "feature.position": "", "strand":"", "direction":"", "internals":"" }
+		  {"name":"", "feature":"", "distance":"", "feature_position": "", "strand":"",
+		   "filter_attribute":"", "attribute_value":"","direction":"", "internals":"" }
           ],
+"show_attributes":"",
 "priority": "",
 "gtf": ".gtf",
 "bed": ".bed"
