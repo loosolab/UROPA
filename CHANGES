@@ -1,3 +1,12 @@
+## 3.0.0 (2019-03-18)
+- revision of functionality to fix several bugs and to simplify future problems
+- new functionality: 
+  - bed/gtf and single query annotation specification can be given via command line
+  - show_attributes outside of query specification
+  - additional name information per query
+  - summary is always produced automatically
+  - final and allhits are available in txt and bed format
+
 ## 2.0.4 (2019-01-30)
 - fixed split command line call: should now work on different linux versions
 
