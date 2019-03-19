@@ -14,7 +14,7 @@ def create_anno_dict(peak, hit=None):
 	#Initialize dict with NAs
 	keys = ["feature", "feat_strand", "feat_start", "feat_end", "feat_center", "feat_length", "feat_attributes", "distance", 
 	        "feat_anchor", "query", "query_name", "best_hit", "relative_location", "feat_ovl_peak", "peak_ovl_feat"]
-	anno_dict = {key:"NA" for key in keys}
+	anno_dict = {key:None for key in keys}
 
 	#Add peak information
 	anno_dict.update(peak) #fills out peak chr/start/end/id/score/strand

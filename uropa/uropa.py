@@ -210,8 +210,12 @@ def main():
 	#----------------------------------------------------------------------------------------------------------#
 
 	#Check if bed & gtf files exists
-	check_file_access(cfg_dict["bed"], logger)
-	check_file_access(cfg_dict["gtf"], logger)
+	for key in ["bed", "gtf"]:
+		if cfg_dict[key] is not None:
+			check_file_access(cfg_dict[key], logger)
+		else:
+			logger.error("No .{0}-file given as input - please check that a .{0}-file is given either via the commandline option --{0} or in the configuration file.".format(key))
+			sys.exit()
 
 	#Check prefix
 	if args.prefix == None:
@@ -308,11 +312,22 @@ def main():
 	else:
 		anno_gtf = cfg_dict["gtf"]
 
+	#Read in and sort gtf file
+	logger.debug("Sorting gtf")
+	anno_gtf_sorted = output_prefix + "_sorted.gtf"
+	temp_files.append(anno_gtf_sorted)
+	sort_call = "sort -k1,1 -k4,4n {0} > {1}".format(anno_gtf, anno_gtf_sorted)
+	try:
+		sub = subprocess.check_output(sort_call, shell=True)
+	except subprocess.CalledProcessError:
+		logger.error("Could not sort GTF file using command-line call: {0}".format(sort_call))
+		sys.exit()
+
 	#Compress and index using gzip/tabix
 	logger.debug("Tabix compress")
-	anno_gtf_gz = output_prefix + ".gtf.gz"
-	anno_gtf_index = anno_gtf_gz + ".tbi"
-	pysam.tabix_compress(anno_gtf, anno_gtf_gz, force=True)
+	anno_gtf_gz = output_prefix + "_sorted.gtf.gz"
+	anno_gtf_index = anno_gtf_gz + "_sorted.tbi"
+	pysam.tabix_compress(anno_gtf_sorted, anno_gtf_gz, force=True)
 	anno_gtf_gz = pysam.tabix_index(anno_gtf_gz, index=anno_gtf_index, seq_col=0, start_col=3, end_col=4, keep_original=True, force=True)
 	temp_files.extend([anno_gtf_gz, anno_gtf_index])
 
@@ -374,8 +389,21 @@ def main():
 
 	for annotation in all_annotations:
 		attributes_dict = annotation["feat_attributes"]
+
+		if attributes_dict is None:	
+			attributes_dict = {}
+
 		if type(attributes_dict) == dict:
-			annotation.update({"show_" + key: attributes_dict[key] for key in attributes_dict})
+			annotation.update({"show_" + key: attributes_dict.get(key, None) for key in attribute_columns})
+
+	#Check if no annotations were found
+	all_NA = 0
+	for anno in all_annotations:
+		if anno["feature"] != None:
+			all_NA = 1
+	
+	if all_NA == 0:	#This is 0 coming out of the loop if no features were found
+		logger.warning("No annotations were found for input regions (all hits are NA). If this is unexpected, please check the configuration of your input queries.")
 
 	##### Write output files #####
 	all_hits = pd.DataFrame(all_annotations)
