@@ -5,7 +5,7 @@ def readme():
         return f.read()
 
 setup(name='uropa',
-      version='3.0.0',
+      version='3.0.1',
       description='UROPA is a command line based tool, intended for genomic region annotation',
       long_description=readme(),
       url='https://github.molgen.mpg.de/loosolab/UROPA',

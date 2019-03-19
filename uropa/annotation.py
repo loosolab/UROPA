@@ -142,7 +142,8 @@ def annotate_peaks(peaks, gtf_gz, gtf_index, cfg_dict, logger=None):
 		try:
 			hits = tabix_obj.fetch(peak["peak_chr"], extend_start, extend_end, parser=pysam.asGTF())
 		except ValueError:
-			logger.error()
+			print("Could not fetch any hits for tabix {0}:{1}-{2}. Continueing.".format(peak["gtf_chr"], extend_start, extend_end))
+			continue
 		
 		#Go through each hit from tabix and establish whether they are valid for queries
 		valid_annotations = []

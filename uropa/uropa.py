@@ -76,11 +76,11 @@ def main():
 	additional.add_argument("-o", "--outdir", metavar="", help="Output directory for output files (default: current dir)", default=".")
 	#additional.add_argument("-r","--reformat", help="create an additional compact and line-reduced table as result file", action="store_true")
 	additional.add_argument("-s","--summary", help="Filename of additional visualisation of results in graphical format", action="store_true")
-	additional.add_argument("-t","--threads", help="Multiprocessed run: n = number of threads to run annotation process", type=int, action="store",metavar="n",default=1)
+	additional.add_argument("-t","--threads", help="Multiprocessed run: n = number of threads to run annotation process", type=int, action="store", metavar="n", default=1)
 	#additional.add_argument("--add-comments",help="add comment lines to output files", action="store_true")
 	additional.add_argument("-l","--log", help="Log file name for messages and warnings (default: log is written to stdout)", action="store", metavar="uropa.log")
 	additional.add_argument("-d","--debug",help="Print verbose messages (for debugging)", action="store_true")
-	additional.add_argument("-v","--version",help="Prints the version and exits", action="version",version="%(prog)s 3.0.0")
+	additional.add_argument("-v","--version",help="Prints the version and exits", action="version",version="%(prog)s 3.0.1")
 	args = parser.parse_args()
 
 	#Write help if no input was given
@@ -264,12 +264,18 @@ def main():
 	gtf_feat_count = {}
 	with open(cfg_dict["gtf"]) as f:
 		for line in f:
-			columns = line.rstrip().split("\t")
-			feature = columns[2]
+			if not line.startswith("#"):
+				columns = line.rstrip().split("\t")
+				
+				if len(columns) < 9:
+					logger.error("Input GTF ({0}) has less than 9 columns - please check that the file has the correct GTF format.".format(cfg_dict["gtf"]))
+					sys.exit()
 
-			if feature not in gtf_feat_count:
-				gtf_feat_count[feature] = 0
-			gtf_feat_count[feature] += 1
+				feature = columns[2]
+
+				if feature not in gtf_feat_count:
+					gtf_feat_count[feature] = 0
+				gtf_feat_count[feature] += 1
 	gtf_feat = list(gtf_feat_count.keys())
 	logger.debug("Features in gtf: {0}".format(gtf_feat_count))
 
@@ -304,7 +310,6 @@ def main():
 
 	#Compress and index using gzip/tabix
 	logger.debug("Tabix compress")
-
 	anno_gtf_gz = output_prefix + ".gtf.gz"
 	anno_gtf_index = anno_gtf_gz + ".tbi"
 	pysam.tabix_compress(anno_gtf, anno_gtf_gz, force=True)
