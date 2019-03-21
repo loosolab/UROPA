@@ -27,6 +27,7 @@ import pandas as pd
 #Import internal functions
 from uropa.utils import *
 from uropa.annotation import *
+from uropa import __version__ as VERSION
 
 def restricted_float(f, f_min, f_max):
     f = float(f)
@@ -80,7 +81,7 @@ def main():
 	#additional.add_argument("--add-comments",help="add comment lines to output files", action="store_true")
 	additional.add_argument("-l","--log", help="Log file name for messages and warnings (default: log is written to stdout)", action="store", metavar="uropa.log")
 	additional.add_argument("-d","--debug",help="Print verbose messages (for debugging)", action="store_true")
-	additional.add_argument("-v","--version",help="Prints the version and exits", action="version",version="%(prog)s 3.0.1")
+	additional.add_argument("-v","--version", help="Prints the version and exits", action="version", version="%(prog)s " + VERSION)
 	args = parser.parse_args()
 
 	#Write help if no input was given
@@ -410,7 +411,7 @@ def main():
 	
 	#Sort on peak_ids
 	all_hits["original_order"] = [internal_peak_ids.index(peak_id) for peak_id in all_hits["internal_peak_id"]] #map position
-	all_hits.sort_values(by=["original_order", "feat_start", "feat_end"])
+	all_hits.sort_values(by=["original_order", "feat_start"], inplace=True)
 
 	#All hits
 	logger.debug("Writing _allhits.txt")

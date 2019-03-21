@@ -1,4 +1,17 @@
+import os
+import re
 from setuptools import setup
+
+#Path of setup file to establish version
+setupdir = os.path.abspath(os.path.dirname(__file__))
+
+def find_version(init_file):
+  version_file = open(init_file).read()
+  version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M)
+  if version_match:
+    return version_match.group(1)
+  else:
+    raise RuntimeError("Unable to find version string.")
 
 def readme():
     with open('README.md', encoding='utf-8') as f:
