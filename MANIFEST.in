@@ -1,2 +1,3 @@
 include README.md
 include LICENSE
+include uropa/__init__.py

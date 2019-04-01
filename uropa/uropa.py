@@ -18,11 +18,11 @@ import datetime
 import time
 import subprocess
 import gzip
+import copy
 
 import logging
 import multiprocessing as mp
 import pysam
-import pandas as pd
 
 #Import internal functions
 from uropa.utils import *
@@ -41,6 +41,7 @@ def main():
 	#################################################### INPUT #################################################
 	############################################################################################################
 
+	start_time = datetime.datetime.now()
 	cmd = " ".join(sys.argv)
 
 	#----------------------------------------------------------------------------------------------------------#
@@ -58,14 +59,15 @@ def main():
 	one_query.add_argument("-b", "--bed", metavar="", help="Filename of .bed-file to annotate", action="store")
 	one_query.add_argument("-g", "--gtf", metavar="", help="Filename of .gtf-file with features", action="store")
 	one_query.add_argument("--feature", help="Feature for annotation", metavar="", nargs="*", default=[])
-	one_query.add_argument("--feature_anchor", help="Feature anchor to annotate to", metavar="", nargs="*", default=["start", "center", "end"])
+	one_query.add_argument("--feature_anchor", help="Specific feature anchor to annotate to", metavar="", choices=["start", "center", "end"], nargs="*", default=[])
 	one_query.add_argument("--distance", help="Maximum permitted distance from feature (1 or 2 arguments)", metavar="", nargs="*", type=int, default=[1000,10000])
-	one_query.add_argument("--strand", metavar="", help="Desired strand of annotated feature relative to peak", nargs="*", choices=['ignore', 'same', 'opposite'], default='ignore')
-	one_query.add_argument("--relative_location", metavar="", help="Peak locaion relative to feature location", nargs="*", choices=["PeakInsideFeature", "FeatureInsidePeak", "Upstream", "Downstream", "OverlapStart", "OverlapEnd"], default=["PeakInsideFeature", "FeatureInsidePeak", "Upstream", "Downstream", "OverlapStart", "OverlapEnd"])
+	one_query.add_argument("--strand", metavar="", help="Desired strand of annotated feature relative to peak", choices=['ignore', 'same', 'opposite'], default='ignore')
+	one_query.add_argument("--relative_location", metavar="", help="Peak location relative to feature location", nargs="*", choices=["PeakInsideFeature", "FeatureInsidePeak", "Upstream", "Downstream", "OverlapStart", "OverlapEnd"], default=[])
 	one_query.add_argument("--internals", metavar="", help="Set minimum overlap fraction for internal feature annotations. 0 equates to internals=False and 1 equates to internals=True. Default is False.", type=lambda x: restricted_float(x, 0, 1), default=False)
-	one_query.add_argument("--filter_attribute",metavar="", help="Filter on 9th column of GTF", default=None)
+	one_query.add_argument("--filter_attribute",metavar="", help="Filter on 9th column of GTF", default="")
 	one_query.add_argument("--attribute_values", help="Value(s) of attribute corresponding to --filter_attribute", nargs="*", metavar="", default=[])
 	one_query.add_argument("--show_attributes", help="A list of attributes to show in output", metavar="", nargs="*", default=[])
+	one_query.add_argument("--priority", help="argparse.SUPPRESS", action="store_true", default=False)
 
 	#Or configuration arguments for multiple queries (overwrites)
 	multi_query = parser.add_argument_group("Multi-query configuration file")
@@ -76,9 +78,8 @@ def main():
 	additional.add_argument("-p", "--prefix", metavar="", help="Prefix for result file names (defaults to basename of .bed-file)")
 	additional.add_argument("-o", "--outdir", metavar="", help="Output directory for output files (default: current dir)", default=".")
 	#additional.add_argument("-r","--reformat", help="create an additional compact and line-reduced table as result file", action="store_true")
-	additional.add_argument("-s","--summary", help="Filename of additional visualisation of results in graphical format", action="store_true")
+	additional.add_argument("-s","--summary", help="Create additional visualisation of results in graphical format", action="store_true")
 	additional.add_argument("-t","--threads", help="Multiprocessed run: n = number of threads to run annotation process", type=int, action="store", metavar="n", default=1)
-	#additional.add_argument("--add-comments",help="add comment lines to output files", action="store_true")
 	additional.add_argument("-l","--log", help="Log file name for messages and warnings (default: log is written to stdout)", action="store", metavar="uropa.log")
 	additional.add_argument("-d","--debug",help="Print verbose messages (for debugging)", action="store_true")
 	additional.add_argument("-v","--version", help="Prints the version and exits", action="version", version="%(prog)s " + VERSION)
@@ -153,7 +154,7 @@ def main():
 	logger.info("Reading configuration from commandline/input config")
 
 	#First, fill in parameters from commandline
-	default_query = {"feature":args.feature,
+	cmd_query = {"feature":args.feature,
 					 "feature_anchor":args.feature_anchor,
 					 "distance": [args.distance[0], args.distance[0]] if len(args.distance) == 1 else args.distance,
 					 "strand": args.strand,
@@ -163,16 +164,22 @@ def main():
 					 "attribute_values": args.attribute_values,
 					 }
 
+	valid_query_keys = set(list(cmd_query.keys()) + ["name"])
+
 	#create cfg_dict like it would have been parsed from config .json
-	cfg_dict = {"queries": [default_query],
+	cfg_dict = {"queries": [cmd_query],
 				"show_attributes": args.show_attributes,
-				"priority": False,
+				"priority": args.priority,
 				"gtf": args.gtf,
-				"bed": args.bed
+				"bed": args.bed,
+				"prefix": args.prefix,
+				"outdir": args.outdir,
+				"threads": args.threads
 				}
 
 	logger.debug("Config from command-line arguments: {0}".format(cfg_dict))
 
+	#### Read from config file
 	#Next, overwrite with config arguments if given, otherwise the arguments fall back to commandline default
 	config = args.input
 	if config != None:
@@ -180,7 +187,7 @@ def main():
 			json_cfg_dict = parse_json(config)
 			logger.debug("Config from json: {0}".format(json_cfg_dict))
 			for key in json_cfg_dict:
-				cfg_dict[key] = json_cfg_dict[key] 	#config values always win over commandline
+				cfg_dict[key] = json_cfg_dict[key] 	#config values always win over commandline input
 		except IOError:
 			logger.error("File %s does not exists or is not readable.", config)
 			sys.exit()
@@ -188,26 +195,25 @@ def main():
 			logger.error("File %s contains malformed JSON. %s", config, e)
 			sys.exit()
 
-	#Fill each key with defaults if they were not set
-	for query in cfg_dict["queries"]:
-		for key in default_query:
-			query[key] = query.get(key, default_query[key])
+	#Set prefix if not set
+	if cfg_dict["prefix"] == None:
+		cfg_dict["prefix"] = os.path.splitext(os.path.basename(cfg_dict["bed"]))[0]	
+	output_prefix = os.path.join(cfg_dict["outdir"], cfg_dict["prefix"])
+	logger.debug("Output_prefix set to: {0}".format(output_prefix))		
 
-	#Format keys in cfg_dict
-	cfg_dict = format_config(cfg_dict)
+	#Format keys in cfg_dict and exit if error
+	cfg_dict = format_config(cfg_dict, logger)
 	logger.debug("Formatted config: {0}".format(cfg_dict))
 
-	#Check for general input in queries, such as no show_attributes
-	if len(cfg_dict["show_attributes"]) == 0:
-		logger.warning("No show_attributes given - no attributes for annotations are displayed in output.")
-
-	#catch duplicates in query names	
-	query_names = [query["name"] for query in cfg_dict["queries"]]
-	if len(query_names) != len(set(query_names)):
-		logger.warning("Duplicates in query names: {0}".format(query_names))
-
+	#Write out formatted config file
+	cfg_dict_filled = copy.deepcopy(cfg_dict)
+	for query in cfg_dict_filled["queries"]:
+		query["relative_location"] = query.get("relative_location", ["PeakInsideFeature", "FeatureInsidePeak", "Upstream", "Downstream", "OverlapStart", "OverlapEnd"])
+		query["strand"] = query.get("strand", 'ignore')
+		query["feature_anchor"] = query.get("feature_anchor", ["start", "center", "end"])
+	
 	#----------------------------------------------------------------------------------------------------------#		
-	# Validate gtf / bed input
+	# Validate existance of gtf / bed input and writability of output
 	#----------------------------------------------------------------------------------------------------------#
 
 	#Check if bed & gtf files exists
@@ -217,13 +223,6 @@ def main():
 		else:
 			logger.error("No .{0}-file given as input - please check that a .{0}-file is given either via the commandline option --{0} or in the configuration file.".format(key))
 			sys.exit()
-
-	#Check prefix
-	if args.prefix == None:
-		args.prefix = os.path.splitext(os.path.basename(cfg_dict["bed"]))[0]	
-
-	output_prefix = os.path.join(args.outdir, args.prefix)
-	logger.debug("Output_prefix set to: {0}".format(output_prefix))
 
 	#Check whether output files can be written
 	output_files = [os.path.join(output_prefix + suffix) for suffix in ["_allhits.txt", "_allhits.bed", "_finalhits.txt", "_finalhits.bed"]]
@@ -247,22 +246,17 @@ def main():
 	check_bed_format(cfg_dict["bed"], logger)
 	gtf_has_chr = check_chr(cfg_dict["gtf"])	#True/False
 
-	peaks = parse_bedfile(cfg_dict["bed"], gtf_has_chr)	
+	peaks = parse_bedfile(cfg_dict["bed"], gtf_has_chr)	#list of peak-dictionaries
 	logger.debug("Read {0} peaks from {1}".format(len(peaks), cfg_dict["bed"]))
 
 	#Establish order of peaks
 	internal_peak_ids = [peak["internal_peak_id"] for peak in peaks]
 
-	#Split bed into chunks
-	n_chunks = 100
-	peak_chunks = [peaks[i::n_chunks] for i in range(n_chunks)]
-
-
 	#----------------------------------------------------------------------------------------------------------#
 	# Prepare GTF and extract chosen features to a subset gtf-file if needed
 	#----------------------------------------------------------------------------------------------------------#		
 
-	logger.info("Preparing .gtf for fast access")
+	logger.info("Preparing .gtf-file for fast access")
 
 	#Check all possible features in gtf
 	logger.debug("Finding all possible features in gtf")
@@ -277,7 +271,6 @@ def main():
 					sys.exit()
 
 				feature = columns[2]
-
 				if feature not in gtf_feat_count:
 					gtf_feat_count[feature] = 0
 				gtf_feat_count[feature] += 1
@@ -303,37 +296,58 @@ def main():
 
 	#Subset gtf if needed
 	logger.debug("Subsetting gtf if needed")
-	gtf_specific = list(set(gtf_feat) - set(query_feat)) 	#features specific for gtf but which are not taken into account in queries
+	gtf_specific = list(set(gtf_feat) - set(query_feat)) 	#features in gtf which are not taken into account in queries
 	if len(gtf_specific) > 0:
 		sub_gtf = output_prefix + "_feature_subset.gtf"
 		logger.debug("Subsetting {0} -> {1} with features {2}".format(cfg_dict["gtf"], sub_gtf, query_feat))
-		subset_gtf(cfg_dict["gtf"], gtf_feat, sub_gtf)
+		subset_gtf(cfg_dict["gtf"], query_feat, sub_gtf)
 		anno_gtf = sub_gtf
 		temp_files.append(sub_gtf)
 	else:
 		anno_gtf = cfg_dict["gtf"]
 
-	#Read in and sort gtf file
-	logger.debug("Sorting gtf")
-	anno_gtf_sorted = output_prefix + "_sorted.gtf"
-	temp_files.append(anno_gtf_sorted)
-	sort_call = "sort -k1,1 -k4,4n {0} > {1}".format(anno_gtf, anno_gtf_sorted)
-	try:
-		sub = subprocess.check_output(sort_call, shell=True)
-	except subprocess.CalledProcessError:
-		logger.error("Could not sort GTF file using command-line call: {0}".format(sort_call))
-		sys.exit()
-
 	#Compress and index using gzip/tabix
 	logger.debug("Tabix compress")
-	anno_gtf_gz = output_prefix + "_sorted.gtf.gz"
-	anno_gtf_index = anno_gtf_gz + "_sorted.tbi"
-	pysam.tabix_compress(anno_gtf_sorted, anno_gtf_gz, force=True)
-	anno_gtf_gz = pysam.tabix_index(anno_gtf_gz, index=anno_gtf_index, seq_col=0, start_col=3, end_col=4, keep_original=True, force=True)
-	temp_files.extend([anno_gtf_gz, anno_gtf_index])
+	anno_gtf_gz = output_prefix + ".gtf.gz"
+	anno_gtf_index = anno_gtf_gz + ".tbi"
 
-	#Write out formatted config file
-	json_string = config_string(cfg_dict)
+	success = 0
+	sort_done = 0
+	while success == 0:
+		try:
+			pysam.tabix_compress(anno_gtf, anno_gtf_gz, force=True)
+			anno_gtf_gz = pysam.tabix_index(anno_gtf_gz, index=anno_gtf_index, seq_col=0, start_col=3, end_col=4, keep_original=True, force=True, meta_char='#')
+			temp_files.extend([anno_gtf_gz, anno_gtf_index])
+			success = 1
+			if sort_done == 1:
+				logger.info("Sorting and indexing was successful")
+
+		except Exception as e:
+
+			#Exit if we already tried to sort file once
+			if sort_done == 1:
+				logger.error("Could not index .gtf-file - please check whether the file has the correct 9-column format.")	
+				sys.exit()
+	
+			#Read in and sort gtf file
+			anno_gtf_sorted = output_prefix + "_sorted.gtf"
+			temp_files.append(anno_gtf_sorted)
+			sort_call = "grep -v \"^#\" {0} | sort -k1,1 -k4,4n > {1}".format(anno_gtf, anno_gtf_sorted)
+
+			logger.warning("Indexing failed - the GTF is probably unsorted")
+			logger.warning("Attempting to sort with call: {0}".format(sort_call))
+
+			try:
+				sub = subprocess.check_output(sort_call, shell=True)
+			except subprocess.CalledProcessError:
+				logger.error("Could not sort GTF file using command-line call: {0}".format(sort_call))
+				sys.exit()
+
+			anno_gtf = anno_gtf_sorted
+			sort_done = 1
+
+	#Write config used for annotation
+	json_string = config_string(cfg_dict_filled)
 	f = open(output_prefix + ".json", "w")
 	f.write(json_string)
 	f.close()
@@ -343,10 +357,17 @@ def main():
 	############################################################################################################
 
 	logger.info("Started annotation")
+	threads = int(cfg_dict["threads"])
+	
+	#Split bed into chunks
+	n_chunks = 100
+	chunk_size = int(np.ceil(len(peaks)/n_chunks))
+	peak_chunks = [peaks[i:i+chunk_size] for i in range(0, len(peaks), chunk_size)]
 	n_chunks = len(peak_chunks)
-	if args.threads > 1:
 
-		pool = mp.Pool(args.threads)
+	if cfg_dict["threads"] > 1:
+
+		pool = mp.Pool(threads)
 		task_list = [pool.apply_async(annotate_peaks, args=(chunk, anno_gtf_gz, anno_gtf_index, cfg_dict, )) for chunk in peak_chunks]
 		pool.close() 	#done sending jobs to pool
 
@@ -367,81 +388,89 @@ def main():
 		
 	else:
 		results = []
+		logger.info("Progress: {0:.0f}%".format(0/float(n_chunks)*100))
 		for i, chunk in enumerate(peak_chunks):
+			logger.debug("Chunk {0}".format(i+1))
+			logger.debug("First peak: {0}".format(chunk[0]))
+			logger.debug("Last peak: {0}".format(chunk[-1]))
 			results.append(annotate_peaks(chunk, anno_gtf_gz, anno_gtf_index, cfg_dict, logger))
 			logger.info("Progress: {0:.0f}%".format((i+1)/float(n_chunks)*100))
 
-	#Join results from threads to one dictionary
+	#Join results from threads to one list
 	all_annotations = sum(results, [])
 	
-
 	############################################################################################################
 	################################################ POSTPROCESSING ############################################
 	############################################################################################################
 
 	logger.info("Processing annotated peaks")
 
-	#Add attribute columns
+	#Add attribute columns to output
 	#The keys are different internally vs. the output columns
-	attribute_columns = cfg_dict["show_attributes"]
-	main = ["peak_chr", "peak_start", "peak_end", "peak_id", "feature", "feat_start", "feat_end", "feat_strand", "feat_anchor", "distance", "relative_location", "feat_ovl_peak", "peak_ovl_feat"]
-	header_internal = main + ["show_" + col for col in attribute_columns]  + ["query_name"]
+	attribute_columns = cfg_dict.get("show_attributes", [])
+	main = ["peak_chr", "peak_start", "peak_end", "peak_id", "peak_score", "peak_strand", "feature", "feat_start", "feat_end", "feat_strand", "feat_anchor", "distance", "relative_location", "feat_ovl_peak", "peak_ovl_feat"]
+	header_internal = main + ["attribute_" + col for col in attribute_columns]  + ["query_name"]
 	header_output = main + attribute_columns + ["name"]
 
+	logger.debug("Adding attribute columns")
 	for annotation in all_annotations:
-		attributes_dict = annotation["feat_attributes"]
-
-		if attributes_dict is None:	
-			attributes_dict = {}
-
-		if type(attributes_dict) == dict:
-			annotation.update({"show_" + key: attributes_dict.get(key, None) for key in attribute_columns})
+		attributes_dict = annotation.get("feat_attributes", {})
+		for key in attribute_columns:
+			annotation["attribute_" + key] = attributes_dict.get(key, "NA")
 
 	#Check if no annotations were found
 	all_NA = 0
 	for anno in all_annotations:
-		if anno["feature"] != None:
+		if "feature" in anno:
 			all_NA = 1
-	
 	if all_NA == 0:	#This is 0 coming out of the loop if no features were found
 		logger.warning("No annotations were found for input regions (all hits are NA). If this is unexpected, please check the configuration of your input queries.")
+	
 
 	##### Write output files #####
-	all_hits = pd.DataFrame(all_annotations)
-	
-	#Sort on peak_ids
-	all_hits["original_order"] = [internal_peak_ids.index(peak_id) for peak_id in all_hits["internal_peak_id"]] #map position
-	all_hits.sort_values(by=["original_order", "feat_start"], inplace=True)
+	logger.info("Writing output files")
+
+	#Make list of all hits in right order
+	all_hits_sorted = sorted(all_annotations, key= lambda d: (d["internal_peak_id"], d.get("feat_start", 0)))	#use get because not all hits have feat_start
+
+	header_str = "\t".join(header_output) + "\n"
+	allhits_str = "\n".join(["\t".join([str(hit.get(key, "NA")) for key in header_internal]) for hit in all_hits_sorted]) + "\n"
+	besthits_str = "\n".join(["\t".join([str(hit.get(key, "NA")) for key in header_internal]) for hit in all_hits_sorted if hit["best_hit"] == 1]) + "\n"
 
 	#All hits
 	logger.debug("Writing _allhits.txt")
-	all_hits.to_csv(os.path.join(output_prefix + "_allhits.txt"), na_rep="NA", sep="\t", index=False, columns=header_internal, header=header_output)
-	all_hits.to_csv(os.path.join(output_prefix + "_allhits.bed"), na_rep="NA", sep="\t", index=False, columns=header_internal, header=False)
+	with open(os.path.join(output_prefix + "_allhits.txt"), "w") as f:
+		f.write(header_str + allhits_str)
+	with open(os.path.join(output_prefix + "_allhits.bed"), "w") as f:
+		f.write(allhits_str)
 
 	#Best hits
-	best_hits = all_hits.loc[all_hits["best_hit"] == 1]
-	best_hits.to_csv(os.path.join(output_prefix + "_finalhits.txt"), na_rep="NA", sep="\t", index=False, columns=header_internal, header=header_output)
-	best_hits.to_csv(os.path.join(output_prefix + "_finalhits.bed"), na_rep="NA", sep="\t", index=False, columns=header_internal, header=False)
+	logger.debug("Writing _besthits.txt")
+	with open(os.path.join(output_prefix + "_finalhits.txt"), "w") as f:
+		f.write(header_str + besthits_str)
+	with open(os.path.join(output_prefix + "_finalhits.bed"), "w") as f:
+		f.write(besthits_str)
 
 	##### Visual summary #####
-	logger.info("Creating the Summary graphs of the results...")
-	summary_script = "uropa_summary.R"
-	summary_output = output_prefix + "_summary.pdf"
+	if args.summary:
+		logger.info("Creating the Summary graphs of the results...")
+		summary_script = "uropa_summary.R"
+		summary_output = output_prefix + "_summary.pdf"
 
-	#cmd is the command-line call str
-	call = [summary_script, "-f", os.path.join(output_prefix + "_finalhits.txt"), "-c", output_prefix + ".json", "-o", summary_output, "-b", os.path.join(output_prefix + "_allhits.txt"), "-a \'", cmd, "\'"]
-	call_str = ' '.join(call)
-	
-	try:
-		logger.debug('Summary output call is {}'.format(call_str))
-		sum_pr = subprocess.check_output(call_str, shell=True)
-	except subprocess.CalledProcessError:
-		logger.warning("Visualized summary output could not be created from: %s", call_str)
-	except OSError:
-		logger.warning("Rscript command not available for summary output.")
+		#cmd is the command-line call str
+		call = [summary_script, "-f", os.path.join(output_prefix + "_finalhits.txt"), "-c", output_prefix + ".json", "-o", summary_output, "-b", os.path.join(output_prefix + "_allhits.txt"), "-a \'", cmd, "\'"]
+		call_str = ' '.join(call)
+		
+		try:
+			logger.debug('Summary output call is {}'.format(call_str))
+			sum_pr = subprocess.check_output(call_str, shell=True)
+		except subprocess.CalledProcessError:
+			logger.warning("Visualized summary output could not be created from: %s", call_str)
+		except OSError:
+			logger.warning("Rscript command not available for summary output.")
 
 	##### Cleanup #####
-	logger.info("Cleaning up temporary files.")
+	logger.info("Cleaning up temporary files")
 	if args.debug == False:
 		for f in temp_files:
 			try:
@@ -449,4 +478,6 @@ def main():
 			except:
 				logger.warning("Could not remove temporary file {0}".format(f))
 
-	logger.info("UROPA run ended successfully!")
+	end_time = datetime.datetime.now()
+	total_time = end_time - start_time
+	logger.info("UROPA run finished in {0}!".format(str(total_time).split('.', 2)[0]))

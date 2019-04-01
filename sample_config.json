@@ -1,7 +1,7 @@
 {
 "queries":[
 		  {"name":"", "feature":"", "distance":"", "feature_anchor": "", "strand":"",
-		   "filter_attribute":"", "attribute_value":"","direction":"", "internals":"" }
+		   "filter_attribute":"", "attribute_values":"","direction":"", "internals":"" }
           ],
 "show_attributes":"",
 "priority": "",

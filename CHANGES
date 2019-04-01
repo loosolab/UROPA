@@ -1,3 +1,11 @@
+## 3.1.0 (2019-03-31)
+- fixed missing sorting of gtf
+- added handling of comment lines in gtf
+- fixed insufficient backwards functionality for feature.anchor -> feature_anchor and other keys
+- internal speed-up of priority queries by fetching hits from queries separately
+- keys such as threads and prefix can now be given via config file
+- re-added --summary
+
 ## 3.0.0 (2019-03-18)
 - revision of functionality to fix several bugs and to simplify future problems
 - new functionality: 

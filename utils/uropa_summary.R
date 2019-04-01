@@ -135,7 +135,7 @@ features <- c()
 	plot.new()
 	df.uropa.final <- read.table(final.hits, header=TRUE, sep="\t",stringsAsFactors = FALSE)
 	# number of peaks annoteted with uropa run
-	num.peaks <- length(unique(df.uropa.final$peak_id))
+	num.peaks <- length(df.uropa.final$peak_id)
 	# stats is based on annoted peaks -> remove na rows
 	df.uropa.final[,"distance"] <- as.numeric(df.uropa.final[,"distance"])
 	df.uropa.final <- df.uropa.final[complete.cases(df.uropa.final),]
