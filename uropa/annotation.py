@@ -96,31 +96,34 @@ def calculate_overlap(anno_dict):
 def get_relative_location(anno_dict):
 	""" Sets the relative location of peak to feature """
 
-	if anno_dict["peak_start"] <= anno_dict["feat_start"] and anno_dict["peak_end"] >= anno_dict["feat_end"]:
+	location = "NA"
+	if anno_dict["feat_ovl_peak"] == 1:
 		location = "FeatureInsidePeak"
 
-	elif anno_dict["peak_start"] > anno_dict["feat_start"] and anno_dict["peak_end"] < anno_dict["feat_end"]:
+	elif anno_dict["peak_ovl_feat"] == 1:
 		location = "PeakInsideFeature"
 
-	elif anno_dict["feat_anchor"] == "start":
-		if anno_dict["feat_ovl_peak"] > 0:
-			location = "OverlapStart"
-		else:
+	elif anno_dict["feat_ovl_peak"] == 0: #no overlap
+		if anno_dict["feat_anchor"] == "start":
 			if anno_dict["feat_strand"] == "+":
 				location = "Upstream"
 			else:
 				location = "Downstream"
 
-	elif anno_dict["feat_anchor"] == "end":
-		if anno_dict["feat_ovl_peak"] > 0:
-			location = "OverlapEnd"
-		else:
+		elif anno_dict["feat_anchor"] == "end":
 			if anno_dict["feat_strand"] == "+":
 				location = "Downstream"
 			else:
 				location = "Upstream"
-	else:
-		location = "NA"
+	
+	else:	#some overlap, but not completely internal
+
+		#Figure out if it is overlapstart or overlap end
+		if anno_dict["anchor_pos"]["start"] in range(anno_dict["peak_start"]+1, anno_dict["peak_end"]+1):
+			location = "OverlapStart"
+
+		elif anno_dict["anchor_pos"]["end"] in range(anno_dict["peak_start"]+1, anno_dict["peak_end"]+1):
+			location = "OverlapEnd"
 
 	anno_dict["relative_location"] = location
 

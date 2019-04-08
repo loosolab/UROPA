@@ -35,6 +35,11 @@ def restricted_float(f, f_min, f_max):
         raise argparse.ArgumentTypeError("{0} not in range [0.0, 1.0]".format(f))
     return f
 
+def split_options(options):
+	#Splits ","-separated options from commandline into lists
+	return sum([opt.split(",") if type(opt) == str else [opt] for opt in options], [])
+
+
 def main():
 
 	############################################################################################################
@@ -154,21 +159,22 @@ def main():
 	logger.info("Reading configuration from commandline/input config")
 
 	#First, fill in parameters from commandline
-	cmd_query = {"feature":args.feature,
-					 "feature_anchor":args.feature_anchor,
+	cmd_query = {"feature":split_options(args.feature),
+					 "feature_anchor":split_options(args.feature_anchor),
 					 "distance": [args.distance[0], args.distance[0]] if len(args.distance) == 1 else args.distance,
 					 "strand": args.strand,
-					 "relative_location": args.relative_location,
+					 "relative_location": split_options(args.relative_location),
 					 "internals": args.internals,
 					 "filter_attribute": args.filter_attribute,
-					 "attribute_values": args.attribute_values,
+					 "attribute_values": split_options(args.attribute_values),
 					 }
+	cmd_query["distance"] = split_options(cmd_query["distance"])
 
 	valid_query_keys = set(list(cmd_query.keys()) + ["name"])
 
 	#create cfg_dict like it would have been parsed from config .json
 	cfg_dict = {"queries": [cmd_query],
-				"show_attributes": args.show_attributes,
+				"show_attributes": split_options(args.show_attributes),
 				"priority": args.priority,
 				"gtf": args.gtf,
 				"bed": args.bed,
@@ -470,8 +476,8 @@ def main():
 			logger.warning("Rscript command not available for summary output.")
 
 	##### Cleanup #####
-	logger.info("Cleaning up temporary files")
 	if args.debug == False:
+		logger.info("Cleaning up temporary files")
 		for f in temp_files:
 			try:
 				os.remove(f)
