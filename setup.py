@@ -14,7 +14,7 @@ def find_version(init_file):
     raise RuntimeError("Unable to find version string.")
 
 def readme():
-    with open('README.md', encoding='utf-8') as f:
+    with open('README.md') as f:
         return f.read()
 
 setup(name='uropa',
