@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Contains helper functions for UROPA """
 
 import json

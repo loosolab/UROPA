@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Contains code for the annotation process"""
 import pysam
 from functools import reduce

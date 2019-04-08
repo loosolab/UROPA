@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-# coding: utf-8
 """
 uropa.py: UROPA - Universal RObust Peak Annotator
 
@@ -8,7 +6,6 @@ uropa.py: UROPA - Universal RObust Peak Annotator
 @maintainer: Mario Looso
 @email: mario.looso@mpi-bn.mpg.de
 """
-
 
 import os
 import sys
@@ -25,9 +22,9 @@ import multiprocessing as mp
 import pysam
 
 #Import internal functions
-from uropa.utils import *
-from uropa.annotation import *
-from uropa import __version__ as VERSION
+from .utils import *
+from .annotation import *
+from .__init__ import __version__ as VERSION
 
 def restricted_float(f, f_min, f_max):
     f = float(f)

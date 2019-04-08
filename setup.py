@@ -1,5 +1,6 @@
 import os
 import re
+import setuptools
 from setuptools import setup
 
 #Path of setup file to establish version
@@ -38,7 +39,7 @@ setup(name='uropa',
         'License :: OSI Approved :: MIT License',
         'Intended Audience :: Science/Research',
         'Topic :: Scientific/Engineering :: Bio-Informatics',
-        'Programming Language :: Python :: 3.4'
+        'Programming Language :: Python '
       ],
       zip_safe=False,
       include_package_data=True)
