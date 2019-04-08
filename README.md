@@ -1,7 +1,7 @@
 Universal RObust Peak Annotator
 =======================================
 
-[![Anaconda-Server Badge](https://img.shields.io/badge/Install%20with-conda-green.svg?style=plastic&logoWidth=40)](https://conda.anaconda.org/bioconda) [![Docker Badge](https://img.shields.io/badge/Container-ready-green.svg?style=plastic&logoWidth=40)](http://biocontainers.pro/registry/#/) [![PyPI version](https://badge.fury.io/py/uropa.png)](https://badge.fury.io/py/uropa)
+[![Anaconda-Server Badge](https://img.shields.io/badge/Install%20with-conda-green.svg?style=plastic&logoWidth=40)](https://conda.anaconda.org/bioconda) [![Docker Badge](https://img.shields.io/badge/Container-ready-green.svg?style=plastic&logoWidth=40)](http://biocontainers.pro/registry/#/) [![PyPI Version](https://img.shields.io/pypi/v/uropa.svg?style=plastic)](https://pypi.org/project/uropa/)
 
 The **Universal RObust Peak Annotator** (UROPA) is a command line based tool, intended for genomic region
 annotation. Based on a configuration file, different target features can be prioritized with multiple integrated queries.
