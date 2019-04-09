@@ -364,7 +364,7 @@ def main():
 	
 	#Split bed into chunks
 	n_chunks = 100
-	chunk_size = int(np.ceil(len(peaks)/n_chunks))
+	chunk_size = int(np.ceil(len(peaks)/float(n_chunks)))
 	peak_chunks = [peaks[i:i+chunk_size] for i in range(0, len(peaks), chunk_size)]
 	n_chunks = len(peak_chunks)
 

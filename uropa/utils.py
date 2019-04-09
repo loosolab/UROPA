@@ -64,7 +64,7 @@ def howtoconfig():
 
 def parse_json(infile):
     """ Read a json file to a dict """
-    with open(infile, 'r', encoding='utf-8') as f:
+    with open(infile) as f:
         return ast.literal_eval(json.dumps(json.load(f)))
 
 

@@ -15,7 +15,7 @@ def create_anno_dict(peak, hit):
 	#Add peak information
 	anno_dict = {}
 	anno_dict.update(peak) #fills out peak chr/start/end/id/score/strand
-	anno_dict["peak_center"] = int((anno_dict["peak_end"] + anno_dict["peak_start"])/2)
+	anno_dict["peak_center"] = int((anno_dict["peak_end"] + anno_dict["peak_start"])/2.0)
 	anno_dict["peak_length"] = anno_dict["peak_end"] - anno_dict["peak_start"]
 
 	#Parse info from gtf string
@@ -32,7 +32,7 @@ def create_anno_dict(peak, hit):
 	anno_dict["feat_strand"] = hit.strand
 	anno_dict["feat_start"] = int(hit.start)
 	anno_dict["feat_end"] = int(hit.end)
-	anno_dict["feat_center"] = int((anno_dict["feat_end"] + anno_dict["feat_start"])/2)
+	anno_dict["feat_center"] = int((anno_dict["feat_end"] + anno_dict["feat_start"])/2.0)
 	anno_dict["feat_length"] =  int(anno_dict["feat_end"] - anno_dict["feat_start"])
 	anno_dict["feat_attributes"] = attribute_dict
 
@@ -75,15 +75,15 @@ def calculate_overlap(anno_dict):
     """ Calculates percentage of length covered by the peak/feature """
     
     #beds exclude first position, therefore +1 for starts. Range excludes last position in range - therefore +1 for end
-    ovl_range = range(max(anno_dict["peak_start"]+1, anno_dict["feat_start"]+1), min(anno_dict["peak_end"], anno_dict["feat_end"])+1)	
+    ovl_range = range(max(anno_dict["peak_start"]+1, anno_dict["feat_start"]+1), min(anno_dict["peak_end"], anno_dict["feat_end"])+1)
     ovl_bp = len(ovl_range)
 
    	#peak_range = list(range(anno_dict["peak_start"], anno_dict["peak_end"]))
     #feature_range = list(range(anno_dict["feat_start"], anno_dict["feat_end"]))
     #ovl_range = set(peak_range).intersection(feature_range)
     
-    ovl_pk = round(ovl_bp /  anno_dict["peak_length"], 3) 
-    ovl_feat = round(ovl_bp / anno_dict["feat_length"], 3) 
+    ovl_pk = round(ovl_bp / float(anno_dict["peak_length"]), 3) 
+    ovl_feat = round(ovl_bp / float(anno_dict["feat_length"]), 3) 
 
     anno_dict["feat_ovl_peak"] = ovl_feat
     anno_dict["peak_ovl_feat"] = ovl_pk
