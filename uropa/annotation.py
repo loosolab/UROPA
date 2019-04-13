@@ -171,7 +171,7 @@ def annotate_peaks(peaks, gtf_gz, gtf_index, cfg_dict, logger=None):
 
 			try:
 				begin = datetime.datetime.now()
-				hits = list(tabix_obj.fetch(peak["peak_chr"], extend_start, extend_end, parser=pysam.asGTF()))	#hits for this query
+				hits = list(tabix_obj.fetch(tabix_query, parser=pysam.asGTF()))	#hits for this query
 				end = datetime.datetime.now()
 				logger.debug("Fetched {0} hits in {1}".format(len(hits), end - begin))
 			except: 
@@ -251,9 +251,13 @@ def annotate_peaks(peaks, gtf_gz, gtf_index, cfg_dict, logger=None):
 		
 		logger.debug("")	#create empty line in debugger output for easy overview
 
+
 		#After all hits have been checked for peak; make final checks and set best flag
 		if len(valid_annotations) > 0:	
 
+			#Sort valid annotations
+			valid_annotations = sorted(valid_annotations, key= lambda anno_dict: (anno_dict["feat_start"], anno_dict["feat_end"], anno_dict["feature"]))
+			
 			#If priority == True, find the highest ranked annotations for this peak
 			#if cfg_dict["priority"] == True:
 			#	highest_priority_query = min([anno_dict["query"] for anno_dict in valid_annotations])
