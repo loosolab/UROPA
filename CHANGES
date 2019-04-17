@@ -1,3 +1,6 @@
+## 3.2.0 (2019-04-17)
+- added functionality to view all available gtf-attributes in output files. Set by show_attributes = all.
+
 ## 3.1.4 (2019-04-13)
 - fixed error due to insufficient handling of "chr"-prefix of both bed and gtf
 

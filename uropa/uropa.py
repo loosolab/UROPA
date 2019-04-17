@@ -408,20 +408,7 @@ def main():
 
 	logger.info("Processing annotated peaks")
 
-	#Add attribute columns to output
-	#The keys are different internally vs. the output columns
-	attribute_columns = cfg_dict.get("show_attributes", [])
-	main = ["peak_chr", "peak_start", "peak_end", "peak_id", "peak_score", "peak_strand", "feature", "feat_start", "feat_end", "feat_strand", "feat_anchor", "distance", "relative_location", "feat_ovl_peak", "peak_ovl_feat"]
-	header_internal = main + ["attribute_" + col for col in attribute_columns]  + ["query_name"]
-	header_output = main + attribute_columns + ["name"]
-
-	logger.debug("Adding attribute columns")
-	for annotation in all_annotations:
-		attributes_dict = annotation.get("feat_attributes", {})
-		for key in attribute_columns:
-			annotation["attribute_" + key] = attributes_dict.get(key, "NA")
-
-	#Check if no annotations were found
+	##### Check if no annotations were found #####
 	all_NA = 0
 	for anno in all_annotations:
 		if "feature" in anno:
@@ -429,6 +416,27 @@ def main():
 	if all_NA == 0:	#This is 0 coming out of the loop if no features were found
 		logger.warning("No annotations were found for input regions (all hits are NA). If this is unexpected, please check the configuration of your input queries.")
 	
+	#Add attribute columns to output
+	logger.debug("Adding attribute columns")
+	all_possible_attributes = {}
+	for annotation in all_annotations:
+		attributes_dict = annotation.get("feat_attributes", {})
+		for key in attributes_dict:
+			annotation["attribute_" + key] = attributes_dict[key]
+			all_possible_attributes[key] = ""
+
+	#Set output attribute columns
+	attribute_columns = cfg_dict.get("show_attributes", [])
+	
+	#If "all" was set in show_attributes, set attributes_columns to total set of attributes
+	if "all" in [str(att).lower() for att in attribute_columns]:
+		attribute_columns = sorted(list(all_possible_attributes.keys()))
+		logger.info("Config key show_attributes was set to \'all\'. All possible attributes are shown in output ({0})".format(attribute_columns))
+
+	#Set output columns (the keys are different internally vs. the output columns)
+	main = ["peak_chr", "peak_start", "peak_end", "peak_id", "peak_score", "peak_strand", "feature", "feat_start", "feat_end", "feat_strand", "feat_anchor", "distance", "relative_location", "feat_ovl_peak", "peak_ovl_feat"]
+	header_internal = main + ["attribute_" + col for col in attribute_columns]  + ["query_name"]
+	header_output = main + attribute_columns + ["name"]
 
 	##### Write output files #####
 	logger.info("Writing output files")

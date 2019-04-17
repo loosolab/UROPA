@@ -290,7 +290,7 @@ def parse_bedfile(bedfile, gtf_has_chr):
 				gtf_chr = "chr" + chrom if not chrom.startswith("chr") else chrom		#add chr to match gtf if needed
 			else:
 				gtf_chr = chrom.replace("chr", "") #gtf chrom should not have chr-prefix
-
+			
 			peak_dict = {"gtf_chr": gtf_chr, "peak_chr":chrom, "peak_start":start, "peak_end":end, "peak_id":name, "peak_score":score, "peak_strand":strand, "internal_peak_id": i+1}
 			peak_dict.update(dict(zip(additional_header, additional)))
 			peaks.append(peak_dict)
