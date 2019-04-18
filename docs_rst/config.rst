@@ -119,7 +119,7 @@ Each query can specify the following keys:
 
    
 -  **show.attributes**: A list of attributes found in the 9th column of the GTF file which should appear in the final output tables. 
-   If non existent attributes are specified, annotated peaks will display ``'NA'`` for those attributes.                  
+   If non existent attributes are specified, annotated peaks will display ``'NA'`` for those attributes. If set to ``'all'`` the list of attributes will be defined from all possible attributes in the annotated features from the gtf.
    
    Default: ``'None'``
    
