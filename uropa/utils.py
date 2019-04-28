@@ -61,6 +61,15 @@ def howtoconfig():
 	"""
     return epilog
 
+def get_valid_filename(s):
+	"""
+	Return the given string converted to a string that can be used for a clean
+	filename. Remove leading and trailing spaces; convert other spaces to
+	underscores; and remove anything that is not an alphanumeric, dash, underscore, or dot.
+	from django.utils.text
+	"""
+	s = str(s).strip().replace(' ', '_')
+	return(re.sub(r'(?u)[^-\w.]', '', s))
 
 def parse_json(infile):
     """ Read a json file to a dict """
@@ -80,7 +89,7 @@ def format_config(cfg_dict, logger):
 
 	###################### Upper level config keys ####################
 	#Check existance of upper-level keys
-	valid_config_keys = set(["queries", "priority", "show_attributes", "gtf", "bed", "prefix", "outdir", "threads"])
+	valid_config_keys = set(["queries", "priority", "show_attributes", "gtf", "bed", "prefix", "outdir", "threads", "output_by_query"])
 	given_config_keys = set(cfg_dict.keys())
 	invalid_config_keys = given_config_keys - valid_config_keys
 	if len(invalid_config_keys) > 0:
@@ -96,7 +105,9 @@ def format_config(cfg_dict, logger):
 	if "show_attributes" not in cfg_dict:
 		cfg_dict["show_attributes"] = []
 
+	#Convert all forms of true/false to python bool value
 	cfg_dict["priority"] = convert_values[str(cfg_dict.get("priority", False)).lower()] 	#per default false
+	cfg_dict["output_by_query"] =  convert_values[str(cfg_dict.get("output_by_query", False)).lower()]
 
 	####################### Query level keys ##########################
 	#Convert keys for backwards compatibility {old:new, (...)}
@@ -188,7 +199,7 @@ def format_config(cfg_dict, logger):
 			valid = set(["PeakInsideFeature", "FeatureInsidePeak", "Upstream", "Downstream", "OverlapStart", "OverlapEnd"])
 			invalid = query["relative_location"] - valid
 			if len(invalid) > 0:
-				logger.error("Invalid relative_location ({0}) set in query {1}. Valid options are: {3}".format(invalid, i+1, valid))
+				logger.error("Invalid relative_location ({0}) set in query {1}. Valid options are: {2}".format(invalid, i+1, valid))
 				sys.exit()
 
 		#Name the query if it was not already named
@@ -203,7 +214,7 @@ def format_config(cfg_dict, logger):
 	#Catch duplicates in query names	
 	query_names = [query["name"] for query in cfg_dict["queries"]]
 	if len(query_names) != len(set(query_names)):
-		logger.warning("Duplicates in query names: {0}".format(query_names))
+		logger.warning("Duplicated query names present: {0}".format(query_names))
 
 	return(cfg_dict)
 
@@ -212,7 +223,7 @@ def format_config(cfg_dict, logger):
 def config_string(cfg_dict):
 	""" Pretty-print cfg_dict with one-line queries """
 
-	upper_level = ["queries", "show_attributes", "priority",  "gtf", "bed", "prefix", "outdir", "threads"]
+	upper_level = ["queries", "show_attributes", "priority",  "gtf", "bed", "prefix", "outdir", "threads", "output_by_query"]
 	query_level = ["feature", "feature_anchor", "distance", "strand", "relative_location", "filter_attribute", "attribute_values", "internals", "name"]
 
 	upper_lines = []

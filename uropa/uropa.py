@@ -61,15 +61,23 @@ def main():
 	one_query.add_argument("-b", "--bed", metavar="", help="Filename of .bed-file to annotate", action="store")
 	one_query.add_argument("-g", "--gtf", metavar="", help="Filename of .gtf-file with features", action="store")
 	one_query.add_argument("--feature", help="Feature for annotation", metavar="", nargs="*", default=[])
-	one_query.add_argument("--feature_anchor", help="Specific feature anchor to annotate to", metavar="", choices=["start", "center", "end"], nargs="*", default=[])
+
+	one_query.add_argument("--feature-anchor", help="Specific feature anchor to annotate to", metavar="", choices=["start", "center", "end"], nargs="*", default=[])
 	one_query.add_argument("--distance", help="Maximum permitted distance from feature (1 or 2 arguments)", metavar="", nargs="*", type=int, default=[1000,10000])
 	one_query.add_argument("--strand", metavar="", help="Desired strand of annotated feature relative to peak", choices=['ignore', 'same', 'opposite'], default='ignore')
-	one_query.add_argument("--relative_location", metavar="", help="Peak location relative to feature location", nargs="*", choices=["PeakInsideFeature", "FeatureInsidePeak", "Upstream", "Downstream", "OverlapStart", "OverlapEnd"], default=[])
+	one_query.add_argument("--relative-location", metavar="", help="Peak location relative to feature location", nargs="*", choices=["PeakInsideFeature", "FeatureInsidePeak", "Upstream", "Downstream", "OverlapStart", "OverlapEnd"], default=[])
 	one_query.add_argument("--internals", metavar="", help="Set minimum overlap fraction for internal feature annotations. 0 equates to internals=False and 1 equates to internals=True. Default is False.", type=lambda x: restricted_float(x, 0, 1), default=False)
-	one_query.add_argument("--filter_attribute",metavar="", help="Filter on 9th column of GTF", default="")
-	one_query.add_argument("--attribute_values", help="Value(s) of attribute corresponding to --filter_attribute", nargs="*", metavar="", default=[])
-	one_query.add_argument("--show_attributes", help="A list of attributes to show in output", metavar="", nargs="*", default=[])
+	one_query.add_argument("--filter-attribute", metavar="", help="Filter on 9th column of GTF", default="")
+	one_query.add_argument("--attribute-values", help="Value(s) of attribute corresponding to --filter-attribute", nargs="*", metavar="", default=[])
+	one_query.add_argument("--show-attributes", help="A list of attributes to show in output", metavar="", nargs="*", default=[])
 	one_query.add_argument("--priority", help="argparse.SUPPRESS", action="store_true", default=False)
+
+	#arguments for backwards compatibility using "-" instead of "_" in argument names
+	one_query.add_argument("--relative_location", metavar="", help=argparse.SUPPRESS, nargs="*", choices=["PeakInsideFeature", "FeatureInsidePeak", "Upstream", "Downstream", "OverlapStart", "OverlapEnd"], default=[])	#deprecated but left for backwards compatibility
+	one_query.add_argument("--feature_anchor", help=argparse.SUPPRESS, metavar="", choices=["start", "center", "end"], nargs="*", default=[])
+	one_query.add_argument("--filter_attribute", metavar="", help=argparse.SUPPRESS, default="")	#deprecated but left for backwards compatibility
+	one_query.add_argument("--attribute_values", help=argparse.SUPPRESS, nargs="*", metavar="", default=[])
+	one_query.add_argument("--show_attributes", help=argparse.SUPPRESS, metavar="", nargs="*", default=[])
 
 	#Or configuration arguments for multiple queries (overwrites)
 	multi_query = parser.add_argument_group("Multi-query configuration file")
@@ -80,6 +88,7 @@ def main():
 	additional.add_argument("-p", "--prefix", metavar="", help="Prefix for result file names (defaults to basename of .bed-file)")
 	additional.add_argument("-o", "--outdir", metavar="", help="Output directory for output files (default: current dir)", default=".")
 	#additional.add_argument("-r","--reformat", help="create an additional compact and line-reduced table as result file", action="store_true")
+	additional.add_argument("--output-by-query", help="Additionally create output files for each named query seperately", action="store_true")
 	additional.add_argument("-s","--summary", help="Create additional visualisation of results in graphical format", action="store_true")
 	additional.add_argument("-t","--threads", help="Multiprocessed run: n = number of threads to run annotation process", type=int, action="store", metavar="n", default=1)
 	additional.add_argument("-l","--log", help="Log file name for messages and warnings (default: log is written to stdout)", action="store", metavar="uropa.log")
@@ -177,7 +186,8 @@ def main():
 				"bed": args.bed,
 				"prefix": args.prefix,
 				"outdir": args.outdir,
-				"threads": args.threads
+				"threads": args.threads,
+				"output_by_query": args.output_by_query
 				}
 
 	logger.debug("Config from command-line arguments: {0}".format(cfg_dict))
@@ -461,6 +471,19 @@ def main():
 		f.write(header_str + besthits_str)
 	with open(os.path.join(output_prefix + "_finalhits.bed"), "w") as f:
 		f.write(besthits_str)
+
+	#Hits per query
+	query_names = [query["name"] for query in cfg_dict["queries"]]	#the key is "name" in query line
+	if cfg_dict["output_by_query"] == True:
+		logger.info("Option --output-by-query is on. Writing additional hits-files per query.")
+		for name in query_names:
+			logger.debug("Writing hits for query: {0}".format(name))
+			query_str = "\n".join(["\t".join([str(hit.get(key, "NA")) for key in header_internal]) for hit in all_hits_sorted if hit.get("query_name", "") == name]) + "\n"
+			
+			with open(os.path.join(output_prefix + "_" + get_valid_filename(name) + ".txt"), "w") as f:
+				f.write(header_str + query_str)
+			with open(os.path.join(output_prefix + "_" + get_valid_filename(name) + ".bed"), "w") as f:
+				f.write(query_str)
 
 	##### Visual summary #####
 	if args.summary:

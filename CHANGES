@@ -1,3 +1,7 @@
+## 3.3.0 (2019-04-28)
+- added '--output-by-query' to allow for output .txt/.bed files per query (split from allhits results). This option can also be given in the config as "output_by_query".
+- changed all underscores in input arguments to dashes to conform with standard CLI options. This change is backwards compatible, e.g. --feature_anchor can still be used for --feature-anchor'.
+
 ## 3.2.0 (2019-04-17)
 - added functionality to view all available gtf-attributes in output files. Set by show_attributes = all.
 
