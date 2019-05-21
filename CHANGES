@@ -1,3 +1,6 @@
+## 3.3.1 (2019-05-21)
+- fixed bug in subset_gtf not taking into account comments when subetting gtfs with header
+
 ## 3.3.0 (2019-04-28)
 - added '--output-by-query' to allow for output .txt/.bed files per query (split from allhits results). This option can also be given in the config as "output_by_query".
 - changed all underscores in input arguments to dashes to conform with standard CLI options. This change is backwards compatible, e.g. --feature_anchor can still be used for --feature-anchor'.
