@@ -333,7 +333,7 @@ def subset_gtf(gtf, features, sub_gtf):
 
 	with open(gtf, "r") as f:
 		lines = f.readlines()
-		gtf_query_feat = [line for line in lines if line.split("\t")[2] in feat2cut]
+		gtf_query_feat = [line for line in lines if not line.startswith("#") and line.split("\t")[2] in feat2cut]
 
 	# List of lines containing only selected features from query
 	with open(sub_gtf, "w") as f:
