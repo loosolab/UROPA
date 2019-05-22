@@ -6,8 +6,23 @@ import numpy as np
 import logging
 import datetime
 
-def get_frozenset(adict):
-    return frozenset((key, set_from_dict(val) if isinstance(val, dict) else val) for key, val in adict.items())
+def decimal_round(num, d=3):
+
+	stringnum = "{:.20f}".format(num)
+
+	#Position of first non-zero integer after decimal
+	decimal_i = stringnum.index(".")
+	nonzero_i_lst = [i for i in range(decimal_i+1, len(stringnum)) if int(stringnum[i]) > 0] + [0]	#If all describing digits are 0 (e.g. 0.0 or 1.0), nonzero_is is [0]
+	nonzero_i = nonzero_i_lst[0]
+
+	#Decide how to round
+	if nonzero_i < decimal_i + d:	#If a non-zero integer was already found
+		rounded = str(round(num, d))
+
+	elif nonzero_i >= decimal_i + d: #If a non-zero integer was already found
+		rounded = stringnum[:nonzero_i+1]
+
+	return(rounded)
 
 def create_anno_dict(peak, hit):
 	""" Returns a dictionary containing information on the hit from gtf """
@@ -78,15 +93,11 @@ def calculate_overlap(anno_dict):
     ovl_range = range(max(anno_dict["peak_start"]+1, anno_dict["feat_start"]+1), min(anno_dict["peak_end"], anno_dict["feat_end"])+1)
     ovl_bp = len(ovl_range)
 
-   	#peak_range = list(range(anno_dict["peak_start"], anno_dict["peak_end"]))
-    #feature_range = list(range(anno_dict["feat_start"], anno_dict["feat_end"]))
-    #ovl_range = set(peak_range).intersection(feature_range)
-    
-    ovl_pk = round(ovl_bp / float(anno_dict["peak_length"]), 3) 
-    ovl_feat = round(ovl_bp / float(anno_dict["feat_length"]), 3) 
+    ovl_pk = ovl_bp / float(anno_dict["peak_length"])
+    ovl_feat = ovl_bp / float(anno_dict["feat_length"])
 
-    anno_dict["feat_ovl_peak"] = ovl_feat
-    anno_dict["peak_ovl_feat"] = ovl_pk
+    anno_dict["feat_ovl_peak"] = decimal_round(ovl_pk, 3)    #Percentage of the peak that is covered by the feature (1.0 corresponds to the genomic_location “PeakInsideFeature”). 
+    anno_dict["peak_ovl_feat"] = decimal_round(ovl_feat, 3)	 #Percentage of the feature that is covered by the peak (1.0 corresponds to the genomic_location “FeatureInsidePeak”).
 
     return(anno_dict)
 
@@ -95,13 +106,13 @@ def get_relative_location(anno_dict):
 	""" Sets the relative location of peak to feature """
 
 	location = "NA"
-	if anno_dict["feat_ovl_peak"] == 1:
-		location = "FeatureInsidePeak"
-
-	elif anno_dict["peak_ovl_feat"] == 1:
+	if float(anno_dict["feat_ovl_peak"]) == 1:
 		location = "PeakInsideFeature"
 
-	elif anno_dict["feat_ovl_peak"] == 0: #no overlap
+	elif float(anno_dict["peak_ovl_feat"]) == 1:
+		location = "FeatureInsidePeak"
+
+	elif float(anno_dict["feat_ovl_peak"]) == 0: #no overlap
 		if anno_dict["feat_anchor"] == "start":
 			if anno_dict["feat_strand"] == "+":
 				location = "Upstream"
@@ -221,7 +232,7 @@ def annotate_peaks(peaks, gtf_gz, gtf_index, cfg_dict, logger=None):
 
 				#Check distance (Distance can still be valid if PeakInsideFeature/FeatureInsidePeak and internals flag is set)
 				if "internals" in query:
-					max_overlap = max(anno_dict["feat_ovl_peak"], anno_dict["peak_ovl_feat"])
+					max_overlap = max(float(anno_dict["feat_ovl_peak"]), float(anno_dict["peak_ovl_feat"]))
 					checks["distance"] = checks["distance"] or (query["internals"]*1.0 > 0 and max_overlap >= query["internals"]*1.0)	#if internals is set to more than 0 overlap
 
 				#Filter on relative location

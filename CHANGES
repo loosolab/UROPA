@@ -1,3 +1,7 @@
+## 3.3.2 (2019-05-22)
+- fixed confusion of feat_ovl_peak and peak_ovl_feat. The functionality is now as stated in the documentation, which is: feat_ovl_peak == 1.0 == PeakInsideFeature and peak_ovl_feat == 1.0 == FeatureInsidePeak. 
+- rounding of small numbers will now print as many decimal places as needed to show fraction
+
 ## 3.3.1 (2019-05-21)
 - fixed bug in subset_gtf not taking into account comments when subetting gtfs with header
 
