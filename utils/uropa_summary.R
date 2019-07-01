@@ -69,7 +69,7 @@ features <- c()
 .plot.genomic.location.per.feature.helper <- function(f, df.uropa, pie.basic){
   
   feat <- features[f]
-  df.feature <- subset(df.uropa, df.uropa$feature==feat)
+  df.feature <- subset(df.uropa, df.uropa$feature == feat)
   unique.loci <- sort(unique(df.feature$relative_location))
   
   occurence.loci <- c()
@@ -79,26 +79,33 @@ features <- c()
     occurence.loci <- c(occurence.loci, occurence)
   }
   df.pie.full <- data.frame(location=unique.loci, value=occurence.loci)
-  min.occurence <- round(nrow(df.feature)/100*0.1)
+  min.occurence <- round(nrow(df.feature)/100*0.1)  #min occurrence 0.1%
   df.pie <- df.pie.full[df.pie.full$value>min.occurence,]
   df.tmp <- df.pie.full[df.pie.full$value<=min.occurence,]
   df.others <- data.frame(location="others", value=sum(df.tmp$value))
   if(sum(df.tmp$value)>min.occurence){
     df.pie <- rbind(df.pie,df.others)
   }
+
   # calculate % oc loci representation
-  perc <- round(df.pie$value/sum(df.pie$value)*100,1)
-  df.pie$location <- paste0(df.pie$location, " (",perc, "%)")
+  perc <- round(df.pie$value/sum(df.pie$value)*100, 1)
+  df.pie$value <- perc
+  df.pie$location <- paste0(df.pie$location, " (", perc, "%)")
+
   # now background
-  blank_theme <- theme_minimal()+ theme(axis.title.x = element_blank(), axis.title.y = element_blank(), 
-                                        panel.border = element_blank(), panel.grid=element_blank(), 
+  blank_theme <- theme_minimal() + theme(axis.title.x = element_blank(), axis.title.y = element_blank(), 
+                                        panel.border = element_blank(), 
+                                        panel.grid=element_blank(), 
                                         axis.ticks = element_blank(), plot.title=element_text(size=14, face="bold"))
   # title
-  main <- paste0("Genomic location of '",feat, "' across ",pie.basic)
-  pie <- ggplot(df.pie, aes(x="", y=value, fill=location)) + geom_bar(width = 1, stat = "identity") + 
-    coord_polar("y", start=0) + blank_theme + ggtitle(main) +
-    theme(axis.text.x=element_blank(), plot.title = element_text(size = 10, face = "bold", vjust=-10)) + 
-    geom_text(aes(y = value/length(value) + 
+  main <- paste0("Genomic location of '", feat, "' across ", pie.basic)
+  pie <- ggplot(df.pie, aes(x="", y=value, fill=location)) + 
+      geom_bar(width = 1, stat = "identity") + 
+      coord_polar("y") +
+      blank_theme + 
+      ggtitle(main) + 
+      theme(axis.text.x=element_blank(), plot.title = element_text(size = 10, face = "bold", vjust=-10)) + 
+      geom_text(aes(y = value/length(value) + 
                     c(0, cumsum(value)[-length(value)]),  label = rep("",nrow(df.pie))), size=2, nudge_x = 0.7, nudge_y = 0.7)
   print(pie, vp=.define_region(f))
 }
@@ -159,16 +166,19 @@ features <- c()
   config.cols <- colnames(config.query)
   priority <- config$priority
   show_attributes <- as.character(paste(config$show_attributes, collapse=", "))
-  # specify y limit for plots
-  y.lim <- round(median(df.uropa.final[,"distance"]) + (max(df.uropa.final[,"distance"])/15))
-  if(y.lim > max(df.uropa.final[,"distance"]) || y.lim > 10000){
-    if(median(df.uropa.final[,"distance"]) + 5000 > max(df.uropa.final[,"distance"])){
-      y.lim <- median(df.uropa.final[,"distance"])
-    } else {
-      y.lim <- median(df.uropa.final[,"distance"]) + 5000
-    }
-    
-  }
+
+	#specify x limit for plots (changed to max of identified distance after github issue #2)
+	x.lim <- max(df.uropa.final[,"distance"]) #round(median(df.uropa.final[,"distance"]) + (max(df.uropa.final[,"distance"])/15))
+	print(x.lim)
+
+	#if(y.lim > max(df.uropa.final[,"distance"]) || y.lim > 10000){
+	#  if(median(df.uropa.final[,"distance"]) + 5000 > max(df.uropa.final[,"distance"])){
+	#    y.lim <- median(df.uropa.final[,"distance"])
+	#  } else {
+	#    y.lim <- median(df.uropa.final[,"distance"]) + 5000
+	#  }
+	#  
+	#}
   
   # expand multiple valid annotations to one row each
   df.uropa.final <- separate_rows(df.uropa.final, name)	# queries of uropa annotation run
@@ -226,7 +236,7 @@ features <- c()
   mtext(plot1, cex=1, adj=0, padj=1)
   
   # plot
-  density <- subset(df.uropa.final[,c("distance","feature")], (df.uropa.final[,"distance"]<y.lim))
+  density <- subset(df.uropa.final[,c("distance","feature")], (df.uropa.final[,"distance"] <= x.lim))
   dpq <- qplot (distance,data=density, geom="density", color=feature, xlab = "Distance to feature", ylab = "Relative count")
   print(dpq + ggtitle("Distance to features across finalhits"))
   
@@ -294,23 +304,25 @@ if (is.null(opt$allhits)) {
                   "\nall features present in any query are displayed.")
   grid.newpage()
   mtext(plot4, cex=1, adj=0, padj=1)
+
   # plot
   # get max distance to calculate binwidth
-  dist <-  df.uropa.allhits[,"distance"]
-  median.uropa.best <- median(dist)
+  dist <- df.uropa.allhits[,"distance"]
   max.uropa.best <- max(dist)
-  considered.distance <- median.uropa.best + round(max.uropa.best/15)
-  if(considered.distance > max.uropa.best || considered.distance>10000){
-    if(median.uropa.best + 5000 > max.uropa.best){
-      considered.distance <- median.uropa.best
-    } else {
-      considered.distance <- median.uropa.best + 5000
-    }
-    
-  }
+  considered.distance <- max.uropa.best
+  #median.uropa.best <- median(dist)
+  #max.uropa.best <- max(dist)
+  #considered.distance <- median.uropa.best + round(max.uropa.best/15)
+  #if(considered.distance > max.uropa.best || considered.distance>10000){
+  #  if(median.uropa.best + 5000 > max.uropa.best){
+  #    considered.distance <- median.uropa.best
+  #  } else {
+  #    considered.distance <- median.uropa.best + 5000
+  #  } 
+  #}
   
   df.distance.query <- subset(df.uropa.allhits[,c("feature","distance","name")], 
-                              (df.uropa.allhits[,"distance"] < considered.distance))
+                              (df.uropa.allhits[,"distance"] <= considered.distance))
   max.distance.query <- round(max(as.numeric(df.distance.query[,"distance"])))
   bin.width <- round(max.distance.query/20)
   dpq <- qplot(df.distance.query[,2],data =df.distance.query, facets=name~feature, 
