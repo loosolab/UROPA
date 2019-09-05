@@ -1,10 +1,12 @@
 {
 "queries":[
-		  {"name":"", "feature":"", "distance":"", "feature_anchor": "", "strand":"",
-		   "filter_attribute":"", "attribute_values":"","direction":"", "internals":"" }
+		  {"name":"promoters", "feature":"gene", "distance":[1000,100], "feature_anchor": "start"},
+		  {"name":"forward_exons", "feature":"exon", "distance":[1,1], "internals":"True", "strand":"+"},
+		  {"name":"query_level", "filter_attribute":"level", "attribute_values":["1", "2"], "distance":[1000,1000]}
           ],
-"show_attributes":"",
-"priority": "",
-"gtf": ".gtf",
-"bed": ".bed"
+"show_attributes":"all",
+"priority": "False",
+"gtf": "test_data/gencode.v29.annotation.chr19.gtf",
+"bed": "test_data/genomic_regions.bed",
+"outdir":"uropa_test_run"
 }

@@ -1,3 +1,8 @@
+## 3.4.0 (2019-09-05)
+- fixed improper handling of feature attributes with multiple tag:value pairs using identical tags. The values will now be written as comma-separated lists per tag.
+- added +/- options for --strand (as addition to same/opposite)
+- fixed creation of output folder to follow config input
+
 ## 3.3.4 (2019-07-01)
 - removed the upper x-limit for "distance to feature" plots in the UROPA summary script (bug)
 - made small changes to pie-charts as ggplot does not fill the circle 100%

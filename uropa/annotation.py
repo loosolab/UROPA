@@ -35,9 +35,17 @@ def create_anno_dict(peak, hit):
 
 	#Parse info from gtf string
 	try:
-		pairs = re.split(";\s*", hit.attributes) #regex remove 0 to n spaces
-		pairs = [pair.replace("\"", "") for pair in pairs]
-		attribute_dict = {pair.split()[0]:pair.split()[1] for pair in pairs if pair != ""} # parse " of attribute values
+		att = hit.attributes.strip("; ")	#remove trailing ;
+		pairs = re.split(";\s*", att) 		#regex split on ;(space)
+
+		pairs = [pair.replace("\"", "").split() for pair in pairs]
+		attribute_tags = [pair[0] for pair in pairs]
+
+		#Join values from identical tags to list
+		attribute_dict = {tag:[] for tag in attribute_tags}
+		for i, (tag, value) in enumerate(pairs):
+			attribute_dict[tag].append(value)
+
 	except:
 		print("Error reading attributes: {0}".format(hit.attributes))
 		attribute_dict = {}
@@ -49,7 +57,7 @@ def create_anno_dict(peak, hit):
 	anno_dict["feat_end"] = int(hit.end)
 	anno_dict["feat_center"] = int((anno_dict["feat_end"] + anno_dict["feat_start"])/2.0)
 	anno_dict["feat_length"] =  int(anno_dict["feat_end"] - anno_dict["feat_start"])
-	anno_dict["feat_attributes"] = attribute_dict
+	anno_dict["feat_attributes"] = attribute_dict	# Dictionary of lists containig values {"key1":[value1], "key2":[val1,val2]} 
 
 	#Look-up keys for annotation
 	anno_dict["anchor_pos"] = {"start": anno_dict["feat_start"] if anno_dict["feat_strand"] != "-" else anno_dict["feat_end"],
@@ -221,7 +229,8 @@ def annotate_peaks(peaks, gtf_gz, gtf_index, cfg_dict, logger=None):
 				#Peak strand relative to feature strand
 				if "strand" in query:
 					if query["strand"] != "ignore" and anno_dict["peak_strand"] != ".":
-						checks["strand"] = ((anno_dict["peak_strand"] == anno_dict["feat_strand"] and query["strand"] == "same") or 
+						checks["strand"] = ((anno_dict["peak_strand"] == query["strand"]) or
+											(anno_dict["peak_strand"] == anno_dict["feat_strand"] and query["strand"] == "same") or 
 											(anno_dict["peak_strand"] != anno_dict["feat_strand"] and query["strand"] == "opposite"))	
 
 				#Check whether distance was valid
@@ -241,8 +250,15 @@ def annotate_peaks(peaks, gtf_gz, gtf_index, cfg_dict, logger=None):
 				
 				#Filter on attribute if any was set
 				if "filter_attribute" in query and "attribute_values" in query: #query["filter_attribute"] != None:
-					checks["attribute"] = anno_dict["feat_attributes"].get(query["filter_attribute"], None) in query["attribute_values"]
 
+					#Check if the desired filter attribute is in the attributes of the hit:
+					checks["attribute"] = False
+					if query["filter_attribute"] in anno_dict["feat_attributes"]:
+						for filter_value in query["attribute_values"]:
+							tag_values_list = anno_dict["feat_attributes"][query["filter_attribute"]]	#list of values for this tag
+							if filter_value in tag_values_list:
+								checks["attribute"] = True
+				
 				##### All checks are done -> establish if hit is a valid annotation #####
 				valid = sum(checks.values()) == len(checks.values()) #all checks must be valid
 				if valid:

@@ -104,6 +104,9 @@ def format_config(cfg_dict, logger):
 	#Check format of values
 	if "show_attributes" not in cfg_dict:
 		cfg_dict["show_attributes"] = []
+	else:
+		if not isinstance(cfg_dict["show_attributes"], list):	#make sure that show_attributes is a list
+			cfg_dict["show_attributes"] = [cfg_dict["show_attributes"]]
 
 	#Convert all forms of true/false to python bool value
 	cfg_dict["priority"] = convert_values[str(cfg_dict.get("priority", False)).lower()] 	#per default false
@@ -181,7 +184,7 @@ def format_config(cfg_dict, logger):
 		#Check the default values of input
 		if "strand" in query:
 			query["strand"] = query["strand"].lower()
-			valid = set(['ignore', 'same', 'opposite'])
+			valid = set(['+', '-', 'same', 'opposite', 'ignore'])
 			if query["strand"] not in valid:
 				logger.error("Invalid strand ({0}) set in query {1}. Valid options are: {2}".format(query["strand"], i+1, valid))
 				sys.exit()

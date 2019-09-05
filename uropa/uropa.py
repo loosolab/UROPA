@@ -64,7 +64,7 @@ def main():
 
 	one_query.add_argument("--feature-anchor", help="Specific feature anchor to annotate to", metavar="", choices=["start", "center", "end"], nargs="*", default=[])
 	one_query.add_argument("--distance", help="Maximum permitted distance from feature (1 or 2 arguments)", metavar="", nargs="*", type=int, default=[1000,10000])
-	one_query.add_argument("--strand", metavar="", help="Desired strand of annotated feature relative to peak", choices=['ignore', 'same', 'opposite'], default='ignore')
+	one_query.add_argument("--strand", metavar="", help="Desired strand of annotated feature relative to peak", choices=['+', '-', 'same', 'opposite', 'ignore'], default='ignore')
 	one_query.add_argument("--relative-location", metavar="", help="Peak location relative to feature location", nargs="*", choices=["PeakInsideFeature", "FeatureInsidePeak", "Upstream", "Downstream", "OverlapStart", "OverlapEnd"], default=[])
 	one_query.add_argument("--internals", metavar="", help="Set minimum overlap fraction for internal feature annotations. 0 equates to internals=False and 1 equates to internals=True. Default is False.", type=lambda x: restricted_float(x, 0, 1), default=False)
 	one_query.add_argument("--filter-attribute", metavar="", help="Filter on 9th column of GTF", default="")
@@ -148,16 +148,6 @@ def main():
 	logger.info("Command-line call: {0}".format(cmd))
 	temp_files = []
 
-	# Validate output folder
-	outdir = args.outdir
-	if not os.path.exists(outdir):
-		try:
-			logger.debug("Creating directory {}".format(outdir))
-			os.makedirs(outdir)
-		except Exception as e:
-			logger.error(e)
-			logger.error("Could not create directory {} for output".format(outdir))
-
 	#----------------------------------------------------------------------------------------------------------#
 	# Establish queries from command-line and --input
 	#----------------------------------------------------------------------------------------------------------#
@@ -207,6 +197,16 @@ def main():
 		except ValueError as e:
 			logger.error("File %s contains malformed JSON. %s", config, e)
 			sys.exit()
+
+	# Validate output folder
+	outdir = cfg_dict["outdir"]
+	if not os.path.exists(outdir):
+		try:
+			logger.debug("Creating directory {}".format(outdir))
+			os.makedirs(outdir)
+		except Exception as e:
+			logger.error(e)
+			logger.error("Could not create directory {} for output".format(outdir))
 
 	#Set prefix if not set
 	if cfg_dict["prefix"] == None:
@@ -378,7 +378,7 @@ def main():
 	peak_chunks = [peaks[i:i+chunk_size] for i in range(0, len(peaks), chunk_size)]
 	n_chunks = len(peak_chunks)
 
-	if cfg_dict["threads"] > 1:
+	if int(cfg_dict["threads"]) > 1:
 
 		pool = mp.Pool(threads)
 		task_list = [pool.apply_async(annotate_peaks, args=(chunk, anno_gtf_gz, anno_gtf_index, cfg_dict, )) for chunk in peak_chunks]
@@ -432,12 +432,12 @@ def main():
 	for annotation in all_annotations:
 		attributes_dict = annotation.get("feat_attributes", {})
 		for key in attributes_dict:
-			annotation["attribute_" + key] = attributes_dict[key]
-			all_possible_attributes[key] = ""
+			annotation["attribute_" + key] = ",".join(attributes_dict[key])
+			all_possible_attributes[key] = "" #used to sum up all possible keys (instead of using list)
 
 	#Set output attribute columns
 	attribute_columns = cfg_dict.get("show_attributes", [])
-	
+
 	#If "all" was set in show_attributes, set attributes_columns to total set of attributes
 	if "all" in [str(att).lower() for att in attribute_columns]:
 		attribute_columns = sorted(list(all_possible_attributes.keys()))
