@@ -131,6 +131,10 @@ Additional arguments:
 
 ```
 
+It is also possible to run UROPA using queries as given in sample_config.json:
+
+``` uropa -i sample_config.json -t 4 ```
+
 ## Biocontainer usage
 
 Running UROPA from a docker container can be done using the following command:
