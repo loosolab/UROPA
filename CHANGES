@@ -1,4 +1,4 @@
-## 3.5.0 (2020-27-01)
+## 3.5.0 (2020-01-27)
 - changed internal setup to allow annotation of large input files (through queue file writing)
 - added command-line option "--chunk" to control the number of lines per chunk for multiprocessing (default 1000)
 - added internal "annotate_single_peak" for easy integration into other tools
