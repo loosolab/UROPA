@@ -69,7 +69,7 @@ def main():
 	one_query.add_argument("--internals", metavar="", help="Set minimum overlap fraction for internal feature annotations. 0 equates to internals=False and 1 equates to internals=True. Default is False.", type=lambda x: restricted_float(x, 0, 1), default=False)
 	one_query.add_argument("--filter-attribute", metavar="", help="Filter on 9th column of GTF", default="")
 	one_query.add_argument("--attribute-values", help="Value(s) of attribute corresponding to --filter-attribute", nargs="*", metavar="", default=[])
-	one_query.add_argument("--show-attributes", help="A list of attributes to show in output", metavar="", nargs="*", default=[])
+	one_query.add_argument("--show-attributes", help="A list of attributes to show in output (default: all)", metavar="", nargs="*", default=["all"])
 	one_query.add_argument("--priority", help="argparse.SUPPRESS", action="store_true", default=False)
 
 	#arguments for backwards compatibility using "-" instead of "_" in argument names
@@ -94,6 +94,7 @@ def main():
 	additional.add_argument("-l","--log", help="Log file name for messages and warnings (default: log is written to stdout)", action="store", metavar="uropa.log")
 	additional.add_argument("-d","--debug",help="Print verbose messages (for debugging)", action="store_true")
 	additional.add_argument("-v","--version", help="Prints the version and exits", action="version", version="%(prog)s " + VERSION)
+	additional.add_argument("-c", "--chunk", metavar="", help="Number of lines per chunk for multiprocessing (default: 1000)", type=int, default=1000) 
 	args = parser.parse_args()
 
 	#Write help if no input was given
@@ -143,7 +144,7 @@ def main():
 	############################################ VALIDATION OF INPUT ###########################################
 	############################################################################################################
 	
-	logger.info("Started UROPA")
+	logger.info("Started UROPA " + VERSION)
 	logger.info("Working directory: {0}".format(os.getcwd()))
 	logger.info("Command-line call: {0}".format(cmd))
 	temp_files = []
@@ -198,6 +199,9 @@ def main():
 			logger.error("File %s contains malformed JSON. %s", config, e)
 			sys.exit()
 
+	#for key in json_cfg_dict:
+		cfg_dict[key] = json_cfg_dict[key]
+
 	# Validate output folder
 	outdir = cfg_dict["outdir"]
 	if not os.path.exists(outdir):
@@ -248,28 +252,14 @@ def main():
 	############################################################################################################
 	################################################## PREPARATION #############################################
 	############################################################################################################
-	
-	#----------------------------------------------------------------------------------------------------------#
-	# Prepare bed for internal region-structure
-	#----------------------------------------------------------------------------------------------------------#				
-	
-	logger.info("Reading .bed-file to annotate")
-
-	#Check bed format and parse to internal structure
-	check_bed_format(cfg_dict["bed"], logger)
-	gtf_has_chr = check_chr(cfg_dict["gtf"])	#True/False
-
-	peaks = parse_bedfile(cfg_dict["bed"], gtf_has_chr)	#list of peak-dictionaries
-	logger.debug("Read {0} peaks from {1}".format(len(peaks), cfg_dict["bed"]))
-
-	#Establish order of peaks
-	internal_peak_ids = [peak["internal_peak_id"] for peak in peaks]
-
+		
 	#----------------------------------------------------------------------------------------------------------#
 	# Prepare GTF and extract chosen features to a subset gtf-file if needed
 	#----------------------------------------------------------------------------------------------------------#		
 
 	logger.info("Preparing .gtf-file for fast access")
+
+	gtf_has_chr = check_chr(cfg_dict["gtf"])	#True/False
 
 	#Check all possible features in gtf
 	logger.debug("Finding all possible features in gtf")
@@ -287,8 +277,30 @@ def main():
 				if feature not in gtf_feat_count:
 					gtf_feat_count[feature] = 0
 				gtf_feat_count[feature] += 1
+
 	gtf_feat = list(gtf_feat_count.keys())
 	logger.debug("Features in gtf: {0}".format(gtf_feat_count))
+
+	#Find all possible attributes in gtf
+	logger.debug("Finding all possible attributes in gtf")
+	gtf_attribute_count = {}
+	with open(cfg_dict["gtf"]) as f:
+		for line in f:
+			if not line.startswith("#"):
+				columns = line.rstrip().split("\t")
+			
+				pairs = columns[8].split(";")
+				attributes = [pair.lstrip().rstrip().split(" ")[0] for pair in pairs]
+				for att in attributes:
+					gtf_attribute_count[att] = 0
+	logger.debug("gtf attributes: {0}".format(list(gtf_attribute_count.keys())))
+
+	if "all" in [str(att).lower() for att in cfg_dict.get("show_attributes", [])]:
+		show_attributes = sorted(list(gtf_attribute_count.keys()))
+		show_attributes = [att for att in show_attributes if att != ""]
+		logger.info("Config key show_attributes was set to \'all\'. All possible attributes are shown in output ({0})".format(show_attributes))
+	else:
+		show_attributes = cfg_dict.get("show_attributes", [])
 
 	#Fill in empty feature keys with all possible 
 	for query in cfg_dict["queries"]:
@@ -370,54 +382,122 @@ def main():
 	############################################################################################################
 
 	logger.info("Started annotation")
+	prev_time = datetime.datetime.now()
+
+	#Checking bed file format
+	check_bed_format(cfg_dict["bed"], logger)
+
+	#Setup pool for async annotation of peak chunks
 	threads = int(cfg_dict["threads"])
+	pool = mp.Pool(processes=threads, maxtasksperchild=100)
+	task_list = []
+	n_jobs_running = 0
+	max_jobs_running = threads - 1
+	chunk_size = args.chunk
+	chunk_i = 0
+
+	#Establish files to write
+	file_dict = {key: os.path.join(output_prefix + "_" + key) for key in ["allhits.bed", "allhits.txt", "finalhits.bed", "finalhits.txt"]}
+
+	#Additional files if output_by_query == True
+	if cfg_dict["output_by_query"] == True:
+		logger.info("Option --output-by-query is on. Writing additional hits-files per query.")
+		query_names = [query["name"] for query in cfg_dict["queries"]]
+		for name in query_names:
+			file_dict[name + ".bed"] = os.path.join(output_prefix + "_" + get_valid_filename(name) + ".bed")
+			file_dict[name + ".txt"] = os.path.join(output_prefix + "_" + get_valid_filename(name) + ".txt")
 	
-	#Split bed into chunks
-	n_chunks = 100
-	chunk_size = int(np.ceil(len(peaks)/float(n_chunks)))
-	peak_chunks = [peaks[i:i+chunk_size] for i in range(0, len(peaks), chunk_size)]
-	n_chunks = len(peak_chunks)
+	logger.debug("File dictionary: {0}".format(file_dict))
 
-	if int(cfg_dict["threads"]) > 1:
+	#Start queue for writing output
+	manager = mp.Manager()
+	q = manager.Queue()
+	pool.apply_async(sorted_file_writer, args=(q, file_dict))
 
-		pool = mp.Pool(threads)
-		task_list = [pool.apply_async(annotate_peaks, args=(chunk, anno_gtf_gz, anno_gtf_index, cfg_dict, )) for chunk in peak_chunks]
-		pool.close() 	#done sending jobs to pool
+	##Initialize files with header line (or nothing)
+	main = ["peak_chr", "peak_start", "peak_end", "peak_id", "peak_score", "peak_strand", "feature", "feat_start", "feat_end", "feat_strand", "feat_anchor", "distance", "relative_location", "feat_ovl_peak", "peak_ovl_feat"]
+	header_output = main + show_attributes + ["name"]
+	header_str = "\t".join(header_output) + "\n"
+	for key in file_dict:
+		if key.endswith(".txt"):
+			q.put((key, 0, header_str))
+		else:
+			q.put((key, 0, ""))
 
-		#Wait for tasks to finish
-		count = -1
-		finished = sum([task.ready() for task in task_list])
-		while finished < n_chunks:
-			finished = sum([task.ready() for task in task_list])
-			if count != finished:
-				logger.info("Progress: {0:.0f}%".format(finished/float(n_chunks)*100))
-				count = finished
+	#Go through bedfile and annotate chunks
+	end_of_file = 0
+	delta = datetime.timedelta(seconds=5)
+	with open(cfg_dict["bed"]) as f:
+
+		while end_of_file == 0:
+
+			#Get chunk of lines
+			chunk_lines = [f.readline() for _ in range(chunk_size)]
+			chunk_lines = [line for line in chunk_lines if line != ""]
+			n_lines = len(chunk_lines)
+			if n_lines == 0:
+				break	#last chunk is empty; break out of while loop and don't annotate
+
+			chunk_i += 1
+	
+			logger.debug("Read {0} lines from chunk {1}".format(n_lines, chunk_i))
+			if n_lines < chunk_size:
+				end_of_file = 1 #End of the file has been reached
+
+			#Create peaks format for chunk
+			peaks = parse_bedlines(chunk_lines, gtf_has_chr) #outputs list of peak-dictionaries
+
+			if threads > 1:
+
+				#Check how many jobs are running:
+				n_jobs_done = sum([task.ready() for task in task_list])
+				n_jobs_running = len(task_list) - n_jobs_done
+				while n_jobs_running > max_jobs_running:
+
+					#Write out progress after certain amount of time
+					current_time = datetime.datetime.now()
+					if current_time - prev_time > delta: 
+						logger.info("Progress: Annotated {0} peaks ({1} jobs running; {2} jobs finished)".format(n_jobs_done * chunk_size, n_jobs_running, n_jobs_done))
+						prev_time = current_time
+
+					#Test whether new jobs can be send to pool
+					#todo: if memory issues occur, remove tasks from task_list if they are done?
+					n_jobs_done = sum([task.ready() for task in task_list])
+					n_jobs_running = len(task_list) - n_jobs_done
+					logger.debug("Total tasks: {0}; Jobs done: {1}; Jobs running {2}".format(len(task_list), n_jobs_done, n_jobs_running))
+					time.sleep(0.5) 
+
+				#Add chunk to pool
+				logger.debug("Adding job for chunk {0}".format(chunk_i))
+				task_list.append(pool.apply_async(annotate_peaks, args=(peaks, anno_gtf_gz, anno_gtf_index, cfg_dict, q, chunk_i, show_attributes, )))
 			else:
-				time.sleep(0.5)
-		pool.join()
+				logger.debug("Annotating peak chunk")
+				annotate_peaks(peaks, anno_gtf_gz, anno_gtf_index, cfg_dict, q, chunk_i, show_attributes, logger)
 
-		#Get results from processes
-		results = [task.get() for task in task_list]
-		
-	else:
-		results = []
-		logger.info("Progress: {0:.0f}%".format(0/float(n_chunks)*100))
-		for i, chunk in enumerate(peak_chunks):
-			logger.debug("Chunk {0}".format(i+1))
-			logger.debug("First peak: {0}".format(chunk[0]))
-			logger.debug("Last peak: {0}".format(chunk[-1]))
-			results.append(annotate_peaks(chunk, anno_gtf_gz, anno_gtf_index, cfg_dict, logger))
-			logger.info("Progress: {0:.0f}%".format((i+1)/float(n_chunks)*100))
+	# Whole file has been read and all jobs were added to task_list
+	# Wait for all jobs to finish
+	logger.debug("Waiting for tasks to finish")
+	while sum([task.ready() for task in task_list]) < len(task_list):
+		time.sleep(0.5) 
 
-	#Join results from threads to one list
-	all_annotations = sum(results, [])
-	
+	#End writer queue
+	q.put((None, None, None))
+
+	#check that all queues are done writing
+	while q.qsize() != 0:
+		logger.debug("- Queue size {0}".format(q.qsize()))
+		time.sleep(0.5) 
+
+	pool.terminate()
+	pool.join()
+
 	############################################################################################################
 	################################################ POSTPROCESSING ############################################
 	############################################################################################################
 
 	logger.info("Processing annotated peaks")
 
+	"""
 	##### Check if no annotations were found #####
 	all_NA = 0
 	for anno in all_annotations:
@@ -425,65 +505,7 @@ def main():
 			all_NA = 1
 	if all_NA == 0:	#This is 0 coming out of the loop if no features were found
 		logger.warning("No annotations were found for input regions (all hits are NA). If this is unexpected, please check the configuration of your input queries.")
-	
-	#Add attribute columns to output
-	logger.debug("Adding attribute columns")
-	all_possible_attributes = {}
-	for annotation in all_annotations:
-		attributes_dict = annotation.get("feat_attributes", {})
-		for key in attributes_dict:
-			annotation["attribute_" + key] = ",".join(attributes_dict[key])
-			all_possible_attributes[key] = "" #used to sum up all possible keys (instead of using list)
-
-	#Set output attribute columns
-	attribute_columns = cfg_dict.get("show_attributes", [])
-
-	#If "all" was set in show_attributes, set attributes_columns to total set of attributes
-	if "all" in [str(att).lower() for att in attribute_columns]:
-		attribute_columns = sorted(list(all_possible_attributes.keys()))
-		logger.info("Config key show_attributes was set to \'all\'. All possible attributes are shown in output ({0})".format(attribute_columns))
-
-	#Set output columns (the keys are different internally vs. the output columns)
-	main = ["peak_chr", "peak_start", "peak_end", "peak_id", "peak_score", "peak_strand", "feature", "feat_start", "feat_end", "feat_strand", "feat_anchor", "distance", "relative_location", "feat_ovl_peak", "peak_ovl_feat"]
-	header_internal = main + ["attribute_" + col for col in attribute_columns]  + ["query_name"]
-	header_output = main + attribute_columns + ["name"]
-
-	##### Write output files #####
-	logger.info("Writing output files")
-
-	#Make list of all hits in right order
-	all_hits_sorted = sorted(all_annotations, key= lambda d: (d["internal_peak_id"], d.get("feat_start", 0)))	#use get because not all hits have feat_start
-
-	header_str = "\t".join(header_output) + "\n"
-	allhits_str = "\n".join(["\t".join([str(hit.get(key, "NA")) for key in header_internal]) for hit in all_hits_sorted]) + "\n"
-	besthits_str = "\n".join(["\t".join([str(hit.get(key, "NA")) for key in header_internal]) for hit in all_hits_sorted if hit["best_hit"] == 1]) + "\n"
-
-	#All hits
-	logger.debug("Writing _allhits.txt")
-	with open(os.path.join(output_prefix + "_allhits.txt"), "w") as f:
-		f.write(header_str + allhits_str)
-	with open(os.path.join(output_prefix + "_allhits.bed"), "w") as f:
-		f.write(allhits_str)
-
-	#Best hits
-	logger.debug("Writing _besthits.txt")
-	with open(os.path.join(output_prefix + "_finalhits.txt"), "w") as f:
-		f.write(header_str + besthits_str)
-	with open(os.path.join(output_prefix + "_finalhits.bed"), "w") as f:
-		f.write(besthits_str)
-
-	#Hits per query
-	query_names = [query["name"] for query in cfg_dict["queries"]]	#the key is "name" in query line
-	if cfg_dict["output_by_query"] == True:
-		logger.info("Option --output-by-query is on. Writing additional hits-files per query.")
-		for name in query_names:
-			logger.debug("Writing hits for query: {0}".format(name))
-			query_str = "\n".join(["\t".join([str(hit.get(key, "NA")) for key in header_internal]) for hit in all_hits_sorted if hit.get("query_name", "") == name]) + "\n"
-			
-			with open(os.path.join(output_prefix + "_" + get_valid_filename(name) + ".txt"), "w") as f:
-				f.write(header_str + query_str)
-			with open(os.path.join(output_prefix + "_" + get_valid_filename(name) + ".bed"), "w") as f:
-				f.write(query_str)
+	"""
 
 	##### Visual summary #####
 	if args.summary:

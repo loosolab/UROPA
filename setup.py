@@ -33,7 +33,7 @@ setup(name='uropa',
       },
       scripts = ['utils/uropa_summary.R','utils/uropa2gtf.R'],
       install_requires=[
-        'numpy',
+        'numpy<=1.16',  #to keep supporting py27 install
         'pysam',
       ],
       classifiers = [

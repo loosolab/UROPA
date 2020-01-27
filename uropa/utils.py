@@ -278,38 +278,39 @@ def check_bed_format(bedfile, logger):
 
 	#todo: also check the number of columns in file
 
-def parse_bedfile(bedfile, gtf_has_chr):
+def parse_bedlines(bedlines, gtf_has_chr):
+	""" Parse a list of bedlines to internal peaks format """
 
-	peaks = []
-	with open(bedfile) as f:
-		for i, line in enumerate(f):
-			columns = line.rstrip().split()
+	peaks = [{}]*len(bedlines)	#initialize to length of bedlines; eliminates the need to append
+	for i, line in enumerate(bedlines):
+		columns = line.rstrip().split()
 
-			#bed6-columns
-			chrom, start, end = columns[0], int(columns[1]), int(columns[2])
-			name = columns[3] if len(columns) > 3 else "peak_{0}".format(i+1) 
-			score = columns[4] if len(columns) > 4 else "."
-			strand = columns[5] if len(columns) > 5 else "."
+		#bed6-columns
+		chrom, start, end = columns[0], int(columns[1]), int(columns[2])
+		name = columns[3] if len(columns) > 3 else "peak_{0}".format(i+1) 
+		score = columns[4] if len(columns) > 4 else "."
+		strand = columns[5] if len(columns) > 5 else "."
 
-			#Additional columns
-			if len(columns) > 6:
-				additional = columns[6:]
-				additional_header = ["custom_" + str(val) for val in range(1,len(additional)+1)]
-			else:
-				additional_header = []
-				additional = []
+		#Additional columns
+		if len(columns) > 6:
+			additional = columns[6:]
+			additional_header = ["custom_" + str(val) for val in range(1,len(additional)+1)]
+		else:
+			additional_header = []
+			additional = []
 
-			#Key for the matching gtf chromosome
-			if gtf_has_chr == True:
-				gtf_chr = "chr" + chrom if not chrom.startswith("chr") else chrom		#add chr to match gtf if needed
-			else:
-				gtf_chr = chrom.replace("chr", "") #gtf chrom should not have chr-prefix
-			
-			peak_dict = {"gtf_chr": gtf_chr, "peak_chr":chrom, "peak_start":start, "peak_end":end, "peak_id":name, "peak_score":score, "peak_strand":strand, "internal_peak_id": i+1}
-			peak_dict.update(dict(zip(additional_header, additional)))
-			peaks.append(peak_dict)
+		#Key for the matching gtf chromosome
+		if gtf_has_chr == True:
+			gtf_chr = "chr" + chrom if not chrom.startswith("chr") else chrom		#add chr to match gtf if needed
+		else:
+			gtf_chr = chrom.replace("chr", "") #gtf chrom should not have chr-prefix
+		
+		peak_dict = {"gtf_chr": gtf_chr, "peak_chr":chrom, "peak_start":start, "peak_end":end, "peak_id":name, "peak_score":score, "peak_strand":strand}
+		peak_dict.update(dict(zip(additional_header, additional)))
+		peaks[i] = peak_dict
 
 	return(peaks)
+
 
 def check_chr(file, lines=100):
 	"""Checks if a file has lines starting with 'chr'."""
@@ -348,3 +349,52 @@ def is_empty(value):
 		return(True)
 	else:
 		return(False)
+
+def sorted_file_writer(q, file_dict):
+	""" Write strings in the correct order coming from Queue """
+
+	#Open handles for files
+	file_handles = {}
+	for key in file_dict:
+		file = file_dict[key]
+		try:
+			file_handles[key] = open(file, "w")
+		except Exception as e:
+			print("Error opening file {0} in file_writer".format(file))
+			print(e)
+			return(0)
+
+	#Fetching string content from queue
+	idx_to_write = {key: 0 for key in file_dict}	#Start with idx == 0
+	ready_to_write = {key:{} for key in file_dict}
+	while True:
+
+		try:
+			(key, idx, content) = q.get() #idx is an integer starting at 0, content is a string
+
+			if key == None:
+				break	#no more content to write 
+			
+			#Add content to indexes ready to write
+			ready_to_write[key][idx] = content
+
+			#Write across keys
+			for key in file_dict:
+				while idx_to_write[key] in ready_to_write[key]:
+					content = ready_to_write[key][idx_to_write[key]]
+					file_handles[key].write(content)
+					ready_to_write[key][idx_to_write[key]] = "" #Content has been written; free up memory!
+					idx_to_write[key] += 1	#increment to write next block
+					
+
+		except Exception as e:
+			import sys, traceback
+			print('Problem in sorted_file_writer:')
+			print(e)
+			break
+
+	#Got all content in queue, close file
+	for key in file_dict:
+		file_handles[key].close()
+	
+	return(1)	
