@@ -412,7 +412,7 @@ def main():
 	#Start queue for writing output
 	manager = mp.Manager()
 	q = manager.Queue()
-	pool.apply_async(sorted_file_writer, args=(q, file_dict))
+	writer_task = pool.apply_async(sorted_file_writer, args=(q, file_dict))
 
 	##Initialize files with header line (or nothing)
 	main = ["peak_chr", "peak_start", "peak_end", "peak_id", "peak_score", "peak_strand", "feature", "feat_start", "feat_end", "feat_strand", "feat_anchor", "distance", "relative_location", "feat_ovl_peak", "peak_ovl_feat"]
@@ -482,7 +482,8 @@ def main():
 
 	#End writer queue
 	q.put((None, None, None))
-
+	writer_result = writer_task.get()	#locks until writer_task returns value (i.e. files were closed)
+	
 	#check that all queues are done writing
 	while q.qsize() != 0:
 		logger.debug("- Queue size {0}".format(q.qsize()))
