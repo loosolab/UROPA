@@ -79,28 +79,17 @@ Each query can specify the following keys:
    
    Example: ``'direction': ['upstream','downstream']``
       
--  **internals**: This key represents a modifier with respect to the ``'distance'`` key. 
-	This can be helpful to annotate peaks to features with a wide size range, such as genes, 
-	which would otherwise be removed due to the distance thresholds. So even if the desired feature anchor is located too far away, 
-	a feature can still be included if it is overlapped. Visual repesentation in :ref:`Figure 1 <genomic-location>` of section :doc:`/uropa-example`.
-
-   ``'center'``: If the center of a peak intersects with a feature region or vice versa, the ``'distance'`` key filtering is disabled. This parameter ensures that the majority of the peak intersects with the feature.
+-  **internals**: A minimum overlap fraction for annotations, where peaks are located (partially) within features or vice versa.
+   This key allows to annotate peaks to features with a wide size range, such as large genes, which would otherwise be removed due to the distance thresholds. 
+   Further, this key can be used to allow partial overlaps to be reported, even if the feature anchor is too far away. A visual repesentation is included in :ref:`Figure 1 <genomic-location>` of section :doc:`/uropa-example`.
    
-   ``'any'``: If a peak intersects with a feature region or vice versa, the ``'distance'`` key filtering is disabled. An overlap of >= 1 nt is sufficient.
+   Default: ``0.0`` for not reporting partially overlapping annotations if they are located outside of distance thresholds.
    
-   ``'none'``: Internals key is turned off. The ``'distance'`` key is active.
+   Furthermore, ``'T', 'True', 'Y', 'Yes'`` are allowed and will be converted to ``1.0``,
+   ``'F', 'False', 'N', 'No'`` are allowed and will be converted to ``0.0``.
    
-   Allowed values are one of ``'none', 'center', 'any'.``
-   
-   Furthermore, ``'T', 'True', 'Y', 'Yes'`` are allowed and will be treated as ``'center'``,
-   
-   ``'F', 'False', 'N', 'No'`` are allowed and will be treated as ``'none'``.
-   
-   Default: ``'none'``
-   
-   Example: ``'internals':'center'``
-   
-   
+   Example: ``'internals':'1.0'`` for allowing annotations where peaks are fully within features or vice versa.
+   ``'internals':'0.1'`` for allowing annotations where peaks overlap features (or vice versa) by at least 10 percent.
 
 -  **filter.attribute** : Key filters the attributes found in the 9th column of the GTF file.
    If a ``'filter.attribute'`` is given, only features that have a ``'attribute.value'`` for this attribute is kept as valid annotations. If this key is set, the key ``'attribute.value'`` is mandatory, too (see below).          
