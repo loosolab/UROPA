@@ -55,7 +55,6 @@ The UROPA installation is now as easy as
 If you have a running [Docker](docker.com) environment, you can pull a biocontainer with UROPA and all dependencies via
 
 -	`docker pull quay.io/biocontainers/uropa:latest_tag` using the latest tag from the [taglist](https://quay.io/repository/biocontainers/uropa?tab=tags), e.g. `1.2.1--py27r3.3.2_0`
--	`docker pull loosolab/uropa`
 
 ### Installation from source
 
