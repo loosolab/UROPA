@@ -344,8 +344,18 @@ def annotate_peaks(peaks, gtf_gz, gtf_index, cfg_dict, q, idx, attributes, logge
 	#For each peak in input peaks, collect all_valid_annotations
 	all_valid_annotations = []
 	for peak in peaks:
-		valid_annotations = annotate_single_peak(peak, tabix_obj, cfg_dict, logger=logger)
-		all_valid_annotations.extend(valid_annotations)
+		success = 0
+		while success == 0:
+
+			#Try to annotate single peak
+			try:
+				valid_annotations = annotate_single_peak(peak, tabix_obj, cfg_dict, logger=logger)
+				all_valid_annotations.extend(valid_annotations)
+				success = 1
+			
+			except: #if annotation fails e.g. due to memory error
+				#try again; or return failure?
+				return(1) #failure
 
 	tabix_obj.close()
 
@@ -366,5 +376,5 @@ def annotate_peaks(peaks, gtf_gz, gtf_index, cfg_dict, q, idx, attributes, logge
 			q.put((name + ".bed", idx, query_str))
 			q.put((name + ".txt", idx, query_str))
 
-	return(1)
+	return(0) #success
 

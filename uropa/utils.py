@@ -391,10 +391,14 @@ def sorted_file_writer(q, file_dict):
 			import sys, traceback
 			print('Problem in sorted_file_writer:')
 			print(e)
+			print(e.message)
+			print(type(e))
+			print(e.args)
+			print(traceback.print_exc())
 			break
 
 	#Got all content in queue, close file
 	for key in file_dict:
 		file_handles[key].close()
 	
-	return(1)	
+	return(0)	

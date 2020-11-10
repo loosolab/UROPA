@@ -70,7 +70,7 @@ def main():
 	one_query.add_argument("--filter-attribute", metavar="", help="Filter on 9th column of GTF", default="")
 	one_query.add_argument("--attribute-values", help="Value(s) of attribute corresponding to --filter-attribute", nargs="*", metavar="", default=[])
 	one_query.add_argument("--show-attributes", help="A list of attributes to show in output (default: all)", metavar="", nargs="*", default=["all"])
-	one_query.add_argument("--priority", help="argparse.SUPPRESS", action="store_true", default=False)
+	one_query.add_argument("--priority", help=argparse.SUPPRESS, action="store_true", default=False)
 
 	#arguments for backwards compatibility using "-" instead of "_" in argument names
 	one_query.add_argument("--relative_location", metavar="", help=argparse.SUPPRESS, nargs="*", choices=["PeakInsideFeature", "FeatureInsidePeak", "Upstream", "Downstream", "OverlapStart", "OverlapEnd"], default=[])	#deprecated but left for backwards compatibility
@@ -470,6 +470,7 @@ def main():
 				#Add chunk to pool
 				logger.debug("Adding job for chunk {0}".format(chunk_i))
 				task_list.append(pool.apply_async(annotate_peaks, args=(peaks, anno_gtf_gz, anno_gtf_index, cfg_dict, q, chunk_i, show_attributes, )))
+			
 			else:
 				logger.debug("Annotating peak chunk")
 				annotate_peaks(peaks, anno_gtf_gz, anno_gtf_index, cfg_dict, q, chunk_i, show_attributes, logger)
