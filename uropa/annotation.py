@@ -124,15 +124,21 @@ def get_relative_location(anno_dict):
 		location = "FeatureInsidePeak"
 
 	elif float(anno_dict["feat_ovl_peak"]) == 0: #no overlap
-		if anno_dict["feat_anchor"] == "start":
-			if anno_dict["feat_strand"] == "+":
-				location = "Upstream"
+		
+		#If feature (gene) is on the - strand
+		if anno_dict["feat_strand"] == "-":
+			
+			#Check if peak is upstream/downstream of anchor
+			if anno_dict["peak_center"] > anno_dict["anchor_pos"][anno_dict["feat_anchor"]]:
+				location = "Upstream" #For feature strand '-': If peak_center is higher than the anchor, the peak is upstream
 			else:
 				location = "Downstream"
 
-		elif anno_dict["feat_anchor"] == "end":
-			if anno_dict["feat_strand"] == "+":
-				location = "Downstream"
+		#Else, feature must be on the plus strand
+		else:
+			#Check if peak is upstream/downstream of anchor
+			if anno_dict["peak_center"] > anno_dict["anchor_pos"][anno_dict["feat_anchor"]]:
+				location = "Downstream" #For feature strand '+': If peak_center is higher than the anchor, the peak is downstream
 			else:
 				location = "Upstream"
 	

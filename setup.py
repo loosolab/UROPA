@@ -33,9 +33,12 @@ setup(name='uropa',
       },
       scripts = ['utils/uropa_summary.R','utils/uropa2gtf.R'],
       install_requires=[
-        'numpy<=1.16',  #to keep supporting py27 install
         'pysam',
       ],
+      extras_require={
+        ':python_version < "3"': ["numpy<=1.16"],
+        ':python_version >= "3"': ["numpy"]
+      },
       classifiers = [
         'License :: OSI Approved :: MIT License',
         'Intended Audience :: Science/Research',
