@@ -329,15 +329,14 @@ def annopeak_to_string(annotated_peak, columns=None, attributes=[]):
 	return(bed_str)
 
 
-def annotate_peaks(peaks, gtf_gz, gtf_index, cfg_dict, q, idx, attributes, logger=None):
+def annotate_peaks(peaks, gtf_gz, gtf_index, cfg_dict, outfile_prefix, attributes, logger=None):
 	""" 
 		Input: 
 		peaks (list): List of dictionaries containing information on peaks to annotate (see function 'annotate_single_peak')
 		gtf_gz (str): Path to gtf.gz file
 		gtf_index (str): Path to gtf.gz index 
 		cfg-dict (dict): The loaded config containing queries
-		q (Queue): The queue to put annotations into
-		idx (int): The order in which the annotations should be written to output
+		outfile_prefix (str): Prefix of temporary output file for writing annotations
 		attributes (list): A list of attribute columns to write to output
 	"""
 
@@ -358,29 +357,32 @@ def annotate_peaks(peaks, gtf_gz, gtf_index, cfg_dict, q, idx, attributes, logge
 				valid_annotations = annotate_single_peak(peak, tabix_obj, cfg_dict, logger=logger)
 				all_valid_annotations.extend(valid_annotations)
 				success = 1
-			
-			except: #if annotation fails e.g. due to memory error
-				#try again; or return failure?
+			except Exception as e: #if annotation fails e.g. due to memory error
+				raise e
 				return(1) #failure
 
 	tabix_obj.close()
 
-	#Write annotations to best hits and final hits
-	content = "\n".join([annopeak_to_string(peak, attributes=attributes) for peak in all_valid_annotations]) + "\n"
-	q.put(("allhits.bed", idx, content))
-	q.put(("allhits.txt", idx, content))
-	
+	#Write annotations to all hits and final hits
+	allhits_content = "\n".join([annopeak_to_string(peak, attributes=attributes) for peak in all_valid_annotations]) + "\n"
+	f = open(outfile_prefix + "_allhits.tmp", "w")
+	f.write(allhits_content)
+	f.close()
+
 	finalhits_content = "\n".join([annopeak_to_string(peak, attributes=attributes) for peak in all_valid_annotations if peak.get("best_hit", 0) == 1]) + "\n"
-	q.put(("finalhits.bed", idx, finalhits_content))
-	q.put(("finalhits.txt", idx, finalhits_content))
-	
+	f = open(outfile_prefix + "_finalhits.tmp", "w")
+	f.write(finalhits_content)
+	f.close()
+
 	## Hits per query if chosen
 	if cfg_dict["output_by_query"] == True:
 		query_names = [query["name"] for query in cfg_dict["queries"]]
 		for name in query_names:
 			query_str = "\n".join([annopeak_to_string(peak, attributes=attributes) for peak in all_valid_annotations if peak.get("query_name", "") == name]) + "\n"
-			q.put((name + ".bed", idx, query_str))
-			q.put((name + ".txt", idx, query_str))
+
+			f = open(outfile_prefix + "_{0}.tmp".format(name), "w")
+			f.write(query_str)
+			f.close()
 
 	return(0) #success
 

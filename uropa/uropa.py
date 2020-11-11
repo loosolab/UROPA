@@ -16,6 +16,7 @@ import time
 import subprocess
 import gzip
 import copy
+import psutil
 
 import logging
 import multiprocessing as mp
@@ -389,44 +390,18 @@ def main():
 
 	#Setup pool for async annotation of peak chunks
 	threads = int(cfg_dict["threads"])
-	pool = mp.Pool(processes=threads, maxtasksperchild=100)
+	pool = mp.Pool(processes=threads, maxtasksperchild=10)
 	task_list = []
 	n_jobs_running = 0
 	max_jobs_running = threads - 1
 	chunk_size = args.chunk
 	chunk_i = 0
 
-	#Establish files to write
-	file_dict = {key: os.path.join(output_prefix + "_" + key) for key in ["allhits.bed", "allhits.txt", "finalhits.bed", "finalhits.txt"]}
-
-	#Additional files if output_by_query == True
-	if cfg_dict["output_by_query"] == True:
-		logger.info("Option --output-by-query is on. Writing additional hits-files per query.")
-		query_names = [query["name"] for query in cfg_dict["queries"]]
-		for name in query_names:
-			file_dict[name + ".bed"] = os.path.join(output_prefix + "_" + get_valid_filename(name) + ".bed")
-			file_dict[name + ".txt"] = os.path.join(output_prefix + "_" + get_valid_filename(name) + ".txt")
-	
-	logger.debug("File dictionary: {0}".format(file_dict))
-
-	#Start queue for writing output
-	manager = mp.Manager()
-	q = manager.Queue()
-	writer_task = pool.apply_async(sorted_file_writer, args=(q, file_dict))
-
-	##Initialize files with header line (or nothing)
-	main = ["peak_chr", "peak_start", "peak_end", "peak_id", "peak_score", "peak_strand", "feature", "feat_start", "feat_end", "feat_strand", "feat_anchor", "distance", "relative_location", "feat_ovl_peak", "peak_ovl_feat"]
-	header_output = main + show_attributes + ["name"]
-	header_str = "\t".join(header_output) + "\n"
-	for key in file_dict:
-		if key.endswith(".txt"):
-			q.put((key, 0, header_str))
-		else:
-			q.put((key, 0, ""))
-
 	#Go through bedfile and annotate chunks
 	end_of_file = 0
 	delta = datetime.timedelta(seconds=5)
+	tmp_prefixes = []
+	return_codes = []
 	with open(cfg_dict["bed"]) as f:
 
 		while end_of_file == 0:
@@ -438,7 +413,9 @@ def main():
 			if n_lines == 0:
 				break	#last chunk is empty; break out of while loop and don't annotate
 
+			#Temporary output file
 			chunk_i += 1
+			tmp_prefix = output_prefix + "_" + str(chunk_i)
 	
 			logger.debug("Read {0} lines from chunk {1}".format(n_lines, chunk_i))
 			if n_lines < chunk_size:
@@ -465,33 +442,103 @@ def main():
 					n_jobs_done = sum([task.ready() for task in task_list])
 					n_jobs_running = len(task_list) - n_jobs_done
 					logger.debug("Total tasks: {0}; Jobs done: {1}; Jobs running {2}".format(len(task_list), n_jobs_done, n_jobs_running))
+					logger.debug("Virtual memory: {0}".format(psutil.virtual_memory().percent))
 					time.sleep(0.5) 
 
 				#Add chunk to pool
 				logger.debug("Adding job for chunk {0}".format(chunk_i))
-				task_list.append(pool.apply_async(annotate_peaks, args=(peaks, anno_gtf_gz, anno_gtf_index, cfg_dict, q, chunk_i, show_attributes, )))
-			
+				task_list.append(pool.apply_async(annotate_peaks, args=(peaks, anno_gtf_gz, anno_gtf_index, cfg_dict, tmp_prefix, show_attributes, )))
+				tmp_prefixes.append(tmp_prefix)
+
+				return_codes = [task.get() for task in task_list if task.ready()]
 			else:
 				logger.debug("Annotating peak chunk")
-				annotate_peaks(peaks, anno_gtf_gz, anno_gtf_index, cfg_dict, q, chunk_i, show_attributes, logger)
+				return_codes.append(annotate_peaks(peaks, anno_gtf_gz, anno_gtf_index, cfg_dict, tmp_prefix, show_attributes, logger))
+				tmp_prefixes.append(tmp_prefix)
+
+			#Check return codes of tasks
+			if sum(return_codes) != 0: 
+				idx_error = [i+1 for (i,code) in enumerate(return_codes) if code != 0]
+				logger.error("Task number {0} exited with error".format(idx_error))
+				sys.exit()
 
 	# Whole file has been read and all jobs were added to task_list
 	# Wait for all jobs to finish
 	logger.debug("Waiting for tasks to finish")
 	while sum([task.ready() for task in task_list]) < len(task_list):
-		time.sleep(0.5) 
-
-	#End writer queue
-	q.put((None, None, None))
-	writer_result = writer_task.get()	#locks until writer_task returns value (i.e. files were closed)
-	
-	#check that all queues are done writing
-	while q.qsize() != 0:
-		logger.debug("- Queue size {0}".format(q.qsize()))
-		time.sleep(0.5) 
+		time.sleep(0.5)
 
 	pool.terminate()
 	pool.join()
+
+	############################################################################################################
+	############################################# COLLECT ANNOTATIONS ##########################################
+	############################################################################################################
+
+	logger.info("Collecting annotations from temporary files")
+
+	#Open output files
+	logger.debug("Opening output file handles")
+	file_handles = {key: open(output_prefix + "_" + key, "w") for key in ["allhits.bed", "allhits.txt", "finalhits.bed", "finalhits.txt"]}
+	default_files = list(file_handles.keys())
+
+	#Additional files if output_by_query == True
+	if cfg_dict["output_by_query"] == True:
+		logger.info("Option --output-by-query is on. Writing additional hits-files per query.")
+		query_names = [query["name"] for query in cfg_dict["queries"]]
+		for name in query_names:
+			file_handles[name + ".bed"] = open(output_prefix + "_" + get_valid_filename(name) + ".bed", "w")
+			file_handles[name + ".txt"] = open(output_prefix + "_" + get_valid_filename(name) + ".txt", "w")
+
+	#Initialize files with header line (or nothing)
+	main_header = ["peak_chr", "peak_start", "peak_end", "peak_id", "peak_score", "peak_strand", "feature", "feat_start", "feat_end", "feat_strand", "feat_anchor", "distance", "relative_location", "feat_ovl_peak", "peak_ovl_feat"]
+	header_output = main_header + show_attributes + ["name"]
+	header_str = "\t".join(header_output) + "\n"
+	for key in file_handles:
+		if key.endswith(".txt"):
+			file_handles[key].write(header_str)
+
+	#Read annotations from each temporary annotation file
+	logger.debug("Reading annotations from temporary files")
+	for tmp_prefix in tmp_prefixes:	#ordered like the files should be written
+		tmp_files = [tmp_prefix + suffix for suffix in ["_allhits.tmp", "_finalhits.tmp"]]
+
+		#Write content to allhits
+		with open(tmp_prefix + "_allhits.tmp") as f:
+			allhits_content = f.read()
+			if allhits_content != "\n":
+				file_handles["allhits.bed"].write(allhits_content)
+				file_handles["allhits.txt"].write(allhits_content)
+
+		#Write content to finalhits
+		with open(tmp_prefix + "_finalhits.tmp") as f:
+			finalhits_content = f.read()
+			if finalhits_content != "\n":
+				file_handles["finalhits.bed"].write(finalhits_content)
+				file_handles["finalhits.txt"].write(finalhits_content)
+
+		#Write content to query-specific output if chosen
+		if cfg_dict["output_by_query"] == True:
+			query_names = [query["name"] for query in cfg_dict["queries"]]
+			for name in query_names:
+				tmp_files.append(tmp_prefix + "_" + name + ".tmp")
+				with open(tmp_files[-1]) as f:
+					query_content = f.read()
+					if query_content != "\n":	#If query_content has any lines
+						file_handles[name + ".bed"].write(query_content)
+						file_handles[name + ".txt"].write(query_content)
+
+		#Delete temporary file for this chunk
+		try:
+			for tmp_file in tmp_files:
+				os.remove(tmp_file)
+		except:
+			logger.error("Temporary file {0} could not be removed, however, this does not affect the output of uropa.")
+
+	#All annotations were written; close all files
+	logger.debug("Closing all files")
+	for key in file_handles:
+		file_handles[key].close()
 
 	############################################################################################################
 	################################################ POSTPROCESSING ############################################
