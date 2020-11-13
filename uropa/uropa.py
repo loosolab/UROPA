@@ -16,6 +16,8 @@ import time
 import subprocess
 import gzip
 import copy
+import psutil
+import traceback
 
 import logging
 import multiprocessing as mp
@@ -95,6 +97,7 @@ def main():
 	additional.add_argument("-d","--debug",help="Print verbose messages (for debugging)", action="store_true")
 	additional.add_argument("-v","--version", help="Prints the version and exits", action="version", version="%(prog)s " + VERSION)
 	additional.add_argument("-c", "--chunk", metavar="", help="Number of lines per chunk for multiprocessing (default: 1000)", type=int, default=1000) 
+	additional.add_argument("--target-mem", help=argparse.SUPPRESS, default=80)	#goal is to stay at maximum 80% memory consumption
 	args = parser.parse_args()
 
 	#Write help if no input was given
@@ -427,6 +430,7 @@ def main():
 	#Go through bedfile and annotate chunks
 	end_of_file = 0
 	delta = datetime.timedelta(seconds=5)
+	task_list_i = 0 #number of finished tasks
 	with open(cfg_dict["bed"]) as f:
 
 		while end_of_file == 0:
@@ -440,7 +444,7 @@ def main():
 
 			chunk_i += 1
 	
-			logger.debug("Read {0} lines from chunk {1}".format(n_lines, chunk_i))
+			logger.debug("Read {0} lines from chunk {1} (({2}) - ({3}))".format(n_lines, chunk_i, " ".join(chunk_lines[0].split()[:3]), " ".join(chunk_lines[-1].split()[:3])))
 			if n_lines < chunk_size:
 				end_of_file = 1 #End of the file has been reached
 
@@ -452,7 +456,7 @@ def main():
 				#Check how many jobs are running:
 				n_jobs_done = sum([task.ready() for task in task_list])
 				n_jobs_running = len(task_list) - n_jobs_done
-				while n_jobs_running > max_jobs_running:
+				while n_jobs_running >= max_jobs_running:
 
 					#Write out progress after certain amount of time
 					current_time = datetime.datetime.now()
@@ -462,14 +466,45 @@ def main():
 
 					#Test whether new jobs can be send to pool
 					#todo: if memory issues occur, remove tasks from task_list if they are done?
-					n_jobs_done = sum([task.ready() for task in task_list])
-					n_jobs_running = len(task_list) - n_jobs_done
-					logger.debug("Total tasks: {0}; Jobs done: {1}; Jobs running {2}".format(len(task_list), n_jobs_done, n_jobs_running))
+					current_ready = sum([task.ready() for task in task_list])
+					n_jobs_done = task_list_i + current_ready #task_list_i is the previously finished jobs
+					n_jobs_running = len(task_list) - current_ready
+
+					#Test memory consumption and adjust max_jobs_running accordingly
+					current_percent = psutil.virtual_memory().percent
+					memory_per_job = current_percent / max(1, n_jobs_running)
+
+					if current_percent == 100:
+						logger.warning("Memory usage has reached 100% - this might cause UROPA to halt or crash. Reducing '--chunk' or '--threads' can help to resolve this issue.")	
+
+					#How many jobs should be running to fulfill --target-mem consumption?
+					target = args.target_mem
+					max_jobs_running = min(threads - 1, int(np.floor(target / memory_per_job))) #maximum possible is threads - 1, but can be lower if memory becomes low
+					max_jobs_running = max(max_jobs_running, 1) # minimum 1 job running
+
+					logger.debug("Jobs done: {0}; Jobs running: {1}; Max jobs allowed: {2}; Virtual memory percent: {3}; Writer task running: {4}; Writing queue size: {5}".format(n_jobs_done, n_jobs_running, max_jobs_running, current_percent, not writer_task.ready(), q.qsize()))
+					logger.debug("Tasks in cache: {0}".format(list(pool._cache.keys())))
+					
+					#Check exit status of any finished tasks
+					for i, task in enumerate(task_list):
+						if task.ready():
+							try:
+								task.get() #either successful or exited with exception
+							except Exception as e:
+								logger.error("Multiprocessing task exited with error: {0}".format(type(e)))
+								logger.debug("Full traceback:\n{0}".format(traceback.format_exc()))
+								sys.exit(1)
+
 					time.sleep(0.5) 
 
-				#Add chunk to pool
+				#Add new chunk to pool
 				logger.debug("Adding job for chunk {0}".format(chunk_i))
 				task_list.append(pool.apply_async(annotate_peaks, args=(peaks, anno_gtf_gz, anno_gtf_index, cfg_dict, q, chunk_i, show_attributes, )))
+
+				#If the first task in task_list was finished, it can be removed to reduce size of task_list
+				while task_list[0].ready():
+					del task_list[0]
+					task_list_i += 1
 			
 			else:
 				logger.debug("Annotating peak chunk")
@@ -477,8 +512,9 @@ def main():
 
 	# Whole file has been read and all jobs were added to task_list
 	# Wait for all jobs to finish
-	logger.debug("Waiting for tasks to finish")
+	logger.info("The input .bed-file has been read and all jobs have been started. Waiting for the final tasks to finish...")
 	while sum([task.ready() for task in task_list]) < len(task_list):
+		logger.debug("Tasks in cache: {0}".format(list(pool._cache.keys())))
 		time.sleep(0.5) 
 
 	#End writer queue
