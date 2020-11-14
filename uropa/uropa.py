@@ -94,7 +94,7 @@ def main():
 	additional.add_argument("-s","--summary", help="Create additional visualisation of results in graphical format", action="store_true")
 	additional.add_argument("-t","--threads", help="Multiprocessed run: n = number of threads to run annotation process", type=int, action="store", metavar="n", default=1)
 	additional.add_argument("-l","--log", help="Log file name for messages and warnings (default: log is written to stdout)", action="store", metavar="uropa.log")
-	additional.add_argument("-d","--debug",help="Print verbose messages (for debugging)", action="store_true")
+	additional.add_argument("-d","--debug",help="Print verbose messages (for debugging)", action="count", default=0)
 	additional.add_argument("-v","--version", help="Prints the version and exits", action="version", version="%(prog)s " + VERSION)
 	additional.add_argument("-c", "--chunk", metavar="", help="Number of lines per chunk for multiprocessing (default: 1000)", type=int, default=1000) 
 	additional.add_argument("--target-mem", help=argparse.SUPPRESS, default=80)	#goal is to stay at maximum 80% memory consumption
@@ -117,31 +117,10 @@ def main():
 	# Configure logger
 	#----------------------------------------------------------------------------------------------------------#
 
-	logger = logging.getLogger(__name__)
-	logger_format = logging.Formatter('%(asctime)s [%(levelname)s] - %(message)s', "%Y-%m-%d %H:%M:%S")
-	logger_level = logging.DEBUG if args.debug else logging.INFO
-
-	#Log vs. stream logger
-	if args.log is not None:
-
-		#Check if logfile can be created
-		try:
-			log = logging.FileHandler(args.log, "w")
-			log.setLevel(logger_level)
-			log.setFormatter(logger_format)
-			logger.addHandler(log)
-		except:
-			sys.exit("ERROR: Could not create logfile {0}. Please check that the given path exists.".format(args.log))
-
-	else:
-		#Stdout stream
-		stream = logging.StreamHandler(sys.stdout)	
-		stream.setLevel(logger_level)
-		stream.setFormatter(logger_format)
-		logger.addHandler(stream)
-
-	logger.setLevel(logger_level)
-	
+	logger_q = mp.Manager().Queue()	#queue for multiprocessing logging
+	logger = UROPALogger(debug_level=args.debug, log_f=args.log, q=logger_q) #debug_level is number of times --debug is given on commandline
+	logger.start_logger_queue()	 #start listening for logging sent to queue
+	logger_options = {"q": logger_q, "debug_level": args.debug}
 
 	############################################################################################################
 	############################################ VALIDATION OF INPUT ###########################################
@@ -499,7 +478,7 @@ def main():
 
 				#Add new chunk to pool
 				logger.debug("Adding job for chunk {0}".format(chunk_i))
-				task_list.append(pool.apply_async(annotate_peaks, args=(peaks, anno_gtf_gz, anno_gtf_index, cfg_dict, q, chunk_i, show_attributes, )))
+				task_list.append(pool.apply_async(annotate_peaks, args=(peaks, anno_gtf_gz, anno_gtf_index, cfg_dict, q, chunk_i, show_attributes, logger_options)))
 
 				#If the first task in task_list was finished, it can be removed to reduce size of task_list
 				while task_list[0].ready():
@@ -508,7 +487,7 @@ def main():
 			
 			else:
 				logger.debug("Annotating peak chunk")
-				annotate_peaks(peaks, anno_gtf_gz, anno_gtf_index, cfg_dict, q, chunk_i, show_attributes, logger)
+				annotate_peaks(peaks, anno_gtf_gz, anno_gtf_index, cfg_dict, q, chunk_i, show_attributes, logger_options)
 
 	# Whole file has been read and all jobs were added to task_list
 	# Wait for all jobs to finish
@@ -575,3 +554,5 @@ def main():
 	end_time = datetime.datetime.now()
 	total_time = end_time - start_time
 	logger.info("UROPA run finished in {0}!".format(str(total_time).split('.', 2)[0]))
+
+	logger.stop_logger_queue()	#done logging
