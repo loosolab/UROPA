@@ -34,6 +34,7 @@ setup(name='uropa',
       scripts = ['utils/uropa_summary.R','utils/uropa2gtf.R'],
       install_requires=[
         'pysam',
+        'psutil'
       ],
       extras_require={
         ':python_version < "3"': ["numpy<=1.16"],
