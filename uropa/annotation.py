@@ -7,6 +7,8 @@ import numpy as np
 import logging
 import datetime
 
+from .utils import * #import Uropa logging functions
+
 def decimal_round(num, d=3):
 
 	stringnum = "{:.20f}".format(num)
@@ -180,7 +182,7 @@ def annotate_single_peak(peak, tabix_obj, cfg_dict, logger=None):
 	max_distance = int(max(distances))
 
 	#Annotation
-	logger.debug("Annotating peak: {0}".format(peak))
+	logger.debug2("Annotating peak: {0}".format(peak))
 
 	valid_annotations = []	#for this peak
 	stop_searching = False
@@ -190,20 +192,20 @@ def annotate_single_peak(peak, tabix_obj, cfg_dict, logger=None):
 		query_i += 1				#First query is 0
 		query = queries[query_i]	#current query to check
 
-		logger.debug("Finding hits for query: {0}".format(query))
+		logger.debug2("Finding hits for query: {0}".format(query))
 
 		#Extend and fetch possible hits from tabix
 		max_distance = max(query["distance"])
 		extend_start = int(max(1, peak["peak_start"] - max_distance))
 		extend_end = peak["peak_end"] + max_distance
 		tabix_query = "{0}:{1}-{2}".format(peak.get("gtf_chr", peak["peak_chr"]), extend_start, extend_end)
-		logger.debug("Tabix query for query {0} ({1}): {2}".format(query_i, query["name"], tabix_query))
+		logger.debug2("Tabix query for query {0} ({1}): {2}".format(query_i, query["name"], tabix_query))
 
 		try:
 			begin = datetime.datetime.now()
 			hits = list(tabix_obj.fetch(tabix_query, parser=pysam.asGTF()))	#hits for this query
 			end = datetime.datetime.now()
-			logger.debug("Fetched {0} hits in {1}".format(len(hits), end - begin))
+			logger.debug2("Fetched {0} hits in {1}".format(len(hits), end - begin))
 		except: 
 			#exception if no hits could be fetched from tabix, for example if the contig does not exist in the gtf index.
 			#print("ERROR: Could not create iterator for peak: {0} \n with tabix query {1}".format(peak, tabix_query))		
@@ -274,20 +276,20 @@ def annotate_single_peak(peak, tabix_obj, cfg_dict, logger=None):
 			valid = sum(checks.values()) == len(checks.values()) #all checks must be valid
 			if valid:
 				valid_annotations.append(anno_dict.copy())
-			logger.debug("Validity: {0} | Checks: {1} | Annotation dict: {2}".format(valid, checks, {key:anno_dict[key] for key in anno_dict}))
+			logger.debug2("Validity: {0} | Checks: {1} | Annotation dict: {2}".format(valid, checks, {key:anno_dict[key] for key in anno_dict}))
 		
 		end = datetime.datetime.now()
-		logger.debug("Validated hits in {0}".format(end-begin))
+		logger.debug2("Validated hits in {0}".format(end-begin))
 
 		#All tabix hits for this query were checked - if priority, stop searching if any valid hit was found -> else, check next query
 		stop_searching = (len(valid_annotations) > 0 and cfg_dict["priority"]) or stop_searching #or if stop_searching was already set previously
 
 		if stop_searching == True:
-			logger.debug("{0} valid hit(s) were found for query_i = {1} and priority is true - stopping search.".format(len(valid_annotations), query_i))
+			logger.debug2("{0} valid hit(s) were found for query_i = {1} and priority is true - stopping search.".format(len(valid_annotations), query_i))
 		else:
-			logger.debug("A total of {0} valid hits were found. Incrementing query_i.".format(len(valid_annotations), query_i))
+			logger.debug2("A total of {0} valid hits were found. Incrementing query_i.".format(len(valid_annotations), query_i))
 	
-	logger.debug("")	#create empty line in debugger output for easy overview
+	logger.debug2("")	#create empty line in debugger output for easy overview
 
 	#After all hits have been checked for peak; make final checks and set best flag
 	if len(valid_annotations) > 0:	
@@ -329,7 +331,7 @@ def annopeak_to_string(annotated_peak, columns=None, attributes=[]):
 	return(bed_str)
 
 
-def annotate_peaks(peaks, gtf_gz, gtf_index, cfg_dict, q, idx, attributes, logger=None):
+def annotate_peaks(peaks, gtf_gz, gtf_index, cfg_dict, q, idx, attributes, logger_options):
 	""" 
 		Input: 
 		peaks (list): List of dictionaries containing information on peaks to annotate (see function 'annotate_single_peak')
@@ -338,31 +340,37 @@ def annotate_peaks(peaks, gtf_gz, gtf_index, cfg_dict, q, idx, attributes, logge
 		cfg-dict (dict): The loaded config containing queries
 		q (Queue): The queue to put annotations into
 		idx (int): The order in which the annotations should be written to output
-		attributes (list): A list of attribute columns to write to output
+		attributes (list): A list of attribute columns to write to output,
+		logger_options (dict): A dict for initializing UROPALogger
 	"""
 
-	if logger is None:
-		logger = logging.getLogger('')	#local logger leading to nowhere
+	logger = UROPALogger(**logger_options)
 
 	#Open tabix file
 	tabix_obj = pysam.TabixFile(gtf_gz, index=gtf_index)
 
 	#For each peak in input peaks, collect all_valid_annotations
+	logger.debug("Annotating peaks in chunk {0}".format(idx))
 	all_valid_annotations = []
 	for peak in peaks:
+		
+		#Annotate single peak
 		valid_annotations = annotate_single_peak(peak, tabix_obj, cfg_dict, logger=logger)
 		all_valid_annotations.extend(valid_annotations)
 
 	tabix_obj.close()
 
 	#Write annotations to best hits and final hits
+	logger.debug("Annotated all peaks in chunk {0}. Now adding contents to queue...".format(idx))
 	content = "\n".join([annopeak_to_string(peak, attributes=attributes) for peak in all_valid_annotations]) + "\n"
 	q.put(("allhits.bed", idx, content))
 	q.put(("allhits.txt", idx, content))
+	content = ""
 	
 	finalhits_content = "\n".join([annopeak_to_string(peak, attributes=attributes) for peak in all_valid_annotations if peak.get("best_hit", 0) == 1]) + "\n"
 	q.put(("finalhits.bed", idx, finalhits_content))
 	q.put(("finalhits.txt", idx, finalhits_content))
+	finalhits_content = ""
 	
 	## Hits per query if chosen
 	if cfg_dict["output_by_query"] == True:
@@ -372,5 +380,6 @@ def annotate_peaks(peaks, gtf_gz, gtf_index, cfg_dict, q, idx, attributes, logge
 			q.put((name + ".bed", idx, query_str))
 			q.put((name + ".txt", idx, query_str))
 
-	return(1)
+	logger.debug("Job finished for chunk {0}".format(idx))
+	return(0) #success
 

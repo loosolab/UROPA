@@ -1,7 +1,14 @@
 import os
+import sys
 import re
 import setuptools
 from setuptools import setup
+
+#Requires minimum python 3.2
+if sys.version_info[0] > 3 or (sys.version_info[0] == 3 and sys.version_info[1] >= 2):
+  pass
+else:
+    sys.exit("ERROR: UROPA install requires python>=3.2")
 
 #Path of setup file to establish version
 setupdir = os.path.abspath(os.path.dirname(__file__))
@@ -32,14 +39,12 @@ setup(name='uropa',
         'console_scripts': ['uropa = uropa.uropa:main']
       },
       scripts = ['utils/uropa_summary.R','utils/uropa2gtf.R'],
+      python_requires='>=3.2',
       install_requires=[
         'pysam',
-        'psutil'
+        'psutil',
+        'numpy'
       ],
-      extras_require={
-        ':python_version < "3"': ["numpy<=1.16"],
-        ':python_version >= "3"': ["numpy"]
-      },
       classifiers = [
         'License :: OSI Approved :: MIT License',
         'Intended Audience :: Science/Research',

@@ -1,5 +1,4 @@
 """Contains helper functions for UROPA """
-
 import json
 from textwrap import dedent
 import ast
@@ -7,6 +6,108 @@ import numpy as np
 import os
 import sys
 import re
+import traceback
+import logging
+from logging import handlers
+import multiprocessing as mp
+import time
+import datetime
+
+class UROPALogger(logging.Logger):
+
+	logger_levels = {
+						0: logging.INFO,
+						1: logging.DEBUG,		#debugging info
+						2: logging.DEBUG - 5	#deeper debugging info
+					}
+
+	def __init__(self, debug_level=0, log_f=None, q=None):
+		""" 
+		debug_level: Logging level as identified in logger_levels
+		log_f: path to output logfile (in addition to stdout)
+		q: queue for handling logging via QueueHandler 
+		"""
+
+		self.debug_level = debug_level
+		self.log_f = log_f
+		self.q = q
+
+		#Create logger
+		logging.Logger.__init__(self, "UROPA")
+
+		####### Setup custom levels #######
+		#Create custom level for deeper debug messages
+		deeper_level = UROPALogger.logger_levels[2]
+		logging.addLevelName(deeper_level, "DEBUG2")
+		setattr(self, 'debug2', lambda *args: self.log(deeper_level, *args))
+
+		#Set level and format
+		self.level = UROPALogger.logger_levels[debug_level]
+		self.setLevel(self.level)
+		self.formatter = logging.Formatter("%(asctime)s (%(process)d) [%(levelname)s]\t%(message)s", "%Y-%m-%d %H:%M:%S")
+
+		########## Setup streaming #########
+		#Log file stream
+		if log_f != None:
+			try:
+				log = logging.FileHandler(log_f, "w")
+				log.setLevel(self.level)
+				log.setFormatter(self.formatter)
+				self.addHandler(log)
+			except:
+				sys.exit("ERROR: Could not create logfile '{0}'. Please check that the given path exists.".format(log_f))
+
+		#Stdout stream
+		if self.q == None:
+			con = logging.StreamHandler(sys.stdout)		#console output
+			con.setLevel(self.level)
+			con.setFormatter(self.formatter)
+			self.addHandler(con)
+
+		#Stdout handled by queue
+		else:
+			h = logging.handlers.QueueHandler(self.q)  	# Just the one handler needed
+			self.handlers = []
+			self.addHandler(h)
+
+		#logger is ready for use
+
+	def start_logger_queue(self):
+		""" start process for listening and handling through the main logger queue """
+
+		self.listener = mp.Process(target=self.main_logger_process)
+		self.listener.start()
+
+	def main_logger_process(self):
+		""" This process runs in the main thread and handles the logging events """
+
+		mainlogger = UROPALogger(self.debug_level, self.log_f)	#no queue, this logger is for collecting logging from the queue
+		mainlogger.debug("Started main logger process")
+		while True:
+			try:
+				record = self.q.get()
+				if record is None:
+					break
+				mainlogger.handle(record) 	#this logger is running in the main process
+
+			except EOFError:
+				mainlogger.error("Logger lost connection to queue - probably due to an error raised from a child process.")
+				break
+
+		return(0)
+
+	def stop_logger_queue(self):
+		""" Stop process for listening """
+
+		self.debug("Waiting for listener to finish")
+		self.q.put(None)
+		while self.listener.exitcode != 0:
+			self.debug("Listener exitcode is: {0}. Waiting for exitcode = 0.".format(self.listener.exitcode))
+			time.sleep(0.1)
+
+		self.debug("Joining listener")
+		self.listener.join()
+	
 
 #Validation of config
 def howtoconfig():
@@ -350,8 +451,11 @@ def is_empty(value):
 	else:
 		return(False)
 
-def sorted_file_writer(q, file_dict):
+def sorted_file_writer(q, file_dict, logger_options):
 	""" Write strings in the correct order coming from Queue """
+
+	#Start logger
+	logger = UROPALogger(**logger_options)
 
 	#Open handles for files
 	file_handles = {}
@@ -367,8 +471,19 @@ def sorted_file_writer(q, file_dict):
 	#Fetching string content from queue
 	idx_to_write = {key: 0 for key in file_dict}	#Start with idx == 0
 	ready_to_write = {key:{} for key in file_dict}
+
+	delta = datetime.timedelta(seconds=10) #Write debug status every 10 seconds
+	prev_time = datetime.datetime.now()
 	while True:
 
+		#Write debug status
+		current_time = datetime.datetime.now()
+		if current_time - prev_time > delta: 
+			n_ready_to_write = {key: sorted(list(ready_to_write[key].keys())) for key in ready_to_write}	#dict of idx-lists per key
+			logger.debug("Writer task status | ready to write: {0}".format(n_ready_to_write))
+			prev_time = current_time
+
+		#Fetch annotated sites from queue
 		try:
 			(key, idx, content) = q.get() #idx is an integer starting at 0, content is a string
 
@@ -383,18 +498,18 @@ def sorted_file_writer(q, file_dict):
 				while idx_to_write[key] in ready_to_write[key]:
 					content = ready_to_write[key][idx_to_write[key]]
 					file_handles[key].write(content)
-					ready_to_write[key][idx_to_write[key]] = "" #Content has been written; free up memory!
+
+					del ready_to_write[key][idx_to_write[key]] #Content has been written for this idx; free up memory!
 					idx_to_write[key] += 1	#increment to write next block
 					
 
 		except Exception as e:
-			import sys, traceback
-			print('Problem in sorted_file_writer:')
-			print(e)
-			break
+			logger.error('Error occurred during file writing: {0}'.format(type(e)))
+			logger.debug("Full traceback: {0}".format(traceback.format_exc()))
+			return(1)
 
 	#Got all content in queue, close file
 	for key in file_dict:
 		file_handles[key].close()
 	
-	return(1)	
+	return(0)	
