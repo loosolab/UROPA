@@ -1,6 +1,8 @@
-# 3.6.0 (in progress)
-- Added dynamic regulation of multiprocessing jobs based on memory usage
+## 4.0.0 (2020-11-17)
+- Requirement of install is python>=3.2 - python 2.x is no longer supported!
+- Added dynamic regulation of multiprocessing jobs based on memory usage (set via hidden --target-mem)
 - Added multiprocessing logger
+- Improved error handling from multiprocessing jobs
 
 ## 3.5.3 (2020-10-09)
 - fixed bug causing wrong downstream/upstream location 

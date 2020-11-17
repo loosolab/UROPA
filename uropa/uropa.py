@@ -38,6 +38,18 @@ def split_options(options):
 	#Splits ","-separated options from commandline into lists
 	return sum([opt.split(",") if type(opt) == str else [opt] for opt in options], [])
 
+def update_status(status_dict, task_list):
+	""" Update status_dict with the information from task_list status """
+	
+	current_done = sum([task.ready() for task in task_list])
+	status_dict["n_jobs_running"] = len(task_list) - current_done
+	status_dict["n_jobs_done"] = status_dict["task_list_i"] + current_done #task_list_i is the previously finished jobs
+
+	#Memory used
+	status_dict["memory_percent"] = psutil.virtual_memory().percent
+
+	return(status_dict)
+
 
 def main():
 
@@ -97,7 +109,7 @@ def main():
 	additional.add_argument("-d","--debug",help="Print verbose messages (for debugging)", action="count", default=0)
 	additional.add_argument("-v","--version", help="Prints the version and exits", action="version", version="%(prog)s " + VERSION)
 	additional.add_argument("-c", "--chunk", metavar="", help="Number of lines per chunk for multiprocessing (default: 1000)", type=int, default=1000) 
-	additional.add_argument("--target-mem", help=argparse.SUPPRESS, default=80)	#goal is to stay at maximum 80% memory consumption
+	additional.add_argument("--target-mem", type=float, help=argparse.SUPPRESS, default=80)	#goal is to stay at maximum 80% memory consumption
 	args = parser.parse_args()
 
 	#Write help if no input was given
@@ -373,7 +385,6 @@ def main():
 	threads = int(cfg_dict["threads"])
 	pool = mp.Pool(processes=threads, maxtasksperchild=100)
 	task_list = []
-	n_jobs_running = 0
 	max_jobs_running = threads - 1
 	chunk_size = args.chunk
 	chunk_i = 0
@@ -394,7 +405,7 @@ def main():
 	#Start queue for writing output
 	manager = mp.Manager()
 	q = manager.Queue()
-	writer_task = pool.apply_async(sorted_file_writer, args=(q, file_dict))
+	writer_task = pool.apply_async(sorted_file_writer, args=(q, file_dict, logger_options))
 
 	##Initialize files with header line (or nothing)
 	main = ["peak_chr", "peak_start", "peak_end", "peak_id", "peak_score", "peak_strand", "feature", "feat_start", "feat_end", "feat_strand", "feat_anchor", "distance", "relative_location", "feat_ovl_peak", "peak_ovl_feat"]
@@ -405,6 +416,12 @@ def main():
 			q.put((key, 0, header_str))
 		else:
 			q.put((key, 0, ""))
+
+	#Dict for collecting information on jobs, memory etc. during run
+	status_dict = {"n_jobs_done": 0, 
+				   "max_jobs_running": threads - 1, 
+				   "n_jobs_running": 0,
+				   "task_list_i": 0}
 
 	#Go through bedfile and annotate chunks
 	end_of_file = 0
@@ -432,38 +449,51 @@ def main():
 
 			if threads > 1:
 
-				#Check how many jobs are running:
-				n_jobs_done = sum([task.ready() for task in task_list])
-				n_jobs_running = len(task_list) - n_jobs_done
-				while n_jobs_running >= max_jobs_running:
+				#Keep looping until job for this chunk has been started
+				chunk_job_started = 0	
+				while chunk_job_started == 0:
+
+					#Check if writer is still runnning
+					if writer_task.ready():
+						logger.error("Writing of output files from multiprocessing jobs failed - please check any previous warnings.")
+						sys.exit()
+
+					#Update status dict
+					status_dict = update_status(status_dict, task_list)
 
 					#Write out progress after certain amount of time
 					current_time = datetime.datetime.now()
 					if current_time - prev_time > delta: 
-						logger.info("Progress: Annotated {0} peaks ({1} jobs running; {2} jobs finished)".format(n_jobs_done * chunk_size, n_jobs_running, n_jobs_done))
+						logger.info("Progress: Annotated {0} peaks ({1} jobs running; {2} jobs finished)".format(status_dict["n_jobs_done"] * chunk_size, 
+																														     status_dict["n_jobs_running"], 
+																														     status_dict["n_jobs_done"]))
+						logger.debug("Max jobs allowed: {0}; Virtual memory percent: {1}; Writer task running: {2}; Writer queue size: {3}; logger queue size: {4}".format(status_dict["max_jobs_running"], 
+																																											status_dict["memory_percent"], 
+																																											not writer_task.ready(), 
+																																											q.qsize(),
+																																											logger_q.qsize()))
+						logger.debug("Tasks in cache: {0}".format(list(pool._cache.keys())))
 						prev_time = current_time
 
-					#Test whether new jobs can be send to pool
-					#todo: if memory issues occur, remove tasks from task_list if they are done?
-					current_ready = sum([task.ready() for task in task_list])
-					n_jobs_done = task_list_i + current_ready #task_list_i is the previously finished jobs
-					n_jobs_running = len(task_list) - current_ready
-
 					#Test memory consumption and adjust max_jobs_running accordingly
-					current_percent = psutil.virtual_memory().percent
-					memory_per_job = current_percent / max(1, n_jobs_running)
-
-					if current_percent == 100:
+					if status_dict["memory_percent"] == 100:
 						logger.warning("Memory usage has reached 100% - this might cause UROPA to halt or crash. Reducing '--chunk' or '--threads' can help to resolve this issue.")	
 
 					#How many jobs should be running to fulfill --target-mem consumption?
-					target = args.target_mem
-					max_jobs_running = min(threads - 1, int(np.floor(target / memory_per_job))) #maximum possible is threads - 1, but can be lower if memory becomes low
-					max_jobs_running = max(max_jobs_running, 1) # minimum 1 job running
+					memory_per_job = status_dict["memory_percent"] / max(1, status_dict["n_jobs_running"])
+					status_dict["max_jobs_running"] = min(threads - 1, int(np.floor(args.target_mem / memory_per_job))) #maximum possible is threads - 1, but can be lower if memory becomes low
+					status_dict["max_jobs_running"] = max(max_jobs_running, 1) # minimum 1 job running
 
-					logger.debug("Jobs done: {0}; Jobs running: {1}; Max jobs allowed: {2}; Virtual memory percent: {3}; Writer task running: {4}; Writing queue size: {5}".format(n_jobs_done, n_jobs_running, max_jobs_running, current_percent, not writer_task.ready(), q.qsize()))
-					logger.debug("Tasks in cache: {0}".format(list(pool._cache.keys())))
-					
+					#### Check whether new jobs can be send to pool ###
+					if status_dict["n_jobs_running"] >= status_dict["max_jobs_running"]:
+						time.sleep(0.5) #wait half a second, and continue while-loop (if condition is True)
+
+					else:
+						#Add new chunk to pool
+						logger.debug("Adding job for chunk {0}".format(chunk_i))
+						task_list.append(pool.apply_async(annotate_peaks, args=(peaks, anno_gtf_gz, anno_gtf_index, cfg_dict, q, chunk_i, show_attributes, logger_options)))
+						chunk_job_started = 1
+
 					#Check exit status of any finished tasks
 					for i, task in enumerate(task_list):
 						if task.ready():
@@ -471,20 +501,15 @@ def main():
 								task.get() #either successful or exited with exception
 							except Exception as e:
 								logger.error("Multiprocessing task exited with error: {0}".format(type(e)))
-								logger.debug("Full traceback:\n{0}".format(traceback.format_exc()))
+								logger.error("Please check previous warnings for resolving the issue.")
+								logger.error("Full traceback:\n{0}".format(traceback.format_exc()))
 								sys.exit(1)
 
-					time.sleep(0.5) 
+					#If the first task in task_list was finished, it can be removed to reduce size of task_list
+					while len(task_list) > 0 and task_list[0].ready():
+						del task_list[0]
+						status_dict["task_list_i"] += 1
 
-				#Add new chunk to pool
-				logger.debug("Adding job for chunk {0}".format(chunk_i))
-				task_list.append(pool.apply_async(annotate_peaks, args=(peaks, anno_gtf_gz, anno_gtf_index, cfg_dict, q, chunk_i, show_attributes, logger_options)))
-
-				#If the first task in task_list was finished, it can be removed to reduce size of task_list
-				while task_list[0].ready():
-					del task_list[0]
-					task_list_i += 1
-			
 			else:
 				logger.debug("Annotating peak chunk")
 				annotate_peaks(peaks, anno_gtf_gz, anno_gtf_index, cfg_dict, q, chunk_i, show_attributes, logger_options)
@@ -496,14 +521,25 @@ def main():
 		logger.debug("Tasks in cache: {0}".format(list(pool._cache.keys())))
 		time.sleep(0.5) 
 
+	#Check results for final tasks
+	for task in task_list:
+		try:
+			task.get() #either successful or exited with exception
+		except Exception as e:
+			logger.error("Multiprocessing task exited with error: {0}".format(type(e)))
+			logger.error("Please check previous warnings for resolving the issue.")
+			logger.debug("Full traceback:\n{0}".format(traceback.format_exc()))
+			sys.exit(1)
+
 	#End writer queue
 	q.put((None, None, None))
-	writer_result = writer_task.get()	#locks until writer_task returns value (i.e. files were closed)
-	
-	#check that all queues are done writing
+
+	#Check that all queues are done writing
 	while q.qsize() != 0:
 		logger.debug("- Queue size {0}".format(q.qsize()))
 		time.sleep(0.5) 
+
+	writer_result = writer_task.get()	#locks until writer_task returns value (i.e. files were closed)
 
 	pool.terminate()
 	pool.join()

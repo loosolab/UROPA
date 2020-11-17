@@ -7,7 +7,7 @@ import numpy as np
 import logging
 import datetime
 
-from uropa.utils import * #import logging
+from .utils import * #import Uropa logging functions
 
 def decimal_round(num, d=3):
 
@@ -350,7 +350,7 @@ def annotate_peaks(peaks, gtf_gz, gtf_index, cfg_dict, q, idx, attributes, logge
 	tabix_obj = pysam.TabixFile(gtf_gz, index=gtf_index)
 
 	#For each peak in input peaks, collect all_valid_annotations
-	logger.debug("Annotating peaks in chunk '{0}'...".format(idx))
+	logger.debug("Annotating peaks in chunk {0}".format(idx))
 	all_valid_annotations = []
 	for peak in peaks:
 		
@@ -361,7 +361,7 @@ def annotate_peaks(peaks, gtf_gz, gtf_index, cfg_dict, q, idx, attributes, logge
 	tabix_obj.close()
 
 	#Write annotations to best hits and final hits
-	logger.debug("Annotated all peaks in chunk '{0}'! Now adding contents to queue...".format(idx))
+	logger.debug("Annotated all peaks in chunk {0}. Now adding contents to queue...".format(idx))
 	content = "\n".join([annopeak_to_string(peak, attributes=attributes) for peak in all_valid_annotations]) + "\n"
 	q.put(("allhits.bed", idx, content))
 	q.put(("allhits.txt", idx, content))
@@ -380,5 +380,6 @@ def annotate_peaks(peaks, gtf_gz, gtf_index, cfg_dict, q, idx, attributes, logge
 			q.put((name + ".bed", idx, query_str))
 			q.put((name + ".txt", idx, query_str))
 
+	logger.debug("Job finished for chunk {0}".format(idx))
 	return(0) #success
 

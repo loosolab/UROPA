@@ -1,5 +1,4 @@
 """Contains helper functions for UROPA """
-
 import json
 from textwrap import dedent
 import ast
@@ -12,7 +11,7 @@ import logging
 from logging import handlers
 import multiprocessing as mp
 import time
-import queue
+import datetime
 
 class UROPALogger(logging.Logger):
 
@@ -452,8 +451,11 @@ def is_empty(value):
 	else:
 		return(False)
 
-def sorted_file_writer(q, file_dict):
+def sorted_file_writer(q, file_dict, logger_options):
 	""" Write strings in the correct order coming from Queue """
+
+	#Start logger
+	logger = UROPALogger(**logger_options)
 
 	#Open handles for files
 	file_handles = {}
@@ -469,8 +471,19 @@ def sorted_file_writer(q, file_dict):
 	#Fetching string content from queue
 	idx_to_write = {key: 0 for key in file_dict}	#Start with idx == 0
 	ready_to_write = {key:{} for key in file_dict}
+
+	delta = datetime.timedelta(seconds=10) #Write debug status every 10 seconds
+	prev_time = datetime.datetime.now()
 	while True:
 
+		#Write debug status
+		current_time = datetime.datetime.now()
+		if current_time - prev_time > delta: 
+			n_ready_to_write = {key: sorted(list(ready_to_write[key].keys())) for key in ready_to_write}	#dict of idx-lists per key
+			logger.debug("Writer task status | ready to write: {0}".format(n_ready_to_write))
+			prev_time = current_time
+
+		#Fetch annotated sites from queue
 		try:
 			(key, idx, content) = q.get() #idx is an integer starting at 0, content is a string
 
@@ -485,18 +498,15 @@ def sorted_file_writer(q, file_dict):
 				while idx_to_write[key] in ready_to_write[key]:
 					content = ready_to_write[key][idx_to_write[key]]
 					file_handles[key].write(content)
-					ready_to_write[key][idx_to_write[key]] = "" #Content has been written; free up memory!
+
+					del ready_to_write[key][idx_to_write[key]] #Content has been written for this idx; free up memory!
 					idx_to_write[key] += 1	#increment to write next block
 					
 
 		except Exception as e:
-			print('Problem in sorted_file_writer:')
-			print(e)
-			print(e.message)
-			print(type(e))
-			print(e.args)
-			print(traceback.print_exc())
-			break
+			logger.error('Error occurred during file writing: {0}'.format(type(e)))
+			logger.debug("Full traceback: {0}".format(traceback.format_exc()))
+			return(1)
 
 	#Got all content in queue, close file
 	for key in file_dict:
