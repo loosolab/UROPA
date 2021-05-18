@@ -280,7 +280,7 @@ def format_config(cfg_dict, logger):
 		#Keys which should be lists (sets) to search in 
 		for key in ["feature", "feature_anchor", "attribute_values", "relative_location"]:
 			if type(query.get(key, [])) != list:
-				query[key] = set([query[key]])
+				query[key] = list(set([query[key]]))
 
 		#Check the default values of input
 		if "strand" in query:
@@ -297,6 +297,7 @@ def format_config(cfg_dict, logger):
 			if len(invalid) > 0:
 				logger.error("Invalid feature_anchor ({0}) set in query {1}. Valid options are: {2}".format(invalid, i+1, valid))
 				sys.exit()
+			query["feature_anchor"] = list(query["feature_anchor"]) #convert back to list from set
 
 		if "relative_location" in query:
 			query["relative_location"] = set([case_conversion.get(str(element).lower(), element) for element in query["relative_location"]])
@@ -305,6 +306,7 @@ def format_config(cfg_dict, logger):
 			if len(invalid) > 0:
 				logger.error("Invalid relative_location ({0}) set in query {1}. Valid options are: {2}".format(invalid, i+1, valid))
 				sys.exit()
+			query["relative_location"] = list(query["relative_location"]) #convert back to list from set
 
 		#Name the query if it was not already named
 		if "name" not in query:

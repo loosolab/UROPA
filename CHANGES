@@ -1,5 +1,6 @@
 ## 4.0.1 (2021-05-18)
 - Fix of bug causing peaks to be named ("peak_xxx") only within chunks - adjusted to global naming
+- Fixed faulty reading of "show.attributes" from individual queries
 
 ## 4.0.0 (2020-11-17)
 - Requirement of install is python>=3.2 - python 2.x is no longer supported!

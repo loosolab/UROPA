@@ -184,17 +184,19 @@ def main():
 		try:
 			json_cfg_dict = parse_json(config)
 			logger.debug("Config from json: {0}".format(json_cfg_dict))
+
+			#Format and check values within given json
+			json_cfg_dict = format_config(json_cfg_dict, logger)
+
 			for key in json_cfg_dict:
 				cfg_dict[key] = json_cfg_dict[key] 	#config values always win over commandline input
+
 		except IOError:
 			logger.error("File %s does not exists or is not readable.", config)
 			sys.exit()
 		except ValueError as e:
 			logger.error("File %s contains malformed JSON. %s", config, e)
 			sys.exit()
-
-	#for key in json_cfg_dict:
-		cfg_dict[key] = json_cfg_dict[key]
 
 	# Validate output folder
 	outdir = cfg_dict["outdir"]
