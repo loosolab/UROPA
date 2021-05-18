@@ -379,7 +379,7 @@ def check_bed_format(bedfile, logger):
 
 	#todo: also check the number of columns in file
 
-def parse_bedlines(bedlines, gtf_has_chr):
+def parse_bedlines(bedlines, gtf_has_chr, line_start=0):
 	""" Parse a list of bedlines to internal peaks format """
 
 	peaks = [{}]*len(bedlines)	#initialize to length of bedlines; eliminates the need to append
@@ -388,7 +388,7 @@ def parse_bedlines(bedlines, gtf_has_chr):
 
 		#bed6-columns
 		chrom, start, end = columns[0], int(columns[1]), int(columns[2])
-		name = columns[3] if len(columns) > 3 else "peak_{0}".format(i+1) 
+		name = columns[3] if len(columns) > 3 else "peak_{0}".format(line_start+i+1) 
 		score = columns[4] if len(columns) > 4 else "."
 		strand = columns[5] if len(columns) > 5 else "."
 

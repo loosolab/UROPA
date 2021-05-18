@@ -1,3 +1,6 @@
+## 4.0.1 (2021-05-18)
+- Fix of bug causing peaks to be named ("peak_xxx") only within chunks - adjusted to global naming
+
 ## 4.0.0 (2020-11-17)
 - Requirement of install is python>=3.2 - python 2.x is no longer supported!
 - Added dynamic regulation of multiprocessing jobs based on memory usage (set via hidden --target-mem)

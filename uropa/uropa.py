@@ -424,6 +424,7 @@ def main():
 				   "task_list_i": 0}
 
 	#Go through bedfile and annotate chunks
+	peaks_read = 0
 	end_of_file = 0
 	delta = datetime.timedelta(seconds=5)
 	task_list_i = 0 #number of finished tasks
@@ -445,8 +446,9 @@ def main():
 				end_of_file = 1 #End of the file has been reached
 
 			#Create peaks format for chunk
-			peaks = parse_bedlines(chunk_lines, gtf_has_chr) #outputs list of peak-dictionaries
-
+			peaks = parse_bedlines(chunk_lines, gtf_has_chr, line_start=peaks_read) #outputs list of peak-dictionaries
+			peaks_read += len(peaks) #update peaks_read count for next chunk
+				
 			if threads > 1:
 
 				#Keep looping until job for this chunk has been started
