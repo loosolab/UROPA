@@ -1,3 +1,6 @@
+## 4.0.2 (2021-07-12)
+- Fix of bug (introduced in 4.0.1) causing show_attributes to be empty when given by commandline.
+
 ## 4.0.1 (2021-05-18)
 - Fix of bug causing peaks to be named ("peak_xxx") only within chunks - adjusted to global naming
 - Fixed faulty reading of "show.attributes" from individual queries

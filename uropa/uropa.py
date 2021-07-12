@@ -185,11 +185,12 @@ def main():
 			json_cfg_dict = parse_json(config)
 			logger.debug("Config from json: {0}".format(json_cfg_dict))
 
-			#Format and check values within given json
-			json_cfg_dict = format_config(json_cfg_dict, logger)
-
+			#Overwrite any values if given in config file
 			for key in json_cfg_dict:
 				cfg_dict[key] = json_cfg_dict[key] 	#config values always win over commandline input
+			
+			#Format and check values within json
+			cfg_dict = format_config(cfg_dict, logger)
 
 		except IOError:
 			logger.error("File %s does not exists or is not readable.", config)
