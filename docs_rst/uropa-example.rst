@@ -315,7 +315,6 @@ For peak 10, there was no valid annotation for query 0, thus query 1 was evaluat
 .. hint::
   - For priority true there will not be an NA row for queries without valid annotations. 
   - If there is no valid annotation for a peak across all queries, there is a combined NA row for all queries (NA NA ... NA 0,1)
-  - There will be no besthist if priority is TRUE, as there is only one final annotation per peak
    
 
 .. _usedfiles:
