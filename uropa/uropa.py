@@ -22,11 +22,13 @@ import traceback
 import logging
 import multiprocessing as mp
 import pysam
+import pandas as pd
 
 #Import internal functions
 from .utils import *
 from .annotation import *
 from .__init__ import __version__ as VERSION
+import visualization
 
 def restricted_float(f, f_min, f_max):
     f = float(f)
@@ -563,20 +565,33 @@ def main():
 	##### Visual summary #####
 	if args.summary:
 		logger.info("Creating the Summary graphs of the results...")
-		summary_script = "uropa_summary.R"
-		summary_output = output_prefix + "_summary.pdf"
 
-		#cmd is the command-line call str
-		call = [summary_script, "-f", os.path.join(output_prefix + "_finalhits.txt"), "-c", output_prefix + ".json", "-o", summary_output, "-b", os.path.join(output_prefix + "_allhits.txt"), "-a \'", cmd, "\'"]
-		call_str = ' '.join(call)
+		# ----------------------------------- deprecated R script ----------------------------------- #
+		# summary_script = "uropa_summary.R"
+		# summary_output = output_prefix + "_summary.pdf"
+
+		# #cmd is the command-line call str
+		# call = [summary_script, "-f", os.path.join(output_prefix + "_finalhits.txt"), "-c", output_prefix + ".json", "-o", summary_output, "-b", os.path.join(output_prefix + "_allhits.txt"), "-a \'", cmd, "\'"]
+		# call_str = ' '.join(call)
 		
-		try:
-			logger.debug('Summary output call is {}'.format(call_str))
-			sum_pr = subprocess.check_output(call_str, shell=True)
-		except subprocess.CalledProcessError:
-			logger.warning("Visualized summary output could not be created from: %s", call_str)
-		except OSError:
-			logger.warning("Rscript command not available for summary output.")
+		# try:
+		# 	logger.debug('Summary output call is {}'.format(call_str))
+		# 	sum_pr = subprocess.check_output(call_str, shell=True)
+		# except subprocess.CalledProcessError:
+		# 	logger.warning("Visualized summary output could not be created from: %s", call_str)
+		# except OSError:
+		# 	logger.warning("Rscript command not available for summary output.")
+		# ------------------------------------------------------------------------------------------- #
+
+		# load data
+		allhits = pd.read_csv(os.path.join(output_prefix + "_allhits.txt"), sep="\t")
+		finalhits = pd.read_csv(os.path.join(output_prefix + "_finalhits.txt"), sep="\t")
+
+		# load config
+		with open(f"{output_prefix}.json", 'r') as f:
+			config = json.load(f)
+
+		visualization.summary(allhits=allhits, finalhits=finalhits, config=config, call=cmd, output=f"{output_prefix}_summary.pdf")
 
 	##### Cleanup #####
 	if args.debug == False:
