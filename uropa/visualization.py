@@ -1,4 +1,9 @@
 # TODO imports
+import pandas as pd
+import matplotlib as mp
+import matplotlib.pyplot as plt
+import seaborn as sb
+import os.path as pt
 
 # -------------------- plot functions -------------------- #
 
@@ -26,29 +31,58 @@ def distribution_plot(table, var, kind):
     """
     pass
 
-
-def count_plot(table, var, kind):
+def count_plot(table, var, kind, title=None, path=None, dpi="figure"):
     """
     Count and plot the occurence of the selected categorical variable.
     Either shown as a pie chart or bar plot.
-
     Parameters
     ----------
     table : pd.DataFrame
         Pandas dataframe containing the data.
-    var : <datatype>, <default value>
-        <param description>
-    kind : <datatype>, <default value>
-        <param description>
-    TODO add more parameters
-
+    var : String value
+        String value naming column along which to group peaks
+    kind : String value
+        String value naming plot type (pie, bar)
+    title : String value, default=None
+        String value for title of plot. If None plot has no title.
+    path : String value, default=None
+        String value with path to save plot at. If None plot is not saved.
+    dpi : Float value, default="figure"
+        Float value with DPI to save plot with. If "figure" the figure's DPI is used.
+    TODO test function and add par plot option
     Returns
     -------
     <datatype> :
         <return description>
     TODO should return the plotting object
     """
-    pass
+    valid_columns = table.keys() # List of valid column names from input table
+    categories = table[var].unique() # List of Unique categories in given column
+    counts = table[var].value_counts(dropna=False).to_dict() # Dict of category as key and count per category as value
+    
+    fig, ax = plt.subplots()
+    
+    if kind == "pie":
+        ax.pie(data, labels=categories, autopct='%1.1f%%')
+        ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+        if title is not None:
+            ax.set_title(title)
+    elif kind == "bar":
+        pass
+    else:
+        raise ValueError("Incorrect type parameter. Please choose either \"pie\" or \"bar\".")
+    
+    if path is not None:
+        # check if path to folder in which to save plot is valid
+        folder_path = pt.split(path)[0]
+        
+        if not pt.exists(folder_path):
+            raise OSError("Invalid file path for saving plot.")
+        
+        # Save figure
+        plt.savefig(path, dpi=dpi)
+        
+    plt.show()
 
 
 def peak_count_plot(table, var, kind):
