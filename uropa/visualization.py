@@ -3,52 +3,102 @@
 # -------------------- plot functions -------------------- #
 
 
-def distribution_plot(table, var, kind):
+def distribution_plot(table, var, kind, title=None, output=None, dpi=300):
     """
     Plot distribution of the selected numerical variable.
     Distribution can be shown as boxplot, violinplot or histogram/kde.
-
     Parameters
     ----------
     table : pd.DataFrame
         Pandas dataframe containing the data.
-    var : <datatype>, <default value>
-        <param description>
-    kind : <datatype>, <default value>
-        <param description>
-    TODO add more parameters
-
+    var : String, "feature"
+        The column to be displayed
+    kind : String, countplot
+        The kind of plot
+    title : String, None
+        The title of the plot
+    output : String, None
+        The path where the plot should be saved
+    dpi : Int, 300
+        The resolution of the plot
     Returns
     -------
-    <datatype> :
-        <return description>
-    TODO should return the plotting object
+    matplotlib.pyplot :
+        pyplot object for further processing
     """
-    pass
+    sns.set(style = "darkgrid")
+    
+    match kind:
+        case "histogram":
+            if title != None:
+                sns.histplot(data = table[var]).set(title = title)
+            else:
+                sns.histplot(data = table[var])
+        case "boxplot":
+            if title != None:
+                sns.boxplot(y = table[var]).set(title = title)
+            else:
+                sns.boxplot(y = table[var])
+        case "violin":
+            if title != None:
+                sns.violinplot(x = table[var]).set(title = title)
+            else:
+                sns.violinplot(x = table[var])
+        case _:
+            print(kind + " not supported.")
+    
+    if output != None:
+        plt.savefig(output, dpi = dpi)
+                
+    return plt
 
 
-def count_plot(table, var, kind):
+def count_plot(table, var="feature", kind="countplot", title=None, output=None, dpi=300):
     """
     Count and plot the occurence of the selected categorical variable.
     Either shown as a pie chart or bar plot.
-
     Parameters
     ----------
     table : pd.DataFrame
         Pandas dataframe containing the data.
-    var : <datatype>, <default value>
-        <param description>
-    kind : <datatype>, <default value>
-        <param description>
-    TODO add more parameters
-
+    var : String, "feature"
+        The column to be displayed
+    kind : String, countplot
+        The kind of plot
+    title : String, None
+        The title of the plot
+    output : String, None
+        The path where the plot should be saved
+    dpi : Int, 300
+        The resolution of the plot
     Returns
     -------
-    <datatype> :
-        <return description>
-    TODO should return the plotting object
+    matplotlib.pyplot :
+        pyplot object for further processing
     """
-    pass
+    sns.set(style="darkgrid")
+
+    match kind:
+        case "countplot":
+            if title != None:
+                sns.countplot(x=var, data=table).set(title = title)
+            else:
+                sns.countplot(x=var, data=table)
+        case "pieplot":
+            counts = table['feature']. value_counts().values.tolist()
+            labels = table['feature']. value_counts().index.tolist()
+            colors = sns.color_palette('pastel')[0:5]
+
+            plt.pie(counts, labels = labels, colors = colors, autopct='%.0f%%')
+            if title != None: #TODO set title of pieplot does not work yet
+                plt.title = title
+        case _:
+            print(kind + " not supported.")
+
+    if output != None:
+        plt.savefig(output, dpi = dpi)
+    
+    return plt
 
 
 def peak_count_plot(table, var, kind):
