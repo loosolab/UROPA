@@ -1,4 +1,3 @@
-# TODO imports
 import pandas as pd
 import matplotlib as mp
 import matplotlib.pyplot as plt
@@ -31,7 +30,7 @@ def distribution_plot(table, var, kind):
     """
     pass
 
-def count_plot(table, var, kind, title=None, path=None, dpi="figure"):
+ef count_plot(table, var="feature", kind="pie", title=None, title_size=20, path=None, dpi=300.0, label_rot=45):
     """
     Count and plot the occurence of the selected categorical variable.
     Either shown as a pie chart or bar plot.
@@ -39,50 +38,63 @@ def count_plot(table, var, kind, title=None, path=None, dpi="figure"):
     ----------
     table : pd.DataFrame
         Pandas dataframe containing the data.
-    var : String value
-        String value naming column along which to group peaks
-    kind : String value
-        String value naming plot type (pie, bar)
-    title : String value, default=None
-        String value for title of plot. If None plot has no title.
-    path : String value, default=None
-        String value with path to save plot at. If None plot is not saved.
-    dpi : Float value, default="figure"
-        Float value with DPI to save plot with. If "figure" the figure's DPI is used.
-    TODO test function and add par plot option
+    var : String, default="featire"
+        Value naming column along which to group peaks
+    kind : String, default="pie"
+        Value naming plot type (pie, bar)
+    title : String, default=None
+        Value for title of plot. If None plot has no title.
+    title_size: Integer, default=20
+        Value for size in points of figure title.
+    path : String, default=None
+        Value with path to save plot at. If None plot is not saved.
+    dpi : Float, default=300.0
+        Value with DPI to save plot with. If default 300.0 DPI is set.
+    label_rot: Integer, default=45
+        Value deciding degree to which to rotate x-labels for bar plot. Valid values are 0 - 360.
     Returns
     -------
-    <datatype> :
-        <return description>
-    TODO should return the plotting object
+    matplotlib.figure.Figure fig :
+        Returns the plotting object.
     """
     valid_columns = table.keys() # List of valid column names from input table
+    # Check if parameter var is valid column name
+    if var not in valid_columns:
+        raise ValueError("Incorrect var parameter. Please chose a valid column name to group by.")
+        
     categories = table[var].unique() # List of Unique categories in given column
-    counts = table[var].value_counts(dropna=False).to_dict() # Dict of category as key and count per category as value
+    counts_dict = table[var].value_counts(dropna=False).to_dict() # Dict of category as key and count per category as value
+    counts = [] # List of counts for each variable in categories
+    # Fill counts
+    for category in categories:
+        counts.append(counts_dict[category])
     
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(dpi=dpi)
     
     if kind == "pie":
         ax.pie(data, labels=categories, autopct='%1.1f%%')
         ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-        if title is not None:
-            ax.set_title(title)
     elif kind == "bar":
-        pass
+        sb.barplot(x=categories, y=counts, ax=ax)
+        plt.xticks(rotation=label_rot)
     else:
-        raise ValueError("Incorrect type parameter. Please choose either \"pie\" or \"bar\".")
+        raise ValueError("Incorrect kind parameter. Please choose either \"pie\" or \"bar\".")
     
+    # Set title if given
+    if title is not None:
+        ax.set_title(title, size=title_size)
+        
     if path is not None:
         # check if path to folder in which to save plot is valid
         folder_path = pt.split(path)[0]
-        
         if not pt.exists(folder_path):
             raise OSError("Invalid file path for saving plot.")
-        
-        # Save figure
-        plt.savefig(path, dpi=dpi)
-        
-    plt.show()
+
+        # Save figure (if file ending is not valid method savefig() will raise an Error)
+        plt.savefig(path)
+    
+    # return plotting object
+    return fig
 
 
 def peak_count_plot(table, var, kind):
