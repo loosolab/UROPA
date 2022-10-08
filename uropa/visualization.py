@@ -1,104 +1,110 @@
-# TODO imports
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 # -------------------- plot functions -------------------- #
 
 
-def distribution_plot(table, var, kind, title=None, output=None, dpi=300):
+def distribution_plot(table, var=, kind="histogram", title=None, output=None, dpi=300):
     """
     Plot distribution of the selected numerical variable.
     Distribution can be shown as boxplot, violinplot or histogram/kde.
+    
     Parameters
     ----------
     table : pd.DataFrame
         Pandas dataframe containing the data.
-    var : String, "feature"
+    var : string
         The column to be displayed
-    kind : String, countplot
-        The kind of plot
-    title : String, None
+    kind : string, default "countplot"
+        The kind of plot: "histogram", "boxplot" or "violin"
+    title : string, default None
         The title of the plot
-    output : String, None
+    output : string, default None
         The path where the plot should be saved
-    dpi : Int, 300
+    dpi : Int, default 300
         The resolution of the plot
+        
     Returns
     -------
     matplotlib.pyplot :
         pyplot object for further processing
     """
-    sns.set(style = "darkgrid")
     
+    # TODO: add title afterwards once
     match kind:
         case "histogram":
-            if title != None:
-                sns.histplot(data = table[var]).set(title = title)
+            if title:
+                sns.histplot(data=table[var]).set(title=title)
             else:
-                sns.histplot(data = table[var])
+                sns.histplot(data=table[var])
         case "boxplot":
-            if title != None:
-                sns.boxplot(y = table[var]).set(title = title)
+            if title:
+                sns.boxplot(y=table[var]).set(title=title)
             else:
-                sns.boxplot(y = table[var])
+                sns.boxplot(y=table[var])
         case "violin":
-            if title != None:
-                sns.violinplot(x = table[var]).set(title = title)
+            if title:
+                sns.violinplot(x=table[var]).set(title=title)
             else:
-                sns.violinplot(x = table[var])
+                sns.violinplot(x=table[var])
         case _:
-            print(kind + " not supported.")
+            print(f"{kind} not supported. Consider using one of the supported plots (histogram, boxplot or violin).")
     
-    if output != None:
-        plt.savefig(output, dpi = dpi)
+    if output:
+        plt.savefig(output, dpi=dpi)
                 
-    return plt
+    return plt #TODO return correct seaborn plot
 
 
-def count_plot(table, var="feature", kind="countplot", title=None, output=None, dpi=300):
+def count_plot(table, var, kind="countplot", title=None, output=None, dpi=300):
     """
     Count and plot the occurence of the selected categorical variable.
     Either shown as a pie chart or bar plot.
+    
     Parameters
     ----------
     table : pd.DataFrame
         Pandas dataframe containing the data.
-    var : String, "feature"
+    var : string
         The column to be displayed
-    kind : String, countplot
-        The kind of plot
-    title : String, None
+    kind : string, default "countplot"
+        The kind of plot: "countplot", "pieplot"
+    title : string, default None
         The title of the plot
-    output : String, None
+    output : string, default None
         The path where the plot should be saved
-    dpi : Int, 300
+    dpi : Int, default 300
         The resolution of the plot
+        
     Returns
     -------
     matplotlib.pyplot :
         pyplot object for further processing
     """
-    sns.set(style="darkgrid")
 
+    # TODO: add title afterwards once
     match kind:
         case "countplot":
-            if title != None:
+            if title:
                 sns.countplot(x=var, data=table).set(title = title)
             else:
                 sns.countplot(x=var, data=table)
         case "pieplot":
-            counts = table['feature']. value_counts().values.tolist()
-            labels = table['feature']. value_counts().index.tolist()
-            colors = sns.color_palette('pastel')[0:5]
+            counts = table['feature'].value_counts().values.tolist()
+            labels = table['feature'].value_counts().index.tolist()
+            colors = sns.color_palette('pastel')[0:5] #TODO choose number of colors dynamically
 
-            plt.pie(counts, labels = labels, colors = colors, autopct='%.0f%%')
-            if title != None: #TODO set title of pieplot does not work yet
+            plt.pie(counts, labels=labels, colors=colors, autopct='%.0f%%')
+            if title: #TODO set title of pieplot does not work yet
                 plt.title = title
         case _:
-            print(kind + " not supported.")
+            print(f"{kind} not supported. Consider using one of the supported plots (countplot, pieplot).")
 
-    if output != None:
-        plt.savefig(output, dpi = dpi)
+    if output:
+        plt.savefig(output, dpi=dpi)
     
-    return plt
+    return plt #TODO return correct seaborn plot
 
 
 def peak_count_plot(table, var, kind):
