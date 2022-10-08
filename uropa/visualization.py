@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 # -------------------- plot functions -------------------- #
 
 
-def distribution_plot(table, var=, kind="histogram", title=None, output=None, dpi=300):
+def distribution_plot(table, var, kind="histogram", title=None, output=None, dpi=300):
     """
     Plot distribution of the selected numerical variable.
     Distribution can be shown as boxplot, violinplot or histogram/kde.
