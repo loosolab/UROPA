@@ -31,30 +31,24 @@ def distribution_plot(table, var, kind="histogram", title=None, output=None, dpi
         pyplot object for further processing
     """
     
-    # TODO: add title afterwards once
     match kind:
         case "histogram":
-            if title:
-                sns.histplot(data=table[var]).set(title=title)
-            else:
-                sns.histplot(data=table[var])
+                distPlot = sns.histplot(data=table[var])
         case "boxplot":
-            if title:
-                sns.boxplot(y=table[var]).set(title=title)
-            else:
-                sns.boxplot(y=table[var])
+                distPlot = sns.boxplot(y=table[var])
         case "violin":
-            if title:
-                sns.violinplot(x=table[var]).set(title=title)
-            else:
-                sns.violinplot(x=table[var])
+                distPlot = sns.violinplot(x=table[var])
         case _:
             print(f"{kind} not supported. Consider using one of the supported plots (histogram, boxplot or violin).")
+            exit(1)
+            
+    if title:
+        distPlot.set(title=title)
     
     if output:
         plt.savefig(output, dpi=dpi)
                 
-    return plt #TODO return correct seaborn plot
+    return distPlot #TODO return correct plot object
 
 
 def count_plot(table, var, kind="countplot", title=None, output=None, dpi=300):
@@ -83,19 +77,21 @@ def count_plot(table, var, kind="countplot", title=None, output=None, dpi=300):
         pyplot object for further processing
     """
 
-    # TODO: add title afterwards once
+    # TODO: add title afterwards once: in this case maybe not possible,
+    # due to different plot libraries
     match kind:
         case "countplot":
             if title:
-                sns.countplot(x=var, data=table).set(title = title)
+                countPlot = sns.countplot(x=var, data=table)
+                countPlot.set(title = title)
             else:
-                sns.countplot(x=var, data=table)
+                countPlot = sns.countplot(x=var, data=table)
         case "pieplot":
             counts = table['feature'].value_counts().values.tolist()
             labels = table['feature'].value_counts().index.tolist()
             colors = sns.color_palette('pastel')[0:5] #TODO choose number of colors dynamically
 
-            plt.pie(counts, labels=labels, colors=colors, autopct='%.0f%%')
+            countPlot = plt.pie(counts, labels=labels, colors=colors, autopct='%.0f%%')
             if title: #TODO set title of pieplot does not work yet
                 plt.title = title
         case _:
@@ -104,7 +100,7 @@ def count_plot(table, var, kind="countplot", title=None, output=None, dpi=300):
     if output:
         plt.savefig(output, dpi=dpi)
     
-    return plt #TODO return correct seaborn plot
+    return countPlot #TODO return correct plot object
 
 
 def peak_count_plot(table, var, kind):
