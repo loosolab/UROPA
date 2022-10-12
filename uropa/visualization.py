@@ -38,7 +38,7 @@ ef count_plot(table, var="feature", kind="pie", title=None, title_size=20, path=
     ----------
     table : pd.DataFrame
         Pandas dataframe containing the data.
-    var : String, default="featire"
+    var : String, default="feature"
         Value naming column along which to group peaks
     kind : String, default="pie"
         Value naming plot type (pie, bar)
@@ -47,7 +47,7 @@ ef count_plot(table, var="feature", kind="pie", title=None, title_size=20, path=
     title_size: Integer, default=20
         Value for size in points of figure title.
     path : String, default=None
-        Value with path to save plot at. If None plot is not saved.
+        Value with path to save plot at including file name and ending. If None plot is not saved.
     dpi : Float, default=300.0
         Value with DPI to save plot with. If default 300.0 DPI is set.
     label_rot: Integer, default=45
@@ -57,9 +57,9 @@ ef count_plot(table, var="feature", kind="pie", title=None, title_size=20, path=
     matplotlib.figure.Figure fig :
         Returns the plotting object.
     """
-    valid_columns = table.keys() # List of valid column names from input table
+    
     # Check if parameter var is valid column name
-    if var not in valid_columns:
+    if var not in table.columns: # List of valid column names from input table
         raise ValueError("Incorrect var parameter. Please chose a valid column name to group by.")
         
     categories = table[var].unique() # List of Unique categories in given column
