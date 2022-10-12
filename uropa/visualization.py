@@ -61,7 +61,7 @@ ef count_plot(table, var="feature", kind="pie", title=None, title_size=20, path=
     
     # Check if parameter var is valid column name
     if var not in table.columns: # List of valid column names from input table
-        raise ValueError("Incorrect var parameter. Please chose a valid column name to group by.")
+        raise ValueError("Incorrect var parameter. Please choose a valid column name to group by.")
         
     categories = table[var].unique() # List of Unique categories in given column
     counts_dict = table[var].value_counts(dropna=False).to_dict() # Dict of category as key and count per category as value
