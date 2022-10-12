@@ -52,6 +52,7 @@ ef count_plot(table, var="feature", kind="pie", title=None, title_size=20, path=
         Value with DPI to save plot with. If default 300.0 DPI is set.
     label_rot: Integer, default=45
         Value deciding degree to which to rotate x-labels for bar plot. Valid values are 0 - 360.
+    
     Returns
     -------
     matplotlib.figure.Figure fig :
