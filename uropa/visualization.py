@@ -76,7 +76,7 @@ def count_plot(table, var="feature", kind="pie", title=None, title_size=20, path
     fig, ax = plt.subplots(dpi=dpi)
     
     if kind == "pie":
-        ax.pie(data, labels=categories, autopct='%1.1f%%')
+        ax.pie(counts, labels=categories, autopct='%1.1f%%')
         ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
     elif kind == "bar":
         sb.barplot(x=categories, y=counts, ax=ax)
