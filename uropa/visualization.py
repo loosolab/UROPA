@@ -13,7 +13,7 @@ def distribution_plot(table, var, kind="histogram", title=None, output=None, dpi
     Parameters
     ----------
     table : pd.DataFrame
-        Pandas dataframe containing the data.
+        Pandas dataframe containing the data
     var : string
         The column to be displayed
     kind : string, default "countplot"
@@ -51,19 +51,20 @@ def distribution_plot(table, var, kind="histogram", title=None, output=None, dpi
     return distPlot #TODO return correct plot object
 
 
-def count_plot(table, var, kind="countplot", title=None, output=None, dpi=300):
+def peak_count_plot(table, var="feature", kind="histogram", peak_type="exon", title=None, output=None, dpi=300):
     """
-    Count and plot the occurence of the selected categorical variable.
-    Either shown as a pie chart or bar plot.
-    
+    Count and plot occurence of selected variable by peak.
+
     Parameters
     ----------
     table : pd.DataFrame
-        Pandas dataframe containing the data.
+        Pandas dataframe containing the data
     var : string
         The column to be displayed
-    kind : string, default "countplot"
-        The kind of plot: "countplot", "pieplot"
+    kind : string, default "histogram"
+        The kind of plot: "histogram" or "stacked" TODO
+    peak_type : string, default "exon"
+        Type of peak which will be counted
     title : string, default None
         The title of the plot
     output : string, default None
@@ -73,57 +74,30 @@ def count_plot(table, var, kind="countplot", title=None, output=None, dpi=300):
         
     Returns
     -------
-    matplotlib.pyplot :
-        pyplot object for further processing
+    TODO
     """
-
-    # TODO: add title afterwards once: in this case maybe not possible,
-    # due to different plot libraries
+    
+    sns.set_style("darkgrid")
+                  
     match kind:
-        case "countplot":
-            if title:
-                countPlot = sns.countplot(x=var, data=table)
-                countPlot.set(title = title)
-            else:
-                countPlot = sns.countplot(x=var, data=table)
-        case "pieplot":
-            counts = table['feature'].value_counts().values.tolist()
-            labels = table['feature'].value_counts().index.tolist()
-            colors = sns.color_palette('pastel')[0:5] #TODO choose number of colors dynamically
-
-            countPlot = plt.pie(counts, labels=labels, colors=colors, autopct='%.0f%%')
-            if title: #TODO set title of pieplot does not work yet
-                plt.title = title
+        case "histogram":
+                df = table[table[var] == peak_type]
+                values = df.groupby(['peak_chr', 'peak_start', 'peak_end']).size()
+                pcPlot = sns.histplot(data=values, discrete=True)
+                pcPlot.set(xlabel=peak_type, ylabel='count')
+        case "stacked":
+                # TODO
         case _:
-            print(f"{kind} not supported. Consider using one of the supported plots (countplot, pieplot).")
-
+            print(f"{kind} not supported. Consider using one of the supported plots (histogram or stacked).")
+            exit(1)
+            
+    if title:
+        pcPlot.set(title=title)
+    
     if output:
         plt.savefig(output, dpi=dpi)
-    
-    return countPlot #TODO return correct plot object
-
-
-def peak_count_plot(table, var, kind):
-    """
-    Count and plot occurence of selected variable by peak.
-
-    Parameters
-    ----------
-    table : pd.DataFrame
-        Pandas dataframe containing the data.
-    var : <datatype>, <default value>
-        <param description>
-    kind : <datatype>, <default value>
-        <param description>
-    TODO add more parameters
-
-    Returns
-    -------
-    <datatype> :
-        <return description>
-    TODO should return the plotting object
-    """
-    pass
+        
+    return pcPlot
 
 
 def upset_plot(table, var):
