@@ -91,7 +91,7 @@ def count_plot(table, var="feature", kind="pie", title=None, title_size=20, path
     if path is not None:
         # check if path to folder in which to save plot is valid
         folder_path = pt.split(path)[0]
-        if not pt.exists(folder_path):
+        if folder_path != "" and not pt.exists(folder_path):
             raise OSError("Invalid file path for saving plot.")
 
         # Save figure (if file ending is not valid method savefig() will raise an Error)
@@ -153,6 +153,7 @@ def upset_plot(table, var="feature", peak_columns=["peak_chr", "peak_start", "pe
     matplotlib.figure.Figure fig :
         Returns the plotting object.
     """
+    
     # Check if parameter var is valid column name
     if var not in table.columns:
         raise ValueError("Incorrect var parameter. Please choose a valid column name to group by.")
@@ -183,7 +184,7 @@ def upset_plot(table, var="feature", peak_columns=["peak_chr", "peak_start", "pe
     if path is not None:
         # check if path to folder in which to save plot is valid
         folder_path = pt.split(path)[0]
-        if not pt.exists(folder_path):
+        if folder_path != "" and not pt.exists(folder_path):
             raise OSError("Invalid file path for saving plot.")
 
         # Save figure (if file ending is not valid method savefig() will raise an Error)
