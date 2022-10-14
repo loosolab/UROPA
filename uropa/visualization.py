@@ -32,10 +32,11 @@ def distribution_plot(table, var, kind):
     """
     pass
 
-ef count_plot(table, var="feature", kind="pie", title=None, title_size=20, path=None, dpi=300.0, label_rot=45):
+def count_plot(table, var="feature", kind="pie", title=None, title_size=20, path=None, dpi=300.0, label_rot=45):
     """
     Count and plot the occurence of the selected categorical variable.
     Either shown as a pie chart or bar plot.
+    
     Parameters
     ----------
     table : pd.DataFrame
@@ -129,6 +130,7 @@ def upset_plot(table, var="feature", peak_columns=["peak_chr", "peak_start", "pe
     Similar to a Venn diagram but more readable especially with higher category count.
     For more information see: https://ieeexplore.ieee.org/document/6876017
     https://upsetplot.readthedocs.io/en/stable/
+    
     Parameters
     ----------
     table : pd.DataFrame
