@@ -44,7 +44,10 @@ setup(name='uropa',
         'pysam',
         'psutil',
         'numpy',
-        'pandas'
+        'pandas',
+        'seaborn',
+        'upsetplot',
+        'matplotlib<=3.5' # Requirement for upsetplot package: https://github.com/jnothman/UpSetPlot/issues/191
       ],
       classifiers = [
         'License :: OSI Approved :: MIT License',
