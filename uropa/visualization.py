@@ -124,7 +124,7 @@ def peak_count_plot(table, var, kind):
     pass
 
 
-def upset_plot(table, var="feature", peak_columns=["peak_chr", "peak_start", "peak_end", "peak_strand"], title=None, title_size=20, path=None, dpi=300.0):
+def upset_plot(table, var="feature", peak_columns=["peak_chr", "peak_start", "peak_end", "peak_strand"], title=None, title_size=20, path=None, dpi=300.0, **kwargs):
     """
     Visualize overlaps in a set with an upset plot.
     Similar to a Venn diagram but more readable especially with higher category count.
@@ -146,7 +146,10 @@ def upset_plot(table, var="feature", peak_columns=["peak_chr", "peak_start", "pe
     path : String, default=None
         Value with path to save plot at including plot name and file type ending. If None plot is not saved.
     dpi : Float, default=300.0
-        Value with DPI to save plot with. If default 300.0 DPI is set.    
+        Value with DPI to save plot with. If default 300.0 DPI is set.
+    **kwargs : Additional arguments
+        Any additional arguments will be passed on to the upsetplot.plot() function. For a list of possible arguments check
+        here: https://upsetplot.readthedocs.io/en/stable/api.html#upsetplot.UpSet
     
     Returns
     -------
@@ -175,7 +178,7 @@ def upset_plot(table, var="feature", peak_columns=["peak_chr", "peak_start", "pe
     fig = plt.figure(dpi=dpi)
     
     # Make upset plot
-    up.plot(plot_table, fig=fig)
+    up.plot(plot_table, fig=fig, **kwargs)
     
     # Set title if given
     if title is not None and type(title) is str and type(title_size) is int:
