@@ -39,8 +39,7 @@ def distribution_plot(table, var, kind="histogram", title=None, output=None, dpi
         case "violin":
                 distPlot = sns.violinplot(x=table[var])
         case _:
-            print(f"{kind} not supported. Consider using one of the supported plots (histogram, boxplot or violin).")
-            exit(1)
+            raise Exception(f"{kind} not supported. Consider using one of the supported plots (histogram, boxplot or violin).")
             
     if title:
         distPlot.set(title=title)
@@ -88,8 +87,7 @@ def peak_count_plot(table, var="feature", kind="histogram", peak_type="exon", ti
         case "stacked":
                 # TODO
         case _:
-            print(f"{kind} not supported. Consider using one of the supported plots (histogram or stacked).")
-            exit(1)
+            raise Exception(f"{kind} not supported. Consider using one of the supported plots (histogram or stacked).")
             
     if title:
         pcPlot.set(title=title)
