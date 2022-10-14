@@ -169,7 +169,7 @@ def upset_plot(table, var="feature", peak_columns=["peak_chr", "peak_start", "pe
     grouped_table = table.groupby(peak_columns, as_index=False)[var].apply(' '.join)
     
     # Create new data frame in correct format as plotting input
-    plot_table = up.from_memberships(grouped_table.feature.str.split(' '), data=grouped_table)
+    plot_table = up.from_memberships(grouped_table[var].str.split(' '), data=grouped_table)
     
     fig = plt.figure(dpi=dpi)
     
