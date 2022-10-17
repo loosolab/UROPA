@@ -65,7 +65,9 @@ def count_plot(table, var="feature", kind="pie", title=None, title_size=20, path
     # Check if parameter var is valid column name
     if var not in table.columns: # List of valid column names from input table
         raise ValueError("Incorrect var parameter. Please choose a valid column name to group by.")
-        
+    
+    # Change type of column to String for better NaN handling
+    table[var] = table[var].astype(str)
     categories = table[var].unique() # List of Unique categories in given column
     counts_dict = table[var].value_counts(dropna=False).to_dict() # Dict of category as key and count per category as value
     counts = [] # List of counts for each variable in categories
@@ -95,7 +97,7 @@ def count_plot(table, var="feature", kind="pie", title=None, title_size=20, path
             raise OSError("Invalid file path for saving plot.")
 
         # Save figure (if file ending is not valid method savefig() will raise an Error)
-        plt.savefig(path)
+        plt.savefig(path, bbox_inches="tight")
     
     # return plotting object
     return fig
