@@ -9,48 +9,51 @@ def distribution_plot(table, var, kind="histogram", title=None, output=None, dpi
     """
     Plot distribution of the selected numerical variable.
     Distribution can be shown as boxplot, violinplot or histogram/kde.
-    
+
     Parameters
     ----------
     table : pd.DataFrame
         Pandas dataframe containing the data
     var : string
-        The column to be displayed
-    kind : string, default "countplot"
-        The kind of plot: "histogram", "boxplot" or "violin"
+        Column to be displayed
+    kind : string, default "histogram"
+        Kind of plot: "histogram", "boxplot" or "violin"
     title : string, default None
-        The title of the plot
+        Title of the plot
     output : string, default None
-        The path where the plot should be saved
+        Path where the plot should be saved
     dpi : Int, default 300
-        The resolution of the plot
-        
+        Resolution of the plot
+
     Returns
     -------
-    matplotlib.pyplot :
-        pyplot object for further processing
+    matplotlib.axes._subplots.AxesSubplot :
+        Plot object for further processing
     """
-    
+
+    sns.set_style("darkgrid")
+
     match kind:
         case "histogram":
-                distPlot = sns.histplot(data=table[var])
+            distPlot = sns.histplot(data=table[var])
         case "boxplot":
-                distPlot = sns.boxplot(y=table[var])
+            distPlot = sns.boxplot(y=table[var])
         case "violin":
-                distPlot = sns.violinplot(x=table[var])
+            distPlot = sns.violinplot(x=table[var])
         case _:
-            raise Exception(f"{kind} not supported. Consider using one of the supported plots (histogram, boxplot or violin).")
-            
+            raise Exception(
+                f"{kind} not supported. Consider using one of the supported plots (histogram, boxplot or violin).")
+
     if title:
         distPlot.set(title=title)
-    
+
     if output:
         plt.savefig(output, dpi=dpi)
-                
-    return distPlot #TODO return correct plot object
+
+    return distPlot
 
 
-def peak_count_plot(table, var="feature", kind="histogram", peak_type="exon", title=None, output=None, dpi=300):
+def peak_count_plot(table, var="feature", peak_type="exon", group_by=["peak_chr", "peak_start", "peak_end", "peak_strand"], stacked=False, color_by=None, title=None, output=None, dpi=300):
     """
     Count and plot occurence of selected variable by peak.
 
@@ -58,43 +61,64 @@ def peak_count_plot(table, var="feature", kind="histogram", peak_type="exon", ti
     ----------
     table : pd.DataFrame
         Pandas dataframe containing the data
-    var : string
-        The column to be displayed
-    kind : string, default "histogram"
-        The kind of plot: "histogram" or "stacked" TODO
+    var : string, default "feature"
+        Column which table is filtered by
     peak_type : string, default "exon"
-        Type of peak which will be counted
+        Value of the selected column (var)
+    group_by : list of string, default ["peak_chr", "peak_start", "peak_end", "peak_strand"]
+        Columns which table is grouped by
+    stacked : bool, default False
+        If true, display a stacked barplot (only works if color_by is not None), else display an unstacked barplot
+    color_by : string, default None
+        Column by whose values the plot should be colored
     title : string, default None
-        The title of the plot
+        Title of the plot
     output : string, default None
-        The path where the plot should be saved
+        Path where the plot should be saved
     dpi : Int, default 300
-        The resolution of the plot
-        
+        Resolution of the plot
+
     Returns
     -------
-    TODO
+    matplotlib.axes._subplots.AxesSubplot :
+        Plot object for further processing
     """
-    
+
     sns.set_style("darkgrid")
-                  
-    match kind:
-        case "histogram":
-                df = table[table[var] == peak_type]
-                values = df.groupby(['peak_chr', 'peak_start', 'peak_end']).size()
-                pcPlot = sns.histplot(data=values, discrete=True)
-                pcPlot.set(xlabel=peak_type, ylabel='count')
-        case "stacked":
-                # TODO
-        case _:
-            raise Exception(f"{kind} not supported. Consider using one of the supported plots (histogram or stacked).")
-            
+
+    # Filter DataFrame by column var and peak_type
+    df = table[table[var] == peak_type]
+
+    if color_by:
+        group_by.append(color_by)
+        # Count the number of equal columns which belong to the group_by list and add the column to the DataFrame
+        df = df.groupby(group_by).size().to_frame(peak_type)
+        # Count the corresponding numbers of the color_by values and add the column to the DataFrame ("count")
+        df = df.groupby([peak_type, color_by]).size().to_frame(
+            "count").reset_index()
+
+        # Generate stacked barplot
+        if stacked:
+            pcPlot = df.pivot(index=peak_type, columns=color_by, values="count").plot(
+                kind="bar", stacked=True, rot=0)
+            pcPlot.set_ylabel("count")
+        # Generate barplot
+        else:
+            pcPlot = sns.barplot(data=df, x=peak_type, y="count", hue=color_by)
+            sns.move_legend(pcPlot, "upper right")
+    else:
+        # Count the number of equal columns which belong to the group_by list
+        df = df.groupby(group_by).size()
+        # Generate histogram
+        pcPlot = sns.histplot(data=df, discrete=True)
+        pcPlot.set(xlabel=peak_type, ylabel="count")
+
     if title:
         pcPlot.set(title=title)
-    
+
     if output:
         plt.savefig(output, dpi=dpi)
-        
+
     return pcPlot
 
 
@@ -176,7 +200,7 @@ def summary(allhits, finalhits, config, call, output):
     None
     """
     # create pdf document
-    
+
     # ----- title page ----- #
     # contains number of annotated peaks
     # cmd call
@@ -188,10 +212,10 @@ def summary(allhits, finalhits, config, call, output):
 
     # ---------------------- #
     # count plot(s)
-    
+
     # ---------------------- #
     # peak count plot(s)
-    
+
     # ---------------------- #
     # upset plot(s)
 
