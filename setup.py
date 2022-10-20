@@ -46,7 +46,7 @@ setup(name='uropa',
         'numpy',
         'pandas',
         'seaborn',
-        'matplotlib.pyplot'
+        'matplotlib'
       ],
       classifiers = [
         'License :: OSI Approved :: MIT License',

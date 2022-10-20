@@ -31,7 +31,13 @@ def distribution_plot(table, var, kind="histogram", title=None, output=None, dpi
         Plot object for further processing
     """
 
+    # Check if var is a numerical column
+    if not pd.api.types.is_numeric_dtype(table[var]):
+        raise Exception(
+            f"Please select a numerical column using parameter \"var\". \"{var}\" is not numerical column.")
+
     sns.set_style("darkgrid")
+    sns.set(rc={"figure.dpi": dpi, "savefig.dpi": dpi})
 
     match kind:
         case "histogram":
@@ -42,18 +48,18 @@ def distribution_plot(table, var, kind="histogram", title=None, output=None, dpi
             distPlot = sns.violinplot(x=table[var])
         case _:
             raise Exception(
-                f"{kind} not supported. Consider using one of the supported plots (histogram, boxplot or violin).")
+                f"\"{kind}\" not supported. Consider using one of the supported plots (histogram, boxplot or violin).")
 
     if title:
         distPlot.set(title=title)
 
     if output:
-        plt.savefig(output, dpi=dpi)
+        plt.savefig(output)
 
     return distPlot
 
 
-def peak_count_plot(table, var="feature", peak_type="exon", group_by=["peak_chr", "peak_start", "peak_end", "peak_strand"], stacked=False, color_by=None, title=None, output=None, dpi=300):
+def peak_count_plot(table, var, peak_type, group_by=["peak_chr", "peak_start", "peak_end", "peak_strand"], stacked=False, color_by=None, title=None, output=None, dpi=300):
     """
     Count and plot occurence of selected variable by peak.
 
@@ -61,9 +67,9 @@ def peak_count_plot(table, var="feature", peak_type="exon", group_by=["peak_chr"
     ----------
     table : pd.DataFrame
         Pandas dataframe containing the data
-    var : string, default "feature"
+    var : string
         Column which table is filtered by
-    peak_type : string, default "exon"
+    peak_type : string
         Value of the selected column (var)
     group_by : list of string, default ["peak_chr", "peak_start", "peak_end", "peak_strand"]
         Columns which table is grouped by
@@ -84,23 +90,37 @@ def peak_count_plot(table, var="feature", peak_type="exon", group_by=["peak_chr"
         Plot object for further processing
     """
 
+    # Check if all parameters are present in data
+    params = group_by
+    params.append(var)
+    if color_by:
+        params.append(color_by)
+    if any(p not in table.columns for p in params):
+        raise Exception(
+            f"Please use valid column names only for parameters \"var\", \"group_by\" and \"color_by\".")
+
+    if peak_type not in table[var].unique():
+        raise Exception(
+            f"peak_type \"{peak_type}\" is not a valid value of column \"{var}\".")
+
     sns.set_style("darkgrid")
+    sns.set(rc={"figure.dpi": dpi, "savefig.dpi": dpi})
 
     # Filter DataFrame by column var and peak_type
-    df = table[table[var] == peak_type]
+    if peak_type == "nan":
+        df = table[table[var].isna()]
+    else:
+        df = table[table[var] == peak_type]
 
     if color_by:
         group_by.append(color_by)
         # Count the number of equal columns which belong to the group_by list and add the column to the DataFrame
         df = df.groupby(group_by).size().to_frame(peak_type)
         # Count the corresponding numbers of the color_by values and add the column to the DataFrame ("count")
-        df = df.groupby([peak_type, color_by]).size().to_frame(
-            "count").reset_index()
-
+        df = df.groupby([peak_type, color_by]).size().to_frame("count").reset_index()
         # Generate stacked barplot
         if stacked:
-            pcPlot = df.pivot(index=peak_type, columns=color_by, values="count").plot(
-                kind="bar", stacked=True, rot=0)
+            pcPlot = df.pivot(index=peak_type, columns=color_by, values="count").plot(kind="bar", stacked=True, rot=0)
             pcPlot.set_ylabel("count")
         # Generate barplot
         else:
@@ -117,7 +137,7 @@ def peak_count_plot(table, var="feature", peak_type="exon", group_by=["peak_chr"
         pcPlot.set(title=title)
 
     if output:
-        plt.savefig(output, dpi=dpi)
+        plt.savefig(output)
 
     return pcPlot
 
