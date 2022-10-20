@@ -31,6 +31,11 @@ def distribution_plot(table, var, kind="histogram", title=None, output=None, dpi
         Plot object for further processing
     """
 
+    # Check if var is a valid column name
+    if var not in table.columns:
+        raise Exception(
+            f"Please use a valid column name for parameter \"var\".")
+            
     # Check if var is a numerical column
     if not pd.api.types.is_numeric_dtype(table[var]):
         raise Exception(
