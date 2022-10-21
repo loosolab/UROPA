@@ -4,11 +4,11 @@ import re
 import setuptools
 from setuptools import setup
 
-#Requires minimum python 3.2
-if sys.version_info[0] > 3 or (sys.version_info[0] == 3 and sys.version_info[1] >= 2):
+#Requires minimum python 3.10
+if sys.version_info[0] > 3 or (sys.version_info[0] == 3 and sys.version_info[1] >= 10):
   pass
 else:
-    sys.exit("ERROR: UROPA install requires python>=3.2")
+    sys.exit("ERROR: UROPA install requires python>=3.10")
 
 #Path of setup file to establish version
 setupdir = os.path.abspath(os.path.dirname(__file__))
