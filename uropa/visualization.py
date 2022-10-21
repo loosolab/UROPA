@@ -1,9 +1,11 @@
-# TODO imports
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 # -------------------- plot functions -------------------- #
 
 
-def distribution_plot(table, var, kind):
+def distribution_plot(table, var, kind="histogram", title=None, output=None, dpi=300):
     """
     Plot distribution of the selected numerical variable.
     Distribution can be shown as boxplot, violinplot or histogram/kde.
@@ -11,67 +13,138 @@ def distribution_plot(table, var, kind):
     Parameters
     ----------
     table : pd.DataFrame
-        Pandas dataframe containing the data.
-    var : <datatype>, <default value>
-        <param description>
-    kind : <datatype>, <default value>
-        <param description>
-    TODO add more parameters
+        Pandas dataframe containing the data
+    var : string
+        Column to be displayed
+    kind : string, default "histogram"
+        Kind of plot: "histogram", "boxplot" or "violin"
+    title : string, default None
+        Title of the plot
+    output : string, default None
+        Path where the plot should be saved
+    dpi : Int, default 300
+        Resolution of the plot
 
     Returns
     -------
-    <datatype> :
-        <return description>
-    TODO should return the plotting object
+    matplotlib.axes._subplots.AxesSubplot :
+        Plot object for further processing
     """
-    pass
+
+    # Check if var is a valid column name
+    if var not in table.columns:
+        raise Exception(
+            f"Please use a valid column name for parameter \"var\".")
+            
+    # Check if var is a numerical column
+    if not pd.api.types.is_numeric_dtype(table[var]):
+        raise Exception(
+            f"Please select a numerical column using parameter \"var\". \"{var}\" is not numerical column.")
+
+    sns.set_style("darkgrid")
+    sns.set(rc={"figure.dpi": dpi, "savefig.dpi": dpi})
+
+    match kind:
+        case "histogram":
+            distPlot = sns.histplot(data=table[var])
+        case "boxplot":
+            distPlot = sns.boxplot(y=table[var])
+        case "violin":
+            distPlot = sns.violinplot(x=table[var])
+        case _:
+            raise Exception(
+                f"\"{kind}\" not supported. Consider using one of the supported plots (histogram, boxplot or violin).")
+
+    if title:
+        distPlot.set(title=title)
+
+    if output:
+        plt.savefig(output)
+
+    return distPlot
 
 
-def count_plot(table, var, kind):
-    """
-    Count and plot the occurence of the selected categorical variable.
-    Either shown as a pie chart or bar plot.
-
-    Parameters
-    ----------
-    table : pd.DataFrame
-        Pandas dataframe containing the data.
-    var : <datatype>, <default value>
-        <param description>
-    kind : <datatype>, <default value>
-        <param description>
-    TODO add more parameters
-
-    Returns
-    -------
-    <datatype> :
-        <return description>
-    TODO should return the plotting object
-    """
-    pass
-
-
-def peak_count_plot(table, var, kind):
+def peak_count_plot(table, var, peak_type, group_by=["peak_chr", "peak_start", "peak_end", "peak_strand"], stacked=False, color_by=None, title=None, output=None, dpi=300):
     """
     Count and plot occurence of selected variable by peak.
 
     Parameters
     ----------
     table : pd.DataFrame
-        Pandas dataframe containing the data.
-    var : <datatype>, <default value>
-        <param description>
-    kind : <datatype>, <default value>
-        <param description>
-    TODO add more parameters
+        Pandas dataframe containing the data
+    var : string
+        Column which table is filtered by
+    peak_type : string
+        Value of the selected column (var)
+    group_by : list of string, default ["peak_chr", "peak_start", "peak_end", "peak_strand"]
+        Columns which table is grouped by
+    stacked : bool, default False
+        If true, display a stacked barplot (only works if color_by is not None), else display an unstacked barplot
+    color_by : string, default None
+        Column by whose values the plot should be colored
+    title : string, default None
+        Title of the plot
+    output : string, default None
+        Path where the plot should be saved
+    dpi : Int, default 300
+        Resolution of the plot
 
     Returns
     -------
-    <datatype> :
-        <return description>
-    TODO should return the plotting object
+    matplotlib.axes._subplots.AxesSubplot :
+        Plot object for further processing
     """
-    pass
+
+    # Check if all parameters are present in data
+    params = group_by
+    params.append(var)
+    if color_by:
+        params.append(color_by)
+    if any(p not in table.columns for p in params):
+        raise Exception(
+            f"Please use valid column names only for parameters \"var\", \"group_by\" and \"color_by\".")
+
+    if peak_type not in table[var].unique():
+        raise Exception(
+            f"peak_type \"{peak_type}\" is not a valid value of column \"{var}\".")
+
+    sns.set_style("darkgrid")
+    sns.set(rc={"figure.dpi": dpi, "savefig.dpi": dpi})
+
+    # Filter DataFrame by column var and peak_type
+    if peak_type == "nan":
+        df = table[table[var].isna()]
+    else:
+        df = table[table[var] == peak_type]
+
+    if color_by:
+        group_by.append(color_by)
+        # Count the number of equal columns which belong to the group_by list and add the column to the DataFrame
+        df = df.groupby(group_by).size().to_frame(peak_type)
+        # Count the corresponding numbers of the color_by values and add the column to the DataFrame ("count")
+        df = df.groupby([peak_type, color_by]).size().to_frame("count").reset_index()
+        # Generate stacked barplot
+        if stacked:
+            pcPlot = df.pivot(index=peak_type, columns=color_by, values="count").plot(kind="bar", stacked=True, rot=0)
+            pcPlot.set_ylabel("count")
+        # Generate barplot
+        else:
+            pcPlot = sns.barplot(data=df, x=peak_type, y="count", hue=color_by)
+            sns.move_legend(pcPlot, "upper right")
+    else:
+        # Count the number of equal columns which belong to the group_by list
+        df = df.groupby(group_by).size()
+        # Generate histogram
+        pcPlot = sns.histplot(data=df, discrete=True)
+        pcPlot.set(xlabel=peak_type, ylabel="count")
+
+    if title:
+        pcPlot.set(title=title)
+
+    if output:
+        plt.savefig(output)
+
+    return pcPlot
 
 
 def upset_plot(table, var):
@@ -152,7 +225,7 @@ def summary(allhits, finalhits, config, call, output):
     None
     """
     # create pdf document
-    
+
     # ----- title page ----- #
     # contains number of annotated peaks
     # cmd call
@@ -164,10 +237,10 @@ def summary(allhits, finalhits, config, call, output):
 
     # ---------------------- #
     # count plot(s)
-    
+
     # ---------------------- #
     # peak count plot(s)
-    
+
     # ---------------------- #
     # upset plot(s)
 
