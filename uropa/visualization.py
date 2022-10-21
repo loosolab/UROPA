@@ -1,10 +1,10 @@
 import pandas as pd
 import matplotlib as mp
 import matplotlib.pyplot as plt
+import seaborn as sns
 import os.path as pt
 import upsetplot as up
 import numpy as n
-import seaborn as sns
 
 # -------------------- plot functions -------------------- #
 
@@ -34,6 +34,37 @@ def distribution_plot(table, var, kind="histogram", title=None, output=None, dpi
     matplotlib.axes._subplots.AxesSubplot :
         Plot object for further processing
     """
+    # Check if var is a valid column name
+    if var not in table.columns:
+        raise Exception(
+            f"Please use a valid column name for parameter \"var\".")
+            
+    # Check if var is a numerical column
+    if not pd.api.types.is_numeric_dtype(table[var]):
+        raise Exception(
+            f"Please select a numerical column using parameter \"var\". \"{var}\" is not numerical column.")
+
+    sns.set_style("darkgrid")
+    sns.set(rc={"figure.dpi": dpi, "savefig.dpi": dpi})
+
+    match kind:
+        case "histogram":
+            distPlot = sns.histplot(data=table[var])
+        case "boxplot":
+            distPlot = sns.boxplot(y=table[var])
+        case "violin":
+            distPlot = sns.violinplot(x=table[var])
+        case _:
+            raise Exception(
+                f"\"{kind}\" not supported. Consider using one of the supported plots (histogram, boxplot or violin).")
+
+    if title:
+        distPlot.set(title=title)
+
+    if output:
+        plt.savefig(output)
+
+    return distPlot
 
 
 def count_plot(table, var="feature", kind="pie", title=None, title_size=20, path=None, dpi=300.0, label_rot=45):
