@@ -1,6 +1,10 @@
 import pandas as pd
-import seaborn as sns
+import matplotlib as mp
 import matplotlib.pyplot as plt
+import seaborn as sns
+import os.path as pt
+import upsetplot as up
+import numpy as n
 
 # -------------------- plot functions -------------------- #
 
@@ -30,7 +34,6 @@ def distribution_plot(table, var, kind="histogram", title=None, output=None, dpi
     matplotlib.axes._subplots.AxesSubplot :
         Plot object for further processing
     """
-
     # Check if var is a valid column name
     if var not in table.columns:
         raise Exception(
@@ -62,6 +65,77 @@ def distribution_plot(table, var, kind="histogram", title=None, output=None, dpi
         plt.savefig(output)
 
     return distPlot
+
+
+def count_plot(table, var="feature", kind="pie", title=None, title_size=20, path=None, dpi=300.0, label_rot=45):
+    """
+    Count and plot the occurence of the selected categorical variable.
+    Either shown as a pie chart or bar plot.
+    
+    Parameters
+    ----------
+    table : pd.DataFrame
+        Pandas dataframe containing the data.
+    var : String, default="feature"
+        Value naming column along which to group peaks
+    kind : String, default="pie"
+        Value naming plot type (pie, bar)
+    title : String, default=None
+        Value for title of plot. If None plot has no title.
+    title_size: Integer, default=20
+        Value for size in points of figure title.
+    path : String, default=None
+        Value with path to save plot at including file name and ending. If None plot is not saved.
+    dpi : Float, default=300.0
+        Value with DPI to save plot with. If default 300.0 DPI is set.
+    label_rot: Integer, default=45
+        Value deciding degree to which to rotate x-labels for bar plot. Valid values are 0 - 360.
+    
+    Returns
+    -------
+    matplotlib.figure.Figure fig :
+        Returns the plotting object.
+    """
+    
+    # Check if parameter var is valid column name
+    if var not in table.columns: # List of valid column names from input table
+        raise ValueError("Incorrect var parameter. Please choose a valid column name to group by.")
+    
+    # Change type of column to String for better NaN handling
+    table[var] = table[var].astype(str)
+    categories = table[var].unique() # List of Unique categories in given column
+    counts_dict = table[var].value_counts(dropna=False).to_dict() # Dict of category as key and count per category as value
+    counts = [] # List of counts for each variable in categories
+    # Fill counts
+    for category in categories:
+        counts.append(counts_dict[category])
+    
+    fig, ax = plt.subplots(dpi=dpi)
+    
+    if kind == "pie":
+        ax.pie(counts, labels=categories, autopct='%1.1f%%')
+        ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    elif kind == "bar":
+        sns.barplot(x=categories, y=counts, ax=ax)
+        plt.xticks(rotation=label_rot)
+    else:
+        raise ValueError("Incorrect kind parameter. Please choose either \"pie\" or \"bar\".")
+    
+    # Set title if given
+    if title is not None:
+        ax.set_title(title, size=title_size)
+        
+    if path is not None:
+        # check if path to folder in which to save plot is valid
+        folder_path = pt.split(path)[0]
+        if folder_path != "" and not pt.exists(folder_path):
+            raise OSError("Invalid file path for saving plot.")
+
+        # Save figure (if file ending is not valid method savefig() will raise an Error)
+        plt.savefig(path, bbox_inches="tight")
+    
+    # return plotting object
+    return fig
 
 
 def peak_count_plot(table, var, peak_type, group_by=["peak_chr", "peak_start", "peak_end", "peak_strand"], stacked=False, color_by=None, title=None, output=None, dpi=300):
@@ -147,30 +221,76 @@ def peak_count_plot(table, var, peak_type, group_by=["peak_chr", "peak_start", "
     return pcPlot
 
 
-def upset_plot(table, var):
+def upset_plot(table, var="feature", peak_columns=["peak_chr", "peak_start", "peak_end", "peak_strand"], title=None, title_size=20, path=None, dpi=300.0, **kwargs):
     """
     Visualize overlaps in a set with an upset plot.
     Similar to a Venn diagram but more readable especially with higher category count.
-
     For more information see: https://ieeexplore.ieee.org/document/6876017
-
     https://upsetplot.readthedocs.io/en/stable/
-
+    
     Parameters
     ----------
     table : pd.DataFrame
         Pandas dataframe containing the data.
-    var : <datatype>, <default value>
-        <param description>
-    TODO add more parameters
-
+    var : String, default="feature"
+        Column which's values to list per peak and plot as categories.
+    peak_columns: List of Strings, default=["peak_chr", "peak_start", "peak_end", "peak_strand"]
+        Colums in table which identify peaks, to be used in group_by function.
+    title : String, default=None
+        Value for title of plot. If None plot has no title.
+    title_size: Integer, default=20
+        Value for size in points of figure title.
+    path : String, default=None
+        Value with path to save plot at including plot name and file type ending. If None plot is not saved.
+    dpi : Float, default=300.0
+        Value with DPI to save plot with. If default 300.0 DPI is set.
+    **kwargs : Additional arguments
+        Any additional arguments will be passed on to the upsetplot.plot() function. For a list of possible arguments check
+        here: https://upsetplot.readthedocs.io/en/stable/api.html#upsetplot.UpSet
+    
     Returns
     -------
-    <datatype> :
-        <return description>
-    TODO should return the plotting object
+    matplotlib.figure.Figure fig :
+        Returns the plotting object.
     """
-    pass
+    
+    # Check if parameter var is valid column name
+    if var not in table.columns:
+        raise ValueError("Incorrect var parameter. Please choose a valid column name to group by.")
+    
+    # Check if values for peak_columns are valid column names
+    for column in peak_columns:
+        if column not in table.columns:
+            raise ValueError("Incorrect peak_columns parameter. Please choose valid column names to identify peaks by.")
+        
+    # Convert var column to String for better handling of NaN values while plotting
+    table[var] = table[var].astype(str)
+    
+    # Creat new data frame that groupes by peaks and lists values for selected colum per peak
+    grouped_table = table.groupby(peak_columns, as_index=False)[var].agg(lambda x: list(x))
+    
+    # Create new data frame in correct format as plotting input
+    plot_table = up.from_memberships(grouped_table[var], data=grouped_table)
+    
+    fig = plt.figure(dpi=dpi)
+    
+    # Make upset plot
+    up.plot(plot_table, fig=fig, **kwargs)
+    
+    # Set title if given
+    if title is not None and type(title) is str and type(title_size) is int:
+        fig.suptitle(title, size=title_size)
+        
+    if path is not None:
+        # check if path to folder in which to save plot is valid
+        folder_path = pt.split(path)[0]
+        if folder_path != "" and not pt.exists(folder_path):
+            raise OSError("Invalid file path for saving plot.")
+
+        # Save figure (if file ending is not valid method savefig() will raise an Error)
+        plt.savefig(path)
+    
+    return fig
 
 
 def plot_grid(table, groupby, func, ncol=3, **kwargs):
