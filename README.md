@@ -32,12 +32,19 @@ Documentation
 --------------
 A detailed description of how to apply UROPA to your data can be found [here](http://uropa-manual.readthedocs.io/).
 
-Installation and Command-line usage
+Installation
 ------------------------------------
 
-### Conda package manager
+### From PyPI
 
-We recommend to install UROPA using the conda package manager. Make sure to have `conda` installed, e.g. via
+You can install UROPA by simply running:
+
+```bash
+pip install uropa
+```
+
+### Conda package manager
+You can also install UROPA using the conda package manager. Make sure to have `conda` installed, e.g. via
 
 - [Miniconda](https://conda.io/miniconda.html)
 	- download the Miniconda installer for **Python 3**
@@ -56,34 +63,26 @@ If you have a running [Docker](docker.com) environment, you can pull a biocontai
 
 -	`docker pull quay.io/biocontainers/uropa:latest_tag` using the latest tag from the [taglist](https://quay.io/repository/biocontainers/uropa?tab=tags), e.g. `1.2.1--py27r3.3.2_0`
 
-### Installation from source
 
-You can also install UROPA from the source PyPI package. Note that this comes without the R dependencies for auxillary scripts:
+Usage
+-----------
 
-`pip install uropa`
+### Test command
+It is possible to run UROPA using either a config file (supports multiple queries):
 
-To fulfill all other dependencies, follow the instructions below:
-
-- [R/Rscript](http://www.r-project.org/) (v3.3.0 or higher; follow instructions on url)
-	- install required packages step by step:
-	```bash
-	install.packages(c("ggplot2", "devtools", "gplots", "gridExtra", "jsonlite", "VennDiagram", "getopt", "tidyr", "UpSetR"))
-	source("https://bioconductor.org/biocLite.R")
-	biocLite(c("RBGL", "graph"))
-  ```
-
-In order to plot the Chow-Ruskey plot with uropa_summary.R, install the modified Vennerable package from our fork:
-
-```
-library(devtools)
-install_github("jenzopr/Vennerable")
+```bash
+uropa -i sample_config.json -t 4 
 ```
 
-### Usage
+Or directly using a .bed-file (supports only one query):
+
+```bash
+uropa --bed test_data/genomic_regions.bed --gtf test_data/gencode.v29.annotation.chr19.gtf
+```
+
+### Command-line usage
 
 To effectively use UROPA, make yourself familiar with the command-line options:
-
-## Command-line usage
 
 ```bash
 $ uropa                   
@@ -129,10 +128,6 @@ Additional arguments:
   -v, --version                    Prints the version and exits
 
 ```
-
-It is also possible to run UROPA using queries as given in sample_config.json:
-
-``` uropa -i sample_config.json -t 4 ```
 
 ## Biocontainer usage
 
