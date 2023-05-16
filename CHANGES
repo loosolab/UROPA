@@ -1,3 +1,13 @@
+## 4.0.3 (in progress)
+- Fix issue with filter_attribute given as list (#21)
+
+## 4.0.2 (2021-07-12)
+- Fix of bug (introduced in 4.0.1) causing show_attributes to be empty when given by commandline.
+
+## 4.0.1 (2021-05-18)
+- Fix of bug causing peaks to be named ("peak_xxx") only within chunks - adjusted to global naming
+- Fixed faulty reading of "show.attributes" from individual queries
+
 ## 4.0.0 (2020-11-17)
 - Requirement of install is python>=3.2 - python 2.x is no longer supported!
 - Added dynamic regulation of multiprocessing jobs based on memory usage (set via hidden --target-mem)
