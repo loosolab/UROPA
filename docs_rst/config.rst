@@ -96,7 +96,7 @@ Each query can specify the following keys:
    
    Default: ``'None'``
    
-   Example: ``'filter.attribute': ['gene_type']``
+   Example: ``'filter.attribute': 'gene_type'``
 
    
 -  **attribute.value** : Corresponding attribute value for the ``'filter.attribute'`` found in the 9th column of the GTF file.
@@ -121,7 +121,7 @@ Prioritizing queries
 If 'False', all given queries are weighted equally and any feature matching with any of these queries will be a valid annotation.
 If only one query is provided, the value of 'priority' has no influence on the annotation process.
 Allowed values are one of ``'T', True', 'Y', 'Yes'`` or ``'F', 'False' ,'N' ,'No'``.
-
+-
 Default: ``'False'``
 
 Example: ``'priority':'Yes'``
