@@ -1,6 +1,6 @@
 ## 4.0.3 (in progress)
 - Fix issue with filter_attribute given as list (#21)
-- Fix issue with summary plot script (#22)
+- Fix false filtering of any rows with "NA" within summary plot script (#22)
 
 ## 4.0.2 (2021-07-12)
 - Fix of bug (introduced in 4.0.1) causing show_attributes to be empty when given by commandline.
