@@ -67,11 +67,11 @@ features <- c()
 
 # helper for plot 2 and 5 (counts the occurence of each loci for pie charts)
 .plot.genomic.location.per.feature.helper <- function(f, df.uropa, pie.basic){
-  
+
   feat <- features[f]
   df.feature <- subset(df.uropa, df.uropa$feature == feat)
   unique.loci <- sort(unique(df.feature$relative_location))
-  
+
   occurence.loci <- c()
   for(j in 1:length(unique.loci)){
     loci <- as.character(unique.loci[j])
@@ -93,19 +93,19 @@ features <- c()
   df.pie$location <- paste0(df.pie$location, " (", perc, "%)")
 
   # now background
-  blank_theme <- theme_minimal() + theme(axis.title.x = element_blank(), axis.title.y = element_blank(), 
-                                        panel.border = element_blank(), 
-                                        panel.grid=element_blank(), 
+  blank_theme <- theme_minimal() + theme(axis.title.x = element_blank(), axis.title.y = element_blank(),
+                                        panel.border = element_blank(),
+                                        panel.grid=element_blank(),
                                         axis.ticks = element_blank(), plot.title=element_text(size=14, face="bold"))
   # title
   main <- paste0("Genomic location of '", feat, "' across ", pie.basic)
-  pie <- ggplot(df.pie, aes(x="", y=value, fill=location)) + 
-      geom_bar(width = 1, stat = "identity") + 
+  pie <- ggplot(df.pie, aes(x="", y=value, fill=location)) +
+      geom_bar(width = 1, stat = "identity") +
       coord_polar("y") +
-      blank_theme + 
-      ggtitle(main) + 
-      theme(axis.text.x=element_blank(), plot.title = element_text(size = 10, face = "bold", vjust=-10)) + 
-      geom_text(aes(y = value/length(value) + 
+      blank_theme +
+      ggtitle(main) +
+      theme(axis.text.x=element_blank(), plot.title = element_text(size = 10, face = "bold", vjust=-10)) +
+      geom_text(aes(y = value/length(value) +
                     c(0, cumsum(value)[-length(value)]),  label = rep("",nrow(df.pie))), size=2, nudge_x = 0.7, nudge_y = 0.7)
   print(pie, vp=.define_region(f))
 }
@@ -138,21 +138,28 @@ features <- c()
 
 # load finalhits file, create coverpage, and calculate basic plots
 .basic.summary <- function(final.hits, conf, out){
+
   pdf(file=out, paper="a4")
   plot.new()
-  df.uropa.final <- read.table(final.hits, header=TRUE, sep="\t",stringsAsFactors = FALSE)
+  df.uropa.final <- read.table(final.hits, header=TRUE, sep="\t", stringsAsFactors = FALSE)
+
   # number of peaks annoteted with uropa run
   num.peaks <- length(df.uropa.final$peak_id)
+
   # stats is based on annoted peaks -> remove na rows
+  df.uropa.final <- df.uropa.final[!is.na(df.uropa.final$feature),]
   df.uropa.final[,"distance"] <- as.numeric(df.uropa.final[,"distance"])
-  df.uropa.final <- df.uropa.final[complete.cases(df.uropa.final),]
+
   if(nrow(df.uropa.final)==0){
+
     mtext("UROPA summary", side=3, line=-3,outer=FALSE, cex=2)
     mtext("No valid peak annotations with specified query/queries, summary unfeasible!", line=-5)
     invisible(dev.off())
     stop("No valid peak annotations with specified query/queries, summary unfeasible!")
   }
+
   anno.peaks <- nrow(df.uropa.final)
+
   # get infos from config for overview page
   config <- fromJSON(conf)
   config.query <- as.data.frame(config$queries)
@@ -177,14 +184,14 @@ features <- c()
 	#  } else {
 	#    y.lim <- median(df.uropa.final[,"distance"]) + 5000
 	#  }
-	#  
+	#
 	#}
-  
+
   # expand multiple valid annotations to one row each
   df.uropa.final <- separate_rows(df.uropa.final, name)	# queries of uropa annotation run
   num.queries <- length(config.query$name)
   #queries <- sprintf("%02d", config.query$name)
-  
+
   features <<- as.character(unique(df.uropa.final$feature))
   num.features <<- length(features)
   if(grepl("T",priority) && num.queries>1){
@@ -196,21 +203,21 @@ features <- c()
   #                                "filter_attribute", "attribute_value")]
   # replaye "start,center,end" position by "any"
   config.query$feature_anchor <- sapply(config.query$feature_anchor, function(x) if(length(x)==3){return("any")}else{return(x)})
-  
+
   mtext("UROPA summary", side=3, line=3.3,outer=FALSE, cex=1,col="red")
-  
+
   if(!is.null(opt$call)){
     mtext(paste0("UROPA command line call:\n", paste(strwrap(opt$call, width= 1.9 * getOption("width")), collapse="\n")),
           side=3, line=1.5,cex=.5)
   }
-  
+
   mtext(paste0("There were ", num.peaks, " peaks in the input bed file, UROPA annotated ", anno.peaks, " peaks\n"),
         side=3, line=0,outer=FALSE, cex=.7)
   if(num.queries != nrow(config.query)){
-    mtext(paste("Only queries", paste(queries, collapse=","), "are represented in the finalhits", sep=" "), 
+    mtext(paste("Only queries", paste(queries, collapse=","), "are represented in the finalhits", sep=" "),
           side=3, line=-0.5,outer=FALSE, cex=.7)
   }
-  
+
   mytheme <- ttheme_default(core = list(fg_params=list(cex = 0.5)),colhead = list(fg_params=list(cex = 0.5)),
                             rowhead = list(fg_params=list(cex = 0.5)))
   config.query <- data.frame(lapply(config.query, as.character), stringsAsFactors=FALSE)
@@ -222,7 +229,7 @@ features <- c()
   anno <- paste("Annotation file:",unlist(config$gtf),collapse=" ")
   input.anno <- paste(input,anno,sep="\n")
   mtext(input.anno,cex=.7, side=1, line=4)
-  
+
   # plot 1
   # description
   plot1 <- paste0("1. Distances of annotated peaks in finalhits:",
@@ -234,12 +241,12 @@ features <- c()
                   "\n\nfinalhits: Only the one best feature among all queries\n(1 peak : 1 query : 1 annotation)")
   grid.newpage()
   mtext(plot1, cex=1, adj=0, padj=1)
-  
+
   # plot
   density <- subset(df.uropa.final[,c("distance","feature")], (df.uropa.final[,"distance"] <= x.lim))
-  dpq <- qplot (distance,data=density, geom="density", color=feature, xlab = "Distance to feature", ylab = "Relative count")
+  dpq <- qplot(distance, data=density, geom="density", color=feature, xlab = "Distance to feature", ylab = "Relative count")
   print(dpq + ggtitle("Distance to features across finalhits"))
-  
+
   # plot 2
   # description
   plot2 <- paste0("2. Relative locations of annotated peaks to features in finalhits:",
@@ -250,7 +257,7 @@ features <- c()
   mtext(plot2 ,cex=1, adj=0, padj=1)
   # plot
   .plot.genomic.location.per.feature(df.uropa.final, "finalhits")
-  
+
   # plot 3
   # plot
   if(num.features > 1){
@@ -265,7 +272,7 @@ features <- c()
     mtext(plot3, cex=1, adj=0, padj=1)
     .plot.feature.distribution(df.uropa=df.uropa.final,header="Feature distribution across finalhits")
   }
-  
+
   return(df.uropa.final)
 }
 
@@ -282,19 +289,21 @@ if (is.null(opt$allhits)) {
 {
   suppressPackageStartupMessages(library(VennDiagram))
   suppressPackageStartupMessages(library(gplots))
-  
+
   ## increased summary -- there is more than one query definded
   df.uropa.final <- .basic.summary(opt$finalhits, opt$config, opt$output)
   df.uropa.allhits <- read.table(opt$allhits, header=TRUE, sep="\t",stringsAsFactors = FALSE)
   num.peaks <- length(unique(df.uropa.final$peak_id))
+
+  df.uropa.allhits <- df.uropa.allhits[!is.na(df.uropa.allhits$feature),]
   df.uropa.allhits[,"distance"] <- as.numeric(df.uropa.allhits[,"distance"])
-  df.uropa.allhits <- df.uropa.allhits[complete.cases(df.uropa.allhits),]
+
   features <<- as.character(unique(df.uropa.allhits$feature))
   num.features <<- length(features)
   queries <- unique(df.uropa.allhits$name)
   #queries <- sprintf("%02d", queries)
   num.queries <- length(queries)
-  
+
   # plot 4
   # description
   plot4 <- paste0("4. Distances of annotated peaks seperated for features and queries in allhits:",
@@ -318,18 +327,18 @@ if (is.null(opt$allhits)) {
   #    considered.distance <- median.uropa.best
   #  } else {
   #    considered.distance <- median.uropa.best + 5000
-  #  } 
+  #  }
   #}
-  
-  df.distance.query <- subset(df.uropa.allhits[,c("feature","distance","name")], 
+
+  df.distance.query <- subset(df.uropa.allhits[,c("feature","distance","name")],
                               (df.uropa.allhits[,"distance"] <= considered.distance))
   max.distance.query <- round(max(as.numeric(df.distance.query[,"distance"])))
   bin.width <- round(max.distance.query/20)
-  dpq <- qplot(df.distance.query[,2],data =df.distance.query, facets=name~feature, 
+  dpq <- qplot(df.distance.query[,2], data=df.distance.query, facets=name~feature,
                geom="histogram", binwidth=bin.width, xlab = "Distance to feature", ylab = "Total count")
   print(dpq + ggtitle("Distance of query vs. feature across allhits"))
-  
-  
+
+
   # plot 5
   # description
   plot5 <- paste0("5. Relative locations of annotated peaks in allhits:",
@@ -348,7 +357,7 @@ if (is.null(opt$allhits)) {
                     "\n\nAdditional Info:\nThis is independent of the number of queries,\nall features present in the allhits are displayed.",
                     "\n\nIf only one feature is present,",
                     "\nthis plot will be skipped.")
-    
+
     grid.newpage()
     mtext(plot6, cex=1, adj=0, padj=1)
     .plot.feature.distribution(df.uropa=df.uropa.allhits,header="Feature distribution across allhits")
@@ -390,10 +399,10 @@ if (is.null(opt$allhits)) {
           } else if(anno.compare.query == matches || anno.initial.query ==matches){
             dist <- c(0.02, -0.02, -0.02)
           }
-          venn.plot <- draw.triple.venn(num.peaks, anno.initial.query, anno.compare.query, anno.initial.query, matches, 
+          venn.plot <- draw.triple.venn(num.peaks, anno.initial.query, anno.compare.query, anno.initial.query, matches,
                                         anno.compare.query, matches, category =c("all",queries[q],queries[c]),
-                                        lwd = 2, lty ="solid", col =  c("black", "red","blue"), fill = c("white","red","blue"), 
-                                        cex=1, cat.pos = c(0,0,0), cat.dist = dist, reverse = FALSE,cat.cex =1, 
+                                        lwd = 2, lty ="solid", col =  c("black", "red","blue"), fill = c("white","red","blue"),
+                                        cex=1, cat.pos = c(0,0,0), cat.dist = dist, reverse = FALSE,cat.cex =1,
                                         cat.default.pos= "outer", alpha =  c(0,.4,.4), euler.d=TRUE, scaled=TRUE)
           grid.draw(venn.plot)
           mtext(paste0("Peak based pairwise compare of ", queries[q], " and ", queries[c]), side=3, line=0,outer=FALSE, cex=1)
@@ -403,7 +412,7 @@ if (is.null(opt$allhits)) {
     }
     tmp.num.query <- tmp.num.query+1
   }
-  
+
   # plot 8
   # only up to five queries because of Vennerable package support
   if(num.queries > 2) {
@@ -416,7 +425,7 @@ if (is.null(opt$allhits)) {
                         "\n\nAdditional Info:\nIt is evalueated whether peaks are annotated,\nbut not whether they are annotated for the same feature")
         grid.newpage()
         mtext(plot8, cex=1, adj=0, padj=1)
-        
+
         num <- venn(peaks.per.query)[,"num"]
         if(num[length(num)] == 0){
           num <- num+1
@@ -424,12 +433,12 @@ if (is.null(opt$allhits)) {
         # compute distribution
         v <- Venn(SetNames=paste0("query",queries), Weight=num)
         cv <- compute.Venn(v, type="ChowRuskey", doWeights=TRUE)
-        
+
         # change FaceText size and line thickness
         gp <- VennThemes(cv, colourAlgorithm = "signature")
         gp[["FaceText"]] <- lapply(gp[["FaceText"]],function(gps){gps$fontsize<-10;gps})
         gp[["Set"]] <- lapply(gp[["Set"]],function(gps){gps$lwd<-.8;gps})
-        
+
         #change label positions
         SetLabels <- VennGetSetLabels(cv)
         max.x <- max(VennGetUniverseRange(cv)[,"x"])
@@ -444,7 +453,7 @@ if (is.null(opt$allhits)) {
           }
         }
         cv <- VennSetSetLabels(cv,SetLabels)
-        
+
         # change face label positions - not yet implemented in original package
         facelabel <- as.data.frame(VennGetFaceLabels(cv))
         face.labels <- nrow(facelabel)
@@ -453,7 +462,7 @@ if (is.null(opt$allhits)) {
           facelabel[i,"y"] <- 1.15*facelabel[i,"y"]
         }
         cv <- VennSetFaceLabels(cv,facelabel)
-        
+
         # draw plot
         pushViewport(viewport(x=.5, y=0.5, width=.8, height=.7))
         grid.rect(gp=gpar(fill="white",lty = "blank"),width = unit(1.5, "npc"), height = unit(1.5, "npc"))
