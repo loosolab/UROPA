@@ -335,7 +335,7 @@ def main():
 	while success == 0:
 		try:
 			pysam.tabix_compress(anno_gtf, anno_gtf_gz, force=True)
-			anno_gtf_gz = pysam.tabix_index(anno_gtf_gz, index=anno_gtf_index, seq_col=0, start_col=3, end_col=4, keep_original=True, force=True, meta_char='#')
+			anno_gtf_gz = pysam.tabix_index(anno_gtf_gz, index=anno_gtf_index, seq_col=0, start_col=3, end_col=4, keep_original=True, force=True, meta_char='#', csi=True)
 			temp_files.extend([anno_gtf_gz, anno_gtf_index])
 			success = 1
 			if sort_done == 1:
