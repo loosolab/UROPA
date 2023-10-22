@@ -1,3 +1,8 @@
+## 4.0.3 (2023-10-22)
+- Fix issue with filter_attribute given as list (#21)
+- Fix false filtering of any rows with "NA" within summary plot script (#22)
+- Fix tabix index of large chromosomes - UROPA now checks for maximum length to decide between tbi/csi index.
+
 ## 4.0.2 (2021-07-12)
 - Fix of bug (introduced in 4.0.1) causing show_attributes to be empty when given by commandline.
 

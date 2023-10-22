@@ -257,6 +257,16 @@ def format_config(cfg_dict, logger):
 			logger.error("Error in query {0}. Keys for filter_attribute/attribute_values have to be set together.".format(i+1))
 			sys.exit()
 
+		# Check that maximum one filter_attribute is given
+		if "filter_attribute" in query:
+			if isinstance(query["filter_attribute"], list):
+				if len(query["filter_attribute"]) > 1:
+					value = query["filter_attribute"]
+					logger.error("Error in query {0}. Only one filter_attribute can be given. The given filter_attribute was: {value}".format(i+1))
+					sys.exit()
+				else:
+					query["filter_attribute"] = query["filter_attribute"][0]
+
 		##### Check content of individual keys #####
 		if "distance" in query:
 			try:

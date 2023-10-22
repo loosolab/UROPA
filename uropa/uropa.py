@@ -281,11 +281,13 @@ def main():
 	#Find all possible attributes in gtf
 	logger.debug("Finding all possible attributes in gtf")
 	gtf_attribute_count = {}
+	max_coord = 0   # largest coordinate in gtf
 	with open(cfg_dict["gtf"]) as f:
 		for line in f:
 			if not line.startswith("#"):
 				columns = line.rstrip().split("\t")
 			
+				max_coord = int(columns[4]) if int(columns[4]) > max_coord else max_coord
 				pairs = columns[8].split(";")
 				attributes = [pair.lstrip().rstrip().split(" ")[0] for pair in pairs]
 				for att in attributes:
@@ -332,13 +334,17 @@ def main():
 	logger.debug("Tabix compress")
 	anno_gtf_gz = output_prefix + ".gtf.gz"
 	anno_gtf_index = anno_gtf_gz + ".tbi"
+	csi_index = False if max_coord <= 2**29 else True   # default is tbi; csi is for larger chromosomes
+	logger.debug("Largest feature coordinate: {0}. csi index: {1}".format(max_coord, csi_index))
 
 	success = 0
 	sort_done = 0
 	while success == 0:
 		try:
 			pysam.tabix_compress(anno_gtf, anno_gtf_gz, force=True)
-			anno_gtf_gz = pysam.tabix_index(anno_gtf_gz, index=anno_gtf_index, seq_col=0, start_col=3, end_col=4, keep_original=True, force=True, meta_char='#')
+			anno_gtf_gz = pysam.tabix_index(anno_gtf_gz, index=anno_gtf_index, seq_col=0, start_col=3, end_col=4,
+											keep_original=True, force=True, meta_char='#', csi=csi_index)
+
 			temp_files.extend([anno_gtf_gz, anno_gtf_index])
 			success = 1
 			if sort_done == 1:
