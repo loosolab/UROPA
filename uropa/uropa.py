@@ -194,10 +194,10 @@ def main():
 
 		except IOError:
 			logger.error("File %s does not exists or is not readable.", config)
-			sys.exit()
+			sys.exit(1)
 		except ValueError as e:
 			logger.error("File %s contains malformed JSON. %s", config, e)
-			sys.exit()
+			sys.exit(1)
 
 	# Validate output folder
 	outdir = cfg_dict["outdir"]
@@ -236,14 +236,14 @@ def main():
 			check_file_access(cfg_dict[key], logger)
 		else:
 			logger.error("No .{0}-file given as input - please check that a .{0}-file is given either via the commandline option --{0} or in the configuration file.".format(key))
-			sys.exit()
+			sys.exit(1)
 
 	#Check whether output files can be written
 	output_files = [os.path.join(output_prefix + suffix) for suffix in ["_allhits.txt", "_allhits.bed", "_finalhits.txt", "_finalhits.bed"]]
 	for f in output_files:
 		if os.path.exists(f) and not os.access(f, os.W_OK):
 			logger.error("Output file {0} is not writable.".format(f))
-			sys.exit()
+			sys.exit(1)
 
 
 	############################################################################################################
@@ -268,7 +268,7 @@ def main():
 				
 				if len(columns) < 9:
 					logger.error("Input GTF ({0}) has less than 9 columns - please check that the file has the correct GTF format.".format(cfg_dict["gtf"]))
-					sys.exit()
+					sys.exit(1)
 
 				feature = columns[2]
 				if feature not in gtf_feat_count:
@@ -316,7 +316,7 @@ def main():
 	not_in_gtf = list(set(query_feat) - set(gtf_feat))
 	if len(not_in_gtf) > 0:
 		logger.error("Query feature(s) {0} not found in gtf".format(not_in_gtf))
-		sys.exit()
+		sys.exit(1)
 
 	#Subset gtf if needed
 	logger.debug("Subsetting gtf if needed")
@@ -355,7 +355,7 @@ def main():
 			#Exit if we already tried to sort file once
 			if sort_done == 1:
 				logger.error("Could not index .gtf-file - please check whether the file has the correct 9-column format.")	
-				sys.exit()
+				sys.exit(1)
 	
 			#Read in and sort gtf file
 			anno_gtf_sorted = output_prefix + "_sorted.gtf"
@@ -369,7 +369,7 @@ def main():
 				sub = subprocess.check_output(sort_call, shell=True)
 			except subprocess.CalledProcessError:
 				logger.error("Could not sort GTF file using command-line call: {0}".format(sort_call))
-				sys.exit()
+				sys.exit(1)
 
 			anno_gtf = anno_gtf_sorted
 			sort_done = 1
@@ -467,7 +467,7 @@ def main():
 					#Check if writer is still runnning
 					if writer_task.ready():
 						logger.error("Writing of output files from multiprocessing jobs failed - please check any previous warnings.")
-						sys.exit()
+						sys.exit(1)
 
 					#Update status dict
 					status_dict = update_status(status_dict, task_list)

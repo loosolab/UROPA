@@ -195,7 +195,7 @@ def format_config(cfg_dict, logger):
 	invalid_config_keys = given_config_keys - valid_config_keys
 	if len(invalid_config_keys) > 0:
 		logger.error("Error in config file: Key(s) {0} not known to UROPA.".format(invalid_config_keys))
-		sys.exit()
+		sys.exit(1)
 
 	#Delete empty keys
 	for key in list(cfg_dict.keys()):
@@ -245,7 +245,7 @@ def format_config(cfg_dict, logger):
 		invalid_keys = query_keys - valid_query_keys
 		if len(invalid_keys) > 0:
 			logger.error("Error in query {0}. Key(s) {1} are not known to UROPA.".format(i+1, invalid_keys))
-			sys.exit()
+			sys.exit(1)
 
 		#Delete empty keys
 		for key in list(query.keys()):
@@ -255,7 +255,7 @@ def format_config(cfg_dict, logger):
 		# If filter_attribute is set, attribute_values has to be set as well
 		if ("filter_attribute" in query and "attribute_values" not in query) or ("attribute_values" in query and "filter_attribute" not in query):
 			logger.error("Error in query {0}. Keys for filter_attribute/attribute_values have to be set together.".format(i+1))
-			sys.exit()
+			sys.exit(1)
 
 		# Check that maximum one filter_attribute is given
 		if "filter_attribute" in query:
@@ -263,7 +263,7 @@ def format_config(cfg_dict, logger):
 				if len(query["filter_attribute"]) > 1:
 					value = query["filter_attribute"]
 					logger.error("Error in query {0}. Only one filter_attribute can be given. The given filter_attribute was: {value}".format(i+1))
-					sys.exit()
+					sys.exit(1)
 				else:
 					query["filter_attribute"] = query["filter_attribute"][0]
 
@@ -276,10 +276,10 @@ def format_config(cfg_dict, logger):
 					query["distance"] = [int(query["distance"]), int(query["distance"])]	#same distance in both positions
 			except:
 				logger.error("Error trying to convert distance \"{0}\" to integer - please check the format of this value.".format(query["distance"]))
-				sys.exit()
+				sys.exit(1)
 		else:
 			logger.error("No 'distance' not given in query: {0}".format(query))
-			sys.exit()
+			sys.exit(1)
 
 		#Internals
 		internalval = query.get("internals", False)
@@ -298,7 +298,7 @@ def format_config(cfg_dict, logger):
 			valid = set(['+', '-', 'same', 'opposite', 'ignore'])
 			if query["strand"] not in valid:
 				logger.error("Invalid strand ({0}) set in query {1}. Valid options are: {2}".format(query["strand"], i+1, valid))
-				sys.exit()
+				sys.exit(1)
 
 		if "feature_anchor" in query:
 			query["feature_anchor"] = set([element.lower() for element in query["feature_anchor"]])
@@ -306,7 +306,7 @@ def format_config(cfg_dict, logger):
 			invalid = query["feature_anchor"] - valid
 			if len(invalid) > 0:
 				logger.error("Invalid feature_anchor ({0}) set in query {1}. Valid options are: {2}".format(invalid, i+1, valid))
-				sys.exit()
+				sys.exit(1)
 			query["feature_anchor"] = list(query["feature_anchor"]) #convert back to list from set
 
 		if "relative_location" in query:
@@ -315,7 +315,7 @@ def format_config(cfg_dict, logger):
 			invalid = query["relative_location"] - valid
 			if len(invalid) > 0:
 				logger.error("Invalid relative_location ({0}) set in query {1}. Valid options are: {2}".format(invalid, i+1, valid))
-				sys.exit()
+				sys.exit(1)
 			query["relative_location"] = list(query["relative_location"]) #convert back to list from set
 
 		#Name the query if it was not already named
@@ -375,10 +375,10 @@ def check_file_access(fil, logger):
 	if os.path.isfile(fil):
 		if not os.access(fil, os.R_OK):
 			logger.error("File %s could not be read.", fil)
-			sys.exit()
+			sys.exit(1)
 	else:
 		logger.error("File %s does not exist.", fil)
-		sys.exit()
+		sys.exit(1)
 
 def check_bed_format(bedfile, logger):
 	""" Checks whether bedfile has the correct format """
@@ -387,7 +387,7 @@ def check_bed_format(bedfile, logger):
 		for i, line in enumerate(f):
 			if not re.match("(\S)+\s+([0-9]+)\s+([0-9]+)(\s+\S+)?(\s+[0-9,.]+)?(\s+[.\-+])?", line):
 				logger.error("Line {0} in {1} is not proper bed format: {2}".format(i+1, bedfile, line))
-				sys.exit()
+				sys.exit(1)
 
 	#todo: also check the number of columns in file
 
